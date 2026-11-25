@@ -320,7 +320,9 @@ def slug(t):
 WCOLS, WLEVELS = 84, 12          # MpcParams.h kWaveCols / kWaveLevels
 WCOL_W, WAVE_H, TAB_H = 14, 136, 26
 WX0 = 640 - WCOLS * WCOL_W // 2  # 52
-DRAG_THUMB = 120                 # the drag strip's thumb (its centre is the marker)
+DRAG_THUMB = 96                  # the drag strip's thumb (its centre is the marker). The strip runs from
+                                 # WX0 - DRAG_THUMB / 2 (= 4) to 1276: it must stay on the 1280-wide screen,
+                                 # a component outside it leaves the MPC's plugin screen blank (0.6.1 - 0.7.2)
 TAB_FRAMES = 15
 SEL_YELLOW = (255, 214, 64)
 PAD_TOP, PAD_BOT, PAD_EDGE = (124, 146, 178), (88, 108, 138), (52, 64, 84)
@@ -595,10 +597,10 @@ def pages():
             [K("stutRate", "STUTTER RATE"), K("rollRate", "ROLL RATE"), K("tapeMs", "TAPE STOP"), K("diveRes", "FILTER DIVE RES")],
             [K("akCycLen", "AKAIZE PAD LENGTH"), K("akCycFreq", "AKAIZE PAD FREQ"), T("akFreqManual", "PAD FREQ\nMANUAL"), K("akRatio", "AKAIZE PAD STRETCH")],
             [K("slCycLen", "SLICE STRETCH LENGTH"), K("slCycFreq", "SLICE STRETCH FREQ"), T("slFreqManual", "SLICE FREQ\nMANUAL"), K("dropRate", "S950 DROP RATE")],
-            [P("padQuant", "FX PAD QUANTISE (START + STOP ON THE GRID)", ["OFF", "1/32", "1/16", "1/8", "1/4", "BAR"], span=2,
+            [P("padQuant", "FX PAD QUANTISE (START AND STOP ON THE GRID)", ["OFF", "1/32", "1/16", "1/8", "1/4", "BAR"], span=2,
                ids=[0, 4, 1, 2, 3, 5]), K("fxAmount", "FX AMOUNT"), G("diceFx", "FX\nDICE")]]},
         {"fn": 4, "sub": 1, "name": "AKAIZER", "rows": [
-            [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 = AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
+            [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 IS AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
             [K("akrCycLen", "CYCLE LENGTH"), K("akrCycFreq", "CYCLE FREQ"), T("akrFreqManual", "FREQ\nMANUAL"), K("akrPitch", "PITCH", bi=True)],
             [G("akaize", "AKAIZE\nTHE BREAK"), R("infoBpm", "BREAK TEMPO"), R("infoMsg", "MESSAGE", span=2)]]},
         {"fn": 5, "sub": 0, "name": "SOUND", "rows": [
@@ -965,7 +967,7 @@ class Builder:
         x, y, w, h = rect
         thumb = "dragthumb_%d.png" % theme
         if thumb not in self.images:
-            self.save(thumb, lcd_key(theme, DRAG_THUMB, h, "< START >", True, 18))
+            self.save(thumb, lcd_key(theme, DRAG_THUMB, h, "START", True, 20))
         key = "cp drag %d" % theme
         self.define(key, component([
             focus_entry(),
@@ -1495,7 +1497,8 @@ def check_skin(path):
     """1. A Label drawn over a touch area takes the touch on the MPC (Helix 0.2.2): no tab-level label may overlap
           an interactive entry painted before it.
        2. The focus frame must be the first child of a pressable component (Helix 0.2.6).
-       3. A cell that opens an overlay must contain something reading its Data handle (Helix 0.2.3)."""
+       3. A cell that opens an overlay must contain something reading its Data handle (Helix 0.2.3).
+       4. Nothing may sit off the 1280 x 800 screen (CHOPPAGE 0.6.1)."""
     t = json.load(open(path))
     defs = {d["key"]: d["value"] for d in t["pageData"]["componentDefinitions"]["localComponentDefinitions"]}
     def shown_when(b):
@@ -1517,6 +1520,10 @@ def check_skin(path):
             typ, b = e["componentData"]["type"], e["bounds"]
             x, y, w, h = map(float, b["bounds"].split())
             vis = shown_when(b)
+            # 4. everything on the 1280 x 800 screen: one component past an edge leaves the whole plugin screen
+            #    blank on the MPC (CHOPPAGE 0.6.1 - 0.7.2: the drag strip started at x = -8)
+            if b.get("boundsType", "Absolute") == "Absolute" and (x < 0 or y < 0 or x + w > 1280 or y + h > 800):
+                bad.append("%s: '%s' is off the screen (%g %g %g %g)" % (tab["tabName"], e["componentData"]["name"], x, y, w, h))
             if typ == "Label":
                 for nm, (X, Y, W_, H_), v2 in seen:
                     if x < X + W_ and X < x + w and y < Y + H_ and Y < y + h and not exclusive(vis, v2):

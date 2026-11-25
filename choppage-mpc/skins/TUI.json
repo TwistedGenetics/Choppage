@@ -19267,7 +19267,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 1296 34"
+         "bounds": "0 0 1272 34"
         }
        }
       ]
@@ -19506,7 +19506,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 1296 34"
+         "bounds": "0 0 1272 34"
         }
        }
       ]
@@ -19745,7 +19745,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 1296 34"
+         "bounds": "0 0 1272 34"
         }
        }
       ]
@@ -19984,7 +19984,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 1296 34"
+         "bounds": "0 0 1272 34"
         }
        }
       ]
@@ -53782,7 +53782,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -53899,7 +53899,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -54016,7 +54016,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -54133,7 +54133,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -61436,7 +61436,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -61553,7 +61553,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -61670,7 +61670,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -61787,7 +61787,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "-8 234 1296 34",
+        "bounds": "4 234 1272 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -76653,7 +76653,7 @@
           "case": "Original"
          },
          "type": "Name",
-         "handleName": "WithName[FX PAD QUANTISE (START + STOP ON THE GRID)]/Parameter 31"
+         "handleName": "WithName[FX PAD QUANTISE (START AND STOP ON THE GRID)]/Parameter 31"
         }
        },
        "handle remapping": {
@@ -77754,7 +77754,7 @@
           "case": "Original"
          },
          "type": "Name",
-         "handleName": "WithName[LOOP BPM (0 = AUTO)]/Parameter 524"
+         "handleName": "WithName[LOOP BPM (0 IS AUTO)]/Parameter 524"
         }
        },
        "handle remapping": {
