@@ -131,6 +131,7 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
+    F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f);
     return v;
 }
 
@@ -212,7 +213,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_AKR_LOOP_BPM + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_SL_DRAG + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -315,7 +316,7 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
         case MP_SL_STRETCH: std::snprintf(buf, sizeof buf, "%.2fX", plain); out = buf; return true;
         case MP_SL_XFADE: std::snprintf(buf, sizeof buf, "%.1f MS", plain); out = buf; return true;
         case MP_SLICE: std::snprintf(buf, sizeof buf, "S%02d", roundi(plain)); out = buf; return true;
-        case MP_SL_MOVE: { std::lock_guard<std::mutex> l(textMutex_); out = moveText_; return true; }
+        case MP_SL_MOVE: case MP_SL_DRAG: { std::lock_guard<std::mutex> l(textMutex_); out = moveText_; return true; }
         case MP_SL_END: { std::lock_guard<std::mutex> l(textMutex_); out = endText_; return true; }
         case MP_SEQ_SEL: std::snprintf(buf, sizeof buf, "STEP %d", roundi(plain)); out = buf; return true;
         case MP_MEMORY: std::snprintf(buf, sizeof buf, "M%02d", roundi(plain)); out = buf; return true;
@@ -433,6 +434,8 @@ void ChoppageMpcApp::tick()
         if (values_[freq].load() != linked) write(freq, linked);
     }
 
+    if (dragTicks_ > 0 && --dragTicks_ == 0) lastVersion_ = ~0u;   // the drag ended: the strip snaps to the marker
+
     // 2. the session moved: mirrors and readouts follow
     syncMirrors(false);
     syncReadouts(false);
@@ -520,7 +523,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BREAK: session_.selectSlot(roundi(v)); break;
         case MP_BRK_PREV: session_.selectSlot((slot + kSlots - 1) % kSlots); break;
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
-        case MP_ZOOM: break;   // syncWave follows
+        case MP_ZOOM: lastVersion_ = ~0u; break;   // syncWave follows (and the drag strip)
         case MP_MUTE_GROUP: session_.setMuteGroup(slot, roundi(v)); break;
         case MP_AKR_LOOP_BPM:
             // AUTO at the bottom; the first nudge up from AUTO starts at the break's own tempo
@@ -564,6 +567,17 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const auto& s = session_.slot(slot);
             if (s.content != nullptr) moveSelectedMarker((int)std::lround(v * (double)s.content->buffer->numSamples));
+            break;
+        }
+        case MP_SL_DRAG:
+        {
+            // the finger on the strip under the waveform: the selected slice's start goes where it is, in the
+            // waveform as shown (ALL or the zoomed slice; the view holds still while the finger moves)
+            const auto& s = session_.slot(slot);
+            if (s.content == nullptr || s.content->slices.isEmpty()) break;
+            const View vw = viewOf(*s.content, session_.selectedSlice());
+            dragTicks_ = 20;
+            moveSelectedMarker(vw.start + (int)std::lround(std::clamp(v, 0.0f, 1.0f) * (double)vw.length));
             break;
         }
         case MP_SL_NUDGE_L: case MP_SL_NUDGE_R:
@@ -739,6 +753,11 @@ void ChoppageMpcApp::syncMirrors(bool force)
             moveText_ = t;
         }
         put(MP_SL_MOVE, (float)at / (float)n);
+        if (dragTicks_ == 0 && !s.content->slices.isEmpty())
+        {
+            const View vw = viewOf(*s.content, slice);
+            put(MP_SL_DRAG, std::clamp((float)(at - vw.start) / (float)std::max(1, vw.length), 0.0f, 1.0f));
+        }
         const int last = s.content->slices.count - 1;
         const int endAt = slice < last ? s.content->slices.starts[(size_t)slice + 1] : n;
         {
@@ -874,6 +893,7 @@ ChoppageMpcApp::View ChoppageMpcApp::viewOf(const SlotContent& c, int sel)
     const int slot = session_.selectedSlot();
     const int marker = t.starts[(size_t)std::clamp(sel, 0, t.count - 1)];
     const bool same = viewSlot_ == slot && viewSel_ == sel && viewZoom_ == zoom && viewN_ == n;
+    if (same && dragTicks_ > 0 && frozen_.start + frozen_.length <= n) return frozen_;   // a drag holds the view
     const int in0 = frozen_.start + frozen_.length / 10, in1 = frozen_.start + frozen_.length * 9 / 10;
     if (!same || frozen_.start + frozen_.length > n || marker < in0 || marker > in1)
     {

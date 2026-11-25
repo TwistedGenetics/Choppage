@@ -320,11 +320,12 @@ def slug(t):
 WCOLS, WLEVELS = 84, 12          # MpcParams.h kWaveCols / kWaveLevels
 WCOL_W, WAVE_H, TAB_H = 14, 136, 26
 WX0 = 640 - WCOLS * WCOL_W // 2  # 52
+DRAG_THUMB = 120                 # the drag strip's thumb (its centre is the marker)
 TAB_FRAMES = 15
 SEL_YELLOW = (255, 214, 64)
 PAD_TOP, PAD_BOT, PAD_EDGE = (124, 146, 178), (88, 108, 138), (52, 64, 84)
 PAD_ON_TOP, PAD_ON_BOT = (255, 196, 92), (232, 140, 40)
-BADGES = "KSGHOX"
+BADGES = "KSGHOP"
 
 def mix(a, b, t):
     return tuple(int(a[k] + (b[k] - a[k]) * t) for k in range(3))
@@ -954,6 +955,21 @@ class Builder:
                                   ids=list(range(1, WCOLS + 1)), name="cp wave tap", focus=False, qlink=False))
         return kids
 
+    def drag_strip(self, pid, rect, theme):
+        """A horizontal TrackAndThumb slider: the thumb sits on the selected slice's start marker and follows the finger."""
+        x, y, w, h = rect
+        thumb = "dragthumb_%d.png" % theme
+        if thumb not in self.images:
+            self.save(thumb, lcd_key(theme, DRAG_THUMB, h, "< START >", True, 18))
+        key = "cp drag %d" % theme
+        self.define(key, component([
+            focus_entry(),
+            entry("drag", "Slider", o(("version", 3), ("sliderType", "TrackAndThumb"), ("direction", "Horizontal"),
+                                      ("thumbImage", thumb), ("thumbTrackVisible", False), ("handleName", "Data")),
+                  bounds((0, 0, w, h)))]))
+        return entry(pid, key, o(("version", 1), ("handleName", "Data")),
+                     bounds(rect, focus="Yes", invalid="Hide", inval=self.vis_theme(theme)), remap=[("Data", self.h(pid))])
+
     def lcd_panel(self, rect, boxes, rules, tag):
         x, y, w, h = rect
         png = "lcdpanel_%s.png" % tag
@@ -1168,13 +1184,23 @@ class Builder:
     def slice_tab(self, sub):
         kids = []
         LX, LY, LW, LH = 10, 4, 1260, 302
-        name_box = (26, 16, 700, 40)
-        bpm_box = (1004, 16, 250, 40)
+        name_box = (26, 16, 430, 40)
+        bpm_box = (1054, 16, 200, 40)
         kids.append(self.lcd_panel((LX, LY, LW, LH), [name_box, bpm_box], [(26, 268, 1254)], "slice"))
-        kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1], name_box[2] - 20, name_box[3]), 28)
-        kids += self.lcd_text("infoBpm", (bpm_box[0] + 8, bpm_box[1], bpm_box[2] - 16, bpm_box[3]), 28,
+        kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1], name_box[2] - 20, name_box[3]), 26)
+        kids += self.lcd_text("infoBpm", (bpm_box[0] + 8, bpm_box[1], bpm_box[2] - 16, bpm_box[3]), 26,
                               "horizontallyCentred verticallyCentred")
-        kids += self.lcd_text("infoSlParams", (26, 240, 1228, 28), 22)
+        # the drag strip under the hit row: put a finger on it and slide to move the selected slice's start
+        for t in range(4):
+            track = "dragtrack_%d.png" % t
+            if track not in self.images:
+                self.save(track, lcd_key(t, WCOLS * WCOL_W, 34, "<  DRAG TO MOVE THE START  >", False, 20))
+            kids.append(self.image_at(track, (WX0, 234, WCOLS * WCOL_W, 34), self.vis_theme(t), name="drag track"))
+            kids.append(self.drag_strip("slDrag", (WX0 - DRAG_THUMB // 2, 234, WCOLS * WCOL_W + DRAG_THUMB, 34), t))
+            # ADD / DELETE right on the LCD, beside the zoom keys
+            v = self.vis_theme(t)
+            kids.append(self.flip_at("slAdd", (740, 16, 120, 40), self.lcd_key_png(t, "+ ADD", 120, 40, 22), v, qlink=False))
+            kids.append(self.flip_at("slDel", (868, 16, 120, 40), self.lcd_key_png(t, "- DEL", 120, 40, 22), v, qlink=False))
         kids += self.lcd_text("infoStatus", (26, 272, 900, 26), 22, style="SemiBold")
         kids += self.lcd_text("infoSlice", (930, 272, 324, 26), 22, "right verticallyCentred")
         for t in range(4):
@@ -1183,7 +1209,7 @@ class Builder:
                 on, off = self.lcd_radio_pngs(t, "ZOOM " + z, 128, 40, 22)
                 imgs.append((on, off, (i * 134, 0, 128, 40)))
             self.discrete("zoom")
-            kids.append(self.radio_at("zoom", (736, 16, 262, 40), imgs, self.vis_theme(t), name="cp zoom %d" % t))
+            kids.append(self.radio_at("zoom", (466, 16, 262, 40), imgs, self.vis_theme(t), name="cp zoom %d" % t))
         kids += self.wave_block(62, 204)
         # three rows of four, as on the grid pages
         if sub == 0:

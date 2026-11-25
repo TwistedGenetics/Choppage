@@ -18767,6 +18767,962 @@
      }
     },
     {
+     "key": "cp drag 0",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "drag",
+         "type": "Slider",
+         "data": {
+          "version": 3,
+          "sliderType": "TrackAndThumb",
+          "direction": "Horizontal",
+          "thumbImage": "dragthumb_0.png",
+          "thumbTrackVisible": false,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 1296 34"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_0_add_e2d42_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_0_add_e2d42_120x40__on.png",
+          "offImage": "lcdkey_0_add_e2d42_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_0_del_b6d19_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_0_del_b6d19_120x40__on.png",
+          "offImage": "lcdkey_0_del_b6d19_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp drag 1",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "drag",
+         "type": "Slider",
+         "data": {
+          "version": 3,
+          "sliderType": "TrackAndThumb",
+          "direction": "Horizontal",
+          "thumbImage": "dragthumb_1.png",
+          "thumbTrackVisible": false,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 1296 34"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_1_add_e2d42_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_1_add_e2d42_120x40__on.png",
+          "offImage": "lcdkey_1_add_e2d42_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_1_del_b6d19_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_1_del_b6d19_120x40__on.png",
+          "offImage": "lcdkey_1_del_b6d19_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp drag 2",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "drag",
+         "type": "Slider",
+         "data": {
+          "version": 3,
+          "sliderType": "TrackAndThumb",
+          "direction": "Horizontal",
+          "thumbImage": "dragthumb_2.png",
+          "thumbTrackVisible": false,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 1296 34"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_2_add_e2d42_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_2_add_e2d42_120x40__on.png",
+          "offImage": "lcdkey_2_add_e2d42_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_2_del_b6d19_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_2_del_b6d19_120x40__on.png",
+          "offImage": "lcdkey_2_del_b6d19_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp drag 3",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "drag",
+         "type": "Slider",
+         "data": {
+          "version": 3,
+          "sliderType": "TrackAndThumb",
+          "direction": "Horizontal",
+          "thumbImage": "dragthumb_3.png",
+          "thumbTrackVisible": false,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 1296 34"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_3_add_e2d42_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_3_add_e2d42_120x40__on.png",
+          "offImage": "lcdkey_3_add_e2d42_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold lcdkey_3_del_b6d19_120x40__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "lcdkey_3_del_b6d19_120x40__on.png",
+          "offImage": "lcdkey_3_del_b6d19_120x40__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 120 40"
+        }
+       }
+      ]
+     }
+    },
+    {
      "key": "cp zoom 0",
      "value": {
       "version": 2,
@@ -51618,7 +52574,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "fff4f6ff",
           "justification": "left verticallyCentred",
@@ -51643,7 +52599,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -51661,7 +52617,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff142008",
           "justification": "left verticallyCentred",
@@ -51686,7 +52642,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -51704,7 +52660,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff241200",
           "justification": "left verticallyCentred",
@@ -51729,7 +52685,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -51747,7 +52703,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff15171a",
           "justification": "left verticallyCentred",
@@ -51772,7 +52728,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -51790,7 +52746,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "fff4f6ff",
           "justification": "horizontallyCentred verticallyCentred",
@@ -51815,7 +52771,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -51833,7 +52789,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff142008",
           "justification": "horizontallyCentred verticallyCentred",
@@ -51858,7 +52814,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -51876,7 +52832,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff241200",
           "justification": "horizontallyCentred verticallyCentred",
@@ -51901,7 +52857,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -51919,7 +52875,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff15171a",
           "justification": "horizontallyCentred verticallyCentred",
@@ -51944,7 +52900,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -51952,34 +52908,18 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "drag track",
+        "type": "Image",
         "data": {
-         "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "fff4f6ff",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
-         "handleName": "Data"
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_0.png"
         }
        },
        "handle remapping": {
         "version": 1,
-        "map": [
-         {
-          "key": "Data",
-          "value": "Parameter 212"
-         }
-        ]
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -51987,7 +52927,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -51995,23 +52935,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 0",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff142008",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -52020,9 +52947,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_0_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_0_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_1.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -52030,7 +53044,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -52038,23 +53052,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 1",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff241200",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -52063,9 +53064,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_1_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_1_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_2.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -52073,7 +53161,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -52081,23 +53169,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 2",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff15171a",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -52106,9 +53181,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_2_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_2_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_3.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -52116,7 +53278,97 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDrag",
+        "type": "cp drag 3",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 525"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_3_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_3_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -52490,7 +53742,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -52520,7 +53772,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -52550,7 +53802,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -52580,7 +53832,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -58976,7 +60228,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "fff4f6ff",
           "justification": "left verticallyCentred",
@@ -59001,7 +60253,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -59019,7 +60271,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff142008",
           "justification": "left verticallyCentred",
@@ -59044,7 +60296,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -59062,7 +60314,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff241200",
           "justification": "left verticallyCentred",
@@ -59087,7 +60339,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -59105,7 +60357,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff15171a",
           "justification": "left verticallyCentred",
@@ -59130,7 +60382,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "36 16 680 40",
+        "bounds": "36 16 410 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -59148,7 +60400,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "fff4f6ff",
           "justification": "horizontallyCentred verticallyCentred",
@@ -59173,7 +60425,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -59191,7 +60443,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff142008",
           "justification": "horizontallyCentred verticallyCentred",
@@ -59216,7 +60468,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -59234,7 +60486,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff241200",
           "justification": "horizontallyCentred verticallyCentred",
@@ -59259,7 +60511,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -59277,7 +60529,7 @@
            "version": 1,
            "name": "Roboto",
            "style": "Bold",
-           "height": 28.0
+           "height": 26.0
           },
           "colour": "ff15171a",
           "justification": "horizontallyCentred verticallyCentred",
@@ -59302,7 +60554,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1012 16 234 40",
+        "bounds": "1062 16 184 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -59310,34 +60562,18 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "drag track",
+        "type": "Image",
         "data": {
-         "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "fff4f6ff",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
-         "handleName": "Data"
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_0.png"
         }
        },
        "handle remapping": {
         "version": 1,
-        "map": [
-         {
-          "key": "Data",
-          "value": "Parameter 212"
-         }
-        ]
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -59345,7 +60581,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -59353,23 +60589,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 0",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff142008",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -59378,9 +60601,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_0_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_0_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_1.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -59388,7 +60698,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -59396,23 +60706,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 1",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff241200",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -59421,9 +60718,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_1_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_1_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_2.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -59431,7 +60815,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -59439,23 +60823,10 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "label infoSlParams",
-        "type": "Label",
+        "name": "slDrag",
+        "type": "cp drag 2",
         "data": {
          "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff15171a",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Value",
          "handleName": "Data"
         }
        },
@@ -59464,9 +60835,96 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 212"
+          "value": "Parameter 525"
          }
         ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_2_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_2_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "drag track",
+        "type": "Image",
+        "data": {
+         "version": 2,
+         "imageType": "Regular",
+         "colour": "0",
+         "image": "dragtrack_3.png"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
        },
        "bounds": {
         "version": 2,
@@ -59474,7 +60932,97 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "26 240 1228 28",
+        "bounds": "52 234 1176 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDrag",
+        "type": "cp drag 3",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 525"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "-8 234 1296 34",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slAdd",
+        "type": "cp hold lcdkey_3_add_e2d42_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 207"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "740 16 120 40",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slDel",
+        "type": "cp hold lcdkey_3_del_b6d19_120x40__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 208"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "868 16 120 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -59848,7 +61396,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -59878,7 +61426,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -59908,7 +61456,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -59938,7 +61486,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "736 16 262 40",
+        "bounds": "466 16 262 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },

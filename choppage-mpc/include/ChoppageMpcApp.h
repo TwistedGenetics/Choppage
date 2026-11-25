@@ -76,6 +76,7 @@ private:
     std::vector<std::string> text_;                 // readout texts, by parameter index
     std::vector<Session::BrowserEntry> browser_;             // copy for formatValue
     std::vector<std::string> badgeLetters_;         // per slice of the selected break (step text)
+    int dragTicks_ = 0;                             // a drag on the strip is under way: hold the view, don't mirror
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
     std::string endText_ = "-";                     // END knob text
     std::string cellText_[kSeqLanes * 16];          // what the MPC shows while a grid cell is jogged ("K 05")

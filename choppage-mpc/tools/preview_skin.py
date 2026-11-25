@@ -171,6 +171,10 @@ class Renderer:
             name = data["onImage"] if on else data["offImage"]
             if name:
                 canvas.alpha_composite(self.img(name), (int(x), int(y)))
+        elif typ == "Slider" and data.get("sliderType") == "TrackAndThumb":
+            th = self.img(data["thumbImage"])
+            v = self.norm(handle)
+            canvas.alpha_composite(th, (int(x + v * (w - th.width)), int(y + (h - th.height) / 2)))
         elif typ in ("Focus", "KnobOverlay"):
             return
         elif typ in self.defs:

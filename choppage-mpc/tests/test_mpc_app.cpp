@@ -350,6 +350,28 @@ int main(int argc, char** argv)
         for (int k = 0; k < kWaveCols; ++k) selCols += ((int)std::lround(app.getParam(MP_WAVE0 + k)) / (2 * kWaveLevels)) % 3 == 1;
         CHECK(selCols > kWaveCols / 3 && r.length() > 0, "ZOOM SLICE fills the screen with the selected slice");
 
+        // the drag strip under the waveform: its thumb sits on the selected marker; a finger on it moves the marker
+        {
+            auto start5 = [&] { return app.session().slot(0).content->slices.starts[5]; };   // (content is replaced on edit)
+            for (int i = 0; i < 40; ++i) app.tick();      // any earlier drag has let go
+            const float shown = app.getParam(MP_SL_DRAG);
+            CHECK(shown > 0.05f && shown < 0.95f, "ZOOM SLICE: the drag thumb sits on the marker inside the view");
+            const int s0 = start5();
+            set(app, MP_SL_DRAG, shown + 0.05f);
+            const int s1 = start5();
+            set(app, MP_SL_DRAG, shown + 0.10f);
+            const int s2 = start5();
+            CHECK(s1 > s0 && s2 > s1, "dragging right moves the start later, step by step");
+            CHECK(std::fabs(app.getParam(MP_SL_DRAG) - (shown + 0.10f)) < 1e-6f, "the thumb stays under the finger while dragging");
+            set(app, MP_SL_DRAG, shown);
+            CHECK(std::abs(start5() - s0) < 64, "dragging back puts it back (the view held still)");
+            set(app, MP_ZOOM, 0);
+            for (int i = 0; i < 40; ++i) app.tick();
+            const float all = app.getParam(MP_SL_DRAG);
+            CHECK(std::fabs(all - (float)start5() / (float)app.session().slot(0).content->buffer->numSamples) < 0.002f, "ZOOM ALL: the thumb is the marker's place in the break");
+            set(app, MP_ZOOM, 1);
+        }
+
         set(app, P_LCD_COLOUR, 2);
         CHECK((int)std::lround(app.getParam(MP_WAVE0)) / (3 * 2 * kWaveLevels) == 2, "LCD AMBER picks the amber frames");
         set(app, P_LCD_COLOUR, 0);

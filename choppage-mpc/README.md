@@ -47,7 +47,10 @@ The sections:
 - **FX** puts each pad's setting knob under it.
 - **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo. Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
 
-**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE.
+**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
+- **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
+- **Drag with your finger** on the strip under the hit letters (`< START >`): the selected slice's start marker follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves.
+- **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
 - **CHOP** has ADD (split the slice in two), DELETE (join it to the one before), NUDGE START < >, EDIT ALL SLICES, SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID and RESLICE.
