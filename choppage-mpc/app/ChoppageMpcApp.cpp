@@ -133,6 +133,7 @@ std::vector<MpcParamDef> buildDefs()
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
     F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f);
     T("resetOrig", "Reset");
+    T("memSaveOrig", "Save Original");
     return v;
 }
 
@@ -214,7 +215,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_RESET_ORIG + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_MEM_SAVE_ORIG + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -689,6 +690,13 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_LENGTH: session_.setPatternLength(1 << std::clamp(roundi(v), 0, 2)); break;
         case MP_CLEAR: session_.clearPattern(); break;
         case MP_MEMORY: break;
+        case MP_MEM_SAVE_ORIG:
+        {
+            const int m = roundi(values_[MP_MEMORY].load());
+            session_.saveOriginalToMemory(m - 1);
+            char b[48]; std::snprintf(b, sizeof b, "ORIGINAL SAVED IN M%02d", m); say(b);
+            break;
+        }
         case MP_MEM_SAVE:
             session_.saveMemory(roundi(values_[MP_MEMORY].load()) - 1);
             say("SAVED TO M" + std::to_string(roundi(values_[MP_MEMORY].load())));

@@ -212,6 +212,12 @@ int main(int argc, char** argv)
         bool fx = false; for (auto& e : sl.current.fx) fx = fx || e.type != FxType::none;
         CHECK(sl.current.slice == sl.original.slice && !fx && app.getParam(MP_RESET_ORIG) == 0.0f, "RESET TO ORIGINAL: the break as recorded, no FX");
     }
+    set(app, MP_MEMORY, 7);
+    press(app, MP_MEM_SAVE_ORIG, 1);
+    press(app, MP_DICE_PAT, 1);
+    press(app, MP_MEM_RECALL, 1);
+    CHECK(app.session().slot(1).current.slice == app.session().slot(1).original.slice, "SAVE ORIGINAL into M07, RECALL brings the original back");
+    set(app, MP_MEMORY, 1);
     set(app, MP_SENS, 0.3f);
     CHECK(std::fabs(app.session().slot(1).sensitivity - 0.3f) < 1e-6f, "SENSITIVITY is kept for the break's next load");
     set(app, MP_SENS, 0.62f);

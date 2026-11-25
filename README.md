@@ -34,7 +34,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - Lanes KICK SNARE GHOST HAT OPEN PERC, then the FX row; each cell shows the slice number.
   - Click a cell to add or remove a hit, right-click to swap to another hit of the same type, shift-click to lock a step.
   - Per-step FX: click a step on the FX row (or any cell) to select it, then pick **STEP FX** OFF / STUTTER / REVERSE / STRETCH / TAPE STOP and **RATE** 1/8 – 1/64 underneath. Right-click an FX cell to cycle its rate.
-  - 16 memories: click to recall, shift-click to save.
+  - 16 memories: click to recall, shift-click to save the pattern, alt-click to save the **original break** there. Right-click a memory for a menu (save pattern, save original, recall, clear).
 - **FX**: filter LP/HP + res, distortion drive/tone, crush, reverb (mix, decay, damp, pre, width), echo, and every pad's setting.
 - **SET**:
   - Tempo: SOURCE AUTO / ÷2 / ×2, SPEED, FIT (REPITCH / KEEP).

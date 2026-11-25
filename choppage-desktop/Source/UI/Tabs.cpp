@@ -747,8 +747,24 @@ namespace ui
             c->boxed = true;
             c->fontSize = 22.0f;
             c->just = juce::Justification::centred;
-            c->onClick = [this, m] (const juce::MouseEvent& e) { if (e.mods.isShiftDown()) proc.saveMemory (m); else proc.recallMemory (m); };
-            c->setTooltip ("Click: recall (or play G#3-B4).  Shift-click: save the pattern here.");
+            c->onClick = [this, m] (const juce::MouseEvent& e)
+            {
+                if (e.mods.isPopupMenu())
+                {
+                    // right-click: what goes in this memory
+                    juce::PopupMenu menu;
+                    menu.addSectionHeader ("MEMORY " + juce::String (m + 1));
+                    menu.addItem ("Save the pattern here", [this, m] { proc.saveMemory (m); refresh(); });
+                    menu.addItem ("Save the ORIGINAL break here", [this, m] { proc.session().saveOriginalToMemory (m); refresh(); });
+                    menu.addItem ("Recall", [this, m] { proc.recallMemory (m); refresh(); });
+                    menu.addItem ("Clear", [this, m] { proc.session().clearMemory (m); refresh(); });
+                    menu.showMenuAsync (juce::PopupMenu::Options().withMousePosition());
+                }
+                else if (e.mods.isShiftDown()) proc.saveMemory (m);
+                else if (e.mods.isAltDown()) proc.session().saveOriginalToMemory (m);
+                else proc.recallMemory (m);
+            };
+            c->setTooltip ("Click: recall (or play G#3-B4).  Shift-click: save the pattern here.  Alt-click: save the ORIGINAL break here.  Right-click: menu.");
             addAndMakeVisible (*c);
             memories.push_back (std::move (c));
         }

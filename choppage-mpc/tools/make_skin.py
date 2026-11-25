@@ -589,8 +589,8 @@ def pages():
         {"fn": 3, "sub": 0, "name": "PATTERN", "rows": [
             [P("length", "LENGTH (BARS)", ["1", "2", "4"]), K("style", "STYLE"), T("layers", "LAYERS"), K("swing", "SWING")],
             [G("dicePattern", "PATTERN\nDICE"), K("patAmount", "PATTERN AMOUNT"), G("clear", "CLEAR"), G("resetOrig", "RESET TO\nORIGINAL")],
-            [K("memory", "MEMORY"), G("memSave", "SAVE"), G("memRecall", "RECALL"), G("undo", "UNDO")],
-            [G("diceFx", "FX\nDICE"), K("fxAmount", "FX AMOUNT"), T("original", "ORIGINAL"), G("redo", "REDO")]]},
+            [K("memory", "MEMORY"), G("memSave", "SAVE\nPATTERN"), G("memSaveOrig", "SAVE\nORIGINAL"), G("memRecall", "RECALL")],
+            [G("diceFx", "FX\nDICE"), T("original", "ORIGINAL"), G("undo", "UNDO"), G("redo", "REDO")]]},
         {"fn": 4, "sub": 0, "name": "FX PADS", "rows": [
             [K("stutRate", "STUTTER RATE"), K("rollRate", "ROLL RATE"), K("tapeMs", "TAPE STOP"), K("diveRes", "FILTER DIVE RES")],
             [K("akCycLen", "AKAIZE PAD LENGTH"), K("akCycFreq", "AKAIZE PAD FREQ"), T("akFreqManual", "PAD FREQ\nMANUAL"), K("akRatio", "AKAIZE PAD STRETCH")],

@@ -36266,7 +36266,7 @@
      }
     },
     {
-     "key": "cp hold key_save_299__on.png",
+     "key": "cp hold key_save_pattern_299__on.png",
      "value": {
       "version": 2,
       "actions": [],
@@ -36321,8 +36321,88 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "key_save_299__on.png",
-          "offImage": "key_save_299__off.png",
+          "onImage": "key_save_pattern_299__on.png",
+          "offImage": "key_save_pattern_299__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 299 96"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold key_save_original_299__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "key_save_original_299__on.png",
+          "offImage": "key_save_original_299__off.png",
           "buttonId": 1,
           "numButtonsInGroup": 1,
           "handleName": "Data",
@@ -36403,86 +36483,6 @@
           "version": 2,
           "onImage": "key_recall_299__on.png",
           "offImage": "key_recall_299__off.png",
-          "buttonId": 1,
-          "numButtonsInGroup": 1,
-          "handleName": "Data",
-          "gestureBehaviour": "Hold"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 299 96"
-        }
-       }
-      ]
-     }
-    },
-    {
-     "key": "cp hold key_undo_299__on.png",
-     "value": {
-      "version": 2,
-      "actions": [],
-      "backgroundData": {
-       "version": 1,
-       "focussed": {
-        "version": 1,
-        "colour": "0",
-        "image": ""
-       },
-       "unfocussed": {
-        "version": 1,
-        "colour": "0",
-        "image": ""
-       }
-      },
-      "ignoreMousePresses": false,
-      "disableCoarseDataWheel": false,
-      "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "focus",
-         "type": "Focus",
-         "data": {
-          "version": 1,
-          "backgroundColour": "24c0141c",
-          "outlineColour": "ffc0141c",
-          "backgroundInset": 0.0,
-          "outlineThickness": 4.0
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "WhenFocussed",
-         "boundsType": "Proportional",
-         "bounds": "0 0 1 1"
-        }
-       },
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "pad",
-         "type": "Button",
-         "data": {
-          "version": 2,
-          "onImage": "key_undo_299__on.png",
-          "offImage": "key_undo_299__off.png",
           "buttonId": 1,
           "numButtonsInGroup": 1,
           "handleName": "Data",
@@ -36674,6 +36674,86 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold key_undo_299__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "key_undo_299__on.png",
+          "offImage": "key_undo_299__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 299 96"
         }
        }
       ]
@@ -74725,7 +74805,7 @@
        "componentData": {
         "version": 1,
         "name": "memSave",
-        "type": "cp hold key_save_299__on.png",
+        "type": "cp hold key_save_pattern_299__on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -74753,8 +74833,8 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "memRecall",
-        "type": "cp hold key_recall_299__on.png",
+        "name": "memSaveOrig",
+        "type": "cp hold key_save_original_299__on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -74765,7 +74845,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "ResetOnGestureEnd/Parameter 126"
+          "value": "ResetOnGestureEnd/Parameter 527"
          }
         ]
        },
@@ -74782,8 +74862,8 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "undo",
-        "type": "cp hold key_undo_299__on.png",
+        "name": "memRecall",
+        "type": "cp hold key_recall_299__on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -74794,7 +74874,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "ResetOnGestureEnd/Parameter 103"
+          "value": "ResetOnGestureEnd/Parameter 126"
          }
         ]
        },
@@ -74840,72 +74920,6 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "caption",
-        "type": "Label",
-        "data": {
-         "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff2a2a2a",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Name",
-         "handleName": "WithName[FX AMOUNT]/Parameter 19"
-        }
-       },
-       "handle remapping": {
-        "version": 1,
-        "map": []
-       },
-       "bounds": {
-        "version": 1,
-        "acceptsHWFocus": "No",
-        "showWhenDataModelInvalid": "Show",
-        "whenVisible": "Always",
-        "boundsType": "Absolute",
-        "bounds": "425 512 209 32"
-       }
-      },
-      {
-       "version": 2,
-       "componentData": {
-        "version": 1,
-        "name": "fxAmount",
-        "type": "cp knob 315",
-        "data": {
-         "version": 1,
-         "handleName": "Data"
-        }
-       },
-       "handle remapping": {
-        "version": 1,
-        "map": [
-         {
-          "key": "Data",
-          "value": "Parameter 19"
-         }
-        ]
-       },
-       "bounds": {
-        "version": 1,
-        "acceptsHWFocus": "Yes",
-        "showWhenDataModelInvalid": "Hide",
-        "whenVisible": "Always",
-        "boundsType": "Absolute",
-        "bounds": "325 504 315 112"
-       }
-      },
-      {
-       "version": 2,
-       "componentData": {
-        "version": 1,
         "name": "original",
         "type": "cp flip key_original_299.png",
         "data": {
@@ -74919,6 +74933,35 @@
          {
           "key": "Data",
           "value": "Parameter 105"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "333 512 299 96"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "undo",
+        "type": "cp hold key_undo_299__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 103"
          }
         ]
        },

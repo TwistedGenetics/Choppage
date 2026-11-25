@@ -452,7 +452,7 @@ void ChoppageEditor::filesDropped (const juce::StringArray& files, int, int)
     for (auto& f : files)
     {
         const juce::File file (f);
-        if (! file.hasFileExtension ("wav;aif;aiff;flac;mp3")) continue;
+        if (! file.hasFileExtension ("wav;aif;aiff;flac;mp3;rx2;rex")) continue;
         proc.loadFile (slot, file);
         if (++slot >= bc::kSlots) break;
     }

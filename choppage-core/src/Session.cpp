@@ -822,6 +822,28 @@ namespace bc
         changed (selectedSlot());
     }
 
+    void Session::saveOriginalToMemory (int m)
+    {
+        // the break as recorded (FX lane empty) into memory m: recall it with the memory's key like any other
+        if (m < 0 || m >= kMemories) return;
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        auto& s = slots[(size_t) selectedSlot()];
+        if (s.content == nullptr) return;
+        Pattern p = s.original;
+        for (auto& f : p.fx) f = FxEvent{};
+        p.locked.fill (false);
+        s.memories[(size_t) m] = p;
+        changed (selectedSlot());
+    }
+
+    void Session::clearMemory (int m)
+    {
+        if (m < 0 || m >= kMemories) return;
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        slots[(size_t) selectedSlot()].memories[(size_t) m].reset();
+        changed (selectedSlot());
+    }
+
     void Session::recallMemory (int m)
     {
         if (m < 0 || m >= kMemories) return;

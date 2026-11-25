@@ -76,6 +76,7 @@ enum MpcParam : int
     MP_SL_DRAG,                 // the selected slice's start marker, 0..1 across the waveform as shown (drag strip)
     // ---- 0.7
     MP_RESET_ORIG,              // trigger: pattern back to the break as recorded, FX lane empty
+    MP_MEM_SAVE_ORIG,           // trigger: the original break into the memory MEMORY shows
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

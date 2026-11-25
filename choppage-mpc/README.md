@@ -68,7 +68,7 @@ The sections:
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT, the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
 
-**PATTERN** has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
+**PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its pad, G#3–B4). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
 
 **FX PAD QUANTISE** (FX PADS page): OFF, 1/32, 1/16, 1/8, 1/4, BAR. A pad hit off the beat waits for the next line of the grid; letting go ends it on the next line.
 

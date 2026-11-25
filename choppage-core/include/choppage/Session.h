@@ -115,6 +115,8 @@ namespace bc
         void cycleFxRate (int step);
         void saveMemory (int memory);
         void recallMemory (int memory);
+        void saveOriginalToMemory (int memory);   // the break as recorded, no FX
+        void clearMemory (int memory);
         void clearPattern();
         void resetToOriginal();      // pattern = the break as recorded, FX lane empty (undoable)
 
