@@ -1,0 +1,14 @@
+set(CHOP_PLUGIN_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/Akaizer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/Analysis.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/Engine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/Generator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/Params.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/PerfFx.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/SampleLoader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/SliceVoice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/SoundChain.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/Engine/TransientDetector.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/PluginProcessor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Source/PluginEditor.cpp
+)
