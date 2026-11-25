@@ -77,8 +77,10 @@ namespace bc
                 break;
             case akaize:
                 r.pos = now;
-                r.grainPos = r.prevGrainPos = now;
-                r.grainAge = 0;
+                r.grains.setup (s.akCycleLength, s.akCycleFreq, sr);
+                akSetLength = s.akCycleLength; akSetFreq = s.akCycleFreq;
+                r.grains.reset();
+                r.grains.tick (r.pos);
                 break;
             case filterDive:
                 diveAge = 0;
@@ -87,7 +89,7 @@ namespace bc
         }
     }
 
-    float PerfFx::readEffect (int pad, int ch, const Settings& s) const noexcept
+    float PerfFx::readEffect (int pad, int ch, const Settings&) const noexcept
     {
         const auto& r = fx[(size_t) pad];
         switch (pad)
@@ -97,18 +99,7 @@ namespace bc
             case reverse:
             case tapeStop: return ringAt (ch, r.pos);
             case akaize:
-            {
-                const int cycle = std::max (8, (int) (s.akCycleMs * 0.001 * sr));
-                const int splice = std::min (cycle / 2, std::max (4, (int) (0.0005 * sr)));
-                float v = ringAt (ch, r.grainPos);
-                if (r.grainAge < splice)
-                {
-                    const float a = (float) r.grainAge / (float) splice;
-                    v = v * a + ringAt (ch, r.prevGrainPos) * (1.0f - a);
-                }
-                (void) cycle;
-                return v;
-            }
+                return r.grains.sample ([this, ch] (double p) { return ringAt (ch, p); });
             default: return 0.0f;
         }
     }
@@ -142,16 +133,15 @@ namespace bc
             }
             case akaize:
             {
-                const int cycle = std::max (8, (int) (s.akCycleMs * 0.001 * sr));
-                r.pos += 1.0 / std::max (1.0, s.akRatio);
-                r.grainPos += 1.0;
-                r.prevGrainPos += 1.0;
-                if (++r.grainAge >= cycle)
+                // the read point moves at 1 / stretch; grains read on at the recording's own speed
+                if (s.akCycleLength != akSetLength || s.akCycleFreq != akSetFreq)
                 {
-                    r.prevGrainPos = r.grainPos;
-                    r.grainPos = r.pos;
-                    r.grainAge = 0;
+                    r.grains.setup (s.akCycleLength, s.akCycleFreq, sr);   // turning CYCLE while it plays
+                    akSetLength = s.akCycleLength; akSetFreq = s.akCycleFreq;
                 }
+                r.pos += 1.0 / std::max (1.0, s.akRatio);
+                r.grains.advance (1.0);
+                r.grains.tick (r.pos);
                 break;
             }
             default: break;

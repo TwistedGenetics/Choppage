@@ -2,9 +2,10 @@
 /*
     The four LCD tabs:
       SAMPLE  waveform + slice badges, then the SLICE / ALL table
-      SEQ     PATTERN / ORIGINAL, bars, pages, the KICK..OPEN + FX lanes, memories
+      SEQ     PATTERN / ORIGINAL, bars, pages, the KICK..PERC lanes, the FX row + the selected step's FX, memories
       FX      post-FX detail and every pad's setting
       SET     tempo, trigger, sound character, slicing, generate, MIDI
+      AKAI    the Akaizer: AKAIZE render settings, and the cycle of the live AKAIZE pad and slice STRETCH
     Each is transparent and drawn on the LCD glass by the editor.
 */
 #include "UI/Widgets.h"
@@ -25,6 +26,8 @@ namespace ui
         void addChoice (const char* paramId, juce::StringArray labels = {});
         void addBool (const char* paramId, const juce::String& on, const juce::String& off);
         void addAction (const juce::String& text, std::function<void()> fn, std::function<bool()> isOn = nullptr, int width = 0);
+        /** A value that isn't a parameter: its text, drag / scroll (steps, fine), double-click. */
+        void addCustom (std::function<juce::String()> text, std::function<void (float, bool)> drag, std::function<void()> reset, int width);
         void addRule();    // a divider line above the next row
 
         void resized() override;
@@ -90,8 +93,10 @@ namespace ui
         void paint (juce::Graphics&) override;
         void mouseDown (const juce::MouseEvent&) override;
         int page = 0;
+        int selStep = 0;                   // the step STEP FX / RATE edit (a click on any cell or the FX row picks it)
+        std::function<void()> onSelect;
         static constexpr int laneW = 112;
-        static constexpr int kLanes = 6;   // KICK SNARE GHOST HAT OPEN FX
+        static constexpr int kLanes = 7;   // KICK SNARE GHOST HAT OPEN PERC, then the FX row
     private:
         int visibleSteps() const;
         juce::Rectangle<int> cell (int lane, int column) const;
@@ -107,7 +112,7 @@ namespace ui
     private:
         ChoppageProcessor& proc;
         SeqGrid grid;
-        std::vector<std::unique_ptr<LcdCell>> tools, memories;
+        std::vector<std::unique_ptr<LcdCell>> tools, memories, stepFx;
         LcdCell memLabel, help;
     };
 
@@ -136,4 +141,5 @@ namespace ui
     // ---- FX / SET -----------------------------------------------------------------------------------
     class FxTab final : public ParamPage { public: explicit FxTab (ChoppageProcessor&); };
     class SetTab final : public ParamPage { public: explicit SetTab (ChoppageProcessor&); };
+    class AkaiTab final : public ParamPage { public: explicit AkaiTab (ChoppageProcessor&); };
 }

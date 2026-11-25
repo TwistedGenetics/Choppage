@@ -45,6 +45,7 @@ namespace bc
             float sensitivity = 0.62f;
             int gridPerBar = 16;
             int muteGroup = 0;                 // 0-3 (kept when another file loads)
+            double loopBpm = 0.0;              // AKAIZE SYNC: hand-set loop tempo (0 = the break's own)
             uint32_t version = 0;
         };
 
@@ -135,7 +136,24 @@ namespace bc
         /** AKAIZE RENDER: Akaizer (S-series cyclic) stretch of the slot's break to `targetBpm`
             (or by `stretchPercent` when targetBpm <= 0), cycle length in samples. The result replaces
             the slot's audio, slices scaled, badges kept, and is written to the data folder. */
-        bool akaizeSlot (int slot, double targetBpm, double stretchPercent, int cycleLength);
+        /** AKAIZE render settings: Akaizer v1.2's, as Twisted-Timestretch sets them. */
+        struct AkaizeRender
+        {
+            bool   sync = true;            // stretch = loop BPM / target BPM (else stretchPercent)
+            double targetBpm = 170.0;      // the host's tempo (or TARGET BPM with no host)
+            double stretchPercent = 100.0; // 25 .. 2000
+            int    cycleLength = 800;      // 20 .. 2000 samples
+            int    cycleFreq = 51;         // 20 .. 2050 cps (the caller links it to the length unless MANUAL)
+            double pitch = 0.0;            // semitones of repitch before the stretch, -24 .. 24
+        };
+        /** Renders the break the Akaizer way (16-bit, exactly as the original computes it), writes
+            Renders/<name>_akaized.wav and loads it back into the slot (slices moved, settings and pattern kept). */
+        bool akaizeSlot (int slot, const AkaizeRender&);
+        bool akaizeSlot (int slot, double targetBpm, double stretchPercent, int cycleLength);   // (older form)
+        /** LOOP BPM of a break for SYNC: set by hand, or 0 for the tempo found when it loaded. */
+        void   setLoopBpm (int slot, double bpm);
+        double loopBpm (int slot) const;      // what SYNC uses (the hand-set one, else the break's own)
+        bool   loopBpmSet (int slot) const;
         /** One pass of the selected break's pattern, rendered with these settings. */
         std::shared_ptr<SampleData> bounce (const Engine::Settings&, double bpm, double sampleRate);
 

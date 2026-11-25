@@ -86,6 +86,20 @@ namespace ui
         rows.back().items.push_back ({ std::move (c), width > 0 ? width : textWidth (t) });
     }
 
+    void ParamPage::addCustom (std::function<juce::String()> text, std::function<void (float, bool)> drag, std::function<void()> reset, int width)
+    {
+        auto c = std::make_unique<LcdCell>();
+        c->text = std::move (text);
+        c->underline = true;
+        c->fontSize = kFont;
+        c->just = juce::Justification::centred;
+        c->onDrag = [drag] (float steps, const juce::ModifierKeys& m) { if (drag) drag (steps, m.isShiftDown()); };
+        c->onClick = [reset] (const juce::MouseEvent& e) { if ((e.mods.isAltDown() || e.getNumberOfClicks() > 1) && reset) reset(); };
+        c->setTooltip ("Drag up / down or scroll. Shift = fine. Double-click = automatic.");
+        addAndMakeVisible (*c);
+        rows.back().items.push_back ({ std::move (c), width });
+    }
+
     void ParamPage::resized()
     {
         int y = 0;
@@ -253,7 +267,7 @@ namespace ui
             if (sel) { g.setColour (lcdc().ink); g.fillRect (cell); }
             else     { g.setColour (lcdc().dim); g.drawRect (cell, 2); }
             g.setColour (sel ? lcdc().inv : lcdc().ink);
-            juce::String t = muted ? "M" : juce::String (bc::badgeLetter (b));
+            juce::String t = muted ? "M" : juce::String (bc::badgeLabel (b));
             if (! muted && cell.getWidth() > 38) t << num;
             g.drawFittedText (t, cell, juce::Justification::centred, 1, 0.6f);
         }
@@ -455,15 +469,16 @@ namespace ui
     // =====================================================================================
     namespace
     {
-        const char* kLaneNames[] = { "KICK", "SNARE", "GHOST", "HAT", "OPEN", "FX" };
+        const char* kLaneNames[] = { "KICK", "SNARE", "GHOST", "HAT", "OPEN", "PERC", "FX" };
         const Badge kLaneBadge[] = { Badge::kick, Badge::snare, Badge::ghost, Badge::hat, Badge::open, Badge::other };
+        constexpr int kHitLanes = 6;    // lane 6 is the FX row
         const char* fxLetter (bc::FxType t)
         {
             switch (t) { case bc::FxType::stutter: return "S"; case bc::FxType::reverse: return "R";
                          case bc::FxType::stretch: return "A"; case bc::FxType::tapeStop: return "T"; case bc::FxType::none: return ""; }
             return "";
         }
-        int laneOf (Badge b) { for (int i = 0; i < 5; ++i) if (kLaneBadge[i] == b) return i; return 1; }   // OTHER shows on SNARE
+        int laneOf (Badge b) { for (int i = 0; i < kHitLanes; ++i) if (kLaneBadge[i] == b) return i; return kHitLanes - 1; }
     }
 
     int SeqGrid::visibleSteps() const
@@ -508,7 +523,7 @@ namespace ui
                 auto r = cell (lane, c);
                 juce::String t;
                 bool hit = false;
-                if (lane < 5)
+                if (lane < kHitLanes)
                 {
                     const int sl = pat.slice[(size_t) step];
                     if (sl >= 0 && s.content != nullptr && laneOf (s.content->badges[(size_t) sl]) == lane)
@@ -532,8 +547,13 @@ namespace ui
                     g.setColour (lcdc().ink);
                     g.fillRect (r);
                     g.setColour (lcdc().inv);
-                    g.setFont (lcd (lane < 5 ? 21.0f : 16.0f));
+                    g.setFont (lcd (lane < kHitLanes ? 21.0f : 16.0f));
                     g.drawFittedText (t, r, juce::Justification::centred, 1, 0.5f);
+                }
+                if (lane == kHitLanes && step == selStep)
+                {
+                    g.setColour (lcdc().mark);
+                    g.drawRect (r.expanded (2, 2), 3);
                 }
                 else
                 {
@@ -559,26 +579,15 @@ namespace ui
                 if (cell (lane, c).expanded (2, 3).contains (e.getPosition()))
                 {
                     const int step = page * 32 + c;
-                    const auto& pat = s.current;
+                    selStep = step;                     // STEP FX / RATE now edit this step
                     if (e.mods.isShiftDown()) { proc.toggleLock (step); repaint(); return; }
-                    if (lane < 5)
+                    if (lane < kHitLanes)
                     {
                         if (e.mods.isPopupMenu()) proc.swapStep (step);
                         else proc.toggleStep (step, kLaneBadge[lane]);
                     }
-                    else
-                    {
-                        if (e.mods.isPopupMenu()) proc.cycleFxRate (step);
-                        else if (pat.fx[(size_t) step].type != bc::FxType::none) proc.setFxStep (step, bc::FxType::none, 16);
-                        else
-                        {
-                            juce::PopupMenu m;
-                            m.addSectionHeader ("ADD FX ON STEP " + juce::String (step + 1));
-                            for (auto t : { bc::FxType::stutter, bc::FxType::reverse, bc::FxType::stretch, bc::FxType::tapeStop })
-                                m.addItem (bc::fxTypeName (t), [this, step, t] { proc.setFxStep (step, t, 16); });
-                            m.showMenuAsync (juce::PopupMenu::Options().withMousePosition());
-                        }
-                    }
+                    else if (e.mods.isPopupMenu()) proc.cycleFxRate (step);   // the FX row: a click selects the step
+                    if (onSelect) onSelect();
                     repaint();
                     return;
                 }
@@ -628,7 +637,40 @@ namespace ui
             addAndMakeVisible (*c);
             memories.push_back (std::move (c));
         }
-        help.text = [] { return juce::String::fromUTF8 ("CLICK ADD/REMOVE \xc2\xb7 RIGHT-CLICK SWAP SLICE / FX RATE \xc2\xb7 SHIFT-CLICK LOCK"); };
+        // the selected step's FX (click a cell or the FX row to pick the step)
+        auto stepCell = [this] (std::function<juce::String()> text, std::function<void()> fn, std::function<bool()> on, bool boxed)
+        {
+            auto c = std::make_unique<LcdCell>();
+            c->text = std::move (text);
+            c->isOn = std::move (on);
+            c->boxed = boxed;
+            c->fontSize = 22.0f;
+            c->just = juce::Justification::centred;
+            if (fn) c->onClick = [fn] (const juce::MouseEvent&) { fn(); };
+            else c->setInterceptsMouseClicks (false, false);
+            addAndMakeVisible (*c);
+            stepFx.push_back (std::move (c));
+        };
+        auto fxOf = [this, slot]() -> bc::FxEvent { const auto& p = slot().program.pattern;
+                                                    return grid.selStep < p.numSteps ? p.fx[(size_t) grid.selStep] : bc::FxEvent{}; };
+        stepCell ([this] { return "STEP " + juce::String (grid.selStep + 1) + " FX"; }, nullptr, nullptr, false);
+        const bc::FxType types[] = { bc::FxType::none, bc::FxType::stutter, bc::FxType::reverse, bc::FxType::stretch, bc::FxType::tapeStop };
+        const char* typeNames[] = { "OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP" };
+        for (int i = 0; i < 5; ++i)
+        {
+            const auto t = types[i];
+            stepCell ([n = juce::String (typeNames[i])] { return n; },
+                      [this, t, fxOf] { const int rate = fxOf().rate > 0 ? fxOf().rate : 16; proc.setFxStep (grid.selStep, t, rate); grid.repaint(); },
+                      [t, fxOf] { return fxOf().type == t; }, true);
+        }
+        stepCell ([] { return juce::String ("RATE"); }, nullptr, nullptr, false);
+        for (int rate : { 8, 16, 32, 64 })
+            stepCell ([rate] { return "1/" + juce::String (rate); },
+                      [this, rate, fxOf] { const auto f = fxOf(); if (f.type != bc::FxType::none) { proc.setFxStep (grid.selStep, f.type, rate); grid.repaint(); } },
+                      [rate, fxOf] { const auto f = fxOf(); return f.type != bc::FxType::none && f.rate == rate; }, true);
+        grid.onSelect = [this] { for (auto& c : stepFx) c->repaint(); };
+
+        help.text = [] { return juce::String::fromUTF8 ("CLICK ADD/REMOVE \xc2\xb7 RIGHT-CLICK SWAP SLICE / FX RATE \xc2\xb7 SHIFT-CLICK LOCK \xc2\xb7 FX ROW: PICK THE STEP"); };
         help.fontSize = 20.0f;
         help.setInterceptsMouseClicks (false, false);
         addAndMakeVisible (help);
@@ -649,6 +691,16 @@ namespace ui
         auto bottom = r.removeFromBottom (36);
         auto helpRow = r.removeFromBottom (28);
         help.setBounds (helpRow);
+        auto fxRow = r.removeFromBottom (38);
+        {
+            const int w[] = { 132, 64, 124, 124, 118, 132, 64, 74, 74, 74, 74 };
+            int x = fxRow.getX();
+            for (size_t i = 0; i < stepFx.size() && i < 11; ++i)
+            {
+                stepFx[i]->setBounds (x, fxRow.getY() + 3, w[i], 32);
+                x += w[i] + (i == 0 || i == 5 ? 10 : 5);
+            }
+        }
         memLabel.setBounds (bottom.removeFromLeft (SeqGrid::laneW));
         const int w = bottom.getWidth() / bc::kMemories;
         for (auto& m : memories) m->setBounds (bottom.removeFromLeft (w).reduced (2, 2));
@@ -666,6 +718,7 @@ namespace ui
         grid.repaint();
         for (auto& t : tools) t->repaint();
         for (auto& m : memories) m->repaint();
+        for (auto& c : stepFx) c->repaint();
     }
 
     // =====================================================================================
@@ -819,11 +872,65 @@ namespace ui
         addRow ("PADS", "");
         addValue (P::stutRate, "STUTTER", 90); addValue (P::rollRate, "ROLL", 90); addValue (P::tapeMs, "TAPE STOP", 130);
         addRow ("", "");
-        addValue (P::akCycle, "AKAIZE", 120); addValue (P::akRatio, "", 90); addValue (P::diveRes, "FILT DIVE RES", 100);
+        addValue (P::akCycLen, "AKAIZE", 130, 0.005f); addValue (P::akRatio, "", 90); addValue (P::diveRes, "FILT DIVE RES", 100);
         addRow ("", "");
         addValue (P::dropRate, "S950 DROP", 140); addText ("QUANT"); addChoice (P::padQuant);
         addRow ("SLICES", "");
-        addValue (P::stretchCycle, "STRETCH CYCLE", 120);
+        addValue (P::slCycLen, "STRETCH CYCLE", 130, 0.005f); addValue (P::slCycFreq, "", 120, 0.005f);
+        addText ("(MORE ON AKAI)");
+    }
+
+    // =====================================================================================
+    //  AKAI: the Akaizer, set as in Akaizer v1.2 / Twisted-Timestretch
+    // =====================================================================================
+    AkaiTab::AkaiTab (ChoppageProcessor& p) : ParamPage (p)
+    {
+        namespace P = bc::params;
+        rowHeight = 36;
+        titleW = 170;
+        addRow ("RENDER", "");
+        addAction ("AKAIZE THE BREAK", [this] { proc.akaizeSelected(); }, nullptr, 260);
+        addCustom ([this] {
+                       const int slot = proc.getSelectedSlot();
+                       const auto& s = proc.getSlot (slot);
+                       if (s.content == nullptr) return juce::String ("NO BREAK");
+                       return "BREAK " + juce::String (slot + 1) + ": " + juce::String (proc.session().loopBpm (slot), 2) + " BPM";
+                   }, nullptr, nullptr, 300);
+        addText ("-> 16-BIT WAV");
+        addRow ("", "STRETCH");
+        addValue (P::akrStretch, "", 150, 0.002f); addText ("SYNC"); addBool (P::akrSync, "ON", "OFF");
+        addRow ("", "LOOP BPM");
+        addCustom ([this] {
+                       const int slot = proc.getSelectedSlot();
+                       const double b = proc.session().loopBpm (slot);
+                       return b > 1.0 ? juce::String (b, 2) + (proc.session().loopBpmSet (slot) ? "" : " AUTO") : juce::String ("-");
+                   },
+                   [this] (float steps, bool fine) {
+                       const int slot = proc.getSelectedSlot();
+                       const double b = proc.session().loopBpm (slot);
+                       if (b > 1.0) proc.session().setLoopBpm (slot, b + steps * (fine ? 0.01 : 0.5));
+                   },
+                   [this] { proc.session().setLoopBpm (proc.getSelectedSlot(), 0.0); }, 200);
+        addText ("TO");
+        addCustom ([this] { const double h = proc.getHostBpm(); return h > 1.0 ? "HOST " + juce::String (h, 2) : juce::String ("NO HOST >"); },
+                   nullptr, nullptr, 190);
+        addValue (P::akrTarget, "TARGET", 150, 0.002f);
+        addRow ("", "CYCLE");
+        addValue (P::akrCycLen, "LENGTH", 140, 0.005f); addValue (P::akrCycFreq, "FREQ", 130, 0.005f);
+        addBool (P::akrFreqManual, "MANUAL", "LINKED");
+        addRow ("", "PITCH");
+        addValue (P::akrPitch, "", 110, 0.02f); addText ("(REPITCH BEFORE THE STRETCH, LENGTH KEPT)");
+        addRule();
+        addRow ("LIVE", "AKAIZE PAD");
+        addValue (P::akCycLen, "LENGTH", 140, 0.005f); addValue (P::akCycFreq, "FREQ", 130, 0.005f);
+        addBool (P::akFreqManual, "MANUAL", "LINKED");
+        addRow ("", "PAD STRETCH");
+        addValue (P::akRatio, "", 110);
+        addRow ("", "SLICE STRETCH");
+        addValue (P::slCycLen, "LENGTH", 140, 0.005f); addValue (P::slCycFreq, "FREQ", 130, 0.005f);
+        addBool (P::slFreqManual, "MANUAL", "LINKED");
+        addRow ("", "");
+        addText ("DRAG / SCROLL - DOUBLE-CLICK RESETS - LINKED = 41000/LEN");
     }
 
     // =====================================================================================
@@ -851,8 +958,8 @@ namespace ui
         addRow ("SOUND", "CHARACTER");
         addValue (P::character, "", 160); addText ("LCD"); addChoice (P::lcdColour);
         addRow ("", "RENDER");
-        addAction ("AKAIZE TO HOST BPM", [this] { proc.akaizeSelected(); });
-        addText ("(OR X AKAIZE STRETCH, NO HOST)");
+        addAction ("AKAIZE THE BREAK", [this] { proc.akaizeSelected(); });
+        addText ("(SETTINGS ON THE AKAI TAB)");
         addRow ("", "SLICING");
         auto sel = [this]() -> const ChoppageProcessor::Slot& { return proc.getSlot (proc.getSelectedSlot()); };
         addAction ("TRANSIENTS", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, s.sensitivity, s.gridPerBar); },

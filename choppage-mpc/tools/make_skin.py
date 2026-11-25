@@ -590,10 +590,14 @@ def pages():
             [K("memory", "MEMORY"), G("memSave", "SAVE"), G("memRecall", "RECALL"), G("undo", "UNDO")],
             [G("diceFx", "FX\nDICE"), K("fxAmount", "FX AMOUNT"), T("original", "ORIGINAL"), G("redo", "REDO")]]},
         {"fn": 4, "sub": 0, "name": "FX PADS", "rows": [
-            [K("stutRate", "STUTTER RATE"), K("rollRate", "ROLL RATE"), K("tapeMs", "TAPE STOP"), K("akCycle", "AKAIZE CYCLE")],
-            [K("akRatio", "AKAIZE STRETCH"), K("diveRes", "FILTER DIVE RES"), K("dropRate", "S950 DROP RATE"),
-             K("stretchCycle", "SLICE STRETCH CYCLE")],
+            [K("stutRate", "STUTTER RATE"), K("rollRate", "ROLL RATE"), K("tapeMs", "TAPE STOP"), K("diveRes", "FILTER DIVE RES")],
+            [K("akCycLen", "AKAIZE PAD LENGTH"), K("akCycFreq", "AKAIZE PAD FREQ"), T("akFreqManual", "PAD FREQ\nMANUAL"), K("akRatio", "AKAIZE PAD STRETCH")],
+            [K("slCycLen", "SLICE STRETCH LENGTH"), K("slCycFreq", "SLICE STRETCH FREQ"), T("slFreqManual", "SLICE FREQ\nMANUAL"), K("dropRate", "S950 DROP RATE")],
             [P("padQuant", "PAD QUANTISE", ["OFF", "1/16", "1/8"], span=2), K("fxAmount", "FX AMOUNT"), G("diceFx", "FX\nDICE")]]},
+        {"fn": 4, "sub": 1, "name": "AKAIZER", "rows": [
+            [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 = AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
+            [K("akrCycLen", "CYCLE LENGTH"), K("akrCycFreq", "CYCLE FREQ"), T("akrFreqManual", "FREQ\nMANUAL"), K("akrPitch", "PITCH", bi=True)],
+            [G("akaize", "AKAIZE\nTHE BREAK"), R("infoBpm", "BREAK TEMPO"), R("infoMsg", "MESSAGE", span=2)]]},
         {"fn": 5, "sub": 0, "name": "SOUND", "rows": [
             [K("character", "CHARACTER"), K("srate", "SAMPLE RATE"), K("volume", "VOLUME"), K("filter", "FILTER")],
             [P("filterType", "FILTER TYPE", ["LP", "HP"]), K("filterRes", "RESONANCE"), K("dist", "DISTORTION"), K("distTone", "DIST TONE", bi=True)],
@@ -1023,7 +1027,7 @@ class Builder:
         # ---- sections under the dice row (one shows, by MP_VIEW)
         SY = 430
         pad_w, pad_h, gap = 152, 88, 6
-        settings = ["stutRate", "rollRate", None, "tapeMs", None, "akCycle", "diveRes", "dropRate"]
+        settings = ["stutRate", "rollRate", None, "tapeMs", None, "akCycLen", "diveRes", "dropRate"]
         names = ["STUTTER", "ROLL", "REVERSE", "TAPE STOP", "HALF-TIME", "AKAIZE", "FILT DIVE", "S950 DROP"]
         win = (10, 44, pad_w - 20, 34)
         for view in (0, 1):     # the 8 FX pads along the bottom (MAIN and FX sections)
@@ -1155,7 +1159,7 @@ class Builder:
         q = {13: "filter", 14: "dist", 15: "crush", 16: "reverb",
              9: "srate", 10: "volume", 11: "patAmount", 12: "fxAmount",
              5: "break", 6: "slice", 7: "slMove", 8: "browse",
-             1: "stutRate", 2: "rollRate", 3: "tapeMs", 4: "akCycle"}
+             1: "stutRate", 2: "rollRate", 3: "tapeMs", 4: "akCycLen"}
         qm = o(("Tab", 1), ("SubTab", 1), ("Bank Direction", "RowTopDown"),
                ("Q-Links", o(*[("Q-Link %d" % i, self.p(q[i])["index"]) for i in range(1, 17)])))
         return tab, qm
@@ -1376,7 +1380,7 @@ class Builder:
             f.write(dump(tui) + "\n")
         # Program mode (no screen page open): the sound and the dice amounts
         prog = [self.p(i)["index"] for i in ("filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
-                                              "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycle")]
+                                              "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycLen")]
         ql = o(("version", 4), ("info", o(("version", 1), ("type", "CompleteDescription"))),
                ("Screen Mode Q-Links", o(("version", 4), ("map", qmaps))),
                ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), prog[i]) for i in range(16)])))

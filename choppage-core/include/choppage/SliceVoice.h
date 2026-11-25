@@ -13,6 +13,7 @@
     No allocation; holds the content reference so the buffer stays alive while it plays.
 */
 #include "choppage/Model.h"
+#include "choppage/AkaiGrains.h"
 
 namespace bc
 {
@@ -27,7 +28,8 @@ namespace bc
             bool   reverse = false;
             int    stutter = 0;
             double stretch = 1.0;
-            int    cycleSamples = 420; // output samples per stretch grain
+            int    cycleLength = 800;  // Akaizer CYCLE LENGTH (samples; a grain is twice this)
+            double cycleFreq = 51.0;   // Akaizer CYCLE FREQ (grains per second)
             float  trans = 0.5f;
             int    gateSamples = 1 << 30;
             int    fadeSamples = 88;
@@ -53,10 +55,7 @@ namespace bc
 
         // Position inside the stutter window, in source samples from the region start (or end, reversed).
         double head = 0.0;         // play head (stretch moves it at rate/stretch)
-        double grain = 0.0;        // grain read position
-        double prevGrain = 0.0;    // the grain fading out at a splice
-        int    grainAge = 0;
-        int    spliceFade = 22;
+        AkaiGrains grains;         // STRETCH: the Akaizer grain scheme
         double windowLen = 0.0;    // source samples in one stutter repeat
         int    repeat = 0, repeats = 1;
         int    age = 0;            // output samples since start

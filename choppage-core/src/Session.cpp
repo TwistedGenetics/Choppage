@@ -6,6 +6,7 @@
 #include "choppage/TransientDetector.h"
 #include <chrono>
 #include <filesystem>
+#include <fstream>
 #include <map>
 #include <sstream>
 
@@ -460,6 +461,7 @@ namespace bc
             if (kv.count ("sens")) s.sensitivity = (float) std::atof (kv["sens"].c_str());
             if (kv.count ("gridPerBar")) s.gridPerBar = std::atoi (kv["gridPerBar"].c_str());
             if (kv.count ("group")) s.muteGroup = clampv (std::atoi (kv["group"].c_str()), 0, kMuteGroups - 1);
+            if (kv.count ("loopBpm")) s.loopBpm = std::atof (kv["loopBpm"].c_str());
         }
         pushHistory (s, s.current);
         if (slot == selectedSlot()) selSlice = 0;
@@ -840,12 +842,42 @@ namespace bc
     // ---- renders ------------------------------------------------------------------------------------
     bool Session::akaizeSlot (int slot, double targetBpm, double stretchPercent, int cycleLength)
     {
+        AkaizeRender r;
+        r.sync = targetBpm > 1.0;
+        r.targetBpm = targetBpm;
+        r.stretchPercent = stretchPercent;
+        r.cycleLength = cycleLength;
+        r.cycleFreq = akaizer::linkedFrequency (clampv (cycleLength, 20, 2000));
+        return akaizeSlot (slot, r);
+    }
+
+    void Session::setLoopBpm (int slot, double bpm)
+    {
+        if (slot < 0 || slot >= kSlots) return;
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        slots[(size_t) slot].loopBpm = bpm > 1.0 ? clampv (bpm, 20.0, 400.0) : 0.0;
+        changed (slot);
+    }
+
+    double Session::loopBpm (int slot) const
+    {
+        if (slot < 0 || slot >= kSlots) return 0.0;
+        const auto& s = slots[(size_t) slot];
+        if (s.loopBpm > 1.0) return s.loopBpm;
+        return s.content != nullptr ? s.content->bpm : 0.0;
+    }
+
+    bool Session::loopBpmSet (int slot) const { return slot >= 0 && slot < kSlots && slots[(size_t) slot].loopBpm > 1.0; }
+
+    bool Session::akaizeSlot (int slot, const AkaizeRender& set)
+    {
         std::lock_guard<std::recursive_mutex> l (mutex);
         auto& s = slots[(size_t) clampv (slot, 0, kSlots - 1)];
         if (s.content == nullptr) return false;
         const auto& src = *s.content->buffer;
-        if (targetBpm > 1.0) stretchPercent = s.content->bpm / targetBpm * 100.0;
-        stretchPercent = clampv (stretchPercent, 25.0, 400.0);
+        const double loop = loopBpm (slot);
+        double stretchPercent = set.sync && set.targetBpm > 1.0 && loop > 1.0 ? loop / set.targetBpm * 100.0 : set.stretchPercent;
+        stretchPercent = clampv (stretchPercent, 25.0, 2000.0);
 
         // Akaizer works on interleaved 16-bit, exactly as the original program did
         const int chans = src.channels;
@@ -856,9 +888,9 @@ namespace bc
 
         akaizer::Settings st;
         st.stretchPercent = stretchPercent;
-        st.cycleLength = clampv (cycleLength, 20, 2000);
-        st.cycleFrequency = akaizer::linkedFrequency (st.cycleLength);
-        const auto r = akaizer::render (pcm.data(), pcm.size(), chans, src.sampleRate, st, 0.0);
+        st.cycleLength = clampv (set.cycleLength, 20, 2000);
+        st.cycleFrequency = clampv (set.cycleFreq, 20, 2050);
+        const auto r = akaizer::render (pcm.data(), pcm.size(), chans, src.sampleRate, st, clampv (set.pitch, -24.0, 24.0));
         if (r.samples.empty()) return false;
 
         auto out = std::make_shared<SampleData>();
@@ -867,22 +899,29 @@ namespace bc
         out->sampleRate = src.sampleRate;
         for (int i = 0; i < frames; ++i)
             for (int c = 0; c < chans; ++c) out->ch[c][(size_t) i] = r.samples[(size_t) (i * chans + c)] / 32768.0f;
-        char tag[32];
-        std::snprintf (tag, sizeof tag, " AKAI %d", (int) std::lround (targetBpm > 1.0 ? targetBpm : stretchPercent));
+        const double newBpm = loop > 1.0 ? loop * 100.0 / stretchPercent : 0.0;
+        char tag[48];
+        std::snprintf (tag, sizeof tag, " AKAI %d", (int) std::lround (newBpm > 1.0 ? newBpm : stretchPercent));
         out->name = s.content->name + tag;
         out->buildOverview();
 
-        // Written next to the other renders so the project can find it again
+        // Renders/<name>_akaized.wav: 16-bit, the original's own WAV layout (never over an earlier render)
         std::string path;
         if (! dataFolder.empty())
         {
             std::error_code ec;
             fs::create_directories (fs::path (dataFolder) / "Renders", ec);
             std::string safe;
-            for (char c : out->name) safe += (std::isalnum ((unsigned char) c) || c == ' ' || c == '-' || c == '_') ? c : '_';
-            path = (fs::path (dataFolder) / "Renders" / (safe + ".wav")).string();
-            const float* ch[2] = { out->ch[0].data(), out->ch[chans > 1 ? 1 : 0].data() };
-            if (AudioFile::writeWav24 (path, ch, chans, frames, out->sampleRate)) out->path = path;
+            for (char c : s.content->name) safe += (std::isalnum ((unsigned char) c) || c == ' ' || c == '-' || c == '_') ? c : '_';
+            auto candidate = [&] (int n) {
+                return (fs::path (dataFolder) / "Renders" / (safe + "_akaized" + (n > 1 ? " " + std::to_string (n) : std::string()) + ".wav")).string();
+            };
+            int n = 1;
+            while (fs::exists (candidate (n), ec) && n < 999) ++n;
+            path = candidate (n);
+            const auto bytes = akaizer::makeWav (r.samples, chans, (int) std::lround (src.sampleRate));
+            std::ofstream f (path, std::ios::binary);
+            if (f && f.write ((const char*) bytes.data(), (std::streamsize) bytes.size())) out->path = path;
             else path.clear();
         }
 
@@ -893,7 +932,7 @@ namespace bc
         c->name = out->name;
         for (int k = 0; k < c->slices.count; ++k) c->slices.starts[(size_t) k] = (int) std::lround (c->slices.starts[(size_t) k] * ratio);
         c->slices.normalise (frames);
-        if (targetBpm > 1.0) c->bpm = targetBpm;
+        if (newBpm > 1.0) c->bpm = newBpm;
 
         // keep the slot's settings and pattern: install, then put them back
         const auto program = s.program;
@@ -905,6 +944,7 @@ namespace bc
         t.program.all = program.all;
         t.current = current;
         t.memories = memories;
+        t.loopBpm = 0.0;     // the render's tempo is now the break's own
         pushHistory (t, t.current);
         publish (slot);
         return true;
@@ -957,6 +997,7 @@ namespace bc
             o << "path " << s.file << "\n";
             o << "grid " << (s.gridSlicing ? 1 : 0) << "\nsens " << s.sensitivity << "\ngridPerBar " << s.gridPerBar << "\n";
             o << "group " << s.muteGroup << "\n";
+            if (s.loopBpm > 1.0) o << "loopBpm " << s.loopBpm << "\n";
             if (s.content != nullptr)
             {
                 o << "bpm " << s.content->bpm << "\nbars " << s.content->bars << "\n";

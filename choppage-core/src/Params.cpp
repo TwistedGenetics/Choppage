@@ -1,4 +1,5 @@
 #include "choppage/Params.h"
+#include "choppage/Akaizer.h"
 #include <cstdio>
 
 namespace bc
@@ -61,17 +62,31 @@ namespace bc
             C ("stutRate", "Stutter Rate", kRates, 1);
             C ("rollRate", "Roll Rate", kRates, 2);
             F ("tapeMs", "Tape Stop Time", 100, 3000, 700, PDisp::ms0);
-            F ("akCycle", "Akaize Cycle", 2, 60, 9.5f, PDisp::ms1);
+            F ("akCycle", "(old) Akaize Cycle ms", 2, 60, 9.5f, PDisp::ms1);
             C ("akRatio", "Akaize Stretch", { "1.5X", "2X", "3X", "4X" }, 1);
             F ("diveRes", "Filter Dive Res", 0, 1, 0.7f, PDisp::percent);
             F ("dropRate", "S950 Drop Rate", 4000, 15600, 7500, PDisp::khz);
-            F ("stretchCycle", "Slice Stretch Cycle", 2, 60, 9.5f, PDisp::ms1);
+            F ("stretchCycle", "(old) Slice Stretch Cycle ms", 2, 60, 9.5f, PDisp::ms1);
             for (int i = 0; i < kFxPads; ++i)
             {
                 static const char* ids[kFxPads] = { "pad1", "pad2", "pad3", "pad4", "pad5", "pad6", "pad7", "pad8" };
                 B (ids[i], fxPadName (i), false);
             }
             C ("lcdColour", "LCD Colour", { "BLUE", "GREEN", "AMBER", "WHITE" }, 0);
+            // 0.6: Akaizer settings (the ranges and defaults of Akaizer v1.2 / Twisted-Timestretch)
+            F ("akCycLen", "Akaize Pad Cycle Length", 20, 2000, 800, PDisp::samples, 400);
+            F ("akCycFreq", "Akaize Pad Cycle Freq", 20, 2050, 51, PDisp::cps, 200);
+            B ("akFreqManual", "Akaize Pad Manual Freq", false);
+            F ("slCycLen", "Slice Stretch Cycle Length", 20, 2000, 800, PDisp::samples, 400);
+            F ("slCycFreq", "Slice Stretch Cycle Freq", 20, 2050, 51, PDisp::cps, 200);
+            B ("slFreqManual", "Slice Stretch Manual Freq", false);
+            F ("akrStretch", "Akaize Render Stretch", 25, 2000, 100, PDisp::pct2, 150);
+            B ("akrSync", "Akaize Render Sync", true);
+            F ("akrTarget", "Akaize Render Target BPM", 40, 300, 170, PDisp::bpm);
+            F ("akrCycLen", "Akaize Render Cycle Length", 20, 2000, 800, PDisp::samples, 400);
+            F ("akrCycFreq", "Akaize Render Cycle Freq", 20, 2050, 51, PDisp::cps, 200);
+            B ("akrFreqManual", "Akaize Render Manual Freq", false);
+            F ("akrPitch", "Akaize Render Pitch", -24, 24, 0, PDisp::semis);
             return v;
         }();
         return d;
@@ -132,6 +147,11 @@ namespace bc
             case PDisp::db:      if (v <= -59.9f) return "-INF"; std::snprintf (b, sizeof b, "%.1f dB", (double) v); break;
             case PDisp::signed2: std::snprintf (b, sizeof b, "%+.2f", (double) v); break;
             case PDisp::plain2:  std::snprintf (b, sizeof b, "%.2f", (double) v); break;
+            case PDisp::samples: std::snprintf (b, sizeof b, "%d smp", (int) std::lround (v)); break;
+            case PDisp::cps:     std::snprintf (b, sizeof b, "%d cps", (int) std::lround (v)); break;
+            case PDisp::semis:   { const int st = (int) std::lround (v); std::snprintf (b, sizeof b, st == 0 ? "0 st" : "%+d st", st); break; }
+            case PDisp::pct2:    std::snprintf (b, sizeof b, "%.2f%%", (double) v); break;
+            case PDisp::bpm:     std::snprintf (b, sizeof b, "%.2f BPM", (double) v); break;
         }
         return b;
     }
@@ -140,6 +160,11 @@ namespace bc
     double echoBeats (int idx)       { static const double b[] = { 0.25, 0.5, 0.75, 1.0, 1.5 }; return b[clampv (idx, 0, 4)]; }
     double speedFactor (int idx)     { static const double s[] = { 0.5, 1.0, 2.0 }; return s[clampv (idx, 0, 2)]; }
     double akRatioValue (int idx)    { static const double r[] = { 1.5, 2.0, 3.0, 4.0 }; return r[clampv (idx, 0, 3)]; }
+    int    akaizeFreq (float cycleLength, float freq, bool manual)
+    {
+        return manual ? clampv ((int) std::lround (freq), 20, 2050)
+                      : akaizer::linkedFrequency (clampv ((int) std::lround (cycleLength), 20, 2000));
+    }
 
     const char* fxPadName (int i)
     {
@@ -160,12 +185,14 @@ namespace bc
         s.keepPitch   = i (P_FIT_MODE) == 1;
         s.tempoSourceMul = i (P_TEMPO_SRC) == 1 ? 0.5 : i (P_TEMPO_SRC) == 2 ? 2.0 : 1.0;
         s.swing       = v[P_SWING];
-        s.stretchCycleMs = v[P_STRETCH_CYCLE];
+        s.slCycleLength = clampv (i (P_SL_CYC_LEN), 20, 2000);
+        s.slCycleFreq   = akaizeFreq (v[P_SL_CYC_LEN], v[P_SL_CYC_FREQ], v[P_SL_FREQ_MAN] > 0.5f);
 
         s.pads.stutterDiv = noteRateDivisor (i (P_STUT_RATE));
         s.pads.rollDiv    = noteRateDivisor (i (P_ROLL_RATE));
         s.pads.tapeMs     = v[P_TAPE_MS];
-        s.pads.akCycleMs  = v[P_AK_CYCLE];
+        s.pads.akCycleLength = clampv (i (P_AK_CYC_LEN), 20, 2000);
+        s.pads.akCycleFreq   = akaizeFreq (v[P_AK_CYC_LEN], v[P_AK_CYC_FREQ], v[P_AK_FREQ_MAN] > 0.5f);
         s.pads.akRatio    = akRatioValue (i (P_AK_RATIO));
         s.pads.diveRes    = v[P_DIVE_RES];
         s.pads.quantSteps = i (P_PAD_QUANT);

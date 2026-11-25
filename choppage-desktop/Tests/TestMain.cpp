@@ -4,7 +4,7 @@
     JUCE decoding, state through the host's XML, and the editor rendered to PNGs.
 
       ChoppageTests                         run the checks
-      ChoppageTests --snapshot out.png [tab 0-4] [width] [lcd 0-3]
+      ChoppageTests --snapshot out.png [tab 0-5] [width] [lcd 0-3]
 */
 #include <JuceHeader.h>
 #include "PluginProcessor.h"

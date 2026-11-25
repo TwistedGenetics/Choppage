@@ -35,6 +35,13 @@ namespace bc
                      case Badge::hat: return "H"; case Badge::open: return "O"; case Badge::other: return "P"; }
         return "P";
     }
+    /** What the screens show: K S GS H O P (saved files keep the one-letter badgeLetter). */
+    inline const char* badgeLabel (Badge b) noexcept
+    {
+        switch (b) { case Badge::kick: return "K"; case Badge::snare: return "S"; case Badge::ghost: return "GS";
+                     case Badge::hat: return "H"; case Badge::open: return "O"; case Badge::other: return "P"; }
+        return "P";
+    }
     inline const char* badgeName (Badge b) noexcept
     {
         switch (b) { case Badge::kick: return "KICK"; case Badge::snare: return "SNARE"; case Badge::ghost: return "GHOST";

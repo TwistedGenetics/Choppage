@@ -15,6 +15,7 @@
 #include <cmath>
 #include <cstdio>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 
 using namespace bc;
@@ -282,6 +283,30 @@ static void fxTests()
         check (d > 0.001f && finite (wet), std::string ("pad ") + fxPadName (pad) + " changes the sound (" + fmt (d, 4) + ")");
     }
     {
+        // the Akaizer's settings, live: CYCLE LENGTH / FREQ on the AKAIZE pad and on per-slice STRETCH
+        check (akaizeFreq (800, 300, false) == 51 && akaizeFreq (400, 300, false) == 102 && akaizeFreq (800, 300, true) == 300,
+               "CYCLE FREQ: linked 41000 / length like the original (800 -> 51), or MANUAL");
+        auto padRun = [] (float len, float freq, bool manual) {
+            Rig r;
+            r.set (P_AK_CYC_LEN, len); r.set (P_AK_CYC_FREQ, freq); r.set (P_AK_FREQ_MAN, manual ? 1.0f : 0.0f);
+            return r.run (1.5, { MidiMsg::noteOn (kFirstFxNote + PerfFx::akaize, 110, (int) (0.4 * r.sr)),
+                                 MidiMsg::noteOff (kFirstFxNote + PerfFx::akaize, (int) (1.2 * r.sr)) });
+        };
+        auto a = padRun (800, 51, false), b = padRun (200, 51, false), c = padRun (800, 400, true);
+        check (difference (a, b) > 0.001f && difference (a, c) > 0.001f && finite (b) && finite (c),
+               "AKAIZE pad: CYCLE LENGTH and a MANUAL FREQ change it");
+        check (rms (a, (int) (0.5 * 44100), (int) (0.6 * 44100)) > 0.3f * rms (dry, (int) (0.5 * 44100), (int) (0.6 * 44100)),
+               "AKAIZE pad keeps its level (overlapping grains scaled)");
+        auto sliceRun = [] (float len) {
+            Rig r;
+            r.set (P_SL_CYC_LEN, len);
+            r.s.setSliceValue (Session::SliceField::stretch, 2.0f, true);
+            return r.run (1.0);
+        };
+        auto s1 = sliceRun (800), s2 = sliceRun (100);
+        check (difference (s1, s2) > 0.001f && finite (s2) && rms (s1) > 0.01f, "slice STRETCH x2: CYCLE LENGTH changes it");
+    }
+    {
         Rig clean, s950, low;
         clean.set (P_CHARACTER, 0);
         low.set (P_SRATE, 4000.0f);
@@ -428,6 +453,36 @@ static void fileTests()
     const double ratio = (double) k.content->buffer->numSamples / before;
     check (std::abs (ratio - 136.0 / 170.0) < 0.01 && std::abs (k.content->bpm - 170.0) < 0.01, "renders to 170 BPM (length x" + fmt (ratio, 3) + ")");
     check (fs::exists (k.file) && k.file.find ("Renders") != std::string::npos, "render saved in Renders/ so the project finds it");
+    {
+        // the file is what Akaizer writes: 16-bit, <name>_akaized.wav
+        std::ifstream f (k.file, std::ios::binary);
+        char h[36] {};
+        f.read (h, 36);
+        const int bits = (unsigned char) h[34] | ((unsigned char) h[35] << 8);
+        check (bits == 16 && k.file.find ("_akaized") != std::string::npos, "render is a 16-bit _akaized.wav, like the original (" + fs::path (k.file).filename().string() + ")");
+    }
+    {
+        // the full settings: STRETCH by hand, SYNC with a hand-set LOOP BPM, PITCH, MANUAL FREQ; never over an earlier file
+        r.s.loadDemo (3);
+        r.s.waitUntilIdle(); r.s.poll();
+        const int n0 = r.s.slot (3).content->buffer->numSamples;
+        Session::AkaizeRender set;
+        set.sync = false; set.stretchPercent = 250.0; set.cycleLength = 400; set.cycleFreq = 103;
+        check (r.s.akaizeSlot (3, set), "render: STRETCH 250% by hand");
+        const double rr = (double) r.s.slot (3).content->buffer->numSamples / n0;
+        check (std::abs (rr - 2.5) < 0.01, "... 2.5 x as long (x" + fmt (rr, 3) + ")");
+        const auto first = r.s.slot (3).file;
+        r.s.loadDemo (3);
+        r.s.waitUntilIdle(); r.s.poll();
+        r.s.setLoopBpm (3, 85.0);
+        check (r.s.loopBpmSet (3) && std::abs (r.s.loopBpm (3) - 85.0) < 0.01, "LOOP BPM set by hand");
+        set.sync = true; set.targetBpm = 170.0; set.pitch = 12.0; set.cycleFreq = 700;
+        check (r.s.akaizeSlot (3, set), "render: SYNC 85 -> 170 BPM, PITCH +12, FREQ 700 cps");
+        const double rs = (double) r.s.slot (3).content->buffer->numSamples / n0;
+        check (std::abs (rs - 0.5) < 0.01 && std::abs (r.s.slot (3).content->bpm - 170.0) < 0.01 && ! r.s.loopBpmSet (3),
+               "... half the length, now 170 BPM (x" + fmt (rs, 3) + ")");
+        check (r.s.slot (3).file != first && fs::exists (first), "a second render gets its own file");
+    }
 
     // bounce
     r.s.selectSlot (0);

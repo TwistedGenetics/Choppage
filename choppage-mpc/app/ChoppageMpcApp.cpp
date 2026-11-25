@@ -1,6 +1,7 @@
 #include "ChoppageMpcApp.h"
 #include "choppage/AudioFile.h"
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -129,6 +130,7 @@ std::vector<MpcParamDef> buildDefs()
     for (int k = 0; k < 16; ++k)
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
+    F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
     return v;
 }
 
@@ -210,7 +212,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_MUTE_GROUP + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_AKR_LOOP_BPM + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -317,6 +319,9 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
         case MP_SL_END: { std::lock_guard<std::mutex> l(textMutex_); out = endText_; return true; }
         case MP_SEQ_SEL: std::snprintf(buf, sizeof buf, "STEP %d", roundi(plain)); out = buf; return true;
         case MP_MEMORY: std::snprintf(buf, sizeof buf, "M%02d", roundi(plain)); out = buf; return true;
+        case MP_AKR_LOOP_BPM:
+            if (plain < 0.05f) out = "AUTO"; else { std::snprintf(buf, sizeof buf, "%.1f", plain); out = buf; }
+            return true;
         default: break;
     }
     if (index >= MP_CELL0 && index < MP_CELL0 + kSeqLanes * 16)
@@ -418,6 +423,16 @@ void ChoppageMpcApp::tick()
         if (!mpcParamDef(i).readout) handle(i, v, prev);
     }
 
+    // CYCLE FREQ follows CYCLE LENGTH unless MANUAL is on (Akaizer's linked frequency)
+    for (auto [len, freq, man] : { std::array<int, 3>{ P_AK_CYC_LEN, P_AK_CYC_FREQ, P_AK_FREQ_MAN },
+                                   std::array<int, 3>{ P_SL_CYC_LEN, P_SL_CYC_FREQ, P_SL_FREQ_MAN },
+                                   std::array<int, 3>{ P_AKR_CYC_LEN, P_AKR_CYC_FREQ, P_AKR_FREQ_MAN } })
+    {
+        if (values_[man].load() > 0.5f) continue;
+        const float linked = (float)akaizeFreq(values_[len].load(), values_[freq].load(), false);
+        if (values_[freq].load() != linked) write(freq, linked);
+    }
+
     // 2. the session moved: mirrors and readouts follow
     syncMirrors(false);
     syncReadouts(false);
@@ -507,6 +522,12 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
         case MP_ZOOM: break;   // syncWave follows
         case MP_MUTE_GROUP: session_.setMuteGroup(slot, roundi(v)); break;
+        case MP_AKR_LOOP_BPM:
+            // AUTO at the bottom; the first nudge up from AUTO starts at the break's own tempo
+            if (v < 0.05f) session_.setLoopBpm(slot, 0.0);
+            else if (!session_.loopBpmSet(slot) && v < 40.0f) session_.setLoopBpm(slot, std::round(session_.loopBpm(slot) * 10.0) / 10.0);
+            else session_.setLoopBpm(slot, v);
+            break;
         case MP_SEQ_PAGE: case MP_SEQ_FOLLOW: case MP_SEQ_SEL: seqKey_ = ~0ull; lastVersion_ = ~0u; break;   // syncs follow
         case MP_STEP_FX: case MP_STEP_RATE:
         {
@@ -595,14 +616,19 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const auto& s = session_.slot(slot);
             if (s.content == nullptr) { say("NO BREAK TO AKAIZE"); break; }
-            const int cycle = std::clamp(roundi(values_[P_AK_CYCLE].load() * 0.001f * (float)s.content->buffer->sampleRate), 20, 2000);
             const double host = hostBpm_.load();
+            Session::AkaizeRender r;
+            r.sync = values_[P_AKR_SYNC].load() > 0.5f;
+            r.targetBpm = host > 1.0 ? host : (double)values_[P_AKR_TARGET].load();
+            r.stretchPercent = values_[P_AKR_STRETCH].load();
+            r.cycleLength = roundi(values_[P_AKR_CYC_LEN].load());
+            r.cycleFreq = akaizeFreq(values_[P_AKR_CYC_LEN].load(), values_[P_AKR_CYC_FREQ].load(), values_[P_AKR_FREQ_MAN].load() > 0.5f);
+            r.pitch = values_[P_AKR_PITCH].load();
             say("AKAIZING...");
             syncReadouts(true);
-            const bool ok = host > 1.0 ? session_.akaizeSlot(slot, host, 0.0, cycle)
-                                       : session_.akaizeSlot(slot, 0.0, akRatioValue(roundi(values_[P_AK_RATIO].load())) * 100.0, cycle);
+            const bool ok = session_.akaizeSlot(slot, r);
             char buf[64];
-            if (ok && host > 1.0) std::snprintf(buf, sizeof buf, "AKAIZED TO %.1f BPM", host);
+            if (ok && r.sync) std::snprintf(buf, sizeof buf, "AKAIZED TO %.1f BPM", r.targetBpm);
             else std::snprintf(buf, sizeof buf, ok ? "AKAIZED" : "AKAIZE FAILED");
             say(buf);
             break;
@@ -687,6 +713,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
     put(MP_SL_MUTE, s.program.slice[(size_t)std::clamp(slice, 0, kMaxSlices - 1)].mute ? 1.0f : 0.0f);
     put(MP_SLICING, s.gridSlicing ? 1.0f : 0.0f);
     put(MP_MUTE_GROUP, (float)session_.muteGroup(slot));
+    put(MP_AKR_LOOP_BPM, session_.loopBpmSet(slot) ? (float)session_.loopBpm(slot) : 0.0f);
     put(MP_SENS, s.sensitivity);
     put(MP_GRID, s.gridPerBar <= 8 ? 0.0f : s.gridPerBar <= 16 ? 1.0f : 2.0f);
     const int steps = s.program.pattern.numSteps;
@@ -697,7 +724,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
         std::lock_guard<std::mutex> l(textMutex_);
         badgeLetters_.clear();
         if (s.content != nullptr)
-            for (int k = 0; k < s.content->numSlices(); ++k) badgeLetters_.push_back(badgeLetter(s.content->badges[(size_t)k]));
+            for (int k = 0; k < s.content->numSlices(); ++k) badgeLetters_.push_back(badgeLabel(s.content->badges[(size_t)k]));
     }
     if (s.content != nullptr)
     {
@@ -733,7 +760,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
             std::snprintf(b, sizeof b, "SLICE %02d", slice + 1);
             line = b;
             if (s.content != nullptr && slice < s.content->numSlices())
-                line += std::string(" ") + badgeLetter(s.content->badges[(size_t)slice]);
+                line += std::string(" ") + badgeLabel(s.content->badges[(size_t)slice]);
         }
         auto add = [&](const char* name, int idx) {
             std::string t;
@@ -990,7 +1017,7 @@ void ChoppageMpcApp::syncSeq(bool force)
                 {
                     c = 2 + std::min(sl, 63);
                     char b[24];
-                    std::snprintf(b, sizeof b, "%s %02d", badgeLetter(s.content->badges[(size_t)sl]), sl + 1);
+                    std::snprintf(b, sizeof b, "%s %02d", badgeLabel(s.content->badges[(size_t)sl]), sl + 1);
                     txt = b;
                 }
             }

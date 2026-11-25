@@ -18,6 +18,7 @@
     losing fades out while the winner fades in. No allocation after prepare().
 */
 #include "choppage/Model.h"
+#include "choppage/AkaiGrains.h"
 
 namespace bc
 {
@@ -31,7 +32,9 @@ namespace bc
             double samplesPerBeat = 22050.0;
             int    stutterDiv = 16, rollDiv = 32;
             double tapeMs = 700.0;
-            double akCycleMs = 9.5, akRatio = 2.0;
+            int    akCycleLength = 800;      // Akaizer CYCLE LENGTH (samples)
+            double akCycleFreq = 51.0;       // Akaizer CYCLE FREQ (grains per second)
+            double akRatio = 2.0;
             float  diveRes = 0.7f;
             int    quantSteps = 1;              // 0 off, 1 = 1/16, 2 = 1/8
             double samplesSinceGrid = 0.0;      // since the last 16th line (for quantised starts)
@@ -54,14 +57,14 @@ namespace bc
             double pos = 0.0;            // absolute ring position (samples written so far)
             double speed = 1.0;
             double loopStart = 0.0, loopLen = 0.0, phase = 0.0;
-            double grainPos = 0.0, prevGrainPos = 0.0;
-            int    grainAge = 0;
+            AkaiGrains grains;
             int    age = 0;
         };
 
         float ringAt (int ch, double absPos) const noexcept;
         void  engage (int pad, const Settings&) noexcept;
         float readEffect (int pad, int ch, const Settings&) const noexcept;
+        int   akSetLength = -1; double akSetFreq = -1.0;   // the AKAIZE pad's grains are set up for these
         void  advance (int pad, const Settings&) noexcept;
 
         double sr = 44100.0;

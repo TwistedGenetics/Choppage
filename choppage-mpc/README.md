@@ -64,7 +64,9 @@ The sections:
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT and the LCD colour (BLUE, GREEN, AMBER, WHITE).
 
-**PATTERN, FX PADS, SOUND / SPACE**: everything else, in rows of four.
+**PATTERN, FX PADS, SOUND / SPACE**: everything else, in rows of four. FX PADS has the AKAIZE pad's and slice STRETCH's CYCLE LENGTH / FREQ / MANUAL.
+
+**AKAIZER** (press FX PADS again): the full Akaizer render. SYNC TO MPC BPM (from LOOP BPM, AUTO = the break's own tempo; TARGET when the MPC has no tempo) or STRETCH 25–2000 % with SYNC off, CYCLE LENGTH, CYCLE FREQ (linked to the length unless FREQ MANUAL), PITCH ±24. **AKAIZE THE BREAK** writes a 16-bit `<name>_akaized.wav` to `Content/Renders` and loads it back into the break.
 
 **Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or perc), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, set it with HIT on the SLICE screen.
 

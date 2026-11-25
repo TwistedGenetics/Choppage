@@ -262,6 +262,43 @@ int main(int argc, char** argv)
     CHECK(t.find("AKAIZED") == 0, ("akaize message: " + t).c_str());
     CHECK(std::filesystem::exists(dir / "Renders") && !std::filesystem::is_empty(dir / "Renders"), "render written to Content/Renders");
 
+    std::printf("akaizer page\n");
+    {
+        set(app, P_AKR_FREQ_MAN, 0.0f);
+        set(app, P_AKR_CYC_LEN, 400.0f);
+        CHECK(app.getParam(P_AKR_CYC_FREQ) == 102.0f, "CYCLE FREQ follows LENGTH (400 -> 102) while MANUAL is off");
+        set(app, P_AKR_FREQ_MAN, 1.0f);
+        set(app, P_AKR_CYC_FREQ, 700.0f);
+        CHECK(app.getParam(P_AKR_CYC_FREQ) == 700.0f, "MANUAL keeps a hand-set CYCLE FREQ");
+        set(app, P_AK_FREQ_MAN, 0.0f);
+        set(app, P_AK_CYC_LEN, 800.0f);
+        CHECK(app.getParam(P_AK_CYC_FREQ) == 51.0f, "the AKAIZE pad's FREQ is linked too");
+
+        set(app, MP_BREAK, 1);
+        CHECK(app.getParam(MP_AKR_LOOP_BPM) == 0.0f, "LOOP BPM starts at AUTO");
+        app.formatValue(MP_AKR_LOOP_BPM, 0.0f, t);
+        CHECK(t == "AUTO", "AUTO is shown");
+        set(app, MP_AKR_LOOP_BPM, 1.0f);
+        CHECK(app.getParam(MP_AKR_LOOP_BPM) > 40.0f, "the first nudge up starts at the break's own tempo");
+        set(app, MP_AKR_LOOP_BPM, 85.0f);
+        CHECK(app.getParam(MP_AKR_LOOP_BPM) == 85.0f, "LOOP BPM set by hand");
+        set(app, MP_BREAK, 2);
+        set(app, MP_BREAK, 1);
+        CHECK(app.getParam(MP_AKR_LOOP_BPM) == 85.0f, "LOOP BPM belongs to the break");
+
+        const auto count = [&] { int n = 0; for (auto& e : std::filesystem::directory_iterator(dir / "Renders")) { (void)e; ++n; } return n; };
+        const int before = count();
+        set(app, P_AKR_SYNC, 0.0f);
+        set(app, P_AKR_STRETCH, 200.0f);
+        press(app, MP_AKAIZE, 1);
+        app.formatValue(MP_INFO_MSG, 0, t);
+        CHECK(t == "AKAIZED", ("STRETCH render: " + t).c_str());
+        CHECK(count() == before + 1, "a second render gets its own file");
+        CHECK(app.getParam(MP_AKR_LOOP_BPM) == 0.0f, "LOOP BPM goes back to AUTO after a render");
+        set(app, P_AKR_SYNC, 1.0f);
+        set(app, P_AKR_FREQ_MAN, 0.0f);
+    }
+
     std::printf("waveform\n");
     {
         set(app, MP_BREAK, 0);

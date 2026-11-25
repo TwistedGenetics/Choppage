@@ -23,15 +23,16 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 | G#3 – B4 | Pad bank C | Pattern memories 1–16 |
 
 ## The panel
-- **Tabs** (the four S950 keys): **SAMPLE** · **SEQ** · **FX** · **SET**
+- **Tabs**: **SAMPLE** · **SEQ** · **FX** · **SET** · **AKAI** · **DISK**
+- **Status line**: the selected break's MUTE GROUP (GRP 1–4) and PLAYING / OTHER PLAYING (another break is running) / STOPPED. Hits show as K S GS H O P.
 - **SAMPLE**: waveform with slice markers and badges (K1, S2, G1, H3, O1…).
   - Click a slice to select it and hear it.
   - Drag a marker to move it; double-click to add one; right-click to mute, change the badge or delete the marker.
   - **SLICE / ALL** table: PITCH, GATE, STRETCH, REVERSE, STUTTER, TRANS, XFADE. Drag or scroll a value; double-click resets it.
 - **SEQ**: PATTERN / ORIGINAL, 1 / 2 / 4 bars, history ◀ ▶, CLEAR.
-  - Lanes KICK SNARE GHOST HAT OPEN FX; each cell shows the slice number.
+  - Lanes KICK SNARE GHOST HAT OPEN PERC, then the FX row; each cell shows the slice number.
   - Click a cell to add or remove a hit, right-click to swap to another hit of the same type, shift-click to lock a step.
-  - FX cells: click to add or remove, right-click to change the rate (8 / 16 / 32 / 64).
+  - Per-step FX: click a step on the FX row (or any cell) to select it, then pick **STEP FX** OFF / STUTTER / REVERSE / STRETCH / TAPE STOP and **RATE** 1/8 – 1/64 underneath. Right-click an FX cell to cycle its rate.
   - 16 memories: click to recall, shift-click to save.
 - **FX**: filter LP/HP + res, distortion drive/tone, crush, reverb (mix, decay, damp, pre, width), echo, and every pad's setting.
 - **SET**:
@@ -42,7 +43,12 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - Sound: CHARACTER (CLEAN, S950, SP-1200, MPC60, S1000, LO-FI), slicing TRANSIENTS / GRID.
   - Generate: STYLE, LAYERS, SWING.
   - LCD colour: BLUE (S950), GREEN, AMBER, WHITE.
-  - Render: **AKAIZE TO HOST BPM** writes the selected break, cyclic-stretched to the host tempo the Akaizer way, to `~/Music/CHOPPAGE/Renders` and loads it back in.
+  - Render: **AKAIZE THE BREAK** (settings on the AKAI tab).
+- **AKAI**: the full Akaizer (as in Twisted Timestretch):
+  - **SYNC** ON: stretch from the break's LOOP BPM (double-click = AUTO, the break's own tempo) to the host tempo, or TARGET with no host. SYNC OFF: **STRETCH** 25–2000 %.
+  - **CYCLE LENGTH** 20–2000 samples, **CYCLE FREQ** linked to the length (41000 / length) unless **MANUAL**, **PITCH** ±24 semitones.
+  - The render is 16-bit like the original Akaizer, written to `~/Music/CHOPPAGE/Renders/<name>_akaized.wav` (a new file each time) and loaded back in.
+  - The same cycle settings drive the live **AKAIZE pad** and **slice STRETCH**.
 - **DISK tab**: a break browser for `~/Music/CHOPPAGE/Breaks` (or any folder) listing BPM, bars, length and name. Click loads into the selected break; shift-click loads into the next empty one.
 - **PATTERN dice / FX dice** with AMOUNT. Every roll goes into the history.
 - **SAMPLE RATE fader** 44.1 → 4.0 kHz · **FILTER · DISTORTION · CRUSH · REVERB** · **VOL**

@@ -12,21 +12,22 @@ class ChoppageEditor::Panel final : public juce::Component
 {
 public:
     Panel (ChoppageEditor& ed, ChoppageProcessor& p)
-        : editor (ed), proc (p), sample (p), seq (p), fx (p), set (p), disk (p),
+        : editor (ed), proc (p), sample (p), seq (p), fx (p), set (p), disk (p), akai (p),
           patternDice ("PATTERN"), fxDice ("FX"),
           patAmount (juce::Colour (0xffd7262e)), fxAmount (juce::Colour (0xffd7262e)),
           filter (juce::Colours::white), dist (juce::Colour (0xffd7262e)), crush (juce::Colours::white),
           reverb (juce::Colours::white), vol (juce::Colours::white)
     {
-        const char* tabNames[] = { "SAMPLE", "SEQ", "FX", "SET", "DISK" };
-        for (int i = 0; i < 5; ++i)
+        const char* tabNames[] = { "SAMPLE", "SEQ", "FX", "SET", "DISK", "AKAI" };
+        for (int i = 0; i < 6; ++i)
         {
             auto b = std::make_unique<ui::ModeButton> (tabNames[i]);
             b->onClick = [this, i] { show (i); };
             addAndMakeVisible (*b);
             tabs.push_back (std::move (b));
         }
-        for (auto* t : { (juce::Component*) &sample, (juce::Component*) &seq, (juce::Component*) &fx, (juce::Component*) &set, (juce::Component*) &disk })
+        for (auto* t : { (juce::Component*) &sample, (juce::Component*) &seq, (juce::Component*) &fx, (juce::Component*) &set, (juce::Component*) &disk,
+                         (juce::Component*) &akai })
             addChildComponent (t);
         disk.onChooseFolder = [this] { editor.chooseFolder(); };
 
@@ -148,9 +149,9 @@ public:
 
     void show (int t)
     {
-        current = juce::jlimit (0, 4, t);
-        juce::Component* pages[] = { &sample, &seq, &fx, &set, &disk };
-        for (int i = 0; i < 5; ++i) { pages[i]->setVisible (i == current); tabs[(size_t) i]->lit = i == current; tabs[(size_t) i]->repaint(); }
+        current = juce::jlimit (0, 5, t);
+        juce::Component* pages[] = { &sample, &seq, &fx, &set, &disk, &akai };
+        for (int i = 0; i < 6; ++i) { pages[i]->setVisible (i == current); tabs[(size_t) i]->lit = i == current; tabs[(size_t) i]->repaint(); }
     }
 
     void refresh()
@@ -161,7 +162,8 @@ public:
         else if (current == 1) seq.refresh();
         else if (current == 2) fx.refresh();
         else if (current == 3) set.refresh();
-        else disk.refresh();
+        else if (current == 4) disk.refresh();
+        else akai.refresh();
         for (auto& c : topBar) c->repaint();
         for (auto& c : slotCells) c->repaint();
         status.repaint();
@@ -260,8 +262,8 @@ public:
     {
         auto r = getLocalBounds().withTrimmedLeft (earW).withTrimmedRight (earW).reduced (26, 18);
         headerArea = r.removeFromTop (100);
-        auto tabRow = headerArea.withTrimmedLeft (headerArea.getWidth() - 5 * 118);
-        for (auto& t : tabs) t->setBounds (tabRow.removeFromLeft (118).withTrimmedRight (14).withTrimmedBottom (6));
+        auto tabRow = headerArea.withTrimmedLeft (headerArea.getWidth() - 6 * 100);
+        for (auto& t : tabs) t->setBounds (tabRow.removeFromLeft (100).withTrimmedRight (12).withTrimmedBottom (6));
         r.removeFromTop (10);
 
         bottomArea = r.removeFromBottom (150);
@@ -312,7 +314,8 @@ public:
         glass.removeFromTop (10);
         status.setBounds (glass.removeFromBottom (30));
         glass.removeFromBottom (4);
-        for (auto* t : { (juce::Component*) &sample, (juce::Component*) &seq, (juce::Component*) &fx, (juce::Component*) &set, (juce::Component*) &disk })
+        for (auto* t : { (juce::Component*) &sample, (juce::Component*) &seq, (juce::Component*) &fx, (juce::Component*) &set, (juce::Component*) &disk,
+                         (juce::Component*) &akai })
             t->setBounds (glass);
 
         // bottom: floppy + the four big knobs
@@ -345,7 +348,7 @@ private:
             case 2: return "HOLD";
             case 3: return juce::String (juce::roundToInt (proc.apvts.getRawParameterValue (P::tapeMs)->load())) + "MS";
             case 4: return "HOLD";
-            case 5: return juce::String (proc.apvts.getRawParameterValue (P::akCycle)->load(), 1) + "MS";
+            case 5: return juce::String (juce::roundToInt (proc.apvts.getRawParameterValue (P::akCycLen)->load())) + " SMP";
             case 6: return "RES " + juce::String (juce::roundToInt (proc.apvts.getRawParameterValue (P::diveRes)->load() * 100.0f));
             case 7: return juce::String (proc.apvts.getRawParameterValue (P::dropRate)->load() / 1000.0f, 1) + "K";
             default: return {};
@@ -354,7 +357,7 @@ private:
 
     void nudgePadSetting (int i, float steps)
     {
-        const char* ids[] = { P::stutRate, P::rollRate, nullptr, P::tapeMs, nullptr, P::akCycle, P::diveRes, P::dropRate };
+        const char* ids[] = { P::stutRate, P::rollRate, nullptr, P::tapeMs, nullptr, P::akCycLen, P::diveRes, P::dropRate };
         if (ids[i] == nullptr) return;
         const ui::Param prm { proc.apvts.getParameter (ids[i]) };
         if (auto* ch = dynamic_cast<juce::AudioParameterChoice*> (prm.p))
@@ -372,9 +375,15 @@ private:
         juce::String t = juce::String (c.numSlices()) + " SLICES" + dot + juce::String (c.bars) + (c.bars == 1 ? " BAR" : " BARS")
                        + dot + "BREAK " + juce::String (c.bpm, 1) + " BPM";
         t << dot << (host > 1.0 ? "HOST " + juce::String (host, 1) : juce::String ("NO HOST TEMPO"));
-        t << dot << (proc.getPlayingSlot() >= 0 ? "PLAYING" : "STOPPED");
+        {
+            const int sel = proc.getSelectedSlot();
+            t << dot << "GRP " << juce::String (proc.getMuteGroupOf (sel) + 1);
+            bool other = false;
+            for (int k = 0; k < bc::kSlots; ++k) if (k != sel && proc.getStepOf (k) >= 0) other = true;
+            t << dot << (proc.getStepOf (sel) >= 0 ? "PLAYING" : other ? "OTHER PLAYING" : "STOPPED");
+        }
         const auto& sl = s.program.slice[(size_t) proc.getSelectedSlice()];
-        t << dot << "S" << juce::String (proc.getSelectedSlice() + 1).paddedLeft ('0', 2) << " " << bc::badgeName (c.badges[(size_t) proc.getSelectedSlice()]);
+        t << dot << "S" << juce::String (proc.getSelectedSlice() + 1).paddedLeft ('0', 2) << " " << bc::badgeLabel (c.badges[(size_t) proc.getSelectedSlice()]);
         if (sl.mute) t << " (MUTED)";
         return t;
     }
@@ -386,6 +395,7 @@ private:
     ui::FxTab fx;
     ui::SetTab set;
     ui::DiskTab disk;
+    ui::AkaiTab akai;
     std::vector<std::unique_ptr<ui::ModeButton>> tabs;
     std::vector<std::unique_ptr<ui::LcdCell>> topBar, slotCells;
     ui::LcdCell* playCell = nullptr; ui::LcdCell* prevCell = nullptr; ui::LcdCell* nameCell = nullptr;

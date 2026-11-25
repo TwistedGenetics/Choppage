@@ -77,7 +77,8 @@ namespace bc
             bool   keepPitch = false;       // FIT: REPITCH / KEEP
             double tempoSourceMul = 1.0;    // AUTO 1, /2 0.5, X2 2
             float  swing = 0.5f;
-            double stretchCycleMs = 9.5;
+            int    slCycleLength = 800;     // per-slice STRETCH: Akaizer CYCLE LENGTH (samples) ...
+            double slCycleFreq = 51.0;      // ... and CYCLE FREQ (grains per second)
             PerfFx::Settings pads;          // samplesPerBeat filled in here
             SoundChain::Settings sound;
         };

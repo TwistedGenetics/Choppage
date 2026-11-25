@@ -13,9 +13,9 @@ namespace bc
         repeats   = st.stutter > 1 ? st.stutter : 1;
         windowLen = (double) st.region.length() / (double) repeats;
         repeat = 0;
-        head = grain = prevGrain = 0.0;
-        grainAge = 0;
-        spliceFade = std::max (4, (int) (0.0005 * sampleRate));
+        head = 0.0;
+        grains.setup (st.cycleLength, st.cycleFreq, sampleRate);
+        grains.reset();
         age = 0;
         releaseLeft = -1;
 
@@ -70,8 +70,8 @@ namespace bc
             if (head >= windowLen)
             {
                 if (++repeat >= repeats) { active = false; content = nullptr; return; }
-                head = grain = prevGrain = 0.0;
-                grainAge = 0;
+                head = 0.0;
+                grains.reset();
             }
 
             float g = s.level;
@@ -90,34 +90,15 @@ namespace bc
             const float env = envDecay * (1.0f + tailLift * std::min (1.0f, (float) age / (float) (0.02 * sampleRate)));
             g *= env;
 
+            if (cyclic) grains.tick (head);
             for (int ch = 0; ch < numChannels; ++ch)
             {
-                float v;
-                if (! cyclic) v = read (ch, head);
-                else
-                {
-                    v = read (ch, grain);
-                    if (grainAge < spliceFade)
-                    {
-                        const float a = (float) grainAge / (float) spliceFade;
-                        v = v * a + read (ch, prevGrain) * (1.0f - a);
-                    }
-                }
+                const float v = cyclic ? grains.sample ([this, ch] (double p) { return read (ch, p); }) : read (ch, head);
                 out[ch][startSample + i] += v * g;
             }
 
             head += headInc;
-            if (cyclic)
-            {
-                grain += s.rate;
-                prevGrain += s.rate;
-                if (++grainAge >= s.cycleSamples)
-                {
-                    prevGrain = grain;
-                    grain = head;
-                    grainAge = 0;
-                }
-            }
+            if (cyclic) grains.advance (s.rate);
             ++age;
         }
     }

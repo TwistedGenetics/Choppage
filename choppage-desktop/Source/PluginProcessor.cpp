@@ -167,10 +167,30 @@ bool ChoppageProcessor::akaizeSelected()
     const int slot = sess.selectedSlot();
     const auto& s = sess.slot (slot);
     if (s.content == nullptr) return false;
-    const double host = hostBpm.load();
-    const int cycle = juce::jlimit (20, 2000, (int) std::lround (plain (P_AK_CYCLE) * 0.001 * s.content->buffer->sampleRate));
-    if (host > 1.0) return sess.akaizeSlot (slot, host, 0.0, cycle);
-    return sess.akaizeSlot (slot, 0.0, akRatioValue ((int) plain (P_AK_RATIO)) * 100.0, cycle);
+    // the AKAI tab's settings: SYNC (LOOP BPM -> the host's tempo, or TARGET BPM without one) or STRETCH %
+    bc::Session::AkaizeRender r;
+    r.sync = plain (P_AKR_SYNC) > 0.5f;
+    r.targetBpm = hostBpm.load() > 1.0 ? hostBpm.load() : (double) plain (P_AKR_TARGET);
+    r.stretchPercent = plain (P_AKR_STRETCH);
+    r.cycleLength = juce::jlimit (20, 2000, (int) std::lround (plain (P_AKR_CYC_LEN)));
+    r.cycleFreq = bc::akaizeFreq (plain (P_AKR_CYC_LEN), plain (P_AKR_CYC_FREQ), plain (P_AKR_FREQ_MAN) > 0.5f);
+    r.pitch = std::round (plain (P_AKR_PITCH));
+    return sess.akaizeSlot (slot, r);
+}
+
+void ChoppageProcessor::keepLinkedFrequencies()
+{
+    // With MANUAL off, CYCLE FREQ follows CYCLE LENGTH (41000 / length) as in the original, so its value shows it
+    const int sets[3][3] = { { P_AK_CYC_LEN, P_AK_CYC_FREQ, P_AK_FREQ_MAN }, { P_SL_CYC_LEN, P_SL_CYC_FREQ, P_SL_FREQ_MAN },
+                             { P_AKR_CYC_LEN, P_AKR_CYC_FREQ, P_AKR_FREQ_MAN } };
+    for (auto& t : sets)
+    {
+        if (plain (t[2]) > 0.5f) continue;
+        const int linked = bc::akaizeFreq (plain (t[0]), plain (t[1]), false);
+        if ((int) std::lround (plain (t[1])) != linked)
+            if (auto* prm = apvts.getParameter (bc::paramDefs()[(size_t) t[1]].id))
+                prm->setValueNotifyingHost (prm->convertTo0to1 ((float) linked));
+    }
 }
 
 void ChoppageProcessor::scanBrowser (const juce::File& folder)

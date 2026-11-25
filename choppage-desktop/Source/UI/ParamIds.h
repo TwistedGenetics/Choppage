@@ -51,6 +51,20 @@ namespace bc::params
     inline constexpr const char* stretchCycle = "stretchCycle";
 
         inline constexpr const char* lcdColour = "lcdColour";
+    // Akaizer (0.6)
+    inline constexpr const char* akCycLen      = "akCycLen";
+    inline constexpr const char* akCycFreq     = "akCycFreq";
+    inline constexpr const char* akFreqManual  = "akFreqManual";
+    inline constexpr const char* slCycLen      = "slCycLen";
+    inline constexpr const char* slCycFreq     = "slCycFreq";
+    inline constexpr const char* slFreqManual  = "slFreqManual";
+    inline constexpr const char* akrStretch    = "akrStretch";
+    inline constexpr const char* akrSync       = "akrSync";
+    inline constexpr const char* akrTarget     = "akrTarget";
+    inline constexpr const char* akrCycLen     = "akrCycLen";
+    inline constexpr const char* akrCycFreq    = "akrCycFreq";
+    inline constexpr const char* akrFreqManual = "akrFreqManual";
+    inline constexpr const char* akrPitch      = "akrPitch";
     inline const char* padParamId (int pad) { return paramDefs()[(size_t) (P_PAD1 + pad)].id; }
     using bc::fxPadName;
 }

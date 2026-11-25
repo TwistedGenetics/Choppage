@@ -70,6 +70,8 @@ enum MpcParam : int
     MP_STEP_RATE,               // its rate: 1/8 1/16 1/32 1/64
     MP_FXROW0,                  // 16 FX row cells under the grid (film strip frame, see fxRowFrame())
     MP_MUTE_GROUP = MP_FXROW0 + 16,   // the selected break's mute group (1-4)
+    // ---- 0.6: the AKAIZER page
+    MP_AKR_LOOP_BPM,            // the selected break's loop tempo for AKAIZE SYNC (0 = AUTO: the break's own)
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
