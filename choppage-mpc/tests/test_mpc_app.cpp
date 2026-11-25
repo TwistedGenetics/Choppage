@@ -393,25 +393,25 @@ int main(int argc, char** argv)
         for (int k = 0; k < kWaveCols; ++k) selCols += ((int)std::lround(app.getParam(MP_WAVE0 + k)) / (2 * kWaveLevels)) % 3 == 1;
         CHECK(selCols > kWaveCols / 3 && r.length() > 0, "ZOOM SLICE fills the screen with the selected slice");
 
-        // the drag strip under the waveform: its thumb sits on the selected marker; a finger on it moves the marker
+        // the strip under the waveform: 84 touch columns; the lit one is the selected start, a touch moves it there
         {
             auto start5 = [&] { return app.session().slot(0).content->slices.starts[5]; };   // (content is replaced on edit)
-            for (int i = 0; i < 40; ++i) app.tick();      // any earlier drag has let go
-            const float shown = app.getParam(MP_SL_DRAG);
-            CHECK(shown > 0.05f && shown < 0.95f, "ZOOM SLICE: the drag thumb sits on the marker inside the view");
+            for (int i = 0; i < 40; ++i) app.tick();
+            const int lit = (int)std::lround(app.getParam(MP_SL_PLACE));
+            CHECK(lit > 1 && lit < kWaveCols, "ZOOM SLICE: the lit column is the start marker inside the view");
             const int s0 = start5();
-            set(app, MP_SL_DRAG, shown + 0.05f);
+            set(app, MP_SL_PLACE, (float)(lit + 4));
             const int s1 = start5();
-            set(app, MP_SL_DRAG, shown + 0.10f);
+            set(app, MP_SL_PLACE, (float)(lit + 8));
             const int s2 = start5();
-            CHECK(s1 > s0 && s2 > s1, "dragging right moves the start later, step by step");
-            CHECK(std::fabs(app.getParam(MP_SL_DRAG) - (shown + 0.10f)) < 1e-6f, "the thumb stays under the finger while dragging");
-            set(app, MP_SL_DRAG, shown);
-            CHECK(std::abs(start5() - s0) < 64, "dragging back puts it back (the view held still)");
+            CHECK(s1 > s0 && s2 > s1, "touching columns to the right moves the start later");
+            set(app, MP_SL_PLACE, (float)lit);
+            CHECK(std::abs(start5() - s0) < 200, "touching the old column puts it back (the view held still)");
             set(app, MP_ZOOM, 0);
             for (int i = 0; i < 40; ++i) app.tick();
-            const float all = app.getParam(MP_SL_DRAG);
-            CHECK(std::fabs(all - (float)start5() / (float)app.session().slot(0).content->buffer->numSamples) < 0.002f, "ZOOM ALL: the thumb is the marker's place in the break");
+            const int all = (int)std::lround(app.getParam(MP_SL_PLACE));
+            const int want = (int)((double)start5() * kWaveCols / app.session().slot(0).content->buffer->numSamples) + 1;
+            CHECK(all == want, "ZOOM ALL: the lit column is the marker's place in the break");
             set(app, MP_ZOOM, 1);
         }
 

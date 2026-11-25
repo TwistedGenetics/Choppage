@@ -131,9 +131,10 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
-    F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f);
+    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->hidden = true; }   // (0.6.1-0.7.3; see MP_SL_PLACE)
     T("resetOrig", "Reset");
     T("memSaveOrig", "Save Original");
+    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->uiOnly = true; }
     return v;
 }
 
@@ -215,7 +216,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_MEM_SAVE_ORIG + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_SL_PLACE + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -572,6 +573,18 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             if (s.content != nullptr) moveSelectedMarker((int)std::lround(v * (double)s.content->buffer->numSamples));
             break;
         }
+        case MP_SL_PLACE:
+        {
+            // a touch on the strip under the waveform: the selected slice's start goes to that column of the
+            // waveform as shown (the view holds still for a moment, so touches in a row land where they look)
+            const int col = roundi(v) - 1;
+            const auto& s = session_.slot(slot);
+            if (col < 0 || s.content == nullptr || s.content->slices.isEmpty()) break;
+            const View vw = viewOf(*s.content, session_.selectedSlice());
+            dragTicks_ = 30;
+            moveSelectedMarker(vw.start + (int)std::lround(((double)col + 0.5) * (double)vw.length / (double)kWaveCols));
+            break;
+        }
         case MP_SL_DRAG:
         {
             // the finger on the strip under the waveform: the selected slice's start goes where it is, in the
@@ -772,6 +785,8 @@ void ChoppageMpcApp::syncMirrors(bool force)
         {
             const View vw = viewOf(*s.content, slice);
             put(MP_SL_DRAG, std::clamp((float)(at - vw.start) / (float)std::max(1, vw.length), 0.0f, 1.0f));
+            const int col = (int)std::floor((double)(at - vw.start) * kWaveCols / (double)std::max(1, vw.length));
+            put(MP_SL_PLACE, (float)(col >= 0 && col < kWaveCols ? col + 1 : 0));
         }
         const int last = s.content->slices.count - 1;
         const int endAt = slice < last ? s.content->slices.starts[(size_t)slice + 1] : n;

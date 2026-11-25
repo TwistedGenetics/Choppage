@@ -77,6 +77,10 @@ enum MpcParam : int
     // ---- 0.7
     MP_RESET_ORIG,              // trigger: pattern back to the break as recorded, FX lane empty
     MP_MEM_SAVE_ORIG,           // trigger: the original break into the memory MEMORY shows
+    // ---- 0.7.4: the SLICE pages' strip under the waveform is a row of 84 touch columns (the 0.6.1 slider
+    //      left the MPC's screen blank): touch a column = the selected slice's start goes there; the lit
+    //      column shows where it is. (MP_SL_DRAG is no longer on the screen.)
+    MP_SL_PLACE,
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

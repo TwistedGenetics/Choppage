@@ -50,7 +50,7 @@ The sections:
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
-- **Drag with your finger** on the strip under the hit letters (`< START >`): the selected slice's start marker follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves.
+- **Touch the strip** under the hit letters (TOUCH HERE TO PUT THE START): the selected slice's start goes to the column you touch; the red column shows where it is. Use ZOOM SLICE for fine placing, and the MOVE knob or jog wheel to fine-tune.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
