@@ -1,0 +1,151 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # lets the build publish a GitHub Release
+
+jobs:
+  macos:
+    name: macOS universal (AU + VST3 + Standalone)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache JUCE download
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: juce-8.0.10-${{ runner.os }}
+
+      - name: Configure
+        run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
+      - name: Build
+        run: |
+          set -o pipefail
+          cmake --build build --config Release -j 4 2>&1 | tee build.log || {
+            grep -E "error:|Error " build.log | head -20 | while IFS= read -r line; do echo "::error title=Build::$line"; done
+            exit 1
+          }
+
+      - name: Run tests
+        run: |
+          set +e
+          ./build/ChoppageTests_artefacts/Release/ChoppageTests > tests.log 2>&1
+          code=$?
+          cat tests.log
+          grep -F "[FAIL]" tests.log | while IFS= read -r line; do echo "::error title=Unit test::$line"; done
+          tail -1 tests.log | sed 's/^/::notice title=Unit tests::/'
+          exit $code
+
+      - name: Render UI snapshots (one per tab)
+        run: |
+          for t in 0 1 2 3; do ./build/ChoppageTests_artefacts/Release/ChoppageTests --snapshot ui-tab$t.png $t; done
+
+      - name: Ad-hoc sign
+        run: |
+          codesign --force --deep --sign - build/Choppage_artefacts/Release/VST3/CHOPPAGE.vst3
+          codesign --force --deep --sign - build/Choppage_artefacts/Release/AU/CHOPPAGE.component
+          codesign --force --deep --sign - build/Choppage_artefacts/Release/Standalone/CHOPPAGE.app
+
+      - name: Validate AU (auval)
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R build/Choppage_artefacts/Release/AU/CHOPPAGE.component ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar || true
+          auval -a | grep -i chpg || true
+          auval -strict -v aumu Chpg Twgn
+
+      - name: Host round trip (AU + VST3, as a DAW does it)
+        run: |
+          set +e
+          for target in "build/Choppage_artefacts/Release/VST3/CHOPPAGE.vst3" "CHOPPAGE.component"; do
+            ./build/ChoppageHostTest_artefacts/Release/ChoppageHostTest "$target" > host.log 2>&1
+            code=$?
+            cat host.log
+            name=$(basename "$target")
+            grep -E "\[FAIL\]" host.log | while IFS= read -r line; do echo "::error title=HostTest $name::$line"; done
+            grep -E "\[SKIP\]|could not load|instance error" host.log | while IFS= read -r line; do echo "::warning title=HostTest $name::$line"; done
+            echo "::notice title=HostTest $name::$(tail -1 host.log)"
+            [ $code -ne 0 ] && failed=1
+          done
+          exit ${failed:-0}
+
+      - name: Validate VST3 (pluginval)
+        run: |
+          curl -sSL -o pluginval.zip https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_macOS.zip
+          unzip -q pluginval.zip
+          ./pluginval.app/Contents/MacOS/pluginval --strictness-level 5 --validate-in-process \
+            --validate build/Choppage_artefacts/Release/VST3/CHOPPAGE.vst3
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          ditto build/Choppage_artefacts/Release/AU/CHOPPAGE.component dist/CHOPPAGE.component
+          ditto build/Choppage_artefacts/Release/VST3/CHOPPAGE.vst3 dist/CHOPPAGE.vst3
+          ditto build/Choppage_artefacts/Release/Standalone/CHOPPAGE.app dist/CHOPPAGE.app
+          cp ui-tab*.png dist/
+          cat > dist/INSTALL.txt <<'EOF'
+          CHOPPAGE - install
+
+          Audio Unit (Logic, Ableton, MainStage):
+            Copy CHOPPAGE.component -> ~/Library/Audio/Plug-Ins/Components/
+          VST3 (Ableton, Bitwig, Reaper...):
+            Copy CHOPPAGE.vst3      -> ~/Library/Audio/Plug-Ins/VST3/
+          App (no DAW needed):
+            Drag CHOPPAGE.app into /Applications
+
+          Then in Terminal (downloaded files are quarantined by macOS):
+            xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/CHOPPAGE.component
+            xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/CHOPPAGE.vst3
+            xattr -dr com.apple.quarantine /Applications/CHOPPAGE.app
+            killall -9 AudioComponentRegistrar
+
+          Ableton: Settings > Plug-Ins > Rescan, then Plug-Ins > Twisted Genetics > CHOPPAGE.
+          Logic:   Instrument > AU Instruments > Twisted Genetics > CHOPPAGE.
+          EOF
+          cd dist && ditto -c -k --keepParent . ../CHOPPAGE-macOS.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CHOPPAGE-macOS
+          path: CHOPPAGE-macOS.zip
+
+      # Every green build of main becomes a downloadable Release.
+      - name: Publish release
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(sed -n 's/^project(Choppage VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
+          TAG="v${VERSION}-build.${{ github.run_number }}"
+          gh release create "$TAG" CHOPPAGE-macOS.zip ui-tab0.png \
+            --target "${{ github.sha }}" \
+            --title "CHOPPAGE ${VERSION} (build ${{ github.run_number }})" \
+            --latest \
+            --notes "$(git log -1 --pretty=%B)
+
+          Install: unzip, then follow INSTALL.txt (copy the .component / .vst3 into your plug-in folders or the app into Applications, clear quarantine, rescan)."
+
+  linux-tests:
+    name: Linux (VST3 build + tests)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libasound2-dev libx11-dev libxrandr-dev libxinerama-dev \
+            libxcursor-dev libxext-dev libfreetype-dev libfontconfig1-dev xvfb
+      - name: Configure
+        run: cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build -j 4
+      - name: Run tests
+        run: xvfb-run -a ./build/ChoppageTests_artefacts/Release/ChoppageTests
+      - name: Host round trip (VST3)
+        run: xvfb-run -a ./build/ChoppageHostTest_artefacts/Release/ChoppageHostTest build/Choppage_artefacts/Release/VST3/CHOPPAGE.vst3

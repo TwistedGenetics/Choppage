@@ -677,6 +677,56 @@ void ChoppageProcessor::clearPattern()
     publish (slot);
 }
 
+juce::File ChoppageProcessor::bounceLoop()
+{
+    const int slot = getSelectedSlot();
+    const auto& s = slots[(size_t) slot];
+    if (s.content == nullptr) return {};
+
+    const double sr = currentSampleRate > 0.0 ? currentSampleRate : 44100.0;
+    const double bpm = hostBpm.load() > 1.0 ? hostBpm.load() : s.content->bpm;
+    auto settings = readSettings();
+    const int steps = s.program.pattern.numSteps;
+    const int total = (int) std::ceil (steps / 4.0 * 60.0 / bpm * sr / settings.speed);
+
+    auto e = std::make_unique<Engine>();
+    e->prepare (sr, 512);
+    e->publishContent (slot, s.content);
+    e->publishProgram (slot, s.program);
+    e->selectedSlot = slot;
+    settings.sound.echoSamples = params::echoBeats ((int) apvts.getRawParameterValue (params::echoTime)->load()) * sr * 60.0 / bpm;
+
+    juce::AudioBuffer<float> out (2, total), block (2, 512);
+    out.clear();
+    Engine::Host host;
+    host.playing = true; host.hasInfo = true; host.bpm = bpm;
+    const juce::MidiBuffer none;
+    for (int pos = 0; pos < total; pos += 512)
+    {
+        const int n = juce::jmin (512, total - pos);
+        block.setSize (2, n, false, false, true);
+        host.ppq = pos * bpm / 60.0 / sr;
+        e->process (block, none, host, settings);
+        for (int ch = 0; ch < 2; ++ch) out.copyFrom (ch, pos, block, ch, 0, n);
+    }
+
+    auto name = s.content->name.retainCharacters ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-").trim();
+    auto f = juce::File::getSpecialLocation (juce::File::tempDirectory)
+                 .getChildFile ("CHOPPAGE " + name + " " + juce::String (juce::roundToInt (bpm)) + "bpm.wav")
+                 .getNonexistentSibling();
+    juce::WavAudioFormat wav;
+    if (auto os = std::unique_ptr<juce::OutputStream> (f.createOutputStream()))
+    {
+        auto opts = juce::AudioFormatWriterOptions().withSampleRate (sr).withNumChannels (2).withBitsPerSample (24);
+        if (auto w = wav.createWriterFor (os, opts))
+        {
+            w->writeFromAudioSampleBuffer (out, 0, total);
+            return f;
+        }
+    }
+    return {};
+}
+
 void ChoppageProcessor::timerCallback()
 {
     // Pattern memory notes (G#3-B4) arrive from the audio thread

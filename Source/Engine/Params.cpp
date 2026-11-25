@@ -6,6 +6,9 @@ namespace bc::params
     {
         using namespace juce;
         AudioProcessorValueTreeState::ParameterLayout l;
+        auto ms0 = AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return String (roundToInt (v)) + " ms"; });
+        auto ms1 = AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return String (v, 1) + " ms"; });
+        auto khz = AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return String (v / 1000.0f, 1) + " kHz"; });
         auto pct = AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return String (roundToInt (v * 100.0f)) + "%"; });
 
         auto f = [&] (const char* id, const char* name, float lo, float hi, float def, AudioParameterFloatAttributes a = {})
@@ -31,7 +34,7 @@ namespace bc::params
         }
         c (character, "Character", characterNames(), 1);   // S950
         {
-            f (volume, "Volume", -60.0f, 6.0f, 0.0f, AudioParameterFloatAttributes().withLabel ("dB"));
+            f (volume, "Volume", -60.0f, 6.0f, 0.0f, AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return v <= -59.9f ? String ("-INF") : String (v, 1) + " dB"; }));
         }
 
         // Post FX
@@ -39,13 +42,13 @@ namespace bc::params
         c (filterType, "Filter Type", { "LP", "HP" }, 0);
         f (filterRes, "Filter Res", 0.0f, 1.0f, 0.2f, pct);
         f (dist,     "Distortion", 0.0f, 1.0f, 0.0f, pct);
-        f (distTone, "Dist Tone",  -1.0f, 1.0f, 0.0f);
+        f (distTone, "Dist Tone",  -1.0f, 1.0f, 0.0f, AudioParameterFloatAttributes().withStringFromValueFunction ([] (float v, int) { return (v > 0.0f ? "+" : "") + String (v, 2); }));
         f (crush,    "Crush",      0.0f, 1.0f, 0.0f, pct);
         f (reverb,   "Reverb",     0.0f, 1.0f, 0.0f, pct);
         f (revDecay, "Reverb Decay", 0.0f, 1.0f, 0.33f, pct);
         f (revDamp,  "Reverb Damp",  0.0f, 1.0f, 0.5f, pct);
         f (revWidth, "Reverb Width", 0.0f, 1.0f, 0.8f, pct);
-        f (revPre,   "Reverb Pre",   0.0f, 100.0f, 10.0f, AudioParameterFloatAttributes().withLabel ("ms"));
+        f (revPre,   "Reverb Pre",   0.0f, 100.0f, 10.0f, ms0);
         f (echoMix,  "Echo Mix",     0.0f, 1.0f, 0.0f, pct);
         f (echoFb,   "Echo Feedback", 0.0f, 0.95f, 0.4f, pct);
         c (echoTime, "Echo Time", echoTimes(), 2);
@@ -72,12 +75,12 @@ namespace bc::params
         c (padQuant, "Pad Quantise", { "OFF", "1/16", "1/8" }, 1);
         c (stutRate, "Stutter Rate", noteRates(), 1);
         c (rollRate, "Roll Rate", noteRates(), 2);
-        f (tapeMs,   "Tape Stop Time", 100.0f, 3000.0f, 700.0f, AudioParameterFloatAttributes().withLabel ("ms"));
-        f (akCycle,  "Akaize Cycle", 2.0f, 60.0f, 9.5f, AudioParameterFloatAttributes().withLabel ("ms"));
+        f (tapeMs,   "Tape Stop Time", 100.0f, 3000.0f, 700.0f, ms0);
+        f (akCycle,  "Akaize Cycle", 2.0f, 60.0f, 9.5f, ms1);
         c (akRatio,  "Akaize Stretch", akRatios(), 1);
         f (diveRes,  "Filter Dive Res", 0.0f, 1.0f, 0.7f, pct);
-        f (dropRate, "S950 Drop Rate", 4000.0f, 15600.0f, 7500.0f, AudioParameterFloatAttributes().withLabel ("Hz"));
-        f (stretchCycle, "Slice Stretch Cycle", 2.0f, 60.0f, 9.5f, AudioParameterFloatAttributes().withLabel ("ms"));
+        f (dropRate, "S950 Drop Rate", 4000.0f, 15600.0f, 7500.0f, khz);
+        f (stretchCycle, "Slice Stretch Cycle", 2.0f, 60.0f, 9.5f, ms1);
 
         for (int i = 0; i < kFxPads; ++i)
             b (padParamId (i).toRawUTF8(), fxPadName (i), false);

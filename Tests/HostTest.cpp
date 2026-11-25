@@ -1,11 +1,11 @@
 /*
-    TwistedTimestretchHostTest — loads the BUILT plugin (VST3, or the installed AU
+    ChoppageHostTest — loads the BUILT plugin (VST3, or the installed AU
     on macOS) through JUCE's plugin hosting, the same boundary Logic / Ableton use:
       * host save -> new instance -> host restore (project save / duplicate track)
       * the sample travels inside the saved state
       * MIDI in -> audio out across the plugin boundary
-    Usage: TwistedTimestretchHostTest /path/to/TwistedTimestretch.vst3
-           TwistedTimestretchHostTest TwistedTimestretch.component
+    Usage: ChoppageHostTest /path/to/Choppage.vst3
+           ChoppageHostTest CHOPPAGE.component
 */
 #include <JuceHeader.h>
 #include <iostream>
@@ -43,7 +43,7 @@ static bool injectRawState (juce::AudioPluginInstance& inst, const juce::MemoryB
     // turn it into XML (the host accepts either), then patch it below.
     if (current.getSize() > 8 && std::memcmp (current.getData(), "bplist", 6) == 0)
     {
-        auto tmp = juce::File::getSpecialLocation (juce::File::tempDirectory).getChildFile ("tt-au-state.plist");
+        auto tmp = juce::File::getSpecialLocation (juce::File::tempDirectory).getChildFile ("choppage-au-state.plist");
         tmp.replaceWithData (current.getData(), current.getSize());
         juce::ChildProcess p;
         if (p.start (juce::StringArray { "/usr/bin/plutil", "-convert", "xml1", tmp.getFullPathName() }))
@@ -89,7 +89,7 @@ static juce::AudioProcessorParameter* findParam (juce::AudioPluginInstance& p, c
 int main (int argc, char* argv[])
 {
     juce::ScopedJuceInitialiser_GUI gui;
-    if (argc < 2) { std::cout << "usage: TwistedTimestretchHostTest plugin.vst3|plugin.component\n"; return 2; }
+    if (argc < 2) { std::cout << "usage: ChoppageHostTest plugin.vst3|plugin.component\n"; return 2; }
 
     juce::AudioPluginFormatManager fm;
     const juce::String path (argv[1]);
@@ -104,7 +104,7 @@ int main (int argc, char* argv[])
     if (path.endsWith (".component"))
     {
         for (auto& id : format->searchPathsForPlugins ({}, true, false))
-            if (id.containsIgnoreCase ("TwistedTimestretch") || id.containsIgnoreCase ("Twts"))
+            if (id.containsIgnoreCase ("CHOPPAGE") || id.containsIgnoreCase ("Chpg"))
                 format->findAllTypesForFile (types, id);
     }
     else
@@ -135,78 +135,57 @@ int main (int argc, char* argv[])
 
     auto a = make();
     if (a == nullptr) return 2;
-    auto* stretch = findParam (*a, "Stretch Length");
-    auto* cycle = findParam (*a, "Cycle Length");
-    auto* pitch = findParam (*a, "Pitch");
-    check (stretch && cycle && pitch, "host sees Stretch Length / Cycle Length / Pitch");
-    if (! (stretch && cycle && pitch)) return 1;
+    auto* amount = findParam (*a, "Pattern Amount");
+    auto* rate   = findParam (*a, "Sample Rate");
+    auto* filter = findParam (*a, "Filter");
+    check (amount && rate && filter, "host sees Pattern Amount / Sample Rate / Filter");
+    if (! (amount && rate && filter)) return 1;
     std::cout << "  params visible to host: " << a->getParameters().size() << "\n";
 
-    // Load a sample by handing the plugin a state that only carries a file path,
-    // exactly as a project saved without the sample embedded would.
-    auto wav = juce::File::getSpecialLocation (juce::File::tempDirectory).getChildFile ("tt-host-test.wav");
+    // No transport here: a tap on C1 latches the demo break on the internal clock.
+    auto run = [&] (juce::AudioPluginInstance& p, int blocks, juce::MidiBuffer first = {})
     {
-        wav.deleteFile();
-        juce::AudioBuffer<float> b (2, 44100);
-        for (int i = 0; i < 44100; ++i)
+        float peak = 0.0f;
+        for (int i = 0; i < blocks; ++i)
         {
-            const float v = 0.5f * std::sin ((float) i * 0.031f) + 0.2f * ((i / 300) % 2 == 0 ? 1.0f : -1.0f);
-            b.setSample (0, i, v); b.setSample (1, i, -v);
+            juce::AudioBuffer<float> b (2, 512);
+            b.clear();
+            juce::MidiBuffer m = i == 0 ? first : juce::MidiBuffer();
+            p.processBlock (b, m);
+            peak = juce::jmax (peak, b.getMagnitude (0, 512));
         }
-        juce::WavAudioFormat wf;
-        std::unique_ptr<juce::AudioFormatWriter> w (wf.createWriterFor (new juce::FileOutputStream (wav), 44100.0, 2, 16, {}, 0));
-        w->writeFromAudioSampleBuffer (b, 0, 44100);
-    }
-    {
-        juce::ValueTree root ("TwistedTimestretch");
-        juce::ValueTree s ("Sample");
-        s.setProperty ("path", wav.getFullPathName(), nullptr);
-        root.appendChild (s, nullptr);
-        juce::MemoryBlock mb;
-        {
-            juce::MemoryOutputStream mos (mb, false);
-            root.writeToStream (mos);
-        }
-        if (! injectRawState (*a, mb))
-        {
-            std::cout << "  [SKIP] this host format's state wrapper isn't recognised; sample checks skipped\n";
-            std::cout << "\n" << (checks - failures) << " / " << checks << " host checks passed\n";
-            return failures == 0 ? 0 : 1;
-        }
-    }
-    pump (100);
+        return peak;
+    };
+    juce::MidiBuffer c1; c1.addEvent (juce::MidiMessage::noteOn (1, 36, (juce::uint8) 110), 0);
+    check (run (*a, 4) < 1e-4f, "silent until a break is played (no host transport)");
+    check (run (*a, 40, c1) > 0.01f, "C1 in -> the demo break plays");
 
-    juce::MidiBuffer on; on.addEvent (juce::MidiMessage::noteOn (1, 60, (juce::uint8) 120), 0);
-    block (*a);
-    check (block (*a, on) > 0.01f, "MIDI note in -> audio out");
-
-    stretch->setValueNotifyingHost (stretch->getValueForText ("150"));
-    pitch->setValueNotifyingHost (pitch->getValueForText ("3"));
-    block (*a); pump (300);
-    std::cout << "  A: stretch=" << stretch->getCurrentValueAsText() << " pitch=" << pitch->getCurrentValueAsText() << "\n";
+    amount->setValueNotifyingHost (0.8f);
+    rate->setValueNotifyingHost (rate->getValueForText ("12000"));
+    filter->setValueNotifyingHost (0.6f);
+    run (*a, 2); pump (100);
+    std::cout << "  A: amount=" << amount->getCurrentValueAsText() << " rate=" << rate->getCurrentValueAsText() << "\n";
 
     juce::MemoryBlock blob;
     a->getStateInformation (blob);
     std::cout << "  state blob: " << (int) blob.getSize() << " bytes\n";
-    check (blob.getSize() > 44100 * 4, "the sample is embedded in the saved state");
+    check (blob.getSize() > 200, "state saves");
 
-    wav.deleteFile(); // the project must still open without the original file
     auto b = make();
     b->setStateInformation (blob.getData(), (int) blob.getSize());
-    block (*b); pump (200);
-    auto* stretchB = findParam (*b, "Stretch Length");
-    auto* pitchB = findParam (*b, "Pitch");
-    std::cout << "  B: stretch=" << stretchB->getCurrentValueAsText() << " pitch=" << pitchB->getCurrentValueAsText() << "\n";
-    check (std::abs (stretchB->getValue() - stretch->getValue()) < 1e-4f, "new instance restores Stretch Length");
-    check (std::abs (pitchB->getValue() - pitch->getValue()) < 1e-4f, "new instance restores Pitch");
-    check (block (*b, on) > 0.01f, "restored instance plays with the original file deleted");
+    pump (200);
+    auto* amountB = findParam (*b, "Pattern Amount");
+    auto* rateB = findParam (*b, "Sample Rate");
+    check (std::abs (amountB->getValue() - amount->getValue()) < 1e-4f, "new instance restores Pattern Amount");
+    check (std::abs (rateB->getValue() - rate->getValue()) < 1e-4f, "new instance restores Sample Rate");
+    check (run (*b, 40, c1) > 0.01f, "restored instance plays");
 
     std::unique_ptr<juce::AudioProcessorEditor> ed (b->createEditorIfNeeded());
     pump (150);
     check (ed != nullptr, "editor opens");
     b->setStateInformation (blob.getData(), (int) blob.getSize());
-    block (*b); pump (150);
-    check (block (*b, on) > 0.01f, "restore with the editor open");
+    pump (150);
+    check (run (*b, 40, c1) > 0.01f, "restore with the editor open");
     ed.reset();
 
     a.reset(); b.reset();

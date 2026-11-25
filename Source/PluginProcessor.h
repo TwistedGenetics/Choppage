@@ -103,7 +103,11 @@ public:
     void recallMemory (int memory);
     void clearPattern();
 
-    // transport (UI ▶) and FX pads (UI)
+    /** Renders one pass of the selected break's pattern (with the current sound) to a
+        24-bit WAV in the temp folder, for DRAG to the DAW. Message thread. */
+    juce::File bounceLoop();
+
+    // transport (UI play button) and FX pads (UI)
     void setPlaying (bool b) { engine.uiPlay = b; }
     bool isPlaying() const { return engine.playingSlot.load() >= 0; }
     void setPadHeld (int pad, bool held) { if (pad >= 0 && pad < bc::kFxPads) engine.uiPad[(size_t) pad] = held; }
