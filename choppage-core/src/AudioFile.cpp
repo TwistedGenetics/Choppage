@@ -177,7 +177,7 @@ namespace bc::AudioFile
         if (dot == std::string::npos) return false;
         std::string e = path.substr (dot + 1);
         for (auto& c : e) c = (char) std::tolower ((unsigned char) c);
-        return e == "wav" || e == "aif" || e == "aiff";
+        return e == "wav" || e == "aif" || e == "aiff" || e == "rx2" || e == "rex";
     }
 
     std::string baseName (const std::string& path)
@@ -190,6 +190,7 @@ namespace bc::AudioFile
 
     Info readInfo (const std::string& path)
     {
+        if (isRexFile (path)) return readRexInfo (path);
         Info i;
         std::ifstream f (path, std::ios::binary);
         if (! f) return i;
@@ -204,6 +205,7 @@ namespace bc::AudioFile
 
     std::shared_ptr<SampleData> load (const std::string& path, Status& status, double maxSeconds)
     {
+        if (isRexFile (path)) return loadRex (path, status, maxSeconds);
         std::ifstream f (path, std::ios::binary);
         if (! f) { status = Status::missing; return nullptr; }
         const auto L = parse (f);

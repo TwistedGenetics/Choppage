@@ -574,6 +574,81 @@ static void wavVariantTests()
     }
 }
 
+static void quantiseTests()
+{
+    std::cout << "\n== Pad quantise, reset to original ==" << std::endl;
+    for (int choice : { 2, 0, 5 })   // 1/8, OFF, 1 BAR
+    {
+        Rig r;
+        r.block = 64;
+        r.set (P_PAD_QUANT, (float) choice);
+        r.run (0.3);
+        const double q = choice == 2 ? 2.0 : choice == 5 ? 16.0 : 0.0;
+        // press off the grid
+        while (q > 0.0 && std::fmod (r.host.ppq * 4.0, q) < q * 0.4) r.run (64.0 / r.sr);
+        const double pressAt = r.host.ppq * 4.0;
+        r.s.setPadHeld (PerfFx::reverse, true);
+        double startAt = -1;
+        for (int i = 0; i < 4000 && startAt < 0; ++i) { r.run (64.0 / r.sr); if (r.s.engine().padActive[PerfFx::reverse]) startAt = r.host.ppq * 4.0; }
+        const double chunk16 = 64.0 * r.host.bpm / 60.0 / r.sr * 4.0;
+        if (q == 0.0)
+            check (startAt >= 0 && startAt - pressAt <= chunk16 + 1e-9, "PAD QUANTISE OFF: the pad acts at once");
+        else
+        {
+            const double line = std::ceil (pressAt / q) * q;
+            check (startAt >= line && startAt - line <= 2.0 * chunk16 + 1e-9,
+                   "PAD QUANTISE " + std::string (choice == 2 ? "1/8" : "1 BAR") + ": an early press waits for the next line (pressed "
+                   + std::to_string (pressAt) + ", started " + std::to_string (startAt) + ", line " + std::to_string (line) + ")");
+            // a quick tap (let go straight away) still plays to the following line
+            r.s.setPadHeld (PerfFx::reverse, false);
+            double stopAt = -1;
+            for (int i = 0; i < 8000 && stopAt < 0; ++i) { r.run (64.0 / r.sr); if (! r.s.engine().padActive[PerfFx::reverse]) stopAt = r.host.ppq * 4.0; }
+            check (stopAt >= line + q && stopAt - (line + q) <= 2.0 * chunk16 + 1e-9, "letting go ends it on the next line");
+        }
+    }
+    {
+        Rig r;
+        r.s.loadDemo (0);
+        r.s.waitUntilIdle();
+        r.s.rollPattern (Style::jungle, 0.9f, true);
+        r.s.rollFx (1.0f);
+        const auto& sl = r.s.slot (0);
+        bool anyFx = false; for (auto& f : sl.current.fx) anyFx = anyFx || f.type != FxType::none;
+        check (! (sl.current.slice == sl.original.slice) && anyFx, "dice changed the pattern and the FX lane");
+        r.s.resetToOriginal();
+        bool fxLeft = false; for (auto& f : sl.current.fx) fxLeft = fxLeft || f.type != FxType::none;
+        check (sl.current.slice == sl.original.slice && ! fxLeft && ! sl.showOriginal, "RESET: the break as recorded, FX lane empty");
+        r.s.historyBack();
+        check (! (r.s.slot (0).current.slice == r.s.slot (0).original.slice), "RESET can be undone");
+    }
+}
+
+static void rexTests()
+{
+    std::cout << "\n== REX loops ==" << std::endl;
+    const auto data = std::filesystem::path (__FILE__).parent_path() / "data";
+    for (auto [name, bpm] : { std::pair<const char*, double> { "120Stereo.rx2", 120.0 }, { "120RexTest.rex", 79.763 } })
+    {
+        const auto path = (data / name).string();
+        AudioFile::Status st;
+        auto d = AudioFile::load (path, st);
+        const std::string n = name;
+        check (d != nullptr && st == AudioFile::Status::ok, n + " decodes");
+        if (d == nullptr) continue;
+        float peak = 0; for (float v : d->ch[0]) peak = std::max (peak, std::abs (v));
+        check (peak > 0.05f && peak <= 1.5f, n + ": audio in it (peak " + std::to_string (peak) + ")");
+        check (d->fileMarkers.size() >= 2 && d->fileMarkers.front() == 0, n + ": ReCycle's slice points (" + std::to_string (d->fileMarkers.size()) + ")");
+        check (std::abs (d->fileBpm - bpm) < 1.0 && d->fileBars == 1, n + ": its tempo, " + std::to_string (d->fileBars) + " bar(s) (" + std::to_string (d->fileBpm) + ")");
+        check (AudioFile::isAudioFile (path) && AudioFile::readInfo (path).ok, n + ": listed by the browser");
+        Rig r;
+        r.s.loadFile (1, path);
+        r.s.waitUntilIdle();
+        const auto& sl = r.s.slot (1);
+        check (sl.status == Session::Status::ready && sl.content && sl.content->numSlices() == std::min ((int) d->fileMarkers.size(), kMaxSlices)
+               && std::abs (sl.content->bpm - bpm) < 1.0, n + ": loads with ReCycle's slices and tempo");
+    }
+}
+
 int main()
 {
     wavVariantTests();
@@ -584,6 +659,8 @@ int main()
     editTests();
     fileTests();
     paramTests();
+    rexTests();
+    quantiseTests();
     std::cout << "\n" << (checks - failures) << " / " << checks << " checks passed" << std::endl;
     return failures == 0 ? 0 : 1;
 }

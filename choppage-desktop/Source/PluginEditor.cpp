@@ -441,7 +441,7 @@ void ChoppageEditor::timerCallback() { panel->refresh(); }
 bool ChoppageEditor::isInterestedInFileDrag (const juce::StringArray& files)
 {
     for (auto& f : files)
-        if (juce::File (f).hasFileExtension ("wav;aif;aiff;flac;mp3")) return true;
+        if (juce::File (f).hasFileExtension ("wav;aif;aiff;flac;mp3;rx2;rex")) return true;
     return false;
 }
 
@@ -474,7 +474,7 @@ void ChoppageEditor::chooseFile()
     const int slot = proc.getSelectedSlot();
     chooser = std::make_unique<juce::FileChooser> ("Load a break into slot " + juce::String (slot + 1),
                                                    juce::File::getSpecialLocation (juce::File::userMusicDirectory),
-                                                   "*.wav;*.aif;*.aiff;*.flac;*.mp3");
+                                                   "*.wav;*.aif;*.aiff;*.flac;*.mp3;*.rx2;*.rex");
     chooser->launchAsync (juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
                           [this, slot] (const juce::FileChooser& fc)
                           {

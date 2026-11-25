@@ -132,6 +132,7 @@ std::vector<MpcParamDef> buildDefs()
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
     F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f);
+    T("resetOrig", "Reset");
     return v;
 }
 
@@ -213,7 +214,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_SL_DRAG + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_RESET_ORIG + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -622,7 +623,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
                 session_.loadFile(slot, entries[(size_t)k].path);
                 say("LOADING " + upper(entries[(size_t)k].name));
             }
-            else say("PUT WAV / AIFF BREAKS IN CONTENT/BREAKS");
+            else say("PUT WAV / AIFF / REX BREAKS IN CONTENT/BREAKS");
             break;
         }
         case MP_DEMO: session_.loadDemo(slot); say("DEMO BREAK"); break;
@@ -651,6 +652,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             session_.rollPattern((Style)roundi(values_[P_STYLE].load()), values_[P_PAT_AMOUNT].load(), values_[P_LAYERS].load() > 0.5f);
             break;
         case MP_DICE_FX: session_.rollFx(values_[P_FX_AMOUNT].load()); break;
+        case MP_RESET_ORIG: session_.resetToOriginal(); say("PATTERN + FX BACK TO THE ORIGINAL"); break;
         case MP_UNDO: session_.historyBack(); break;
         case MP_REDO: session_.historyForward(); break;
         case MP_ORIGINAL: session_.setShowOriginal(on); break;
@@ -674,7 +676,11 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             break;
         }
         case MP_SL_BADGE: session_.setBadge(session_.selectedSlice(), (Badge)std::clamp(roundi(v), 0, kNumBadges - 1)); break;
-        case MP_SLICING: case MP_SENS: case MP_GRID: break;   // RESLICE applies them
+        case MP_SLICING: case MP_SENS: case MP_GRID:
+            // kept for this break's next load; RESLICE applies them to the break loaded now
+            session_.setSlicing(slot, roundi(values_[MP_SLICING].load()) == 1, values_[MP_SENS].load(),
+                                kGridValues[std::clamp(roundi(values_[MP_GRID].load()), 0, 2)]);
+            break;
         case MP_RESLICE:
             session_.reslice(slot, roundi(values_[MP_SLICING].load()) == 1, values_[MP_SENS].load(),
                              kGridValues[std::clamp(roundi(values_[MP_GRID].load()), 0, 2)]);

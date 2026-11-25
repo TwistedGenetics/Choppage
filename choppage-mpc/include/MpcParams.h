@@ -74,6 +74,8 @@ enum MpcParam : int
     MP_AKR_LOOP_BPM,            // the selected break's loop tempo for AKAIZE SYNC (0 = AUTO: the break's own)
     // ---- 0.6.1: finger drag on the SLICE pages
     MP_SL_DRAG,                 // the selected slice's start marker, 0..1 across the waveform as shown (drag strip)
+    // ---- 0.7
+    MP_RESET_ORIG,              // trigger: pattern back to the break as recorded, FX lane empty
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

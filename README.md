@@ -30,7 +30,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - Click a slice to select it and hear it.
   - Drag a marker to move it; double-click to add one; right-click to mute, change the badge or delete the marker.
   - **SLICE / ALL** table: PITCH, GATE, STRETCH, REVERSE, STUTTER, TRANS, XFADE. Drag or scroll a value; double-click resets it.
-- **SEQ**: PATTERN / ORIGINAL, 1 / 2 / 4 bars, history ◀ ▶, CLEAR.
+- **SEQ**: PATTERN / ORIGINAL, 1 / 2 / 4 bars, history ◀ ▶, CLEAR, **RESET** (pattern back to the break as recorded and the FX lane emptied; undo with ◀).
   - Lanes KICK SNARE GHOST HAT OPEN PERC, then the FX row; each cell shows the slice number.
   - Click a cell to add or remove a hit, right-click to swap to another hit of the same type, shift-click to lock a step.
   - Per-step FX: click a step on the FX row (or any cell) to select it, then pick **STEP FX** OFF / STUTTER / REVERSE / STRETCH / TAPE STOP and **RATE** 1/8 – 1/64 underneath. Right-click an FX cell to cycle its rate.
@@ -41,7 +41,8 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - Trigger: SYNC / MIDI, break switching (RESTART / BAR SYNC / QUANT), velocity → start slice. A break plays only once its key (C1–G1) triggers it, timed to the host's tempo. The transport running doesn't start it on its own.
   - GATE: LATCH (until the same key again), HOLD (while held), ONE SHOT (one note plays the pattern to its end, then stops).
   - MUTE GROUP 1–4 per break: the same group cuts (the new break carries on from the same point in the bar with BAR SYNC), different groups play together.
-  - Sound: CHARACTER (CLEAN, S950, SP-1200, MPC60, S1000, LO-FI), slicing TRANSIENTS / GRID.
+  - **FX QUANTISE**: OFF, 1/32, 1/16, 1/8, 1/4, 1 BAR. A pad press waits for the next line of the grid, and letting go ends the effect on the next line (a quick tap plays one grid's worth).
+  - Sound: CHARACTER (CLEAN, S950, SP-1200, MPC60, S1000, LO-FI), slicing TRANSIENTS / GRID and **SENS** (transient sensitivity: drag or scroll to re-slice, double-click = 62%).
   - Generate: STYLE, LAYERS, SWING.
   - LCD colour: BLUE (S950), GREEN, AMBER, WHITE.
   - Render: **AKAIZE THE BREAK** (settings on the AKAI tab).
@@ -54,7 +55,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 - **PATTERN dice / FX dice** with AMOUNT. Every roll goes into the history.
 - **SAMPLE RATE fader** 44.1 → 4.0 kHz · **FILTER · DISTORTION · CRUSH · REVERB** · **VOL**
 - **LCD top bar**: ▶ (plays on CHOPPAGE's own clock when the host is stopped), break picker, LOAD, **DRAG** (drags the pattern out as a WAV), BPM.
-- Drop WAV / AIFF / FLAC files anywhere on the panel. Several files fill consecutive slots.
+- Drop WAV / AIFF / FLAC / MP3 or **REX** (.rx2 / .rex from ReCycle) files anywhere on the panel. Several files fill consecutive slots. A REX loop comes in with ReCycle's own slices and its tempo; RESLICE finds new ones.
 
 Saved with the project: breaks (by path), slices, badges, slice settings, pattern, FX lane and memories.
 

@@ -23,6 +23,10 @@ namespace bc
         double sampleRate = 44100.0;
         std::string name;                 // file name without extension
         std::string path;
+        // REX loops: the file's own slice points (sample positions) and length in bars (empty / 0 otherwise)
+        std::vector<int> fileMarkers;
+        int    fileBars = 0;
+        double fileBpm = 0.0;
 
         static constexpr int overviewBucket = 256;
         std::vector<float> overviewMin, overviewMax;

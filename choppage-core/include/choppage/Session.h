@@ -90,6 +90,8 @@ namespace bc
         void loadDemo (int slot);
         void clearSlot (int slot);
         void reslice (int slot, bool grid, float sensitivity, int gridPerBar);
+        /** Slicing settings kept for the slot's next load (no reslice now). */
+        void setSlicing (int slot, bool grid, float sensitivity, int gridPerBar);
 
         float getSliceValue (SliceField, bool all) const;
         void  setSliceValue (SliceField, float, bool all);
@@ -114,6 +116,7 @@ namespace bc
         void saveMemory (int memory);
         void recallMemory (int memory);
         void clearPattern();
+        void resetToOriginal();      // pattern = the break as recorded, FX lane empty (undoable)
 
         // ---- break browser ----------------------------------------------------------------------------
         /** Scans `folder` (and its sub-folders, 3 deep) on the worker; entries sorted by BPM then name. */
@@ -207,5 +210,6 @@ namespace bc
     };
 
     /** The analysis that turns a decoded break into slot content (used by Session and the tests). */
-    ContentPtr analyseBreak (const SamplePtr& buf, bool grid, float sensitivity, int gridPerBar, const std::string* restore);
+    ContentPtr analyseBreak (const SamplePtr& buf, bool grid, float sensitivity, int gridPerBar, const std::string* restore,
+                             bool fileSlices = true);   // a REX file's own slice points when it has them
 }

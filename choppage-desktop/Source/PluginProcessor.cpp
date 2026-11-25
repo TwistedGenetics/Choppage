@@ -48,6 +48,7 @@ ChoppageProcessor::ChoppageProcessor()
     {
         const juce::File f (path);
         if (! f.existsAsFile()) { st = AudioFile::Status::missing; return nullptr; }
+        if (AudioFile::isRexFile (path)) return AudioFile::loadRex (path, st);   // REX2: the core's decoder, with ReCycle's slices
         std::unique_ptr<juce::AudioFormatReader> r (formats.createReaderFor (f));
         if (r == nullptr || r->sampleRate <= 0 || r->numChannels == 0) { st = AudioFile::Status::unreadable; return nullptr; }
         if ((double) r->lengthInSamples > 300.0 * r->sampleRate) { st = AudioFile::Status::tooLong; return nullptr; }

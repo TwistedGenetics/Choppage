@@ -58,7 +58,7 @@ namespace bc
             C ("gateMode", "Gate", { "LATCH", "HOLD", "ONE SHOT" }, 0);
             B ("velSlice", "Velocity To Start Slice", false);
             C ("tempoSrc", "Tempo Source", { "AUTO", "/2", "X2" }, 0);
-            C ("padQuant", "Pad Quantise", { "OFF", "1/16", "1/8" }, 1);
+            C ("padQuant", "Pad Quantise", { "OFF", "1/16", "1/8", "1/4", "1/32", "1 BAR" }, 1);   // (appended: saved values stay)
             C ("stutRate", "Stutter Rate", kRates, 1);
             C ("rollRate", "Roll Rate", kRates, 2);
             F ("tapeMs", "Tape Stop Time", 100, 3000, 700, PDisp::ms0);
@@ -195,7 +195,10 @@ namespace bc
         s.pads.akCycleFreq   = akaizeFreq (v[P_AK_CYC_LEN], v[P_AK_CYC_FREQ], v[P_AK_FREQ_MAN] > 0.5f);
         s.pads.akRatio    = akRatioValue (i (P_AK_RATIO));
         s.pads.diveRes    = v[P_DIVE_RES];
-        s.pads.quantSteps = i (P_PAD_QUANT);
+        {
+            static const double grid16[] = { 0.0, 1.0, 2.0, 4.0, 0.5, 16.0 };
+            s.pads.quantSteps = grid16[clampv (i (P_PAD_QUANT), 0, 5)];
+        }
 
         auto& c = s.sound;
         c.character = i (P_CHARACTER);

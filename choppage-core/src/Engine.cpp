@@ -284,7 +284,8 @@ namespace bc
                     handleMidi (midi[midiIt++], s);
 
                 const double ppqNow = host.playing ? host.ppq + abs * ppqPerSample : internalPpq;
-                const bool halfTime = midiPad[PerfFx::halfTime] || uiPad[PerfFx::halfTime].load();
+                const bool halfTime = s.pads.quantSteps > 0.0 ? padOn[PerfFx::halfTime]   // (quantised like the other pads)
+                                                              : midiPad[PerfFx::halfTime] || uiPad[PerfFx::halfTime].load();
                 const double speed = s.speed * (halfTime ? 0.5 : 1.0);
                 const bool followHost = host.playing && ! halfTime;
 
@@ -387,12 +388,37 @@ namespace bc
             renderVoices (renderedUpTo, n);
 
             // FX pads: MIDI, UI and the FX lane
-            std::array<bool, kFxPads> held {};
-            for (int p = 0; p < kFxPads; ++p)
+            std::array<bool, kFxPads> held {}, pressed {};
+            const double ppqHere0 = host.playing ? host.ppq + c0 * ppqPerSample : internalPpq;
             {
-                const bool lane = autoPadLeft[(size_t) p] > 0;
-                held[(size_t) p] = midiPad[(size_t) p] || uiPad[(size_t) p].load() || lane;
-                if (lane) autoPadLeft[(size_t) p] -= n;
+                // PAD QUANTISE: a press waits for the next grid line (it starts in the chunk the line falls in or
+                // just after, so STUTTER's loop starts on the line); letting go ends it on the next line; a tap
+                // shorter than the grid still plays one grid's worth. The FX lane is on the grid already.
+                const double q = s.pads.quantSteps;
+                const double pos16 = ppqHere0 * 4.0, chunk16 = n * ppqPerSample * 4.0;
+                const bool onLine = q > 0.0 && (pos16 - std::floor (pos16 / q) * q) < chunk16;
+                for (int p = 0; p < kFxPads; ++p)
+                {
+                    const size_t i = (size_t) p;
+                    const bool raw = midiPad[i] || uiPad[i].load();
+                    pressed[i] = raw;
+                    if (q <= 0.0) { padOn[i] = raw; padArmed[i] = padStopArmed[i] = padTap[i] = false; }
+                    else
+                    {
+                        if (raw && ! padWas[i]) { if (padOn[i]) padStopArmed[i] = false; else { padArmed[i] = true; padTap[i] = false; } }
+                        if (! raw && padWas[i]) { if (padOn[i]) padStopArmed[i] = true; else if (padArmed[i]) padTap[i] = true; }
+                        if (padOn[i] && padStopArmed[i] && onLine) { padOn[i] = false; padStopArmed[i] = false; }
+                        else if (padArmed[i] && onLine)
+                        {
+                            padOn[i] = true; padArmed[i] = false;
+                            if (padTap[i] || ! raw) { padStopArmed[i] = true; padTap[i] = false; }
+                        }
+                    }
+                    padWas[i] = raw;
+                    const bool lane = autoPadLeft[i] > 0;
+                    held[i] = padOn[i] || lane;
+                    if (lane) autoPadLeft[i] -= n;
+                }
             }
             PerfFx::Settings ps = s.pads;
             if (autoPadLeft[PerfFx::stutter] > 0 && ! midiPad[PerfFx::stutter] && ! uiPad[PerfFx::stutter].load())
@@ -407,7 +433,10 @@ namespace bc
             chain.process (mix[0], mix[1], n, cs);
 
             for (int p = 0; p < kFxPads; ++p)
-                padLit[(size_t) p] = held[(size_t) p] || perf.isAudible (p);
+            {
+                padLit[(size_t) p] = held[(size_t) p] || pressed[(size_t) p] || perf.isAudible (p);
+                padActive[(size_t) p] = held[(size_t) p];
+            }
 
             // what plays where, for the screens
             {

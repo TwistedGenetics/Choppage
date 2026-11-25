@@ -17951,7 +17951,7 @@
      }
     },
     {
-     "key": "cp flip key_follow_160x84.png",
+     "key": "cp flip key_follow_136x84.png",
      "value": {
       "version": 2,
       "actions": [
@@ -17989,7 +17989,7 @@
           "version": 2,
           "imageType": "FilmStrip",
           "colour": "0",
-          "image": "key_follow_160x84.png",
+          "image": "key_follow_136x84.png",
           "numFrames": 2,
           "handleName": "Data"
          }
@@ -18004,7 +18004,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 160 84"
+         "bounds": "0 0 136 84"
         }
        },
        {
@@ -18038,7 +18038,7 @@
      }
     },
     {
-     "key": "cp flip key_original_160x84.png",
+     "key": "cp flip key_original_136x84.png",
      "value": {
       "version": 2,
       "actions": [
@@ -18076,7 +18076,7 @@
           "version": 2,
           "imageType": "FilmStrip",
           "colour": "0",
-          "image": "key_original_160x84.png",
+          "image": "key_original_136x84.png",
           "numFrames": 2,
           "handleName": "Data"
          }
@@ -18091,7 +18091,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 160 84"
+         "bounds": "0 0 136 84"
         }
        },
        {
@@ -18125,7 +18125,7 @@
      }
     },
     {
-     "key": "cp hold key_clear_166x84__on.png",
+     "key": "cp hold key_clear_105x84__on.png",
      "value": {
       "version": 2,
       "actions": [],
@@ -18180,8 +18180,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "key_clear_166x84__on.png",
-          "offImage": "key_clear_166x84__off.png",
+          "onImage": "key_clear_105x84__on.png",
+          "offImage": "key_clear_105x84__off.png",
           "buttonId": 1,
           "numButtonsInGroup": 1,
           "handleName": "Data",
@@ -18198,7 +18198,87 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "0 0 166 84"
+         "bounds": "0 0 105 84"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold key_reset_105x84__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "key_reset_105x84__on.png",
+          "offImage": "key_reset_105x84__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 105 84"
         }
        }
       ]
@@ -20740,8 +20820,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_k_on.png",
-          "offImage": "pick_51_k_off.png",
+          "onImage": "pick_51x52_k_on.png",
+          "offImage": "pick_51x52_k_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -20769,8 +20849,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_s_on.png",
-          "offImage": "pick_51_s_off.png",
+          "onImage": "pick_51x52_s_on.png",
+          "offImage": "pick_51x52_s_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -20798,8 +20878,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_gs_on.png",
-          "offImage": "pick_51_gs_off.png",
+          "onImage": "pick_51x52_gs_on.png",
+          "offImage": "pick_51x52_gs_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -20827,8 +20907,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_h_on.png",
-          "offImage": "pick_51_h_off.png",
+          "onImage": "pick_51x52_h_on.png",
+          "offImage": "pick_51x52_h_off.png",
           "buttonId": 3,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -20856,8 +20936,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_o_on.png",
-          "offImage": "pick_51_o_off.png",
+          "onImage": "pick_51x52_o_on.png",
+          "offImage": "pick_51x52_o_off.png",
           "buttonId": 4,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -20885,8 +20965,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_51_p_on.png",
-          "offImage": "pick_51_p_off.png",
+          "onImage": "pick_51x52_p_on.png",
+          "offImage": "pick_51x52_p_off.png",
           "buttonId": 5,
           "numButtonsInGroup": 6,
           "handleName": "Data",
@@ -21793,8 +21873,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_147_trans_on.png",
-          "offImage": "pick_147_trans_off.png",
+          "onImage": "pick_147x52_trans_on.png",
+          "offImage": "pick_147x52_trans_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -21822,8 +21902,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_147_grid_on.png",
-          "offImage": "pick_147_grid_off.png",
+          "onImage": "pick_147x52_grid_on.png",
+          "offImage": "pick_147x52_grid_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -21910,8 +21990,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_99_1_8_d1dde_on.png",
-          "offImage": "pick_99_1_8_d1dde_off.png",
+          "onImage": "pick_99x52_1_8_d1dde_on.png",
+          "offImage": "pick_99x52_1_8_d1dde_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -21939,8 +22019,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_99_1_16_b8d2f_on.png",
-          "offImage": "pick_99_1_16_b8d2f_off.png",
+          "onImage": "pick_99x52_1_16_b8d2f_on.png",
+          "offImage": "pick_99x52_1_16_b8d2f_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -21968,8 +22048,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_99_1_32_5671f_on.png",
-          "offImage": "pick_99_1_32_5671f_off.png",
+          "onImage": "pick_99x52_1_32_5671f_on.png",
+          "offImage": "pick_99x52_1_32_5671f_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -35769,8 +35849,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_1_bar_on.png",
-          "offImage": "pick_204_1_bar_off.png",
+          "onImage": "pick_99x64_1_on.png",
+          "offImage": "pick_99x64_1_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -35787,7 +35867,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "6 6 204 52"
+         "bounds": "6 6 99 52"
         }
        },
        {
@@ -35798,8 +35878,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_2_bars_on.png",
-          "offImage": "pick_204_2_bars_off.png",
+          "onImage": "pick_99x64_2_on.png",
+          "offImage": "pick_99x64_2_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -35816,7 +35896,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "207 6 204 52"
+         "bounds": "102 6 99 52"
         }
        },
        {
@@ -35827,8 +35907,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_4_bars_on.png",
-          "offImage": "pick_204_4_bars_off.png",
+          "onImage": "pick_99x64_4_on.png",
+          "offImage": "pick_99x64_4_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -35845,7 +35925,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "408 6 204 52"
+         "bounds": "198 6 99 52"
         }
        }
       ]
@@ -36083,6 +36163,86 @@
           "version": 2,
           "onImage": "key_clear_299__on.png",
           "offImage": "key_clear_299__off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 299 96"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp hold key_reset_to_original_299__on.png",
+     "value": {
+      "version": 2,
+      "actions": [],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "key_reset_to_original_299__on.png",
+          "offImage": "key_reset_to_original_299__off.png",
           "buttonId": 1,
           "numButtonsInGroup": 1,
           "handleName": "Data",
@@ -36851,10 +37011,10 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_off_on.png",
-          "offImage": "pick_204_off_off.png",
+          "onImage": "pick_103x64_off_on.png",
+          "offImage": "pick_103x64_off_off.png",
           "buttonId": 0,
-          "numButtonsInGroup": 3,
+          "numButtonsInGroup": 6,
           "handleName": "Data",
           "gestureBehaviour": "Instant"
          }
@@ -36869,7 +37029,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "6 6 204 52"
+         "bounds": "6 6 103 52"
         }
        },
        {
@@ -36880,10 +37040,10 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_1_16_b8d2f_on.png",
-          "offImage": "pick_204_1_16_b8d2f_off.png",
-          "buttonId": 1,
-          "numButtonsInGroup": 3,
+          "onImage": "pick_103x64_1_32_5671f_on.png",
+          "offImage": "pick_103x64_1_32_5671f_off.png",
+          "buttonId": 4,
+          "numButtonsInGroup": 6,
           "handleName": "Data",
           "gestureBehaviour": "Instant"
          }
@@ -36898,7 +37058,7 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "207 6 204 52"
+         "bounds": "106 6 103 52"
         }
        },
        {
@@ -36909,10 +37069,10 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_1_8_d1dde_on.png",
-          "offImage": "pick_204_1_8_d1dde_off.png",
-          "buttonId": 2,
-          "numButtonsInGroup": 3,
+          "onImage": "pick_103x64_1_16_b8d2f_on.png",
+          "offImage": "pick_103x64_1_16_b8d2f_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 6,
           "handleName": "Data",
           "gestureBehaviour": "Instant"
          }
@@ -36927,7 +37087,94 @@
          "showWhenDataModelInvalid": "Show",
          "whenVisible": "Always",
          "boundsType": "Absolute",
-         "bounds": "408 6 204 52"
+         "bounds": "206 6 103 52"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "choice 3",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pick_103x64_1_8_d1dde_on.png",
+          "offImage": "pick_103x64_1_8_d1dde_off.png",
+          "buttonId": 2,
+          "numButtonsInGroup": 6,
+          "handleName": "Data",
+          "gestureBehaviour": "Instant"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "306 6 103 52"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "choice 4",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pick_103x64_1_4_ff8be_on.png",
+          "offImage": "pick_103x64_1_4_ff8be_off.png",
+          "buttonId": 3,
+          "numButtonsInGroup": 6,
+          "handleName": "Data",
+          "gestureBehaviour": "Instant"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "406 6 103 52"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "choice 5",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pick_103x64_bar_on.png",
+          "offImage": "pick_103x64_bar_off.png",
+          "buttonId": 5,
+          "numButtonsInGroup": 6,
+          "handleName": "Data",
+          "gestureBehaviour": "Instant"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "506 6 103 52"
         }
        }
       ]
@@ -37265,8 +37512,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_147_lp_on.png",
-          "offImage": "pick_147_lp_off.png",
+          "onImage": "pick_147x64_lp_on.png",
+          "offImage": "pick_147x64_lp_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -37294,8 +37541,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_147_hp_on.png",
-          "offImage": "pick_147_hp_off.png",
+          "onImage": "pick_147x64_hp_on.png",
+          "offImage": "pick_147x64_hp_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -37476,8 +37723,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_414_latch_on.png",
-          "offImage": "pick_414_latch_off.png",
+          "onImage": "pick_414x64_latch_on.png",
+          "offImage": "pick_414x64_latch_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -37505,8 +37752,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_414_hold_on.png",
-          "offImage": "pick_414_hold_off.png",
+          "onImage": "pick_414x64_hold_on.png",
+          "offImage": "pick_414x64_hold_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -37534,8 +37781,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_414_one_shot_on.png",
-          "offImage": "pick_414_one_shot_off.png",
+          "onImage": "pick_414x64_one_shot_on.png",
+          "offImage": "pick_414x64_one_shot_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -37622,8 +37869,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_1_on.png",
-          "offImage": "pick_311_1_off.png",
+          "onImage": "pick_311x64_1_on.png",
+          "offImage": "pick_311x64_1_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -37651,8 +37898,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_2_on.png",
-          "offImage": "pick_311_2_off.png",
+          "onImage": "pick_311x64_2_on.png",
+          "offImage": "pick_311x64_2_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -37680,8 +37927,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_3_on.png",
-          "offImage": "pick_311_3_off.png",
+          "onImage": "pick_311x64_3_on.png",
+          "offImage": "pick_311x64_3_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -37709,8 +37956,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_4_on.png",
-          "offImage": "pick_311_4_off.png",
+          "onImage": "pick_311x64_4_on.png",
+          "offImage": "pick_311x64_4_off.png",
           "buttonId": 3,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -37797,8 +38044,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_309_restart_on.png",
-          "offImage": "pick_309_restart_off.png",
+          "onImage": "pick_309x64_restart_on.png",
+          "offImage": "pick_309x64_restart_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -37826,8 +38073,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_309_bar_sync_on.png",
-          "offImage": "pick_309_bar_sync_off.png",
+          "onImage": "pick_309x64_bar_sync_on.png",
+          "offImage": "pick_309x64_bar_sync_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -37855,8 +38102,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_309_quant_on.png",
-          "offImage": "pick_309_quant_off.png",
+          "onImage": "pick_309x64_quant_on.png",
+          "offImage": "pick_309x64_quant_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38037,8 +38284,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_304_sync_on.png",
-          "offImage": "pick_304_sync_off.png",
+          "onImage": "pick_304x64_sync_on.png",
+          "offImage": "pick_304x64_sync_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -38066,8 +38313,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_304_midi_on.png",
-          "offImage": "pick_304_midi_off.png",
+          "onImage": "pick_304x64_midi_on.png",
+          "offImage": "pick_304x64_midi_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -38154,8 +38401,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_36_c1_on.png",
-          "offImage": "pick_204_36_c1_off.png",
+          "onImage": "pick_204x64_36_c1_on.png",
+          "offImage": "pick_204x64_36_c1_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38183,8 +38430,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_37_mpc_on.png",
-          "offImage": "pick_204_37_mpc_off.png",
+          "onImage": "pick_204x64_37_mpc_on.png",
+          "offImage": "pick_204x64_37_mpc_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38212,8 +38459,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_48_c2_on.png",
-          "offImage": "pick_204_48_c2_off.png",
+          "onImage": "pick_204x64_48_c2_on.png",
+          "offImage": "pick_204x64_48_c2_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38300,8 +38547,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_auto_on.png",
-          "offImage": "pick_204_auto_off.png",
+          "onImage": "pick_204x64_auto_on.png",
+          "offImage": "pick_204x64_auto_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38329,8 +38576,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_2_de045_on.png",
-          "offImage": "pick_204_2_de045_off.png",
+          "onImage": "pick_204x64_2_de045_on.png",
+          "offImage": "pick_204x64_2_de045_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38358,8 +38605,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_x2_on.png",
-          "offImage": "pick_204_x2_off.png",
+          "onImage": "pick_204x64_x2_on.png",
+          "offImage": "pick_204x64_x2_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38446,8 +38693,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_0_5x_57053_on.png",
-          "offImage": "pick_204_0_5x_57053_off.png",
+          "onImage": "pick_204x64_0_5x_57053_on.png",
+          "offImage": "pick_204x64_0_5x_57053_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38475,8 +38722,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_1x_on.png",
-          "offImage": "pick_204_1x_off.png",
+          "onImage": "pick_204x64_1x_on.png",
+          "offImage": "pick_204x64_1x_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38504,8 +38751,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_204_2x_on.png",
-          "offImage": "pick_204_2x_off.png",
+          "onImage": "pick_204x64_2x_on.png",
+          "offImage": "pick_204x64_2x_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 3,
           "handleName": "Data",
@@ -38686,8 +38933,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_304_repitch_on.png",
-          "offImage": "pick_304_repitch_off.png",
+          "onImage": "pick_304x64_repitch_on.png",
+          "offImage": "pick_304x64_repitch_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -38715,8 +38962,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_304_keep_on.png",
-          "offImage": "pick_304_keep_off.png",
+          "onImage": "pick_304x64_keep_on.png",
+          "offImage": "pick_304x64_keep_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 2,
           "handleName": "Data",
@@ -38803,8 +39050,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_blue_on.png",
-          "offImage": "pick_311_blue_off.png",
+          "onImage": "pick_311x64_blue_on.png",
+          "offImage": "pick_311x64_blue_off.png",
           "buttonId": 0,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -38832,8 +39079,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_green_on.png",
-          "offImage": "pick_311_green_off.png",
+          "onImage": "pick_311x64_green_on.png",
+          "offImage": "pick_311x64_green_off.png",
           "buttonId": 1,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -38861,8 +39108,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_amber_on.png",
-          "offImage": "pick_311_amber_off.png",
+          "onImage": "pick_311x64_amber_on.png",
+          "offImage": "pick_311x64_amber_off.png",
           "buttonId": 2,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -38890,8 +39137,8 @@
          "type": "Button",
          "data": {
           "version": 2,
-          "onImage": "pick_311_white_on.png",
-          "offImage": "pick_311_white_off.png",
+          "onImage": "pick_311x64_white_on.png",
+          "offImage": "pick_311x64_white_off.png",
           "buttonId": 3,
           "numButtonsInGroup": 4,
           "handleName": "Data",
@@ -38959,7 +39206,7 @@
    },
    {
     "key": "Parameter 31",
-    "value": ["OFF", "1/16", "1/8"]
+    "value": ["OFF", "1/16", "1/8", "1/4", "1/32", "1 BAR"]
    },
    {
     "key": "Parameter 32",
@@ -52309,7 +52556,7 @@
        "componentData": {
         "version": 1,
         "name": "seqFollow",
-        "type": "cp flip key_follow_160x84.png",
+        "type": "cp flip key_follow_136x84.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -52330,7 +52577,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "772 434 160 84",
+        "bounds": "772 434 136 84",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 198"]
        }
       },
@@ -52339,7 +52586,7 @@
        "componentData": {
         "version": 1,
         "name": "original",
-        "type": "cp flip key_original_160x84.png",
+        "type": "cp flip key_original_136x84.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -52360,7 +52607,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "936 434 160 84",
+        "bounds": "912 434 136 84",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 198"]
        }
       },
@@ -52369,7 +52616,7 @@
        "componentData": {
         "version": 1,
         "name": "clear",
-        "type": "cp hold key_clear_166x84__on.png",
+        "type": "cp hold key_clear_105x84__on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -52390,7 +52637,37 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "1100 434 166 84",
+        "bounds": "1052 434 105 84",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 198"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "resetOrig",
+        "type": "cp hold key_reset_105x84__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 526"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1161 434 105 84",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 198"]
        }
       },
@@ -74018,7 +74295,7 @@
           "case": "Original"
          },
          "type": "Name",
-         "handleName": "WithName[LENGTH]/Parameter 122"
+         "handleName": "WithName[LENGTH (BARS)]/Parameter 122"
         }
        },
        "handle remapping": {
@@ -74031,7 +74308,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "20 156 618 30"
+        "bounds": "20 156 303 30"
        }
       },
       {
@@ -74060,7 +74337,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "16 190 618 64"
+        "bounds": "16 190 303 64"
        }
       },
       {
@@ -74097,7 +74374,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "740 158 209 32"
+        "bounds": "425 158 209 32"
        }
       },
       {
@@ -74126,7 +74403,7 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "640 150 315 112"
+        "bounds": "325 150 315 112"
        }
       },
       {
@@ -74155,7 +74432,73 @@
         "showWhenDataModelInvalid": "Hide",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "963 158 299 96"
+        "bounds": "648 158 299 96"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "caption",
+        "type": "Label",
+        "data": {
+         "version": 1,
+         "textStyle": {
+          "version": 1,
+          "font": {
+           "version": 1,
+           "name": "Roboto",
+           "style": "Bold",
+           "height": 22.0
+          },
+          "colour": "ff2a2a2a",
+          "justification": "left verticallyCentred",
+          "case": "Original"
+         },
+         "type": "Name",
+         "handleName": "WithName[SWING]/Parameter 21"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "No",
+        "showWhenDataModelInvalid": "Show",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1055 158 209 32"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "swing",
+        "type": "cp knob 315",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 21"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "955 150 315 112"
        }
       },
       {
@@ -74257,72 +74600,6 @@
        "version": 2,
        "componentData": {
         "version": 1,
-        "name": "caption",
-        "type": "Label",
-        "data": {
-         "version": 1,
-         "textStyle": {
-          "version": 1,
-          "font": {
-           "version": 1,
-           "name": "Roboto",
-           "style": "Bold",
-           "height": 22.0
-          },
-          "colour": "ff2a2a2a",
-          "justification": "left verticallyCentred",
-          "case": "Original"
-         },
-         "type": "Name",
-         "handleName": "WithName[SWING]/Parameter 21"
-        }
-       },
-       "handle remapping": {
-        "version": 1,
-        "map": []
-       },
-       "bounds": {
-        "version": 1,
-        "acceptsHWFocus": "No",
-        "showWhenDataModelInvalid": "Show",
-        "whenVisible": "Always",
-        "boundsType": "Absolute",
-        "bounds": "740 276 209 32"
-       }
-      },
-      {
-       "version": 2,
-       "componentData": {
-        "version": 1,
-        "name": "swing",
-        "type": "cp knob 315",
-        "data": {
-         "version": 1,
-         "handleName": "Data"
-        }
-       },
-       "handle remapping": {
-        "version": 1,
-        "map": [
-         {
-          "key": "Data",
-          "value": "Parameter 21"
-         }
-        ]
-       },
-       "bounds": {
-        "version": 1,
-        "acceptsHWFocus": "Yes",
-        "showWhenDataModelInvalid": "Hide",
-        "whenVisible": "Always",
-        "boundsType": "Absolute",
-        "bounds": "640 268 315 112"
-       }
-      },
-      {
-       "version": 2,
-       "componentData": {
-        "version": 1,
         "name": "clear",
         "type": "cp hold key_clear_299__on.png",
         "data": {
@@ -74336,6 +74613,35 @@
          {
           "key": "Data",
           "value": "ResetOnGestureEnd/Parameter 123"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "648 276 299 96"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "resetOrig",
+        "type": "cp hold key_reset_to_original_299__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 526"
          }
         ]
        },
@@ -76304,7 +76610,7 @@
           "case": "Original"
          },
          "type": "Name",
-         "handleName": "WithName[PAD QUANTISE]/Parameter 31"
+         "handleName": "WithName[FX PAD QUANTISE (START + STOP ON THE GRID)]/Parameter 31"
         }
        },
        "handle remapping": {
@@ -83640,10 +83946,237 @@
         "boundsType": "Absolute",
         "bounds": "16 426 1248 64"
        }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "caption",
+        "type": "Label",
+        "data": {
+         "version": 1,
+         "textStyle": {
+          "version": 1,
+          "font": {
+           "version": 1,
+           "name": "Roboto",
+           "style": "Bold",
+           "height": 22.0
+          },
+          "colour": "ff2a2a2a",
+          "justification": "left verticallyCentred",
+          "case": "Original"
+         },
+         "type": "Name",
+         "handleName": "WithName[SLICING]/Parameter 118"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "No",
+        "showWhenDataModelInvalid": "Show",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "20 510 303 30"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "slicing",
+        "type": "cp pick slicing",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 118"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "16 544 303 64"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "caption",
+        "type": "Label",
+        "data": {
+         "version": 1,
+         "textStyle": {
+          "version": 1,
+          "font": {
+           "version": 1,
+           "name": "Roboto",
+           "style": "Bold",
+           "height": 22.0
+          },
+          "colour": "ff2a2a2a",
+          "justification": "left verticallyCentred",
+          "case": "Original"
+         },
+         "type": "Name",
+         "handleName": "WithName[SENSITIVITY]/Parameter 119"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "No",
+        "showWhenDataModelInvalid": "Show",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "425 512 209 32"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "sens",
+        "type": "cp knob 315",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 119"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "325 504 315 112"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "caption",
+        "type": "Label",
+        "data": {
+         "version": 1,
+         "textStyle": {
+          "version": 1,
+          "font": {
+           "version": 1,
+           "name": "Roboto",
+           "style": "Bold",
+           "height": 22.0
+          },
+          "colour": "ff2a2a2a",
+          "justification": "left verticallyCentred",
+          "case": "Original"
+         },
+         "type": "Name",
+         "handleName": "WithName[GRID]/Parameter 120"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": []
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "No",
+        "showWhenDataModelInvalid": "Show",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "650 510 303 30"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "grid",
+        "type": "cp pick grid",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 120"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "646 544 303 64"
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "reslice",
+        "type": "cp hold key_reslice_299__on.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "ResetOnGestureEnd/Parameter 121"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 1,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "963 512 299 96"
+       }
       }
      ]
     },
-    "qlinkBoundsData": ["10 150 1260 112", "10 268 1260 112", "10 386 1260 112"]
+    "qlinkBoundsData": ["10 150 1260 112", "10 268 1260 112", "10 386 1260 112", "10 504 1260 112"]
    }
   ]
  }

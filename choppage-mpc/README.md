@@ -8,7 +8,7 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 ## Install
 1. Unzip and copy the `Twisted Genetics - VST - CHOPPAGE` folder into `VST2 Plugins` on an MPC drive (SD card, SSD or USB).
 2. On the MPC, go to Preferences > Enhancements (Beta) and turn on **Enable Enhancements** and **External Plugin Support**, then restart.
-3. Put your breaks (WAV or AIFF) in the plugin's `Content/Breaks` folder. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
+3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in the plugin's `Content/Breaks` folder. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
 ## Pads
@@ -66,7 +66,11 @@ The sections:
 
 **PLAY / SET** (press again for SET):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
-- SET has TEMPO SOURCE, SPEED, FIT and the LCD colour (BLUE, GREEN, AMBER, WHITE).
+- SET has TEMPO SOURCE, SPEED, FIT, the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
+
+**PATTERN** has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
+
+**FX PAD QUANTISE** (FX PADS page): OFF, 1/32, 1/16, 1/8, 1/4, BAR. A pad hit off the beat waits for the next line of the grid; letting go ends it on the next line.
 
 **PATTERN, FX PADS, SOUND / SPACE**: everything else, in rows of four. FX PADS has the AKAIZE pad's and slice STRETCH's CYCLE LENGTH / FREQ / MANUAL.
 

@@ -57,7 +57,7 @@ namespace bc
                 double back = 0.0;
                 if (s.quantSteps > 0)
                 {
-                    const double grid = s.samplesPerBeat / 4.0 * (double) s.quantSteps;
+                    const double grid = s.samplesPerBeat / 4.0 * s.quantSteps;
                     back = std::fmod (s.samplesSinceGrid, grid);
                 }
                 r.loopStart = now - back;

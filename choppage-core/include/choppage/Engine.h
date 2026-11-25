@@ -107,6 +107,7 @@ namespace bc
         std::atomic<bool> uiPlay { false };       // the ▶ button (internal clock when the host is stopped)
         std::array<std::atomic<bool>, kFxPads> uiPad {};   // UI / automation pad holds
         std::array<std::atomic<bool>, kFxPads> padLit {};  // pad audible (for the lamps)
+        std::array<std::atomic<bool>, kFxPads> padActive {};   // the pad's effect is on (after PAD QUANTISE)
         std::atomic<int>  previewSlice { -1 };    // UI click on a slice
         std::atomic<int>  memoryRequest { -1 };   // slot * 16 + memory, for the message thread
         std::atomic<int>  lastNote { -1 };
@@ -176,6 +177,8 @@ namespace bc
         // FX
         std::array<bool, kFxPads> midiPad {};
         std::array<int, kFxPads> autoPadLeft {};   // FX lane events, samples left
+        // PAD QUANTISE: a press waits for the next grid line, a release (or a short tap) ends on the one after
+        std::array<bool, kFxPads> padWas {}, padOn {}, padArmed {}, padStopArmed {}, padTap {};
         int autoStutterDiv = 16;
         PerfFx perf;
         SoundChain chain;

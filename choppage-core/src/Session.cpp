@@ -123,7 +123,7 @@ namespace bc
         }
     }
 
-    ContentPtr analyseBreak (const SamplePtr& buf, bool grid, float sens, int gridPerBar, const std::string* restore)
+    ContentPtr analyseBreak (const SamplePtr& buf, bool grid, float sens, int gridPerBar, const std::string* restore, bool fileSlices)
     {
         auto c = std::make_shared<SlotContent>();
         c->buffer = buf;
@@ -131,6 +131,7 @@ namespace bc
         const auto tempo = Analysis::estimateTempo (buf->lengthSeconds(), buf->name);
         c->bpm = tempo.bpm;
         c->bars = tempo.bars;
+        if (buf->fileBars > 0 && buf->fileBpm > 1.0) { c->bpm = buf->fileBpm; c->bars = buf->fileBars; }   // REX: as ReCycle says
 
         KV kv;
         if (restore != nullptr) kv = parseBlock (*restore);
@@ -140,6 +141,14 @@ namespace bc
             if (kv.count ("bars")) c->bars = std::atoi (kv["bars"].c_str());
             c->slices = SliceTable::fromString (kv["slices"]);
             c->slices.normalise (buf->numSamples);
+        }
+        if (c->slices.isEmpty() && fileSlices && ! buf->fileMarkers.empty())
+        {
+            // a REX file's own chops (RESLICE finds new ones)
+            SliceTable t;
+            for (int s : buf->fileMarkers) if (t.count < kMaxSlices) t.starts[(size_t) t.count++] = s;
+            t.normalise (buf->numSamples);
+            c->slices = t;
         }
         if (c->slices.isEmpty())
             c->slices = grid ? Analysis::gridSlices (buf->numSamples, c->bars, gridPerBar)
@@ -246,7 +255,8 @@ namespace bc
                         const auto p = it->path().string();
                         std::string ext = it->path().extension().string();
                         for (auto& ch : ext) ch = (char) std::tolower ((unsigned char) ch);
-                        if (ext != ".wav" && ext != ".aif" && ext != ".aiff" && ext != ".flac" && ext != ".mp3") continue;
+                        if (ext != ".wav" && ext != ".aif" && ext != ".aiff" && ext != ".flac" && ext != ".mp3"
+                            && ext != ".rx2" && ext != ".rex") continue;
                         BrowserEntry e;
                         e.path = p;
                         e.name = AudioFile::baseName (p);
@@ -255,6 +265,7 @@ namespace bc
                         const auto t = Analysis::estimateTempo (e.seconds > 0 ? e.seconds : 60.0 / 170.0 * 8.0, e.name);
                         e.bpm = e.seconds > 0 ? t.bpm : 0.0;
                         e.bars = e.seconds > 0 ? t.bars : 0;
+                        if (info.bpm > 1.0) { e.bpm = info.bpm; e.bars = info.bars; }   // REX: from the file
                         found.push_back (e);
                         if (found.size() >= 2000) break;
                     }
@@ -416,13 +427,22 @@ namespace bc
         publish (slot);
     }
 
+    void Session::setSlicing (int slot, bool grid, float sens, int gridPerBar)
+    {
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        if (slot < 0 || slot >= kSlots) return;
+        auto& s = slots[(size_t) slot];
+        s.gridSlicing = grid; s.sensitivity = clampv (sens, 0.05f, 0.95f); s.gridPerBar = gridPerBar;
+        publish (slot);
+    }
+
     void Session::reslice (int slot, bool grid, float sens, int gridPerBar)
     {
         std::lock_guard<std::recursive_mutex> l (mutex);
         auto& s = slots[(size_t) slot];
         s.gridSlicing = grid; s.sensitivity = sens; s.gridPerBar = gridPerBar;
         if (s.content == nullptr) { changed (slot); return; }
-        auto fresh = analyseBreak (s.content->buffer, grid, sens, gridPerBar, nullptr);
+        auto fresh = analyseBreak (s.content->buffer, grid, sens, gridPerBar, nullptr, false);
         auto c = std::const_pointer_cast<SlotContent> (fresh);
         c->bpm = s.content->bpm; c->bars = s.content->bars;
         installContent (slot, c, s.file, s.demo, nullptr);
@@ -823,6 +843,21 @@ namespace bc
         const int n = s.current.numSteps;
         s.current = Pattern();
         s.current.numSteps = n;
+        s.showOriginal = false;
+        pushHistory (s, s.current);
+        publish (slot);
+    }
+
+    void Session::resetToOriginal()
+    {
+        // the pattern back to the break as recorded (one hit per slice, in order) with an empty FX lane
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        const int slot = selectedSlot();
+        auto& s = slots[(size_t) slot];
+        if (s.content == nullptr) return;
+        s.current = s.original;
+        for (auto& f : s.current.fx) f = FxEvent{};
+        s.current.locked.fill (false);
         s.showOriginal = false;
         pushHistory (s, s.current);
         publish (slot);

@@ -3,6 +3,7 @@
 add_library(choppage-core STATIC
     src/Akaizer.cpp
     src/Analysis.cpp
+    src/RexFile.cpp
     src/AudioFile.cpp
     src/Engine.cpp
     src/Generator.cpp

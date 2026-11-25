@@ -574,8 +574,9 @@ def T(pid, name, span=1):
 def G(pid, name, span=1):
     return {"type": "trig", "param": pid, "name": name, "span": span}
 
-def P(pid, name, labels, span=1):
-    return {"type": "pick", "param": pid, "name": name, "labels": labels, "span": span}
+def P(pid, name, labels, span=1, ids=None):
+    """ids: the choice each button sets, when the buttons are not in the parameter's order"""
+    return {"type": "pick", "param": pid, "name": name, "labels": labels, "span": span, "ids": ids}
 
 def R(pid, name, span=1):
     return {"type": "read", "param": pid, "name": name, "span": span}
@@ -586,15 +587,16 @@ def steps(first):
 def pages():
     return [
         {"fn": 3, "sub": 0, "name": "PATTERN", "rows": [
-            [P("length", "LENGTH", ["1 BAR", "2 BARS", "4 BARS"], span=2), K("style", "STYLE"), T("layers", "LAYERS")],
-            [G("dicePattern", "PATTERN\nDICE"), K("patAmount", "PATTERN AMOUNT"), K("swing", "SWING"), G("clear", "CLEAR")],
+            [P("length", "LENGTH (BARS)", ["1", "2", "4"]), K("style", "STYLE"), T("layers", "LAYERS"), K("swing", "SWING")],
+            [G("dicePattern", "PATTERN\nDICE"), K("patAmount", "PATTERN AMOUNT"), G("clear", "CLEAR"), G("resetOrig", "RESET TO\nORIGINAL")],
             [K("memory", "MEMORY"), G("memSave", "SAVE"), G("memRecall", "RECALL"), G("undo", "UNDO")],
             [G("diceFx", "FX\nDICE"), K("fxAmount", "FX AMOUNT"), T("original", "ORIGINAL"), G("redo", "REDO")]]},
         {"fn": 4, "sub": 0, "name": "FX PADS", "rows": [
             [K("stutRate", "STUTTER RATE"), K("rollRate", "ROLL RATE"), K("tapeMs", "TAPE STOP"), K("diveRes", "FILTER DIVE RES")],
             [K("akCycLen", "AKAIZE PAD LENGTH"), K("akCycFreq", "AKAIZE PAD FREQ"), T("akFreqManual", "PAD FREQ\nMANUAL"), K("akRatio", "AKAIZE PAD STRETCH")],
             [K("slCycLen", "SLICE STRETCH LENGTH"), K("slCycFreq", "SLICE STRETCH FREQ"), T("slFreqManual", "SLICE FREQ\nMANUAL"), K("dropRate", "S950 DROP RATE")],
-            [P("padQuant", "PAD QUANTISE", ["OFF", "1/16", "1/8"], span=2), K("fxAmount", "FX AMOUNT"), G("diceFx", "FX\nDICE")]]},
+            [P("padQuant", "FX PAD QUANTISE (START + STOP ON THE GRID)", ["OFF", "1/32", "1/16", "1/8", "1/4", "BAR"], span=2,
+               ids=[0, 4, 1, 2, 3, 5]), K("fxAmount", "FX AMOUNT"), G("diceFx", "FX\nDICE")]]},
         {"fn": 4, "sub": 1, "name": "AKAIZER", "rows": [
             [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 = AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
             [K("akrCycLen", "CYCLE LENGTH"), K("akrCycFreq", "CYCLE FREQ"), T("akrFreqManual", "FREQ\nMANUAL"), K("akrPitch", "PITCH", bi=True)],
@@ -615,7 +617,9 @@ def pages():
         {"fn": 6, "sub": 1, "name": "SET", "rows": [
             [P("tempoSrc", "TEMPO SOURCE", ["AUTO", "/2", "X2"], span=2), P("speed", "SPEED", ["0.5X", "1X", "2X"], span=2)],
             [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2)],
-            [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)]]},
+            [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)],
+            [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
+             G("reslice", "RESLICE")]]},
     ]
 
 # ---------------------------------------------------------------- build
@@ -783,10 +787,11 @@ class Builder:
             key = "cp pick " + pid
             kids = [focus_entry()]
             for i, lab in enumerate(labels):
-                on = self.save("pick_%d_%s_on.png" % (bw, slug(lab)), keycap(bw, gh - 2 * FM, lab, True, led=False, picked=True))
-                off = self.save("pick_%d_%s_off.png" % (bw, slug(lab)), keycap(bw, gh - 2 * FM, lab, False, led=False))
+                on = self.save("pick_%dx%d_%s_on.png" % (bw, gh, slug(lab)), keycap(bw, gh - 2 * FM, lab, True, led=False, picked=True))
+                off = self.save("pick_%dx%d_%s_off.png" % (bw, gh, slug(lab)), keycap(bw, gh - 2 * FM, lab, False, led=False))
                 kids.append(entry("choice %d" % i, "Button",
-                                  o(("version", 2), ("onImage", on), ("offImage", off), ("buttonId", i), ("numButtonsInGroup", n),
+                                  o(("version", 2), ("onImage", on), ("offImage", off),
+                                    ("buttonId", c["ids"][i] if c.get("ids") else i), ("numButtonsInGroup", n),
                                     ("handleName", "Data"), ("gestureBehaviour", "Instant")),
                                   bounds((FM + i * (bw - 3), FM, bw, gh - 2 * FM))))
             self.define(key, component(kids, [act("Mouse Down", "Q-Link", "Data")]))
@@ -1127,8 +1132,8 @@ class Builder:
         pick_row("length", (10, r0, 330, rh), ["1 BAR", "2 BARS", "4 BARS"], "LENGTH")
         pick_row("seqPage", (346, r0, 420, rh), ["1-16", "17-32", "33-48", "49-64"], "STEPS SHOWN")
         x = 772
-        for pid, text in (("seqFollow", "FOLLOW"), ("original", "ORIGINAL"), ("clear", "CLEAR")):
-            w_ = 164 if pid != "clear" else 1270 - x
+        for pid, text in (("seqFollow", "FOLLOW"), ("original", "ORIGINAL"), ("clear", "CLEAR"), ("resetOrig", "RESET")):
+            w_ = 140 if pid in ("seqFollow", "original") else (1270 - 772 - 280) // 2
             kids.append(self.flip_at(pid, (x, r0 + 4, w_ - 4, rh - 8), self.key_png(text, w_ - 4, rh - 8), vv, qlink=False))
             x += w_
         kids += self.key_row("stepFx", (10, r1, 640, rh), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP"],

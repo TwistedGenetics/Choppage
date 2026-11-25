@@ -36,7 +36,7 @@ namespace bc
             double akCycleFreq = 51.0;       // Akaizer CYCLE FREQ (grains per second)
             double akRatio = 2.0;
             float  diveRes = 0.7f;
-            int    quantSteps = 1;              // 0 off, 1 = 1/16, 2 = 1/8
+            double quantSteps = 1.0;            // the pad quantise grid in 16ths: 0 off, 0.5 = 1/32, 1 = 1/16 ... 16 = a bar
             double samplesSinceGrid = 0.0;      // since the last 16th line (for quantised starts)
         };
 

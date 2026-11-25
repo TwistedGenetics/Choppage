@@ -733,6 +733,7 @@ namespace ui
         tool (juce::String::fromUTF8 ("\xe2\x97\x80"), [this] { proc.historyBack(); }, nullptr);
         tool (juce::String::fromUTF8 ("\xe2\x96\xb6"), [this] { proc.historyForward(); }, nullptr);
         tool ("CLEAR", [this] { proc.clearPattern(); }, nullptr);
+        tool ("RESET", [this] { proc.session().resetToOriginal(); }, nullptr);
 
         memLabel.text = [] { return juce::String ("MEMORY"); };
         memLabel.fontSize = 23.0f;
@@ -794,11 +795,11 @@ namespace ui
     {
         auto r = getLocalBounds();
         auto top = r.removeFromTop (38);
-        const int widths[] = { 130, 140, 100, 110, 110, 44, 44, 50, 50, 100 };
+        const int widths[] = { 130, 140, 100, 110, 110, 44, 44, 50, 50, 100, 104 };
         int x = 0;
-        for (size_t i = 0; i < tools.size(); ++i)
+        for (size_t i = 0; i < tools.size() && i < 11; ++i)
         {
-            if (i == 2 || i == 5 || i == 7 || i == 9) x += 18;
+            if (i == 2 || i == 5 || i == 7 || i == 9) x += 12;
             tools[i]->setBounds (x, top.getY() + 2, widths[i], 34);
             x += widths[i] + 6;
         }
@@ -988,7 +989,7 @@ namespace ui
         addRow ("", "");
         addValue (P::akCycLen, "AKAIZE", 130, 0.005f); addValue (P::akRatio, "", 90); addValue (P::diveRes, "FILT DIVE RES", 100);
         addRow ("", "");
-        addValue (P::dropRate, "S950 DROP", 140); addText ("QUANT"); addChoice (P::padQuant);
+        addValue (P::dropRate, "S950 DROP", 140); addText ("QUANT"); addValue (P::padQuant, "", 110);
         addRow ("SLICES", "");
         addValue (P::slCycLen, "STRETCH CYCLE", 130, 0.005f); addValue (P::slCycFreq, "", 120, 0.005f);
         addText ("(MORE ON AKAI)");
@@ -1068,12 +1069,21 @@ namespace ui
             addAction (juce::String (g + 1), [this, g] { proc.session().setMuteGroup (proc.getSelectedSlot(), g); },
                        [this, g] { return proc.session().muteGroup (proc.getSelectedSlot()) == g; });
         addText ("(THIS BREAK - SAME GROUP CUTS)");
+        addRow ("", "FX QUANTISE");
+        {
+            // the FX pads wait for the next line of this grid (choices in grid order; the parameter keeps its old order)
+            const Param prm = param (P::padQuant);
+            const int order[] = { 0, 4, 1, 2, 3, 5 };
+            const char* names[] = { "OFF", "1/32", "1/16", "1/8", "1/4", "1 BAR" };
+            for (int k = 0; k < 6; ++k)
+            {
+                const int i = order[k];
+                addAction (names[k], [prm, i] { prm.set ((float) i); }, [prm, i] { return prm.choice() == i; });
+            }
+        }
         addRule();
         addRow ("SOUND", "CHARACTER");
         addValue (P::character, "", 160); addText ("LCD"); addChoice (P::lcdColour);
-        addRow ("", "RENDER");
-        addAction ("AKAIZE THE BREAK", [this] { proc.akaizeSelected(); });
-        addText ("(SETTINGS ON THE AKAI TAB)");
         addRow ("", "SLICING");
         auto sel = [this]() -> const ChoppageProcessor::Slot& { return proc.getSlot (proc.getSelectedSlot()); };
         addAction ("TRANSIENTS", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, s.sensitivity, s.gridPerBar); },
@@ -1083,8 +1093,16 @@ namespace ui
         for (int g : { 8, 16, 32 })
             addAction ("1/" + juce::String (g), [this, sel, g] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), true, s.sensitivity, g); },
                        [sel, g] { return sel().gridSlicing && sel().gridPerBar == g; });
-        addAction ("SENS-", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, juce::jmax (0.05f, s.sensitivity - 0.1f), s.gridPerBar); });
-        addAction ("SENS+", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, juce::jmin (0.95f, s.sensitivity + 0.1f), s.gridPerBar); });
+        // SENSITIVITY: drag / scroll (shift = fine) re-finds the transients; double-click = 62%
+        addText ("SENS");
+        addCustom ([sel] { return juce::String (juce::roundToInt (sel().sensitivity * 100.0f)) + "%"; },
+                   [this, sel] (float steps, bool fine)
+                   {
+                       const auto& s = sel();
+                       if (s.content == nullptr) return;
+                       proc.reslice (proc.getSelectedSlot(), false, juce::jlimit (0.05f, 0.95f, s.sensitivity + steps * (fine ? 0.01f : 0.05f)), s.gridPerBar);
+                   },
+                   [this, sel] { proc.reslice (proc.getSelectedSlot(), false, 0.62f, sel().gridPerBar); }, 100);
         addRule();
         addRow ("GENERATE", "STYLE");
         addValue (P::style, "", 170); addText ("LAYERS"); addBool (P::layers, "ON", "OFF"); addText ("SWING"); addValue (P::swing, "", 100, 0.02f);

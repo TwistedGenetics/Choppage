@@ -205,6 +205,16 @@ int main(int argc, char** argv)
     CHECK(app.session().slot(1).program.pattern == rolled, "UNDO goes back to the first roll");
     press(app, MP_REDO, 1);
     CHECK(app.getParam(MP_UNDO) == 0.0f && app.getParam(MP_REDO) == 0.0f, "UNDO / REDO spring back");
+    press(app, MP_DICE_FX, 1);
+    press(app, MP_RESET_ORIG, 1);
+    {
+        const auto& sl = app.session().slot(1);
+        bool fx = false; for (auto& e : sl.current.fx) fx = fx || e.type != FxType::none;
+        CHECK(sl.current.slice == sl.original.slice && !fx && app.getParam(MP_RESET_ORIG) == 0.0f, "RESET TO ORIGINAL: the break as recorded, no FX");
+    }
+    set(app, MP_SENS, 0.3f);
+    CHECK(std::fabs(app.session().slot(1).sensitivity - 0.3f) < 1e-6f, "SENSITIVITY is kept for the break's next load");
+    set(app, MP_SENS, 0.62f);
 
     std::printf("slice editing\n");
     set(app, MP_SLICE, 3);

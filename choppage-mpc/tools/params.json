@@ -30,7 +30,7 @@
   {"index": 28, "id": "gateMode", "name": "Gate", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["LATCH", "HOLD", "ONE SHOT"], "hidden": false, "readout": false, "trigger": false},
   {"index": 29, "id": "velSlice", "name": "Velocity To Start Slice", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 30, "id": "tempoSrc", "name": "Tempo Source", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["AUTO", "/2", "X2"], "hidden": false, "readout": false, "trigger": false},
-  {"index": 31, "id": "padQuant", "name": "Pad Quantise", "kind": "choice", "min": 0, "max": 2, "def": 1, "choices": ["OFF", "1/16", "1/8"], "hidden": false, "readout": false, "trigger": false},
+  {"index": 31, "id": "padQuant", "name": "Pad Quantise", "kind": "choice", "min": 0, "max": 5, "def": 1, "choices": ["OFF", "1/16", "1/8", "1/4", "1/32", "1 BAR"], "hidden": false, "readout": false, "trigger": false},
   {"index": 32, "id": "stutRate", "name": "Stutter Rate", "kind": "choice", "min": 0, "max": 3, "def": 1, "choices": ["1/8", "1/16", "1/32", "1/64"], "hidden": false, "readout": false, "trigger": false},
   {"index": 33, "id": "rollRate", "name": "Roll Rate", "kind": "choice", "min": 0, "max": 3, "def": 2, "choices": ["1/8", "1/16", "1/32", "1/64"], "hidden": false, "readout": false, "trigger": false},
   {"index": 34, "id": "tapeMs", "name": "Tape Stop Time", "kind": "float", "min": 100, "max": 3000, "def": 700, "choices": [], "hidden": false, "readout": false, "trigger": false},
@@ -524,5 +524,6 @@
   {"index": 522, "id": "fxrow16", "name": "FX Step 16", "kind": "int", "min": 0, "max": 135, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
   {"index": 523, "id": "muteGroup", "name": "Mute Group", "kind": "choice", "min": 0, "max": 3, "def": 0, "choices": ["1", "2", "3", "4"], "hidden": false, "readout": false, "trigger": false},
   {"index": 524, "id": "akrLoopBpm", "name": "Loop BPM", "kind": "float", "min": 0, "max": 300, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
-  {"index": 525, "id": "slDrag", "name": "Drag Start", "kind": "float", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false}
+  {"index": 525, "id": "slDrag", "name": "Drag Start", "kind": "float", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 526, "id": "resetOrig", "name": "Reset", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true}
 ]
