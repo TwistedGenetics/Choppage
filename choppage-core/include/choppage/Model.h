@@ -27,19 +27,19 @@ namespace bc
     constexpr int kFirstMemoryNote = 68;   // G#3 .. B4   : pattern memories 1-16
 
     /** What a slice sounds like, as the classifier hears it. */
-    enum class Badge : uint8_t { kick, snare, ghost, hat, open, other };
+    enum class Badge : uint8_t { kick, snare, ghost, hat, open, other };   // other = PERC (P); saved files may say X
     constexpr int kNumBadges = 6;
     inline const char* badgeLetter (Badge b) noexcept
     {
         switch (b) { case Badge::kick: return "K"; case Badge::snare: return "S"; case Badge::ghost: return "G";
-                     case Badge::hat: return "H"; case Badge::open: return "O"; case Badge::other: return "X"; }
-        return "X";
+                     case Badge::hat: return "H"; case Badge::open: return "O"; case Badge::other: return "P"; }
+        return "P";
     }
     inline const char* badgeName (Badge b) noexcept
     {
         switch (b) { case Badge::kick: return "KICK"; case Badge::snare: return "SNARE"; case Badge::ghost: return "GHOST";
-                     case Badge::hat: return "HAT"; case Badge::open: return "OPEN"; case Badge::other: return "OTHER"; }
-        return "OTHER";
+                     case Badge::hat: return "HAT"; case Badge::open: return "OPEN"; case Badge::other: return "PERC"; }
+        return "PERC";
     }
 
     /** The loaded break: audio + where it is cut + what each cut is. Immutable. */

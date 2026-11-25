@@ -1,5 +1,6 @@
 #include "choppage/AudioFile.h"
 #include <cstdio>
+#include <cctype>
 #include <cstring>
 #include <fstream>
 
@@ -38,17 +39,39 @@ namespace bc::AudioFile
             if (! f.read ((char*) h, 12)) return L;
             if (std::memcmp (h, "RIFF", 4) == 0 && std::memcmp (h + 8, "WAVE", 4) == 0)
             {
-                bool haveFmt = false;
-                for (;;)
+                // Tolerant of what real files do: odd-sized chunks written without their pad byte, a data size of
+                // 0 or 0xFFFFFFFF (streaming recorders), the data chunk before fmt.
+                f.seekg (0, std::ios::end);
+                const int64_t fileSize = (int64_t) f.tellg();
+                auto readAt = [&f] (int64_t at, uint8_t* out, int n) {
+                    f.clear();
+                    f.seekg (at);
+                    return (bool) f.read ((char*) out, n);
+                };
+                // How much a position looks like the start of a chunk: 2 a known id, 1 a plausible one, 0 neither.
+                auto score = [&] (int64_t at) {
+                    uint8_t c[8];
+                    if (at + 8 > fileSize || ! readAt (at, c, 8)) return 0;
+                    static const char* known[] = { "fmt ", "data", "LIST", "JUNK", "junk", "bext", "smpl", "inst", "cue ", "acid",
+                                                   "atem", "id3 ", "ID3 ", "fact", "PAD ", "iXML", "axml", "umid", "minf", "elm1",
+                                                   "regn", "ResU", "DGDA", "FLLR", "SyLp", "strc", "cart", "labl", "note", "_PMX" };
+                    for (auto* k : known) if (std::memcmp (c, k, 4) == 0) return 2;
+                    for (int i = 0; i < 4; ++i)
+                        if (! (std::isalnum (c[i]) || c[i] == ' ' || c[i] == '_')) return 0;
+                    return (int64_t) le32 (c + 4) <= fileSize - at - 8 ? 1 : 0;
+                };
+                bool haveFmt = false, haveData = false;
+                int64_t at = 12;
+                while (at + 8 <= fileSize)
                 {
                     uint8_t ch[8];
-                    if (! f.read ((char*) ch, 8)) break;
+                    if (score (at) == 0 || ! readAt (at, ch, 8)) break;
                     const uint32_t size = le32 (ch + 4);
-                    const auto pos = (int64_t) f.tellg();
+                    const int64_t pos = at + 8;
                     if (std::memcmp (ch, "fmt ", 4) == 0)
                     {
                         uint8_t fmt[40] {};
-                        f.read ((char*) fmt, std::min<uint32_t> (size, 40));
+                        readAt (pos, fmt, (int) std::min<uint32_t> (size, 40));
                         int tag = le16 (fmt);
                         L.channels = le16 (fmt + 2);
                         L.rate = le32 (fmt + 4);
@@ -60,13 +83,20 @@ namespace bc::AudioFile
                     else if (std::memcmp (ch, "data", 4) == 0)
                     {
                         L.dataOffset = pos;
-                        L.dataBytes = size;
-                        L.ok = haveFmt;
-                        return L;
+                        const int64_t rest = fileSize - pos;
+                        L.dataBytes = (size == 0 || size == 0xFFFFFFFFu || (int64_t) size > rest) ? rest : (int64_t) size;
+                        haveData = true;
+                        if (size == 0 || size == 0xFFFFFFFFu) break;   // runs to the end of the file
                     }
-                    f.seekg (pos + size + (size & 1));
-                    if (! f) break;
+                    if (haveFmt && haveData) break;
+                    // next chunk: after the pad byte an odd chunk should have; some apps leave it out, so take
+                    // whichever of the two positions looks more like a chunk (the spec's on a tie)
+                    at = pos + (int64_t) size;
+                    if (size & 1)
+                        at += score (at + 1) >= score (at) ? 1 : 0;
                 }
+                L.ok = haveFmt && haveData;
+                f.clear();
                 return L;
             }
             if (std::memcmp (h, "FORM", 4) == 0 && (std::memcmp (h + 8, "AIFF", 4) == 0 || std::memcmp (h + 8, "AIFC", 4) == 0))

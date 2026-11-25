@@ -7,10 +7,12 @@
       WAV / AIFF in and out · break browser · Akaize render · bounce
 */
 #include "choppage/Analysis.h"
+#include "choppage/AudioFile.h"
 #include "choppage/DemoBreak.h"
 #include "choppage/Generator.h"
 #include "choppage/Params.h"
 #include "choppage/Session.h"
+#include <cmath>
 #include <cstdio>
 #include <filesystem>
 #include <iostream>
@@ -35,6 +37,7 @@ struct Rig
     Engine::Host host;
     double sr = 44100.0;
     int block = 512;
+    bool autoKey = true;   // a break plays only once its key is pressed: the first run presses the selected break's key
 
     Rig()
     {
@@ -50,6 +53,11 @@ struct Rig
         const int total = (int) (seconds * sr);
         Audio a; a.l.assign ((size_t) total, 0.0f); a.r.assign ((size_t) total, 0.0f);
         auto settings = settingsFromParams (plain.data());
+        if (autoKey)
+        {
+            autoKey = false;
+            events.insert (events.begin(), MidiMsg::noteOn (kFirstBreakNote + s.selectedSlot(), 100));
+        }
         for (int pos = 0; pos < total; pos += block)
         {
             const int n = std::min (block, total - pos);
@@ -163,10 +171,13 @@ static void playbackTests()
 {
     std::cout << "\n== Playback ==" << std::endl;
     {
+        Rig quiet;
+        quiet.autoKey = false;
+        check (rms (quiet.run (0.5)) < 0.0001f, "host playing, no break key pressed: silent (a break plays only when its key triggers it)");
         Rig r;
         check (r.s.slot (0).status == Session::Status::ready, "demo break ready in slot 1");
         auto a = r.run (1.0);
-        check (rms (a) > 0.01f && finite (a), "host playing: the break plays (rms " + fmt (rms (a), 3) + ")");
+        check (rms (a) > 0.01f && finite (a), "C1 pressed, host playing: the break plays in time (rms " + fmt (rms (a), 3) + ")");
         r.host.ppq = 4.0;
         r.run (0.01);
         check (r.s.engine().currentStep.load() == 16, "BAR SYNC: bar 2 starts on step 17 (got " + std::to_string (r.s.engine().currentStep.load() + 1) + ")");
@@ -182,6 +193,7 @@ static void playbackTests()
     }
     {
         Rig r;
+        r.autoKey = false;
         r.host.playing = false;
         check (rms (r.run (0.3)) < 0.0001f, "host stopped, nothing latched: silent");
         auto on = r.run (0.6, { MidiMsg::noteOn (kFirstBreakNote, 100), MidiMsg::noteOff (kFirstBreakNote, 1000) });
@@ -311,6 +323,19 @@ static void fileTests()
     const auto& w = r.s.slot (2);
     check (w.status == Session::Status::ready && w.content && std::abs (w.content->bpm - 136.0) < 0.5, "WAV loads and reads 136 BPM from its name");
     check (w.content && w.content->numSlices() >= 8, "transient slicer finds the hits (" + std::to_string (w.content ? w.content->numSlices() : 0) + ")");
+    {
+        Rig a;
+        a.autoKey = false;
+        a.host.playing = false;
+        check (a.s.audition (wav) && a.s.auditioning() == wav, "audition decodes the browsed file");
+        check (rms (a.run (0.5)) > 0.01f, "audition plays with no break running");
+        check (! a.s.audition ("/no/such/break.wav") && a.s.auditioning().empty(), "an unreadable file stops the audition");
+        a.s.audition (wav);
+        a.run (0.1);
+        a.s.auditionStop();
+        a.run (0.05);
+        check (rms (a.run (0.3)) < 0.0001f, "auditionStop: silence");
+    }
     r.s.loadFile (3, "/no/such/break.wav");
     r.s.waitUntilIdle();
     check (r.s.slot (3).status == Session::Status::missing, "a missing file says so");
@@ -375,8 +400,79 @@ static void paramTests()
            "value text: " + formatParam (P_SRATE, 10000.0f) + " / " + formatParam (P_PAT_AMOUNT, 0.35f) + " / " + formatParam (P_STYLE, 2));
 }
 
+// WAV files as real apps write them (24-bit 44.1 kHz stereo): the reader must load every one.
+static void wavVariantTests()
+{
+    std::cout << "WAV variants" << std::endl;
+    const int frames = 1000;
+    std::vector<uint8_t> pcm;
+    for (int i = 0; i < frames; ++i)
+        for (int c = 0; c < 2; ++c)
+        {
+            const int v = (int) (0.5 * 8388607 * std::sin (i * 0.05));
+            pcm.push_back ((uint8_t) (v & 0xff)); pcm.push_back ((uint8_t) ((v >> 8) & 0xff)); pcm.push_back ((uint8_t) ((v >> 16) & 0xff));
+        }
+    auto u32 = [] (std::vector<uint8_t>& o, uint32_t v) { for (int i = 0; i < 4; ++i) o.push_back ((uint8_t) (v >> (8 * i))); };
+    auto u16 = [] (std::vector<uint8_t>& o, uint16_t v) { o.push_back ((uint8_t) v); o.push_back ((uint8_t) (v >> 8)); };
+    auto chunk = [&] (const char* id, const std::vector<uint8_t>& body, bool pad, int64_t size) {
+        std::vector<uint8_t> o (id, id + 4);
+        u32 (o, size >= 0 ? (uint32_t) size : (uint32_t) body.size());
+        o.insert (o.end(), body.begin(), body.end());
+        if (pad && (body.size() & 1)) o.push_back (0);
+        return o;
+    };
+    auto fmt = [&] (bool ext) {
+        std::vector<uint8_t> b;
+        u16 (b, ext ? 0xFFFE : 1); u16 (b, 2); u32 (b, 44100); u32 (b, 44100 * 6); u16 (b, 6); u16 (b, 24);
+        if (ext)
+        {
+            u16 (b, 22); u16 (b, 24); u32 (b, 3); u16 (b, 1);
+            const uint8_t g[14] = { 0, 0, 0, 0, 0x10, 0, 0x80, 0, 0, 0xaa, 0, 0x38, 0x9b, 0x71 };
+            b.insert (b.end(), g, g + 14);
+        }
+        return chunk ("fmt ", b, true, -1);
+    };
+    auto riff = [&] (std::vector<std::vector<uint8_t>> parts, int64_t size) {
+        std::vector<uint8_t> body = { 'W', 'A', 'V', 'E' };
+        for (auto& p : parts) body.insert (body.end(), p.begin(), p.end());
+        std::vector<uint8_t> o = { 'R', 'I', 'F', 'F' };
+        u32 (o, size >= 0 ? (uint32_t) size : (uint32_t) body.size());
+        o.insert (o.end(), body.begin(), body.end());
+        return o;
+    };
+    const std::vector<uint8_t> odd = { 'I', 'N', 'F', 'O', 'I', 'S', 'F', 'T', 5, 0, 0, 0, 'L', 'o', 'g', 'i', 'c' };
+    const std::vector<uint8_t> atem = { '{', '"', 'x', '"', ':', '1', '}' };
+    struct V { const char* name; std::vector<uint8_t> bytes; };
+    std::vector<V> vs = {
+        { "plain", riff ({ fmt (false), chunk ("data", pcm, true, -1) }, -1) },
+        { "WAVE_FORMAT_EXTENSIBLE", riff ({ fmt (true), chunk ("data", pcm, true, -1) }, -1) },
+        { "odd LIST chunk without its pad byte", riff ({ fmt (false), chunk ("LIST", odd, false, -1), chunk ("data", pcm, true, -1) }, -1) },
+        { "odd atem chunk without its pad byte (MPC)", riff ({ fmt (false), chunk ("atem", atem, false, -1), chunk ("data", pcm, true, -1) }, -1) },
+        { "data size 0xFFFFFFFF", riff ({ fmt (false), chunk ("data", pcm, true, 0xFFFFFFFFll) }, 0xFFFFFFFFll) },
+        { "data size 0", riff ({ fmt (false), chunk ("data", pcm, true, 0) }, 0) },
+        { "data before fmt", riff ({ chunk ("data", pcm, true, -1), fmt (false) }, -1) },
+        { "JUNK + bext + smpl", riff ({ chunk ("JUNK", std::vector<uint8_t> (28), true, -1), chunk ("bext", std::vector<uint8_t> (602), true, -1),
+                                        fmt (false), chunk ("smpl", std::vector<uint8_t> (36), true, -1), chunk ("data", pcm, true, -1) }, -1) },
+    };
+    const auto dir = fs::temp_directory_path() / "choppage-wav-variants";
+    fs::create_directories (dir);
+    for (auto& v : vs)
+    {
+        const auto path = (dir / (std::string (v.name).substr (0, 12) + ".wav")).string();
+        FILE* f = std::fopen (path.c_str(), "wb");
+        std::fwrite (v.bytes.data(), 1, v.bytes.size(), f);
+        std::fclose (f);
+        AudioFile::Status st;
+        auto s = AudioFile::load (path, st);
+        check (s != nullptr && s->numSamples == frames && s->channels == 2
+                   && std::fabs (s->ch[0][20] - (float) (0.5 * std::sin (20 * 0.05))) < 1e-4f,
+               std::string ("24-bit WAV loads: ") + v.name);
+    }
+}
+
 int main()
 {
+    wavVariantTests();
     analysisTests();
     generatorTests();
     playbackTests();

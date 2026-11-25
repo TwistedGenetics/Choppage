@@ -36,7 +36,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 - **FX**: filter LP/HP + res, distortion drive/tone, crush, reverb (mix, decay, damp, pre, width), echo, and every pad's setting.
 - **SET**:
   - Tempo: SOURCE AUTO / ÷2 / ×2, SPEED, FIT (REPITCH / KEEP).
-  - Trigger: SYNC / MIDI, break switching (RESTART / BAR SYNC / QUANT), GATE LATCH / HOLD, velocity → start slice.
+  - Trigger: SYNC / MIDI, break switching (RESTART / BAR SYNC / QUANT), GATE LATCH / HOLD, velocity → start slice. A break plays only once its key (C1–G1) triggers it, timed to the host's tempo. The transport running doesn't start it on its own.
   - Sound: CHARACTER (CLEAN, S950, SP-1200, MPC60, S1000, LO-FI), slicing TRANSIENTS / GRID.
   - Generate: STYLE, LAYERS, SWING.
   - LCD colour: BLUE (S950), GREEN, AMBER, WHITE.

@@ -56,7 +56,7 @@ enum MpcParam : int
     MP_LIST0,                   // readouts: 5 lines of the DISK list
     MP_WAVE0 = MP_LIST0 + 5,    // waveform columns (film strip frame, see waveFrame())
     MP_TAB0 = MP_WAVE0 + 84,    // the hit-letter row under the waveform (film strip frame, see tabFrame())
-    // the BR3AK SEQ grid: 6 lanes (KICK SNARE GHOST HAT OPEN FX) x 16 steps of the page shown
+    // the BR3AK SEQ grid: 6 lanes (KICK SNARE GHOST HAT OPEN PERC) x 16 steps of the page shown
     MP_SEQ_PAGE = MP_TAB0 + 84, // steps 1-16 / 17-32 / 33-48 / 49-64
     MP_SEQ_FOLLOW,              // the page follows the playhead
     MP_SEQ_TAP,                 // a tap on the grid: lane * 16 + column + 1 (springs back to 0)
@@ -64,7 +64,12 @@ enum MpcParam : int
     MP_CELL0,                   // 96 grid cells (film strip frame, see cellFrame())
     MP_VSTEP0 = MP_CELL0 + 96,  // 16 step knobs for the page shown (the Q-Links on the SEQ screens)
     MP_INFO_BRK = MP_VSTEP0 + 16,   // readout: "BRK 3" (the SEQ page's corner)
-    kMpcParamEnd
+    MP_SL_END,                  // the selected slice's end (= the next slice's start), 0..1 through the break
+    MP_SEQ_SEL,                 // the step selected on the grid (1-64): STEP FX and RATE edit it
+    MP_STEP_FX,                 // the selected step's FX: OFF STUTTER REVERSE STRETCH TAPE STOP
+    MP_STEP_RATE,               // its rate: 1/8 1/16 1/32 1/64
+    MP_FXROW0,                  // 16 FX row cells under the grid (film strip frame, see fxRowFrame())
+    kMpcParamEnd = MP_FXROW0 + 16
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 
@@ -82,11 +87,17 @@ constexpr int kListLines = 5;
 inline int waveFrame(int theme, int look, int mark, int level) { return ((theme * 3 + look) * 2 + mark) * kWaveLevels + level; }
 inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
 
-// SEQ grid cells: cell frame = theme * kCellFrames + c; c: 0 empty, 1 empty on a beat, 2-65 a hit playing slice
-// c - 1, 66-81 an FX step (type 1-4 x rate 8 / 16 / 32 / 64). The step row: theme * 17 + step (0 = none).
+// SEQ grid (lanes KICK SNARE GHOST HAT OPEN PERC). Cell frame = 1 + theme * kCellFrames + c; c: 0 empty, 1 empty on
+// a beat, 2-65 a hit playing slice c - 1. Frame 0 and the last frame are spare, so the jog wheel can always move a
+// cell's value both ways (the app reads the direction, cycles the lane's slices, and puts the right frame back).
+// FX row frame = theme * kFxRowFrames + (selected ? 17 : 0) + f; f: 0 none, 1-16 type 1-4 x rate 8 / 16 / 32 / 64.
+// The step row: theme * 17 + step (0 = none).
 constexpr int kSeqLanes = 6;
-constexpr int kCellFrames = 82;
-inline int cellFrame(int theme, int c) { return theme * kCellFrames + c; }
+constexpr int kCellFrames = 66;
+constexpr int kCellStripFrames = 4 * kCellFrames + 2;
+constexpr int kFxRowFrames = 34;
+inline int cellFrame(int theme, int c) { return 1 + theme * kCellFrames + c; }
+inline int fxRowFrame(int theme, bool selected, int f) { return theme * kFxRowFrames + (selected ? 17 : 0) + f; }
 
 enum class MpcKind { Float, Int, Bool, Choice };
 

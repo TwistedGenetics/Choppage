@@ -46,8 +46,25 @@ namespace bc
         lock.unlock();
     }
 
+    void Engine::publishAudition (SamplePtr b)
+    {
+        lock.lock();
+        pendingAudition = std::move (b);
+        auditionVersion.fetch_add (1);
+        lock.unlock();
+    }
+
     void Engine::pullPublished() noexcept
     {
+        const auto av = auditionVersion.load();
+        if (av != auditionSeen && lock.tryLock())
+        {
+            audition = pendingAudition;
+            auditionSeen = av;
+            auditionPos = 0.0;
+            auditionFade = 0.0f;
+            lock.unlock();
+        }
         const auto v = pendingVersion.load();
         if (v == seenVersion) return;
         if (! lock.tryLock()) return;   // next block
@@ -240,9 +257,11 @@ namespace bc
                 const bool halfTime = midiPad[PerfFx::halfTime] || uiPad[PerfFx::halfTime].load();
                 const double speed = s.speed * (halfTime ? 0.5 : 1.0);
 
-                const bool hostRuns = host.playing && ! s.gateHold;
+                // A break plays only once its key has triggered it (LATCH: until the same key again, another
+                // break or the host stopping; HOLD: while the key is held) or the panel's PLAY is on. The host's
+                // tempo and position time it, but the transport running doesn't start it on its own.
                 const bool running = ! s.midiTrigger && content[(size_t) activeSlot] != nullptr
-                                     && (hostRuns || latched || uiPlay.load());
+                                     && (latched || uiPlay.load());
 
                 // QUANT switch on the next beat line
                 if (pendingSlot >= 0)
@@ -331,6 +350,27 @@ namespace bc
 
             for (int p = 0; p < kFxPads; ++p)
                 padLit[(size_t) p] = held[(size_t) p] || perf.isAudible (p);
+
+            // browser audition: dry, over everything, looped at the file's own speed
+            if (audition != nullptr && audition->numSamples > 1)
+            {
+                const auto& b = *audition;
+                const double step = b.sampleRate / sr;
+                const float* L = b.ch[0].data();
+                const float* R = b.channels > 1 ? b.ch[1].data() : L;
+                for (int k = 0; k < n; ++k)
+                {
+                    const int i0 = (int) auditionPos;
+                    const int i1 = i0 + 1 < b.numSamples ? i0 + 1 : 0;
+                    const float t = (float) (auditionPos - i0);
+                    auditionFade = std::min (1.0f, auditionFade + 1.0f / 256.0f);
+                    const float g = 0.8f * auditionFade;
+                    mix[0][k] += g * (L[i0] + (L[i1] - L[i0]) * t);
+                    mix[1][k] += g * (R[i0] + (R[i1] - R[i0]) * t);
+                    auditionPos += step;
+                    if (auditionPos >= b.numSamples) auditionPos -= b.numSamples;
+                }
+            }
 
             std::copy (mix[0], mix[0] + n, outL + c0);
             std::copy (mix[1], mix[1] + n, outR + c0);

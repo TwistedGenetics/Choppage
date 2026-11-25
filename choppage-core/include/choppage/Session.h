@@ -115,6 +115,11 @@ namespace bc
 
         // ---- break browser ----------------------------------------------------------------------------
         /** Scans `folder` (and its sub-folders, 3 deep) on the worker; entries sorted by BPM then name. */
+        /** Browser audition: decodes the file here (the caller's thread, never the audio thread) and loops it dry
+            until another file, auditionStop() or a load. Returns false if the file can't be read. */
+        bool audition (const std::string& path);
+        void auditionStop();
+        std::string auditioning() const { return auditionPath; }
         void scanFolder (const std::string& folder);
         std::vector<BrowserEntry> browserEntries() const;
         std::string browserFolder() const;
@@ -138,6 +143,8 @@ namespace bc
         void setPadHeld (int pad, bool held) { if (pad >= 0 && pad < kFxPads) eng.uiPad[(size_t) pad] = held; }
 
     private:
+        std::vector<SamplePtr> auditionKeep;   // buffers the audio thread may still hold
+        std::string auditionPath;
         struct Job { int slot; std::string path; std::optional<std::string> restore; bool grid; float sens; int gpb; };
         struct Done { int slot; std::string path; ContentPtr content; AudioFile::Status status; std::optional<std::string> restore; };
 

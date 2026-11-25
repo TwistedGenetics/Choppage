@@ -54,7 +54,7 @@ std::vector<MpcParamDef> buildDefs()
 
     C("break", "Break", { "1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1" }, 0);
     I("browse", "Browse", 0, 255, 0);
-    T("load", "Load");
+    { auto* p = B("load", "Load", false); p->uiOnly = true; }   // the jog wheel's push flips it: every change loads
     T("demo", "Demo");
     T("akaize", "Akaize");
     T("dicePattern", "Pattern");
@@ -73,7 +73,7 @@ std::vector<MpcParamDef> buildDefs()
     F("slTrans", "Trans", 0, 1, 0.5f);
     F("slXfade", "Xfade", 0.5f, 20, 2);
     B("slMute", "Mute", false);
-    C("slBadge", "Hit", { "K", "S", "G", "H", "O", "X" }, 0);
+    C("slBadge", "Hit", { "K", "S", "GS", "H", "O", "P" }, 0);
     C("slicing", "Slicing", { "TRANSIENTS", "GRID" }, 0);
     F("sens", "Sensitivity", 0, 1, 0.62f);
     C("grid", "Grid", { "1/8", "1/16", "1/32" }, 1);
@@ -115,13 +115,19 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("tab" + std::to_string(c + 1)).c_str(), ("Tab " + std::to_string(c + 1)).c_str(), 0, tabFrame(3, kTabFrames - 1), 0); p->readout = true; }
     { auto* p = C("seqPage", "Steps", { "1-16", "17-32", "33-48", "49-64" }, 0); p->uiOnly = true; }
     { auto* p = B("seqFollow", "Follow", true); p->uiOnly = true; }
-    { auto* p = I("seqTap", "Grid Tap", 0, kSeqLanes * 16, 0); p->uiOnly = true; }
+    { auto* p = I("seqTap", "Grid Tap", 0, kSeqLanes * 16 + 16, 0); p->uiOnly = true; }
     { auto* p = I("seqHead", "Step Now", 0, 4 * 17 - 1, 0); p->readout = true; }
     for (int c = 0; c < kSeqLanes * 16; ++c)
-    { auto* p = I(("cell" + std::to_string(c + 1)).c_str(), ("Cell " + std::to_string(c + 1)).c_str(), 0, 4 * kCellFrames - 1, 0); p->readout = true; }
+    { auto* p = I(("cell" + std::to_string(c + 1)).c_str(), ("Cell " + std::to_string(c + 1)).c_str(), 0, kCellStripFrames - 1, 1); p->uiOnly = true; }
     for (int k = 0; k < 16; ++k)
         I(("vstep" + std::to_string(k + 1)).c_str(), ("Step " + std::to_string(k + 1)).c_str(), 0, 64, 0);
     R("infoBrk", "Break Now");
+    F("slEnd", "End", 0, 1, 1);
+    { auto* p = I("seqSel", "Step", 1, 64, 1); p->uiOnly = true; }
+    C("stepFx", "Step FX", { "OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP" }, 0);
+    C("stepRate", "Step FX Rate", { "1/8", "1/16", "1/32", "1/64" }, 1);
+    for (int k = 0; k < 16; ++k)
+    { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     return v;
 }
 
@@ -141,6 +147,7 @@ int roundi(float v) { return (int)std::lround(v); }
 const int kStutterValues[] = { 0, 2, 3, 4, 6, 8 };
 int stutterChoice(int n) { for (int i = 0; i < 6; ++i) if (kStutterValues[i] == n) return i; return 0; }
 const int kGridValues[] = { 8, 16, 32 };
+const Badge kLaneBadge[kSeqLanes] = { Badge::kick, Badge::snare, Badge::ghost, Badge::hat, Badge::open, Badge::other };
 
 // Denormals cost a lot of CPU on the MPC's ARM cores: flush them to zero for the whole block (FZ bit).
 struct ScopedFlushDenormals
@@ -190,7 +197,7 @@ bool isStepParam(int index) { return index >= MP_STEP0 && index < MP_STEP0 + 64;
 bool isPictureParam(int index)
 {
     return index == MP_PLAYHEAD || (index >= MP_WAVE0 && index < MP_TAB0 + kWaveCols) || index == MP_SEQ_HEAD
-        || (index >= MP_CELL0 && index < MP_CELL0 + kSeqLanes * 16);
+        || (index >= MP_FXROW0 && index < MP_FXROW0 + 16);
 }
 
 int padBaseNote(int choice)
@@ -202,7 +209,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_INFO_BRK + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_FXROW0 + 16, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -306,8 +313,16 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
         case MP_SL_XFADE: std::snprintf(buf, sizeof buf, "%.1f MS", plain); out = buf; return true;
         case MP_SLICE: std::snprintf(buf, sizeof buf, "S%02d", roundi(plain)); out = buf; return true;
         case MP_SL_MOVE: { std::lock_guard<std::mutex> l(textMutex_); out = moveText_; return true; }
+        case MP_SL_END: { std::lock_guard<std::mutex> l(textMutex_); out = endText_; return true; }
+        case MP_SEQ_SEL: std::snprintf(buf, sizeof buf, "STEP %d", roundi(plain)); out = buf; return true;
         case MP_MEMORY: std::snprintf(buf, sizeof buf, "M%02d", roundi(plain)); out = buf; return true;
         default: break;
+    }
+    if (index >= MP_CELL0 && index < MP_CELL0 + kSeqLanes * 16)
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        out = cellText_[(size_t)(index - MP_CELL0)];
+        return true;
     }
     if (isStepParam(index) || (index >= MP_VSTEP0 && index < MP_VSTEP0 + 16))
     {
@@ -351,7 +366,7 @@ std::string ChoppageMpcApp::saveState() const { return session_.saveState(); }
 void ChoppageMpcApp::loadState(const std::string& text)
 {
     session_.loadState(text);
-    lastVersion_ = ~0u;   // the worker resyncs every mirror
+    resync_ = true;       // the worker takes the restored values as they are and resyncs every mirror
 }
 
 // ===================================================================================== worker
@@ -386,12 +401,20 @@ void ChoppageMpcApp::tick()
     session_.poll();
 
     // 1. the user moved something: act on it
+    if (resync_.exchange(false))
+    {
+        // a saved state came back: take the host's values as they are (nothing fires on project load), then
+        // put every mirror and picture right from the session
+        for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i) seen_[i] = values_[i].load(std::memory_order_relaxed);
+        lastVersion_ = ~0u; seqKey_ = ~0ull; waveKey_ = ~0ull; listKey_ = ~0ull;
+    }
     for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i)
     {
         const float v = values_[i].load(std::memory_order_relaxed);
         if (v == seen_[i]) continue;
+        const float prev = seen_[i];
         seen_[i] = v;
-        if (!mpcParamDef(i).readout) handle(i, v);
+        if (!mpcParamDef(i).readout) handle(i, v, prev);
     }
 
     // 2. the session moved: mirrors and readouts follow
@@ -400,22 +423,22 @@ void ChoppageMpcApp::tick()
     syncWave(false);
     syncList(false);
     syncSeq(false);
+    syncAudition();
     if (messageTicks_ > 0 && --messageTicks_ == 0) message_.clear();
 }
 
-void ChoppageMpcApp::handle(int index, float v)
+void ChoppageMpcApp::handle(int index, float v, float prev)
 {
+    auto say = [this](const std::string& m) { message_ = m; messageTicks_ = 90; };
     const auto& d = mpcParamDef(index);
     const bool on = v >= 0.5f;
-    auto say = [this](const std::string& m) { message_ = m; messageTicks_ = 90; };
     auto field = [this, v](Session::SliceField f) { session_.setSliceValue(f, v, session_.editingAll()); };
     const int slot = session_.selectedSlot();
 
-    if (d.trigger)
-    {
-        if (!on) return;
-        write(index, 0.0f);   // momentary
-    }
+    // Keys and taps are momentary on the screen: the MPC puts them back to their default (0) when the finger
+    // lifts (ResetOnGestureEnd). The app acts on the press and never writes them itself, so a saved state always
+    // matches what the host holds.
+    if (d.trigger && !(on && prev < 0.5f)) return;
     if (isStepParam(index))
     {
         session_.setStepSlice(index - MP_STEP0, roundi(v) - 1);
@@ -430,28 +453,37 @@ void ChoppageMpcApp::handle(int index, float v)
     {
         const int k = roundi(v) - 1;
         if (k < 0) return;
-        write(index, 0.0f);
         const int lane = k / 16, step = roundi(seen_[MP_SEQ_PAGE]) * 16 + k % 16;
         const auto& s = session_.slot(slot);
         if (s.content == nullptr || step >= s.program.pattern.numSteps) return;
-        if (lane < 5)
-        {
-            static const Badge laneBadge[] = { Badge::kick, Badge::snare, Badge::ghost, Badge::hat, Badge::open };
-            session_.toggleStep(step, laneBadge[lane]);
-        }
-        else
-        {
-            // FX lane: each tap moves on: off > STUTTER > REVERSE > STRETCH > TAPE STOP > off
-            const auto t = (int)s.program.pattern.fx[(size_t)step].type;
-            session_.setFxStep(step, (FxType)((t + 1) % kNumFxTypes), 16);
-        }
+        write(MP_SEQ_SEL, (float)(step + 1));                 // the step STEP FX / RATE edit
+        if (lane < kSeqLanes) session_.toggleStep(step, kLaneBadge[lane]);   // the FX row only selects
+        return;
+    }
+    if (index >= MP_CELL0 && index < MP_CELL0 + kSeqLanes * 16)
+    {
+        // the jog wheel on a focused cell: through the slices of that lane's hit only (K in KICK, P in PERC ...)
+        const int dir = v > cellShown_[index - MP_CELL0] ? 1 : -1;
+        const int lane = (index - MP_CELL0) / 16, step = roundi(seen_[MP_SEQ_PAGE]) * 16 + (index - MP_CELL0) % 16;
+        const auto& s = session_.slot(slot);
+        if (s.content == nullptr || step >= s.program.pattern.numSteps) { seqKey_ = ~0ull; return; }
+        std::vector<int> pool;
+        for (int k2 = 0; k2 < s.content->numSlices(); ++k2) if (s.content->badges[(size_t)k2] == kLaneBadge[lane]) pool.push_back(k2);
+        write(MP_SEQ_SEL, (float)(step + 1));
+        if (pool.empty()) { say(std::string("NO ") + badgeName(kLaneBadge[lane]) + " SLICES IN THIS BREAK"); seqKey_ = ~0ull; return; }
+        const int cur = s.program.pattern.slice[(size_t)step];
+        int pos = -1;
+        for (size_t i = 0; i < pool.size(); ++i) if (pool[i] == cur) pos = (int)i;
+        const int n = (int)pool.size();
+        const int next = pos < 0 ? (dir > 0 ? 0 : n - 1) : (pos + dir + n) % n;
+        session_.setStepSlice(step, pool[(size_t)next]);
+        seqKey_ = ~0ull;   // put the right frame back even if nothing changed
         return;
     }
     if (index == MP_WAVE_TAP || index == MP_LIST_TAP)
     {
         const int k = roundi(v) - 1;
         if (k < 0) return;
-        write(index, 0.0f);   // springs back, so the same place can be tapped again
         if (index == MP_LIST_TAP)
         {
             const int n = (int)session_.browserEntries().size();
@@ -473,7 +505,26 @@ void ChoppageMpcApp::handle(int index, float v)
         case MP_BRK_PREV: session_.selectSlot((slot + kSlots - 1) % kSlots); break;
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
         case MP_ZOOM: break;   // syncWave follows
-        case MP_SEQ_PAGE: case MP_SEQ_FOLLOW: break;   // syncSeq follows
+        case MP_SEQ_PAGE: case MP_SEQ_FOLLOW: case MP_SEQ_SEL: seqKey_ = ~0ull; lastVersion_ = ~0u; break;   // syncs follow
+        case MP_STEP_FX: case MP_STEP_RATE:
+        {
+            const auto& s = session_.slot(slot);
+            const int step = roundi(seen_[MP_SEQ_SEL]) - 1;
+            if (s.content == nullptr || step < 0 || step >= s.program.pattern.numSteps) break;
+            static const int rates[] = { 8, 16, 32, 64 };
+            session_.setFxStep(step, (FxType)std::clamp(roundi(seen_[MP_STEP_FX]), 0, kNumFxTypes - 1),
+                               rates[std::clamp(roundi(seen_[MP_STEP_RATE]), 0, 3)]);
+            break;
+        }
+        case MP_SL_END:
+        {
+            const auto& s = session_.slot(slot);
+            if (s.content == nullptr) break;
+            const int k = session_.selectedSlice();
+            if (k + 1 >= s.content->slices.count) { say("THE LAST SLICE ENDS WITH THE BREAK"); lastVersion_ = ~0u; break; }
+            moveMarkerOf(k + 1, (int)std::lround(v * (double)s.content->buffer->numSamples));
+            break;
+        }
         case MP_SHOW_PAT: case MP_SHOW_FX: case MP_SHOW_DISK:
         {
             // MAIN 0, FX 1, DISK 2, PATTERN 3 (the waveform's tap area shows for 0-2: one RangedEnabling)
@@ -530,6 +581,7 @@ void ChoppageMpcApp::handle(int index, float v)
             const int k = roundi(values_[MP_BROWSE].load());
             if (k >= 0 && k < (int)entries.size())
             {
+                session_.auditionStop();
                 session_.loadFile(slot, entries[(size_t)k].path);
                 say("LOADING " + upper(entries[(size_t)k].name));
             }
@@ -657,6 +709,16 @@ void ChoppageMpcApp::syncMirrors(bool force)
             moveText_ = t;
         }
         put(MP_SL_MOVE, (float)at / (float)n);
+        const int last = s.content->slices.count - 1;
+        const int endAt = slice < last ? s.content->slices.starts[(size_t)slice + 1] : n;
+        {
+            std::lock_guard<std::mutex> l(textMutex_);
+            char t[40];
+            if (slice < last) std::snprintf(t, sizeof t, "%.3f S", endAt / s.content->buffer->sampleRate);
+            else std::snprintf(t, sizeof t, "END OF BREAK");
+            endText_ = t;
+        }
+        put(MP_SL_END, (float)endAt / (float)n);
     }
     {
         // one line of the LCD: the slice being edited (or ALL) and its settings, like the desktop's slice rows
@@ -788,12 +850,14 @@ ChoppageMpcApp::View ChoppageMpcApp::viewOf(const SlotContent& c, int sel)
     return frozen_;
 }
 
-void ChoppageMpcApp::moveSelectedMarker(int position)
+void ChoppageMpcApp::moveSelectedMarker(int position) { moveMarkerOf(session_.selectedSlice(), position); }
+
+void ChoppageMpcApp::moveMarkerOf(int marker, int position)
 {
     const auto& s = session_.slot(session_.selectedSlot());
     if (s.content == nullptr || s.content->slices.isEmpty()) return;
     const auto& t = s.content->slices;
-    const int k = std::clamp(session_.selectedSlice(), 0, t.count - 1);
+    const int k = std::clamp(marker, 0, t.count - 1);
     const int n = s.content->buffer->numSamples;
     const int lo = k > 0 ? t.starts[(size_t)k - 1] + SliceTable::kMinGap : 0;
     const int hi = (k + 1 < t.count ? t.starts[(size_t)k + 1] : n) - SliceTable::kMinGap;
@@ -901,39 +965,88 @@ void ChoppageMpcApp::syncSeq(bool force)
     const float headF = (float)(theme * 17 + head);
     if (force || seen_[MP_SEQ_HEAD] != headF) write(MP_SEQ_HEAD, headF);
 
-    const uint64_t key = ((uint64_t)session_.version() << 24) ^ ((uint64_t)slot << 16) ^ ((uint64_t)page << 8) ^ (uint64_t)theme;
+    const int sel = std::clamp(roundi(seen_[MP_SEQ_SEL]), 1, 64) - 1;
+    const uint64_t key = ((uint64_t)session_.version() << 24) ^ ((uint64_t)slot << 16) ^ ((uint64_t)page << 8) ^ (uint64_t)theme
+                       ^ ((uint64_t)sel << 40);
     if (!force && key == seqKey_) return;
     seqKey_ = key;
-    static const Badge laneBadge[] = { Badge::kick, Badge::snare, Badge::ghost, Badge::hat, Badge::open };
-    auto laneOf = [](Badge b) { for (int i = 0; i < 5; ++i) if (laneBadge[i] == b) return i; return 1; };   // OTHER shows on SNARE
+    auto laneOf = [](Badge b) { for (int i = 0; i < kSeqLanes; ++i) if (kLaneBadge[i] == b) return i; return kSeqLanes - 1; };
     for (int lane = 0; lane < kSeqLanes; ++lane)
         for (int col = 0; col < 16; ++col)
         {
             const int step = page * 16 + col;
             int c = col % 4 == 0 ? 1 : 0;
+            std::string txt = std::string(badgeName(kLaneBadge[lane])) + " --";
             if (step < pat.numSteps && s.content != nullptr)
             {
-                if (lane < 5)
+                const int sl = pat.slice[(size_t)step];
+                if (sl >= 0 && sl < s.content->numSlices() && laneOf(s.content->badges[(size_t)sl]) == lane)
                 {
-                    const int sl = pat.slice[(size_t)step];
-                    if (sl >= 0 && sl < s.content->numSlices() && laneOf(s.content->badges[(size_t)sl]) == lane) c = 2 + std::min(sl, 63);
-                }
-                else if (pat.fx[(size_t)step].type != FxType::none)
-                {
-                    const int r = pat.fx[(size_t)step].rate;
-                    const int ri = r <= 8 ? 0 : r <= 16 ? 1 : r <= 32 ? 2 : 3;
-                    c = 66 + ((int)pat.fx[(size_t)step].type - 1) * 4 + ri;
+                    c = 2 + std::min(sl, 63);
+                    char b[24];
+                    std::snprintf(b, sizeof b, "%s %02d", badgeLetter(s.content->badges[(size_t)sl]), sl + 1);
+                    txt = b;
                 }
             }
+            const int cellIdx = lane * 16 + col;
+            {
+                std::lock_guard<std::mutex> l(textMutex_);
+                cellText_[(size_t)cellIdx] = txt;
+            }
             const float f = (float)cellFrame(theme, c);
-            const int idx = MP_CELL0 + lane * 16 + col;
-            if (force || seen_[idx] != f) write(idx, f);
+            cellShown_[cellIdx] = f;
+            const int idx = MP_CELL0 + cellIdx;
+            if (force || seen_[idx] != f || values_[idx].load() != f) write(idx, f);
         }
+    for (int col = 0; col < 16; ++col)
+    {
+        const int step = page * 16 + col;
+        int f = 0;
+        if (step < pat.numSteps && pat.fx[(size_t)step].type != FxType::none)
+        {
+            const int r = pat.fx[(size_t)step].rate;
+            const int ri = r <= 8 ? 0 : r <= 16 ? 1 : r <= 32 ? 2 : 3;
+            f = 1 + ((int)pat.fx[(size_t)step].type - 1) * 4 + ri;
+        }
+        const float fr = (float)fxRowFrame(theme, step == sel, f);
+        if (force || seen_[MP_FXROW0 + col] != fr) write(MP_FXROW0 + col, fr);
+    }
     for (int k = 0; k < 16; ++k)
     {
         const int step = page * 16 + k;
         const float v = step < pat.numSteps ? (float)(pat.slice[(size_t)step] + 1) : 0.0f;
         if (force || seen_[MP_VSTEP0 + k] != v) write(MP_VSTEP0 + k, v);
+    }
+    // the selected step's FX
+    if (sel < pat.numSteps)
+    {
+        const auto& fx = pat.fx[(size_t)sel];
+        const float t = (float)(int)fx.type;
+        const float r = fx.rate <= 8 ? 0.0f : fx.rate <= 16 ? 1.0f : fx.rate <= 32 ? 2.0f : 3.0f;
+        if (seen_[MP_STEP_FX] != t) write(MP_STEP_FX, t);
+        if (fx.type != FxType::none && seen_[MP_STEP_RATE] != r) write(MP_STEP_RATE, r);
+    }
+}
+
+// ===================================================================================== DISK audition
+void ChoppageMpcApp::syncAudition()
+{
+    // The DISK section open: the file under the jog wheel plays after a short pause (so scrolling doesn't stutter);
+    // closed: quiet.
+    const bool disk = roundi(seen_[MP_VIEW]) == 2;
+    if (!disk)
+    {
+        if (!session_.auditioning().empty()) session_.auditionStop();
+        auditionWant_ = -1;
+        return;
+    }
+    const int pick = roundi(seen_[MP_BROWSE]);
+    if (pick != auditionWant_) { auditionWant_ = pick; auditionWait_ = 6; return; }
+    if (auditionWait_ > 0 && --auditionWait_ == 0)
+    {
+        const auto entries = session_.browserEntries();
+        if (pick >= 0 && pick < (int)entries.size() && session_.auditioning() != entries[(size_t)pick].path)
+            if (!session_.audition(entries[(size_t)pick].path)) { message_ = "CAN'T READ " + upper(entries[(size_t)pick].name); messageTicks_ = 90; }
     }
 }
 

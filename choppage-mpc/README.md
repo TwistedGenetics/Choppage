@@ -14,10 +14,14 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 ## Pads
 | Pads | Notes (default) | What |
 |---|---|---|
-| 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. Hit one to switch to it; it plays locked to the MPC's tempo, and **every screen changes to that break**: the LCD, the waveform and slices, the SEQ grid, the slice settings |
+| 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. **A break plays only when its key triggers it**, in time with the MPC's tempo. Pressing a key (or a sequenced note) also switches **every screen to that break**: the LCD, the waveform and slices, the SEQ grid and the slice settings |
 | 9–16 (top two rows) | G#1–D#2 (44–51) | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP. The FX plays while you hold the pad and stops when you let go |
 
-The 8 FX pads on the touchscreen work the same way: they play while touched and stop when your finger lifts.
+The 8 FX pads on the touchscreen work the same way: they play while touched and stop when your finger lifts. Keys on the screen (DICE, UNDO, ADD and so on) light while touched and act once per press.
+
+How long a break plays is set by **SET > GATE**:
+- **LATCH** (the default): it plays until you press the same key again, play another break, or stop the MPC.
+- **HOLD**: it plays for as long as the key, or the note in the MPC's sequence, is held.
 
 If the program's pads send other notes, set **SET > PAD NOTES** to 37 (the MPC's default) or 48. Slices 1–16 of the playing break are on E2–G3, and pattern memories are on G#3–B4. These are the same as the desktop edition.
 
@@ -36,23 +40,26 @@ Under the LCD:
 - FILTER, DISTORTION, CRUSH and REVERB, with SAMPLE RATE and VOLUME either side.
 
 The sections:
-- **PATTERN** turns the LCD into the SEQ grid (below), with LENGTH, STEPS SHOWN, FOLLOW, ORIGINAL, CLEAR, STYLE, SWING, MEMORY, SAVE, RECALL, UNDO and REDO underneath.
+- **PATTERN** turns the LCD into the SEQ grid (below), with LENGTH, STEPS SHOWN, FOLLOW, ORIGINAL, CLEAR, the selected step's FX and RATE, UNDO and REDO underneath. STYLE, SWING and the memories are on the PATTERN screen.
 - **FX** puts each pad's setting knob under it.
-- **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo (tap one), BROWSE, LOAD, DEMO BREAK and AKAIZE TO MPC BPM.
+- **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo. Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
 
-**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE. The **slice markers move as you edit them** with MOVE MARKER, NUDGE < >, ADD (split) and DELETE (join).
-- SLICE has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
-- CHOP has EDIT ALL SLICES, HIT (correct a hit letter), SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID and RESLICE.
+**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE.
+- **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
+- SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
+- **CHOP** has ADD (split the slice in two), DELETE (join it to the one before), NUDGE START < >, EDIT ALL SLICES, SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID and RESLICE.
+- Slices sit end to end, so a slice's END is the next slice's START. The last slice ends with the break.
 
-**SEQ** is the BR3AK pattern editor: a row each for KICK, SNARE, GHOST, HAT and OPEN, plus the FX lane, over 16 steps. A hit shows the number of the slice it plays.
-- Tap a cell to put a hit of that kind there, or take it off.
-- Tap the FX lane to step through STUTTER, REVERSE, STRETCH, TAPE STOP and off.
+**SEQ** is the BR3AK pattern editor: KICK, SNARE, GHOST, HAT, OPEN and PERC lanes over 16 steps. A hit shows the number of the slice it plays.
+- **Tap** a cell to put a hit of that kind there, or take it off.
+- With the cell selected (red frame), **turn the jog wheel** to step through that lane's hits only: kicks in KICK, snares in SNARE, ghosts in GHOST, hats in HAT, open hats in OPEN, percs in PERC. The MPC shows which one (for example "K 05").
+- **FX on a step:** tap a step, or the FX row under the grid, to select it. Then pick its FX (STUTTER, REVERSE, STRETCH, TAPE STOP or OFF) and RATE (1/8 to 1/64). The FX row shows each step's FX.
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
 **PATTERN, FX PADS, SOUND / SPACE, SET**: everything else, in rows of four, including the LCD colour (BLUE, GREEN, AMBER, WHITE) and PAD NOTES.
 
-**Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or other), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, fix it with HIT on the CHOP screen.
+**Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or perc), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, set it with HIT on the SLICE screen.
 
 ## What the MPC can't do
 - **Coarser waveform:** MPC plugin screens have no drawing area, so the waveform is made of 84 picture columns the plugin sets (the approach Twisted MPC Breaks uses). It's less detailed than the desktop's.

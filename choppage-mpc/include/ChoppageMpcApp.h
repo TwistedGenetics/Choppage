@@ -51,13 +51,15 @@ public:
 
 private:
     void workerLoop();
-    void handle(int index, float v);
+    void handle(int index, float v, float prev);
     void write(int index, float v);           // the app changes a parameter: remembered as seen, host told
     void syncMirrors(bool force);
     void syncReadouts(bool force);
     void syncWave(bool force);
     void syncList(bool force);
     void syncSeq(bool force);
+    void syncAudition();
+    void moveMarkerOf(int marker, int position);
     struct View { int start = 0, length = 1; };
     View viewOf(const SlotContent& c, int sel);
     void moveSelectedMarker(int position);
@@ -75,6 +77,9 @@ private:
     std::vector<Session::BrowserEntry> browser_;             // copy for formatValue
     std::vector<std::string> badgeLetters_;         // per slice of the selected break (step text)
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
+    std::string endText_ = "-";                     // END knob text
+    std::string cellText_[kSeqLanes * 16];          // what the MPC shows while a grid cell is jogged ("K 05")
+    float cellShown_[kSeqLanes * 16] = {};          // the frame each cell shows (jog direction = value vs this)
 
     // shared with the audio thread
     std::atomic<double> fallbackBpm_{170.0};        // the selected break's tempo, when the MPC sends none
@@ -95,10 +100,12 @@ private:
     int listTop_ = 0;
     uint64_t listKey_ = ~0ull;
     uint64_t seqKey_ = ~0ull;
+    int auditionWant_ = -1, auditionWait_ = 0;
     std::string message_;
     int messageTicks_ = 0;
 
     std::atomic<bool> quit_{false};
+    std::atomic<bool> resync_{false};
     std::thread worker_;
 };
 

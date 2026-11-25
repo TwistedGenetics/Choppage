@@ -45,6 +45,10 @@ static void settle(ChoppageMpcApp& app)
 }
 
 static void set(ChoppageMpcApp& app, int i, float v) { app.setParam(i, v); app.tick(); settle(app); }
+// A key or tap on the MPC: down (the app acts), then the MPC puts it back to 0 when the finger lifts.
+static void press(ChoppageMpcApp& app, int i, float v = 1.0f) { set(app, i, v); set(app, i, 0.0f); }
+// The jog wheel's push on the DISK list flips LOAD; every change loads.
+static void push(ChoppageMpcApp& app) { set(app, MP_LOAD, app.getParam(MP_LOAD) >= 0.5f ? 0.0f : 1.0f); }
 
 // --dump out.json: the parameter table for tools/make_skin.py (index, id, name, kind, range, choices, flags)
 static int dump(const char* path)
@@ -88,8 +92,8 @@ static int state(const char* path, int lcd, int view)
     pf.app = &app;
     app.prepare(44100.0, 512);
     settle(app);
-    set(app, MP_DICE_PAT, 1);
-    set(app, MP_DICE_FX, 1);
+    press(app, MP_DICE_PAT, 1);
+    press(app, MP_DICE_FX, 1);
     set(app, MP_SLICE, 5);
     set(app, MP_BROWSE, 2);
     set(app, P_LCD_COLOUR, (float)lcd);
@@ -171,13 +175,13 @@ int main(int argc, char** argv)
     set(app, MP_BREAK, 1);
     CHECK(app.session().selectedSlot() == 1, "BREAK selects the break");
     set(app, MP_BROWSE, 1);
-    set(app, MP_LOAD, 1);
-    CHECK(app.getParam(MP_LOAD) == 0.0f, "LOAD springs back to 0");
+    push(app);
+    CHECK(app.getParam(MP_DICE_PAT) == 0.0f, "keys never stick: the plugin leaves them to the MPC");
     CHECK(app.session().slot(1).content != nullptr && app.session().slot(1).content->name.find("174") != std::string::npos,
           "LOAD puts the browsed file into break 2");
     CHECK(std::fabs(app.session().slot(1).content->bpm - 174.0) < 0.6, "tempo from the file name");
 
-    set(app, MP_DICE_PAT, 1);
+    press(app, MP_DICE_PAT, 1);
     const auto& pat = app.session().slot(1).program.pattern;
     const Pattern rolled = pat;
     int hits = 0, mirrored = 0;
@@ -195,11 +199,11 @@ int main(int argc, char** argv)
     CHECK(app.session().slot(1).program.pattern.slice[2] == 4, "a step knob sets that step's slice");
     set(app, MP_STEP0 + 2, 0);
     CHECK(app.session().slot(1).program.pattern.slice[2] == -1, "step knob at 0 is a rest");
-    set(app, MP_DICE_PAT, 1);
+    press(app, MP_DICE_PAT, 1);
     CHECK(!(app.session().slot(1).program.pattern == rolled), "a second roll changes the pattern");
-    set(app, MP_UNDO, 1);
+    press(app, MP_UNDO, 1);
     CHECK(app.session().slot(1).program.pattern == rolled, "UNDO goes back to the first roll");
-    set(app, MP_REDO, 1);
+    press(app, MP_REDO, 1);
     CHECK(app.getParam(MP_UNDO) == 0.0f && app.getParam(MP_REDO) == 0.0f, "UNDO / REDO spring back");
 
     std::printf("slice editing\n");
@@ -222,11 +226,11 @@ int main(int argc, char** argv)
     set(app, MP_LENGTH, 2);
     CHECK(app.session().slot(1).program.pattern.numSteps == 64, "LENGTH 4 BARS");
     set(app, MP_MEMORY, 5);
-    set(app, MP_MEM_SAVE, 1);
+    press(app, MP_MEM_SAVE, 1);
     CHECK(app.session().slot(1).memories[4].has_value(), "SAVE into M05");
-    set(app, MP_CLEAR, 1);
+    press(app, MP_CLEAR, 1);
     CHECK(app.session().slot(1).program.pattern.hits() == 0, "CLEAR");
-    set(app, MP_MEM_RECALL, 1);
+    press(app, MP_MEM_RECALL, 1);
     CHECK(app.session().slot(1).program.pattern.hits() > 0, "RECALL M05");
 
     std::printf("pads\n");
@@ -253,7 +257,7 @@ int main(int argc, char** argv)
 
     std::printf("akaize\n");
     set(app, MP_BREAK, 1);
-    set(app, MP_AKAIZE, 1);
+    press(app, MP_AKAIZE, 1);
     app.formatValue(MP_INFO_MSG, 0, t);
     CHECK(t.find("AKAIZED") == 0, ("akaize message: " + t).c_str());
     CHECK(std::filesystem::exists(dir / "Renders") && !std::filesystem::is_empty(dir / "Renders"), "render written to Content/Renders");
@@ -280,7 +284,7 @@ int main(int argc, char** argv)
         const int before = c.slices.starts[3];
         std::vector<int> wBefore;
         for (int k = 0; k < kWaveCols; ++k) wBefore.push_back((int)std::lround(app.getParam(MP_WAVE0 + k)));
-        set(app, MP_SL_NUDGE_R, 1);
+        press(app, MP_SL_NUDGE_R, 1);
         const int after = app.session().slot(0).content->slices.starts[3];
         CHECK(after > before, "NUDGE > moves the marker later");
         set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.02f);
@@ -291,12 +295,16 @@ int main(int argc, char** argv)
         CHECK(changed > 0, "the waveform redraws as the marker moves");
 
         const int count = app.session().slot(0).content->slices.count;
-        set(app, MP_SL_ADD, 1);
+        press(app, MP_SL_ADD, 1);
         CHECK(app.session().slot(0).content->slices.count == count + 1 && app.session().selectedSlice() == 4, "ADD splits the slice");
-        set(app, MP_SL_DEL, 1);
+        press(app, MP_SL_DEL, 1);
         CHECK(app.session().slot(0).content->slices.count == count && app.session().selectedSlice() == 3, "DELETE joins it back");
+        const int nextBefore = app.session().slot(0).content->slices.starts[4];
+        set(app, MP_SL_END, app.getParam(MP_SL_END) - 0.01f);
+        const int nextAfter = app.session().slot(0).content->slices.starts[4];
+        CHECK(nextAfter < nextBefore && nextAfter > app.session().slot(0).content->slices.starts[3], "END moves the slice's end (the next marker)");
 
-        set(app, MP_WAVE_TAP, 1);
+        press(app, MP_WAVE_TAP, 1);
         CHECK(app.session().selectedSlice() == 0 && app.getParam(MP_WAVE_TAP) == 0.0f, "a tap on the first column picks slice 1");
         set(app, MP_SLICE, 6);
         set(app, MP_ZOOM, 1);
@@ -310,16 +318,16 @@ int main(int argc, char** argv)
         set(app, P_LCD_COLOUR, 0);
         set(app, MP_ZOOM, 0);
 
-        set(app, MP_BRK_NEXT, 1);
+        press(app, MP_BRK_NEXT, 1);
         CHECK(app.session().selectedSlot() == 1, "break > steps to the next break");
-        set(app, MP_BRK_PREV, 1);
-        set(app, MP_BRK_PREV, 1);
+        press(app, MP_BRK_PREV, 1);
+        press(app, MP_BRK_PREV, 1);
         CHECK(app.session().selectedSlot() == 7, "break < wraps to break 8");
         set(app, MP_BREAK, 0);
 
         app.formatValue(MP_INFO_SLPARAMS, 0, t);
         CHECK(t.find("PITCH") != std::string::npos && t.find("XFADE") != std::string::npos, ("slice line: " + t).c_str());
-        set(app, MP_LIST_TAP, 2);
+        press(app, MP_LIST_TAP, 2);
         CHECK((int)app.getParam(MP_BROWSE) == 1 && app.getParam(MP_LIST_TAP) == 0.0f, "a tap on list line 2 picks file 2");
         app.formatValue(MP_LIST0 + 1, 0, t);
         CHECK(t.find("> ") == 0, ("picked list line: " + t).c_str());
@@ -330,16 +338,16 @@ int main(int argc, char** argv)
         set(app, MP_BREAK, 0);
         set(app, MP_SEQ_FOLLOW, 0);
         set(app, MP_SEQ_PAGE, 0);
-        set(app, MP_DICE_PAT, 1);
+        press(app, MP_DICE_PAT, 1);
         const auto& pat = app.session().slot(0).program.pattern;
         const auto& c = *app.session().slot(0).content;
         int shown = 0, hits = 0;
         for (int col = 0; col < 16; ++col)
         {
             if (pat.slice[(size_t)col] >= 0) ++hits;
-            for (int lane = 0; lane < 5; ++lane)
+            for (int lane = 0; lane < kSeqLanes; ++lane)
             {
-                const int f = (int)std::lround(app.getParam(MP_CELL0 + lane * 16 + col)) % kCellFrames;
+                const int f = ((int)std::lround(app.getParam(MP_CELL0 + lane * 16 + col)) - 1) % kCellFrames;
                 if (f >= 2 && f < 66) { ++shown; CHECK(f - 2 == pat.slice[(size_t)col], "a grid cell shows its slice number"); break; }
             }
         }
@@ -348,16 +356,49 @@ int main(int argc, char** argv)
         for (int col = 0; col < 16 && emptyStep < 0; ++col) if (pat.slice[(size_t)col] < 0) emptyStep = col;
         if (emptyStep >= 0)
         {
-            set(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);   // KICK lane
+            press(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);   // KICK lane
             const int sl = app.session().slot(0).program.pattern.slice[(size_t)emptyStep];
             CHECK(sl >= 0 && c.badges[(size_t)sl] == Badge::kick, "a tap on an empty KICK cell puts a kick there");
-            set(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);
+            press(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);
             CHECK(app.session().slot(0).program.pattern.slice[(size_t)emptyStep] < 0, "a second tap takes it off");
         }
-        set(app, MP_SEQ_TAP, 5 * 16 + 3 + 1);              // FX lane, step 4
-        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::stutter, "a tap on the FX lane adds STUTTER");
-        set(app, MP_SEQ_TAP, 5 * 16 + 3 + 1);
-        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::reverse, "... then REVERSE");
+        // per-step FX: pick a step, then STEP FX / RATE
+        press(app, MP_SEQ_TAP, 6 * 16 + 3 + 1);              // the FX row under step 4: selects it
+        CHECK((int)app.getParam(MP_SEQ_SEL) == 4, "a tap on the FX row selects step 4");
+        set(app, MP_STEP_FX, 1);
+        set(app, MP_STEP_RATE, 2);
+        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::stutter && app.session().slot(0).program.pattern.fx[3].rate == 32,
+              "STEP FX STUTTER at 1/32 on step 4");
+        const int fxf = (int)std::lround(app.getParam(MP_FXROW0 + 3)) % kFxRowFrames;
+        CHECK(fxf == 17 + 1 + 2, "the FX row shows it (selected)");
+        set(app, MP_STEP_FX, 0);
+        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::none, "STEP FX OFF clears it");
+
+        // the jog wheel on a cell cycles only that lane's hits
+        auto laneSlices = [&](Badge b) { std::vector<int> v; for (int k = 0; k < c.numSlices(); ++k) if (c.badges[(size_t)k] == b) v.push_back(k); return v; };
+        const auto kicks = laneSlices(Badge::kick), snares = laneSlices(Badge::snare);
+        const int cellK = MP_CELL0 + 0 * 16 + 5, cellS = MP_CELL0 + 1 * 16 + 5;
+        set(app, cellK, app.getParam(cellK) + 1);           // jog up on KICK, step 6
+        int sl = app.session().slot(0).program.pattern.slice[5];
+        CHECK(sl >= 0 && c.badges[(size_t)sl] == Badge::kick, "jog on the KICK lane puts a kick on the step");
+        if (kicks.size() > 1)
+        {
+            set(app, cellK, app.getParam(cellK) + 1);
+            const int sl2 = app.session().slot(0).program.pattern.slice[5];
+            CHECK(sl2 != sl && c.badges[(size_t)sl2] == Badge::kick, "jog again: the next kick");
+            set(app, cellK, app.getParam(cellK) - 1);
+            CHECK(app.session().slot(0).program.pattern.slice[5] == sl, "jog back: the kick before");
+        }
+        if (!snares.empty())
+        {
+            set(app, cellS, app.getParam(cellS) - 1);
+            sl = app.session().slot(0).program.pattern.slice[5];
+            CHECK(sl >= 0 && c.badges[(size_t)sl] == Badge::snare, "jog on the SNARE lane: only snares");
+        }
+        std::string ct;
+        app.formatValue(cellS, app.getParam(cellS), ct);
+        CHECK(ct.find("S ") == 0, ("the jogged cell's text: " + ct).c_str());
+        CHECK(app.getParam(cellS) >= 1.0f && app.getParam(cellS) < (float)(kCellStripFrames - 1), "cells keep a spare frame each side");
         set(app, MP_VSTEP0 + 2, 9);
         CHECK(app.session().slot(0).program.pattern.slice[2] == 8, "step knob 3 sets step 3's slice");
         set(app, MP_SEQ_PAGE, 1);
@@ -369,7 +410,7 @@ int main(int argc, char** argv)
     std::printf("a break pad switches every screen\n");
     {
         set(app, MP_BREAK, 0);
-        set(app, MP_DICE_PAT, 1);
+        press(app, MP_DICE_PAT, 1);
         app.session().loadDemo(3);
         settle(app);
         const int wave0 = (int)std::lround(app.getParam(MP_WAVE0 + 10));
@@ -385,6 +426,25 @@ int main(int argc, char** argv)
         CHECK((int)std::lround(app.getParam(MP_SL_PITCH)) == (int)app.session().slot(3).program.slice[(size_t)app.session().selectedSlice()].pitch,
               "the slice controls show break 4's slice");
         (void)wave0; (void)cells0;
+    }
+
+    std::printf("DISK: jog to hear, push to load\n");
+    {
+        set(app, MP_SHOW_DISK, 1);
+        set(app, MP_BROWSE, 0);
+        for (int i = 0; i < 10; ++i) app.tick();
+        CHECK(app.session().auditioning().find("136") != std::string::npos, "the browsed break plays");
+        set(app, MP_BROWSE, 1);
+        for (int i = 0; i < 10; ++i) app.tick();
+        CHECK(app.session().auditioning().find("174") != std::string::npos, "the next one plays as the jog moves");
+        set(app, MP_BREAK, 6);
+        push(app);                                 // the jog wheel's push
+        CHECK(app.session().auditioning().empty() && app.session().slot(6).file.find("174") != std::string::npos, "push: loads it into the break, the audition stops");
+        set(app, MP_BROWSE, 0);
+        for (int i = 0; i < 10; ++i) app.tick();
+        set(app, MP_SHOW_DISK, 0);
+        CHECK(app.session().auditioning().empty(), "closing DISK stops the audition");
+        set(app, MP_BREAK, 0);
     }
 
     std::printf("sections\n");
@@ -407,6 +467,13 @@ int main(int argc, char** argv)
         settle(app2);
         CHECK(app2.session().slot(1).program.slice[2].pitch == 7.0f, "slice settings come back");
         CHECK(app2.session().slot(1).memories[4].has_value(), "memories come back");
+        // a project whose saved values have a key down must not fire it on load
+        const auto before = app2.session().slot(1).program.pattern;
+        app2.setParam(MP_DICE_PAT, 1.0f);
+        app2.setParam(MP_SEQ_TAP, 3.0f);
+        app2.loadState(st);
+        settle(app2);
+        CHECK(app2.session().slot(1).program.pattern == before, "restored values don't fire keys or taps");
     }
 
     std::printf("\n%d / %d checks passed\n", checks - failures, checks);

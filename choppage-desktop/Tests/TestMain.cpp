@@ -64,11 +64,13 @@ static void tests()
         auto* sr = r.p.apvts.getParameter ("srate");
         check (sr->getCurrentValueAsText() == "44.1 kHz" && std::abs (sr->convertFrom0to1 (0.5f) - 15000.0f) < 50.0f,
                "core value text and skew reach the host (" + sr->getCurrentValueAsText() + ")");
-        check (r.run (1.0) > 0.01f, "host playing: the demo break plays");
+        check (r.run (0.5) < 0.0001f, "host playing, no break key: silent (a break plays only when its key triggers it)");
+        juce::MidiBuffer c1;
+        c1.addEvent (juce::MidiMessage::noteOn (1, 36, (juce::uint8) 100), 0);
+        check (r.run (1.0, c1) > 0.01f, "C1 pressed, host playing: the demo break plays");
         r.host.playing = false;
         r.run (0.3);
         check (r.run (0.3) < 0.001f, "host stopped: silent");
-        juce::MidiBuffer c1; c1.addEvent (juce::MidiMessage::noteOn (1, 36, (juce::uint8) 100), 0);
         check (r.run (0.5, c1) > 0.01f, "C1 through processBlock latches the break");
         r.setParam ("volume", -60.0f);
         r.run (0.2);
@@ -117,7 +119,9 @@ static int snapshot (const juce::String& path, int tab, int width, int lcd)
     Rig r;
     if (auto* prm = r.p.apvts.getParameter ("lcdColour")) prm->setValueNotifyingHost (prm->convertTo0to1 ((float) lcd));
     r.p.loadDemo (1);
-    r.run (0.7);
+    juce::MidiBuffer c1;
+    c1.addEvent (juce::MidiMessage::noteOn (1, 36, (juce::uint8) 100), 0);   // the break plays once its key is pressed
+    r.run (0.7, c1);
     r.p.selectSlice (4, false);
     r.p.rollFx();
     if (tab == 4)

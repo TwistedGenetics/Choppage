@@ -271,8 +271,38 @@ namespace bc
         }
     }
 
+    bool Session::audition (const std::string& path)
+    {
+        Decoder dec;
+        { std::lock_guard<std::mutex> q (qMutex); dec = decoder; }
+        AudioFile::Status st = AudioFile::Status::unreadable;
+        auto b = dec ? dec (path, st) : nullptr;
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        if (b == nullptr) { auditionStop(); return false; }
+        auditionKeep.push_back (b);
+        auditionPath = path;
+        eng.publishAudition (std::move (b));
+        return true;
+    }
+
+    void Session::auditionStop()
+    {
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        auditionPath.clear();
+        eng.publishAudition (nullptr);
+    }
+
     void Session::poll()
     {
+        {
+            // auditions the audio thread has let go of (the newest one stays until it is replaced)
+            std::lock_guard<std::recursive_mutex> lk (mutex);
+            if (auditionKeep.size() > 1)
+                auditionKeep.erase (std::remove_if (auditionKeep.begin(), auditionKeep.end() - 1,
+                                                    [] (const SamplePtr& p) { return p.use_count() <= 1; }),
+                                    auditionKeep.end() - 1);
+            if (auditionPath.empty() && ! auditionKeep.empty() && auditionKeep.back().use_count() <= 1) auditionKeep.clear();
+        }
         std::deque<Done> ready;
         { std::lock_guard<std::mutex> l (qMutex); ready.swap (done); }
         std::lock_guard<std::recursive_mutex> lk (mutex);

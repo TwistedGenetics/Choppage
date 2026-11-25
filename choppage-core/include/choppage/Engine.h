@@ -83,6 +83,9 @@ namespace bc
         // ---- message thread --------------------------------------------------------
         void publishContent (int slot, ContentPtr);
         void publishProgram (int slot, const SlotProgram&);
+        // Audition a file from the browser: loops it, dry, at its own speed, until replaced or cleared (nullptr).
+        // The caller keeps the buffer alive until the audio thread has let go of it (Session does).
+        void publishAudition (SamplePtr);
 
         // ---- audio thread --------------------------------------------------------------
         /** Renders n samples into left / right (overwrites). MIDI sorted by offset. */
@@ -120,6 +123,13 @@ namespace bc
         std::array<SlotProgram, kSlots> pendingProgram {};
         std::atomic<uint32_t> pendingVersion { 0 };
         uint32_t seenVersion = 0;
+
+        SamplePtr pendingAudition;
+        std::atomic<uint32_t> auditionVersion { 0 };
+        uint32_t auditionSeen = 0;
+        SamplePtr audition;          // audio thread's copy
+        double auditionPos = 0.0;
+        float auditionFade = 0.0f;   // 0..1, a short fade in so a new file doesn't click
 
         // audio thread's copies
         std::array<ContentPtr, kSlots> content;
