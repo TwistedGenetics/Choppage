@@ -271,6 +271,19 @@ namespace bc
         }
     }
 
+    void Session::setMuteGroup (int slot, int group)
+    {
+        if (slot < 0 || slot >= kSlots) return;
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        slots[(size_t) slot].muteGroup = clampv (group, 0, kMuteGroups - 1);
+        publish (slot);
+    }
+
+    int Session::muteGroup (int slot) const
+    {
+        return slot >= 0 && slot < kSlots ? slots[(size_t) slot].muteGroup : 0;
+    }
+
     bool Session::audition (const std::string& path)
     {
         Decoder dec;
@@ -417,9 +430,9 @@ namespace bc
     void Session::installContent (int slot, ContentPtr c, const std::string& path, bool demo, const std::string* restore)
     {
         auto& s = slots[(size_t) slot];
-        const bool grid = s.gridSlicing; const float sens = s.sensitivity; const int gpb = s.gridPerBar;
+        const bool grid = s.gridSlicing; const float sens = s.sensitivity; const int gpb = s.gridPerBar; const int grp = s.muteGroup;
         s = Slot();
-        s.gridSlicing = grid; s.sensitivity = sens; s.gridPerBar = gpb;
+        s.gridSlicing = grid; s.sensitivity = sens; s.gridPerBar = gpb; s.muteGroup = grp;
         s.content = c;
         keep (c);
         s.file = path;
@@ -446,6 +459,7 @@ namespace bc
             if (kv.count ("grid")) s.gridSlicing = kv["grid"] == "1";
             if (kv.count ("sens")) s.sensitivity = (float) std::atof (kv["sens"].c_str());
             if (kv.count ("gridPerBar")) s.gridPerBar = std::atoi (kv["gridPerBar"].c_str());
+            if (kv.count ("group")) s.muteGroup = clampv (std::atoi (kv["group"].c_str()), 0, kMuteGroups - 1);
         }
         pushHistory (s, s.current);
         if (slot == selectedSlot()) selSlice = 0;
@@ -457,6 +471,7 @@ namespace bc
     {
         auto& s = slots[(size_t) slot];
         s.program.pattern = s.showOriginal ? s.original : s.current;
+        s.program.muteGroup = s.muteGroup;
         eng.publishProgram (slot, s.program);
         changed (slot);
     }
@@ -941,6 +956,7 @@ namespace bc
             o << "demo " << (s.demo ? 1 : 0) << "\n";
             o << "path " << s.file << "\n";
             o << "grid " << (s.gridSlicing ? 1 : 0) << "\nsens " << s.sensitivity << "\ngridPerBar " << s.gridPerBar << "\n";
+            o << "group " << s.muteGroup << "\n";
             if (s.content != nullptr)
             {
                 o << "bpm " << s.content->bpm << "\nbars " << s.content->bars << "\n";
@@ -989,6 +1005,7 @@ namespace bc
             s.gridSlicing = kv["grid"] == "1";
             if (kv.count ("sens")) s.sensitivity = (float) std::atof (kv["sens"].c_str());
             if (kv.count ("gridPerBar")) s.gridPerBar = std::atoi (kv["gridPerBar"].c_str());
+            if (kv.count ("group")) s.muteGroup = clampv (std::atoi (kv["group"].c_str()), 0, kMuteGroups - 1);
             if (kv["demo"] == "1")
             {
                 installContent (i, analyseBreak (DemoBreak::make (44100.0, 170.0), false, 0.62f, 16, &block), "", true, &block);

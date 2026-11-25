@@ -44,6 +44,7 @@ namespace bc
             bool gridSlicing = false;
             float sensitivity = 0.62f;
             int gridPerBar = 16;
+            int muteGroup = 0;                 // 0-3 (kept when another file loads)
             uint32_t version = 0;
         };
 
@@ -117,6 +118,11 @@ namespace bc
         /** Scans `folder` (and its sub-folders, 3 deep) on the worker; entries sorted by BPM then name. */
         /** Browser audition: decodes the file here (the caller's thread, never the audio thread) and loops it dry
             until another file, auditionStop() or a load. Returns false if the file can't be read. */
+        /** Mute group of a break (0-3): breaks in the same group cut each other, different groups play together.
+            It belongs to the slot, so loading another file keeps it. */
+        void setMuteGroup (int slot, int group);
+        int  muteGroup (int slot) const;
+
         bool audition (const std::string& path);
         void auditionStop();
         std::string auditioning() const { return auditionPath; }

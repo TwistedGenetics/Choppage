@@ -602,13 +602,15 @@ def pages():
             [K("reverb", "REVERB"), K("revDecay", "DECAY"), K("revDamp", "DAMP"), K("revWidth", "WIDTH")],
             [K("revPre", "PRE-DELAY"), K("echoMix", "ECHO"), K("echoFb", "ECHO FEEDBACK"), K("echoTime", "ECHO TIME")],
             [T("echoMono", "ECHO MONO")]]},
-        {"fn": 6, "sub": 0, "name": "SET", "rows": [
+        {"fn": 6, "sub": 0, "name": "PLAY", "rows": [
+            [P("gateMode", "GATE (HOW LONG A BREAK PLAYS)", ["LATCH", "HOLD", "ONE SHOT"], span=4)],
+            [P("muteGroup", "MUTE GROUP OF THIS BREAK (SAME GROUP CUTS, OTHERS PLAY TOGETHER)", ["1", "2", "3", "4"], span=4)],
+            [P("breakMode", "BREAK SWITCH (IN A GROUP)", ["RESTART", "BAR SYNC", "QUANT"], span=3), T("velSlice", "VELOCITY\n> SLICE")],
+            [P("trigger", "TRIGGER", ["SYNC", "MIDI"], span=2), P("padNotes", "PAD NOTES (PAD 1)", ["36 C1", "37 MPC", "48 C2"], span=2)]]},
+        {"fn": 6, "sub": 1, "name": "SET", "rows": [
             [P("tempoSrc", "TEMPO SOURCE", ["AUTO", "/2", "X2"], span=2), P("speed", "SPEED", ["0.5X", "1X", "2X"], span=2)],
-            [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2), P("trigger", "TRIGGER", ["SYNC", "MIDI"])],
-            [P("breakMode", "BREAK SWITCH", ["RESTART", "BAR SYNC", "QUANT"], span=2), P("gateMode", "GATE", ["LATCH", "HOLD"]),
-             T("velSlice", "VELOCITY\n> SLICE")],
-            [P("padNotes", "PAD NOTES (PAD 1)", ["36 C1", "37 MPC", "48 C2"], span=2),
-             P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=2)]]},
+            [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2)],
+            [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)]]},
     ]
 
 # ---------------------------------------------------------------- build

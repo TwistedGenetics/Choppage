@@ -205,6 +205,55 @@ static void playbackTests()
         check (rms (held, 0, (int) (0.2 * r.sr)) > 0.01f && rms (held, (int) (0.33 * r.sr)) < 0.001f, "HOLD: plays while held, stops on release");
     }
     {
+        // ONE SHOT: one note plays the pattern to its end, then stops (the note-off doesn't stop it)
+        Rig r;
+        r.autoKey = false;
+        r.set (P_GATE_MODE, 2);
+        const int steps = r.s.slot (0).program.pattern.numSteps;
+        const double stepSec = 60.0 / r.host.bpm / 4.0;
+        auto a = r.run (stepSec * steps * 0.5, { MidiMsg::noteOn (kFirstBreakNote, 100), MidiMsg::noteOff (kFirstBreakNote, 200) });
+        check (rms (a) > 0.01f && r.s.engine().slotStep[0].load() >= 0, "ONE SHOT: a note starts the pattern; its note-off doesn't stop it");
+        r.run (stepSec * steps * 0.5 + 0.05);
+        auto after = r.run (0.4);
+        check (r.s.engine().slotStep[0].load() < 0 && rms (after, (int) (0.05 * r.sr)) < 0.001f,
+               "ONE SHOT: stops at the end of the pattern (" + std::to_string (steps) + " steps)");
+        r.run (0.3, { MidiMsg::noteOn (kFirstBreakNote, 100) });
+        check (r.s.engine().slotStep[0].load() >= 0, "ONE SHOT: the next note plays it again");
+    }
+    {
+        // Mute groups: same group hands over (carrying on from the same point in the bar), different groups layer
+        Rig r;
+        r.autoKey = false;
+        r.s.loadDemo (1);
+        r.s.loadDemo (2);
+        r.s.setMuteGroup (2, 1);
+        check (r.s.muteGroup (2) == 1, "break 3 in mute group 2");
+        r.run (0.3, { MidiMsg::noteOn (kFirstBreakNote, 100) });
+        const int before = r.s.engine().slotStep[0].load();
+        auto hand = r.run (0.01, { MidiMsg::noteOn (kFirstBreakNote + 1, 100) });
+        const int after = r.s.engine().slotStep[1].load();
+        check (r.s.engine().slotStep[0].load() < 0 && after >= 0, "same group: break 2 takes over from break 1");
+        check (after >= before && after <= before + 1, "BAR SYNC: break 2 carries on from the same step (" + std::to_string (before + 1) + " -> "
+                                                       + std::to_string (after + 1) + ")");
+        r.run (0.2, { MidiMsg::noteOn (kFirstBreakNote + 2, 100) });
+        check (r.s.engine().slotStep[1].load() >= 0 && r.s.engine().slotStep[2].load() >= 0, "different groups: break 2 and break 3 play together");
+        check (r.s.engine().slotStep[1].load() % 16 == r.s.engine().slotStep[2].load() % 16, "... in step with each other");
+        auto st = r.s.saveState();
+        Session t;
+        t.prepare (44100.0, 512);
+        t.loadState (st);
+        t.waitUntilIdle();
+        t.poll();
+        check (t.muteGroup (2) == 1 && t.muteGroup (1) == 0, "mute groups are saved with the session");
+        r.s.loadDemo (2);
+        r.s.waitUntilIdle();
+        r.s.poll();
+        check (r.s.muteGroup (2) == 1, "loading another break into a slot keeps its mute group");
+        r.host.playing = false;
+        r.run (0.1);
+        check (r.s.engine().slotStep[1].load() < 0 && r.s.engine().slotStep[2].load() < 0, "MPC / host stop ends both");
+    }
+    {
         Rig r;
         r.host.playing = false;
         r.set (P_TRIGGER, 1);

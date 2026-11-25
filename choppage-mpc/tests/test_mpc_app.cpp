@@ -447,6 +447,29 @@ int main(int argc, char** argv)
         set(app, MP_BREAK, 0);
     }
 
+    std::printf("mute groups and ONE SHOT\n");
+    {
+        set(app, MP_PAD_NOTES, 0);
+        set(app, MP_BREAK, 3);
+        set(app, MP_MUTE_GROUP, 1);
+        CHECK(app.session().muteGroup(3) == 1, "MUTE GROUP sets the selected break's group");
+        set(app, MP_BREAK, 0);
+        CHECK((int)app.getParam(MP_MUTE_GROUP) == app.session().muteGroup(0), "MUTE GROUP follows the selected break");
+        render(app, 8, { MidiMsg::noteOn(36, 100), MidiMsg::noteOn(39, 100) });   // pads 1 and 4
+        settle(app);
+        CHECK(app.session().engine().slotStep[0].load() >= 0 && app.session().engine().slotStep[3].load() >= 0,
+              "pads 1 and 4 (groups 1 and 2) play together");
+        render(app, 4, { MidiMsg::noteOn(36, 100), MidiMsg::noteOn(39, 100) });   // LATCH: again stops both
+        set(app, P_GATE_MODE, 2);
+        std::string gt;
+        app.formatValue(P_GATE_MODE, 2.0f, gt);
+        CHECK(gt == "ONE SHOT", ("GATE has ONE SHOT: " + gt).c_str());
+        set(app, P_GATE_MODE, 0);
+        set(app, MP_BREAK, 3);
+        set(app, MP_MUTE_GROUP, 0);
+        set(app, MP_BREAK, 0);
+    }
+
     std::printf("sections\n");
     set(app, MP_SHOW_PAT, 1);
     CHECK(app.getParam(MP_VIEW) == 3.0f, "the PATTERN bar opens the pattern section");

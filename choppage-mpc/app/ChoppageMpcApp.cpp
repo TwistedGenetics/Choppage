@@ -128,6 +128,7 @@ std::vector<MpcParamDef> buildDefs()
     C("stepRate", "Step FX Rate", { "1/8", "1/16", "1/32", "1/64" }, 1);
     for (int k = 0; k < 16; ++k)
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
+    C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     return v;
 }
 
@@ -209,7 +210,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_FXROW0 + 16, "parameter table");
+    static_assert(kMpcNumParams == MP_MUTE_GROUP + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -505,6 +506,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BRK_PREV: session_.selectSlot((slot + kSlots - 1) % kSlots); break;
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
         case MP_ZOOM: break;   // syncWave follows
+        case MP_MUTE_GROUP: session_.setMuteGroup(slot, roundi(v)); break;
         case MP_SEQ_PAGE: case MP_SEQ_FOLLOW: case MP_SEQ_SEL: seqKey_ = ~0ull; lastVersion_ = ~0u; break;   // syncs follow
         case MP_STEP_FX: case MP_STEP_RATE:
         {
@@ -684,6 +686,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
     put(MP_SL_XFADE, session_.getSliceValue(Session::SliceField::xfade, all));
     put(MP_SL_MUTE, s.program.slice[(size_t)std::clamp(slice, 0, kMaxSlices - 1)].mute ? 1.0f : 0.0f);
     put(MP_SLICING, s.gridSlicing ? 1.0f : 0.0f);
+    put(MP_MUTE_GROUP, (float)session_.muteGroup(slot));
     put(MP_SENS, s.sensitivity);
     put(MP_GRID, s.gridPerBar <= 8 ? 0.0f : s.gridPerBar <= 16 ? 1.0f : 2.0f);
     const int steps = s.program.pattern.numSteps;
@@ -782,21 +785,24 @@ void ChoppageMpcApp::syncReadouts(bool force)
 
     // status line
     const double host = hostBpm_.load();
-    const bool playing = eng.playingSlot.load() >= 0;
+    bool othersPlaying = false;
+    for (int k = 0; k < kSlots; ++k) if (k != slot && eng.slotStep[(size_t)k].load() >= 0) othersPlaying = true;
+    const bool thisPlaying = eng.slotStep[(size_t)slot].load() >= 0;
     if (s.content != nullptr)
     {
         char hostTxt[32];
         if (host > 1.0) std::snprintf(hostTxt, sizeof hostTxt, "MPC %.1f", host);
         else std::snprintf(hostTxt, sizeof hostTxt, "MPC --");
-        std::snprintf(buf, sizeof buf, "%d SLICES  %d BARS  %s  %s%s", s.content->numSlices(), s.content->bars, hostTxt,
-                      playing ? (eng.playingSlot.load() == slot ? "PLAYING" : "PLAYING OTHER") : "STOPPED",
+        std::snprintf(buf, sizeof buf, "%d SLICES  %d BARS  GRP %d  %s  %s%s", s.content->numSlices(), s.content->bars,
+                      session_.muteGroup(slot) + 1, hostTxt,
+                      thisPlaying ? "PLAYING" : othersPlaying ? "OTHER PLAYING" : "STOPPED",
                       s.showOriginal ? "  ORIGINAL" : "");
     }
     else std::snprintf(buf, sizeof buf, "PAD 1-8 PICKS A BREAK  LOAD FROM CONTENT/BREAKS");
     setText(MP_INFO_STATUS, buf);
 
     // the slice playing now
-    const int now = eng.currentSlice.load();
+    const int now = eng.slotSlice[(size_t)slot].load();
     if (now >= 0 && s.content != nullptr && now < s.content->numSlices())
         std::snprintf(buf, sizeof buf, "S%02d %s", now + 1, badgeName(s.content->badges[(size_t)now]));
     else std::snprintf(buf, sizeof buf, "--");
@@ -804,7 +810,7 @@ void ChoppageMpcApp::syncReadouts(bool force)
     setText(MP_INFO_MSG, message_.empty() ? std::string("CHOPPAGE") : message_);
 
     // playhead through the pattern (only while this break plays)
-    const int step = eng.playingSlot.load() == slot ? eng.currentStep.load() : -1;
+    const int step = eng.slotStep[(size_t)slot].load();
     if (force || step != lastStepShown_)
     {
         lastStepShown_ = step;
@@ -873,7 +879,7 @@ void ChoppageMpcApp::syncWave(bool force)
     const int sel = session_.selectedSlice();
     const int theme = std::clamp(roundi(values_[P_LCD_COLOUR].load()), 0, 3);
     auto& eng = session_.engine();
-    const int playing = eng.playingSlot.load() == slot ? eng.currentSlice.load() : -1;
+    const int playing = eng.slotSlice[(size_t)slot].load();
     const uint64_t key = ((uint64_t)session_.version() << 32) ^ ((uint64_t)slot << 24) ^ ((uint64_t)(sel & 0xff) << 16)
                        ^ ((uint64_t)(playing & 0xff) << 8) ^ (uint64_t)(theme << 2) ^ (uint64_t)roundi(values_[MP_ZOOM].load())
                        ^ ((uint64_t)(s.content != nullptr ? s.content->slices.count : 0) << 40)
@@ -954,7 +960,7 @@ void ChoppageMpcApp::syncSeq(bool force)
     const auto& pat = s.program.pattern;
     const int theme = std::clamp(roundi(values_[P_LCD_COLOUR].load()), 0, 3);
     auto& eng = session_.engine();
-    const int now = eng.playingSlot.load() == slot ? eng.currentStep.load() : -1;
+    const int now = eng.slotStep[(size_t)slot].load();
     const int pages = std::max(1, (pat.numSteps + 15) / 16);
     int page = std::clamp(roundi(seen_[MP_SEQ_PAGE]), 0, 3);
     if (seen_[MP_SEQ_FOLLOW] >= 0.5f && now >= 0 && now / 16 != page) page = now / 16;

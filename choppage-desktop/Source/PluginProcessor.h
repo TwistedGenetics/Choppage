@@ -100,6 +100,8 @@ public:
     int   getCurrentStep()  { return sess.engine().currentStep.load(); }
     int   getCurrentSlice() { return sess.engine().currentSlice.load(); }
     int   getPlayingSlot()  { return sess.engine().playingSlot.load(); }
+    int   getStepOf (int slot)  { return slot >= 0 && slot < bc::kSlots ? sess.engine().slotStep[(size_t) slot].load() : -1; }
+    int   getSliceOf (int slot) { return slot >= 0 && slot < bc::kSlots ? sess.engine().slotSlice[(size_t) slot].load() : -1; }
     bool  isPadLit (int p)  { return p >= 0 && p < bc::kFxPads && sess.engine().padLit[(size_t) p].load(); }
     float getPeak()         { return sess.engine().getPeak(); }
     double getHostBpm() const { return hostBpm.load(); }

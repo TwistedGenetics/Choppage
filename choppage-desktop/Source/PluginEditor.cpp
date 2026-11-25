@@ -82,7 +82,7 @@ public:
             c->text = [this, i, key]
             {
                 const auto& s = proc.getSlot (i);
-                const juce::String mark = proc.getPlayingSlot() == i ? u8 ("\xe2\x96\xb6") : juce::String (i + 1);
+                const juce::String mark = proc.getStepOf (i) >= 0 ? u8 ("\xe2\x96\xb6") : juce::String (i + 1);
                 return mark + " " + key + (s.status == ChoppageProcessor::Status::empty ? u8 (" \xe2\x80\x94") : juce::String());
             };
             c->isOn = [this, i] { return proc.getSelectedSlot() == i; };

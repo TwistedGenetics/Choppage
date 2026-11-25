@@ -19,9 +19,12 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 
 The 8 FX pads on the touchscreen work the same way: they play while touched and stop when your finger lifts. Keys on the screen (DICE, UNDO, ADD and so on) light while touched and act once per press.
 
-How long a break plays is set by **SET > GATE**:
-- **LATCH** (the default): it plays until you press the same key again, play another break, or stop the MPC.
+How long a break plays is set by **PLAY > GATE**:
+- **LATCH** (the default): it plays until you press the same key again, play another break in its mute group, or stop the MPC.
 - **HOLD**: it plays for as long as the key, or the note in the MPC's sequence, is held.
+- **ONE SHOT**: one note plays the pattern through to its end, then it stops (the note's length doesn't matter).
+
+**Mute groups (PLAY > MUTE GROUP, per break):** breaks in the same group cut each other. The new one carries on from the same point in the bar (BREAK SWITCH = BAR SYNC, the default), or starts from step 1 (RESTART), or waits for the next beat (QUANT). Breaks in different groups play together, in time with each other. All 8 start in group 1: one break at a time.
 
 If the program's pads send other notes, set **SET > PAD NOTES** to 37 (the MPC's default) or 48. Slices 1–16 of the playing break are on E2–G3, and pattern memories are on G#3–B4. These are the same as the desktop edition.
 
@@ -57,7 +60,11 @@ The sections:
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
-**PATTERN, FX PADS, SOUND / SPACE, SET**: everything else, in rows of four, including the LCD colour (BLUE, GREEN, AMBER, WHITE) and PAD NOTES.
+**PLAY / SET** (press again for SET):
+- PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
+- SET has TEMPO SOURCE, SPEED, FIT and the LCD colour (BLUE, GREEN, AMBER, WHITE).
+
+**PATTERN, FX PADS, SOUND / SPACE**: everything else, in rows of four.
 
 **Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or perc), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, set it with HIT on the SLICE screen.
 

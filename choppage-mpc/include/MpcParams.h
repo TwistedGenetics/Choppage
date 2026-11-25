@@ -69,7 +69,8 @@ enum MpcParam : int
     MP_STEP_FX,                 // the selected step's FX: OFF STUTTER REVERSE STRETCH TAPE STOP
     MP_STEP_RATE,               // its rate: 1/8 1/16 1/32 1/64
     MP_FXROW0,                  // 16 FX row cells under the grid (film strip frame, see fxRowFrame())
-    kMpcParamEnd = MP_FXROW0 + 16
+    MP_MUTE_GROUP = MP_FXROW0 + 16,   // the selected break's mute group (1-4)
+    kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 

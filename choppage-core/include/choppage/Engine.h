@@ -2,7 +2,10 @@
 /*
     Engine — the audio-thread half of CHOPPAGE.
 
-    One break plays at a time. The message thread publishes each slot's audio
+    Mute groups: each of the 8 breaks is in one of 4 groups (all in group 1 by default). One break per group
+    plays at a time: a break note in a group that is playing hands over to the new break, which carries on
+    from the same point in the bar (BAR SYNC) or restarts (RESTART). Breaks in different groups play together.
+    The message thread publishes each slot's audio
     (SlotContent, immutable) and its program (slice settings + pattern, POD)
     under a spin lock; the audio thread picks them up with a try-lock at the
     top of a block, so it never waits and never allocates.
@@ -11,7 +14,9 @@
                       E2-G3 slices 1-16 of the playing break · G#3-B4 pattern memories
 
     SYNC:  the pattern's steps are clocked from the host's song position
-           (or an internal clock when the host is stopped and a break is latched).
+           (or an internal clock when the host is stopped and a break is latched). A break plays only once its
+           key triggers it. GATE: LATCH (until the same key again, another break in its group or the host
+           stopping), HOLD (while the key is held), ONE SHOT (one note plays the pattern to its end, then stops).
     MIDI:  no sequencing; slice notes play slices, break notes pick the break.
 
     Work is done in 64-sample chunks: MIDI and step triggers are sample-exact
@@ -65,7 +70,7 @@ namespace bc
         {
             bool   midiTrigger = false;     // TRIGGER: SYNC (false) / MIDI
             int    breakMode = 1;           // 0 RESTART, 1 BAR SYNC, 2 QUANT
-            bool   gateHold = false;        // GATE: LATCH / HOLD
+            int    gateMode = 0;            // GATE: 0 LATCH, 1 HOLD, 2 ONE SHOT
             bool   velToSlice = false;
             double speed = 1.0;
             bool   fit = true;
@@ -93,9 +98,11 @@ namespace bc
 
         // ---- shared with the UI (atomics) ------------------------------------------------
         std::atomic<int>  selectedSlot { 0 };     // UI / last break note
-        std::atomic<int>  playingSlot  { -1 };    // -1 = silent
-        std::atomic<int>  currentStep  { -1 };
+        std::atomic<int>  playingSlot  { -1 };    // the break played most recently that is still playing; -1 = silent
+        std::atomic<int>  currentStep  { -1 };    // ... its step and slice
         std::atomic<int>  currentSlice { -1 };
+        std::array<std::atomic<int>, kSlots> slotStep {};    // per break: the step playing, -1 when silent
+        std::array<std::atomic<int>, kSlots> slotSlice {};   // per break: the slice playing, -1 when silent
         std::atomic<bool> uiPlay { false };       // the ▶ button (internal clock when the host is stopped)
         std::array<std::atomic<bool>, kFxPads> uiPad {};   // UI / automation pad holds
         std::array<std::atomic<bool>, kFxPads> padLit {};  // pad audible (for the lamps)
@@ -109,8 +116,10 @@ namespace bc
 
         void pullPublished() noexcept;
         void handleMidi (const MidiMsg&, const Settings&) noexcept;
-        void triggerStep (int step, int atSample, const Settings&, double samplesPerStep) noexcept;
-        void playSlice (int slice, int atSample, int gateSamples, const Settings&) noexcept;
+        struct Player;
+        void triggerStep (Player&, int step, int atSample, const Settings&, double samplesPerStep) noexcept;
+        void playSlice (Player&, int slice, int atSample, int gateSamples, const Settings&) noexcept;
+        int  groupOf (int slot) const noexcept { return clampv (program[(size_t) clampv (slot, 0, kSlots - 1)].muteGroup, 0, kMuteGroups - 1); }
         void startStopFromHost (const Host&) noexcept;
         void renderVoices (int from, int to) noexcept;
 
@@ -135,25 +144,32 @@ namespace bc
         std::array<ContentPtr, kSlots> content;
         std::array<SlotProgram, kSlots> program {};
 
-        // sequencer
-        int    activeSlot = 0;
-        int    pendingSlot = -1;          // QUANT waits for the next beat
-        bool   latched = false;           // a break note turned it on (host stopped / HOLD off)
-        int    heldBreakNote = -1;
-        double stepPos = 0.0;             // in 16ths since the pattern's step 0
-        double syncOffset = 0.0;          // stepPos - host position in 16ths (0 when on the bar grid)
-        int64_t lastStepGlobal = std::numeric_limits<int64_t>::min();
+        // sequencer: one player per mute group
+        struct Player
+        {
+            int    activeSlot = 0;
+            int    pendingSlot = -1;          // QUANT waits for the next beat
+            bool   latched = false;           // a break note turned it on
+            int    heldBreakNote = -1;
+            bool   oneShot = false, oneShotArm = false;   // ONE SHOT: stop at oneShotEnd (worked out on the next step)
+            int64_t oneShotEnd = std::numeric_limits<int64_t>::max();
+            double stepPos = 0.0;             // in 16ths since the pattern's step 0
+            double syncOffset = 0.0;          // stepPos - host position in 16ths (0 when on the bar grid)
+            int64_t lastStepGlobal = std::numeric_limits<int64_t>::min();
+            bool   wasRunning = false, restartNow = false, restartFromNote = false;
+            int    startStepOffset = 0;
+            int    step = -1, slice = -1;
+            // voices: the new slice fades in while the old one fades out
+            std::array<SliceVoice, 3> voices;
+            int nextVoice = 0;
+        };
+        std::array<Player, kMuteGroups> players;
+        int    lastPlayer = 0;                // the group played most recently (slice / memory notes, the clock)
         double internalPpq = 0.0;
-        bool   wasRunning = false, wasHostPlaying = false, halfTimeWas = false;
-        bool   restartNow = false, restartFromNote = false;
+        bool   wasHostPlaying = false;
         double lastHostBpm = 120.0;
         int    renderedUpTo = 0;
         int    pendingSliceNote = -1;
-        int    startStepOffset = 0;
-
-        // voices: the new slice fades in while the old one fades out
-        std::array<SliceVoice, 3> voices;
-        int nextVoice = 0;
         float mix[2][kChunk] {};
 
         // FX

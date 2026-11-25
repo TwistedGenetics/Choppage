@@ -231,9 +231,9 @@ namespace ui
         }
 
         // play head: the slice playing now
-        if (proc.getPlayingSlot() == proc.getSelectedSlot() && proc.getCurrentSlice() >= 0)
+        if (proc.getSliceOf (proc.getSelectedSlot()) >= 0)
         {
-            const auto reg = c.region (proc.getCurrentSlice());
+            const auto reg = c.region (proc.getSliceOf (proc.getSelectedSlot()));
             g.setColour (lcdc().mark);
             g.fillRect (xForSample (reg.start), r.getY(), juce::jmax (4, (xForSample (reg.end) - xForSample (reg.start)) / 6), 6);
         }
@@ -488,7 +488,7 @@ namespace ui
         const auto& pat = s.program.pattern;
         const int cols = visibleSteps();
         const int first = page * 32;
-        const int playing = proc.getPlayingSlot() == proc.getSelectedSlot() ? proc.getCurrentStep() : -1;
+        const int playing = proc.getStepOf (proc.getSelectedSlot());
 
         g.setFont (lcd (20.0f));
         g.setColour (lcdc().ink);
@@ -661,8 +661,8 @@ namespace ui
         const auto& s = proc.getSlot (proc.getSelectedSlot());
         if (s.program.pattern.numSteps <= 32) grid.page = 0;
         // follow the play head onto page 2
-        const int st = proc.getCurrentStep();
-        if (proc.getPlayingSlot() == proc.getSelectedSlot() && st >= 0 && s.program.pattern.numSteps > 32) grid.page = st / 32;
+        const int st = proc.getStepOf (proc.getSelectedSlot());
+        if (proc.getStepOf (proc.getSelectedSlot()) >= 0 && st >= 0 && s.program.pattern.numSteps > 32) grid.page = st / 32;
         grid.repaint();
         for (auto& t : tools) t->repaint();
         for (auto& m : memories) m->repaint();
@@ -842,6 +842,11 @@ namespace ui
         addChoice (P::trigger); addText ("BREAK"); addValue (P::breakMode, "", 150);
         addRow ("", "GATE");
         addChoice (P::gateMode); addText ("VEL>SLICE"); addBool (P::velSlice, "ON", "OFF");
+        addRow ("", "MUTE GROUP");
+        for (int g = 0; g < bc::kMuteGroups; ++g)
+            addAction (juce::String (g + 1), [this, g] { proc.session().setMuteGroup (proc.getSelectedSlot(), g); },
+                       [this, g] { return proc.session().muteGroup (proc.getSelectedSlot()) == g; });
+        addText ("(THIS BREAK - SAME GROUP CUTS)");
         addRule();
         addRow ("SOUND", "CHARACTER");
         addValue (P::character, "", 160); addText ("LCD"); addChoice (P::lcdColour);

@@ -54,7 +54,7 @@ namespace bc
             C ("fitMode", "Fit Mode", { "REPITCH", "KEEP" }, 0);
             C ("trigger", "Trigger", { "SYNC", "MIDI" }, 0);
             C ("breakMode", "Break Switch", { "RESTART", "BAR SYNC", "QUANT" }, 1);
-            C ("gateMode", "Gate", { "LATCH", "HOLD" }, 0);
+            C ("gateMode", "Gate", { "LATCH", "HOLD", "ONE SHOT" }, 0);
             B ("velSlice", "Velocity To Start Slice", false);
             C ("tempoSrc", "Tempo Source", { "AUTO", "/2", "X2" }, 0);
             C ("padQuant", "Pad Quantise", { "OFF", "1/16", "1/8" }, 1);
@@ -153,7 +153,7 @@ namespace bc
         Engine::Settings s;
         s.midiTrigger = i (P_TRIGGER) == 1;
         s.breakMode   = i (P_BREAK_MODE);
-        s.gateHold    = i (P_GATE_MODE) == 1;
+        s.gateMode    = i (P_GATE_MODE);
         s.velToSlice  = v[P_VEL_SLICE] > 0.5f;
         s.speed       = speedFactor (i (P_SPEED));
         s.fit         = v[P_FIT] > 0.5f;

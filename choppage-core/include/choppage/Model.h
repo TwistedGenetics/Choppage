@@ -123,11 +123,14 @@ namespace bc
     };
 
     /** Everything the audio thread needs to play one slot apart from the audio. */
+    constexpr int kMuteGroups = 4;
+
     struct SlotProgram
     {
         std::array<SliceParams, kMaxSlices> slice {};
         GlobalSliceParams all;
         Pattern pattern;
+        int muteGroup = 0;   // 0-3: breaks in the same group cut each other; different groups play together
     };
 
     /** Styles the generator knows. */
