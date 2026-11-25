@@ -22,7 +22,20 @@ struct FakePlatform : IPlatform
     std::map<int, int> notified;
     const char* platformName() const override { return "test"; }
     std::string contentDir() const override { return dir; }
-    void notifyParameter(int index, float v) override { ++notified[index]; if (app) app->setParam(index, v); }
+    // The MPC stores a parameter as 0..1 and hands the plugin back min + (max - min) x norm^(1/skew): a skewed
+    // value does not come back exactly as it was written. Do the same here.
+    void notifyParameter(int index, float v) override
+    {
+        ++notified[index];
+        const auto& d = mpcParamDef(index);
+        if (d.kind == MpcKind::Float && d.max > d.min)
+        {
+            const float lin = std::clamp((v - d.min) / (d.max - d.min), 0.0f, 1.0f);
+            const float norm = d.skew != 1.0f ? std::clamp(std::pow(lin, d.skew), 0.0f, 1.0f) : lin;
+            v = d.skew != 1.0f ? d.min + (d.max - d.min) * std::pow(norm, 1.0f / d.skew) : d.min + (d.max - d.min) * norm;
+        }
+        if (app) app->setParam(index, v);
+    }
 };
 
 static void render(ChoppageMpcApp& app, int blocks, std::vector<MidiMsg> midi = {}, bool playing = true)
@@ -278,11 +291,25 @@ int main(int argc, char** argv)
     CHECK(t.find("AKAIZED") == 0, ("akaize message: " + t).c_str());
     CHECK(std::filesystem::exists(dir / "Renders") && !std::filesystem::is_empty(dir / "Renders"), "render written to Content/Renders");
 
+    {
+        // nothing the plugin writes may keep re-sending itself (the MPC's screen would never settle)
+        for (int i = 0; i < 20; ++i) app.tick();
+        const auto before = pf.notified;
+        for (int i = 0; i < 60; ++i) app.tick();
+        int busiest = -1, most = 0;
+        for (auto& [k, n] : pf.notified) { const int d = n - (before.count(k) ? before.at(k) : 0); if (d > most) { most = d; busiest = k; } }
+        CHECK(most <= 2, ("idle: parameter " + std::to_string(busiest) + " re-sent " + std::to_string(most) + " times").c_str());
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);
         set(app, P_AKR_CYC_LEN, 400.0f);
-        CHECK(app.getParam(P_AKR_CYC_FREQ) == 102.0f, "CYCLE FREQ follows LENGTH (400 -> 102) while MANUAL is off");
+        CHECK(std::fabs(app.getParam(P_AKR_CYC_FREQ) - 102.0f) < 0.05f, "CYCLE FREQ follows LENGTH (400 -> 102) while MANUAL is off");
+        {
+            const int n0 = pf.notified[P_AKR_CYC_FREQ];
+            for (int i = 0; i < 60; ++i) app.tick();
+            CHECK(pf.notified[P_AKR_CYC_FREQ] - n0 <= 1, ("linked FREQ settles (re-sent " + std::to_string(pf.notified[P_AKR_CYC_FREQ] - n0) + " times)").c_str());
+        }
         set(app, P_AKR_FREQ_MAN, 1.0f);
         set(app, P_AKR_CYC_FREQ, 700.0f);
         CHECK(app.getParam(P_AKR_CYC_FREQ) == 700.0f, "MANUAL keeps a hand-set CYCLE FREQ");

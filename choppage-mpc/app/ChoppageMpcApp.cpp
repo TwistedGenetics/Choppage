@@ -433,7 +433,8 @@ void ChoppageMpcApp::tick()
     {
         if (values_[man].load() > 0.5f) continue;
         const float linked = (float)akaizeFreq(values_[len].load(), values_[freq].load(), false);
-        if (values_[freq].load() != linked) write(freq, linked);
+        // (the MPC hands a skewed value back a hair off what was written: compare loosely, or this re-sends every tick)
+        if (std::fabs(values_[freq].load() - linked) > 0.25f) write(freq, linked);
     }
 
     if (dragTicks_ > 0 && --dragTicks_ == 0) lastVersion_ = ~0u;   // the drag ended: the strip snaps to the marker
