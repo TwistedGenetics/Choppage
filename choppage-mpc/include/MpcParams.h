@@ -43,9 +43,50 @@ enum MpcParam : int
     MP_INFO_NAME, MP_INFO_BPM, MP_INFO_STATUS, MP_INFO_SLICE, MP_INFO_MSG,
     MP_PLAYHEAD,                // 0..1 through the pattern (drives the playhead bar on the LCD)
     MP_STEP0,                   // 64 step knobs: 0 = rest, k = slice k
-    kMpcParamEnd = MP_STEP0 + 64
+    // ---- 0.3: the BR3AK main screen and the waveform (appended: indices above stay put)
+    MP_VIEW = MP_STEP0 + 64,    // main page section: MAIN (FX pads + knobs) 0, FX 1, DISK 2, PATTERN 3 (app-written)
+    MP_SHOW_PAT, MP_SHOW_FX, MP_SHOW_DISK,   // the PATTERN / FX bars and LOAD: tap to open that section, again to close
+    MP_BRK_PREV, MP_BRK_NEXT,   // triggers: the LCD's arrows either side of the break name
+    MP_SL_MOVE,                 // the selected slice's marker, 0..1 through the break
+    MP_SL_NUDGE_L, MP_SL_NUDGE_R, MP_SL_ADD, MP_SL_DEL,   // triggers
+    MP_ZOOM,                    // the waveform shows ALL of the break or the selected SLICE
+    MP_WAVE_TAP,                // a tap on the waveform: column + 1 (springs back to 0)
+    MP_LIST_TAP,                // a tap on a DISK list line: line + 1 (springs back to 0)
+    MP_INFO_SLPARAMS,           // readout: the selected slice's settings in one line
+    MP_LIST0,                   // readouts: 5 lines of the DISK list
+    MP_WAVE0 = MP_LIST0 + 5,    // waveform columns (film strip frame, see waveFrame())
+    MP_TAB0 = MP_WAVE0 + 84,    // the hit-letter row under the waveform (film strip frame, see tabFrame())
+    // the BR3AK SEQ grid: 6 lanes (KICK SNARE GHOST HAT OPEN FX) x 16 steps of the page shown
+    MP_SEQ_PAGE = MP_TAB0 + 84, // steps 1-16 / 17-32 / 33-48 / 49-64
+    MP_SEQ_FOLLOW,              // the page follows the playhead
+    MP_SEQ_TAP,                 // a tap on the grid: lane * 16 + column + 1 (springs back to 0)
+    MP_SEQ_HEAD,                // the step-number row: theme * 17 + (0 = not playing here, 1-16 = the step playing)
+    MP_CELL0,                   // 96 grid cells (film strip frame, see cellFrame())
+    MP_VSTEP0 = MP_CELL0 + 96,  // 16 step knobs for the page shown (the Q-Links on the SEQ screens)
+    MP_INFO_BRK = MP_VSTEP0 + 16,   // readout: "BRK 3" (the SEQ page's corner)
+    kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
+
+// The waveform on the MPC: kWaveCols picture columns, each a film strip whose frame the app picks.
+// wave frame = ((theme * 3 + look) * 2 + mark) * kWaveLevels + level
+//   theme: LCD colour 0-3, look: 0 plain / 1 selected slice / 2 slice playing now, mark: slice marker in this column,
+//   level: 0 silence .. kWaveLevels-1 full scale.
+// tab frame = theme * kTabFrames + t; t: 0 none, 1-6 a slice starts here (K S G H O X), 7-12 the same selected,
+//   13 inside a slice, 14 inside the selected slice.
+constexpr int kWaveCols = 84;
+constexpr int kWaveLevels = 12;
+constexpr int kWaveFrames = 4 * 3 * 2 * kWaveLevels;
+constexpr int kTabFrames = 15;
+constexpr int kListLines = 5;
+inline int waveFrame(int theme, int look, int mark, int level) { return ((theme * 3 + look) * 2 + mark) * kWaveLevels + level; }
+inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
+
+// SEQ grid cells: cell frame = theme * kCellFrames + c; c: 0 empty, 1 empty on a beat, 2-65 a hit playing slice
+// c - 1, 66-81 an FX step (type 1-4 x rate 8 / 16 / 32 / 64). The step row: theme * 17 + step (0 = none).
+constexpr int kSeqLanes = 6;
+constexpr int kCellFrames = 82;
+inline int cellFrame(int theme, int c) { return theme * kCellFrames + c; }
 
 enum class MpcKind { Float, Int, Bool, Choice };
 
@@ -59,10 +100,12 @@ struct MpcParamDef
     bool hidden = false;               // filler: not on any page, not automatable
     bool readout = false;              // written by the plugin only
     bool trigger = false;              // momentary: the app acts on 1 and puts it back to 0
+    bool uiOnly = false;               // a screen control (view, taps): not automatable
 };
 
 const MpcParamDef& mpcParamDef(int index);
 bool isStepParam(int index);
+bool isPictureParam(int index);   // the playhead, waveform columns and tabs: film-strip frames, no text
 // The notes pad 1 plays for each MP_PAD_NOTES choice.
 int padBaseNote(int choice);
 

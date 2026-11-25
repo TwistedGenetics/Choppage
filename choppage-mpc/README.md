@@ -1,5 +1,7 @@
 # CHOPPAGE for MPC
 
+![MAIN](../docs/mpc-main.png)
+
 CHOPPAGE as a plugin on standalone Akai MPCs (MPC OS 3.10.1 or later). The folder carries both builds: 32-bit (Gen 1) and 64-bit (Gen 2); the MPC picks the right one.
 It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front panel. **This edition is untested on hardware.**
 
@@ -12,28 +14,46 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 ## Pads
 | Pads | Notes (default) | What |
 |---|---|---|
-| 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. Hit one to switch to it; it plays locked to the MPC's tempo |
+| 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. Hit one to switch to it; it plays locked to the MPC's tempo, and **every screen changes to that break**: the LCD, the waveform and slices, the SEQ grid, the slice settings |
 | 9–16 (top two rows) | G#1–D#2 (44–51) | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP |
 
 If the program's pads send other notes, set **SET > PAD NOTES** to 37 (the MPC's default) or 48. Slices 1–16 of the playing break are on E2–G3, and pattern memories are on G#3–B4. These are the same as the desktop edition.
 
-## Pages (the function keys under the screen)
-The S950 LCD across the top shows the break, its tempo, slices and bars, the MPC tempo, the slice playing now and a playhead bar. Turn a knob on screen, or use the Q-Links: each row of four controls is one bank of four Q-Links. Double-tap a knob for a big knob overlay.
+## Screens (the function keys under the MPC's screen)
+Double-tap a knob for a big knob overlay. The Q-Links follow each screen, in rows of four.
 
-| Page | Controls |
-|---|---|
-| SAMPLE | BREAK, BROWSE (files in Content/Breaks) + LOAD, PATTERN dice + AMOUNT, FX dice + AMOUNT, UNDO / REDO, ORIGINAL, PLAY (CHOPPAGE's own clock while the MPC is stopped), AKAIZE TO MPC BPM, DEMO BREAK |
-| SLICE | SLICE, PITCH, GATE, STRETCH, REVERSE, STUTTER, TRANSIENT, XFADE, EDIT ALL SLICES, MUTE, HIT (K S G H O X), SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID, RESLICE |
-| SEQ (press again for 17-32, 33-48, 49-64) | 16 step knobs: each step's slice (-- = rest). Q-Links 1-16 are steps 1-16 |
-| PATTERN | LENGTH, STYLE, LAYERS, SWING, CLEAR, MEMORY + SAVE / RECALL |
-| FX PADS | the pads' rates and times, PAD QUANTISE |
-| SOUND (press again for SPACE) | CHARACTER, SAMPLE RATE, VOLUME, FILTER, RESONANCE, DISTORTION, CRUSH, REVERB, ECHO |
-| SET | TEMPO SOURCE, SPEED, FIT, TRIGGER, BREAK SWITCH, GATE, VELOCITY > SLICE, PAD NOTES, LCD colour |
+**MAIN** is the desktop's main screen in the BR3AK arrangement. The S950 LCD has:
+- ▶ (CHOPPAGE's own clock while the MPC is stopped), ◀ BREAK NAME ▶, LOAD and the tempo.
+- The 8 break keys.
+- The break's **waveform with its slice markers** (the selected slice in a yellow box, the slice playing now lit up) and the hit letter (K S G H O X) of every slice. Tap the waveform to pick and hear a slice.
+- The selected slice's settings and the status line.
 
-**AKAIZE TO MPC BPM** renders the break time-stretched to the MPC's tempo the Akaizer way, writes it to `Content/Renders`, and loads it back into the same break.
+Under the LCD:
+- **PATTERN** and **FX** bars. The dice square rolls; tap the bar to open that section, and tap it again to come back.
+- The 8 FX pads, with their settings.
+- FILTER, DISTORTION, CRUSH and REVERB, with SAMPLE RATE and VOLUME either side.
+
+The sections:
+- **PATTERN** turns the LCD into the SEQ grid (below), with LENGTH, STEPS SHOWN, FOLLOW, ORIGINAL, CLEAR, STYLE, SWING, MEMORY, SAVE, RECALL, UNDO and REDO underneath.
+- **FX** puts each pad's setting knob under it.
+- **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo (tap one), BROWSE, LOAD, DEMO BREAK and AKAIZE TO MPC BPM.
+
+**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE. The **slice markers move as you edit them** with MOVE MARKER, NUDGE < >, ADD (split) and DELETE (join).
+- SLICE has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
+- CHOP has EDIT ALL SLICES, HIT (correct a hit letter), SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID and RESLICE.
+
+**SEQ** is the BR3AK pattern editor: a row each for KICK, SNARE, GHOST, HAT and OPEN, plus the FX lane, over 16 steps. A hit shows the number of the slice it plays.
+- Tap a cell to put a hit of that kind there, or take it off.
+- Tap the FX lane to step through STUTTER, REVERSE, STRETCH, TAPE STOP and off.
+- Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
+- The 16 Q-Links set the slice of the 16 steps shown.
+
+**PATTERN, FX PADS, SOUND / SPACE, SET**: everything else, in rows of four, including the LCD colour (BLUE, GREEN, AMBER, WHITE) and PAD NOTES.
+
+**Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or other), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, fix it with HIT on the CHOP screen.
 
 ## What the MPC can't do
-- **No waveform:** MPC plugin screens are built from the SDK's widgets, so there's no drawing area for a waveform. The LCD shows readouts and a playhead instead. The desktop edition draws the waveform.
+- **Coarser waveform:** MPC plugin screens have no drawing area, so the waveform is made of 84 picture columns the plugin sets (the approach Twisted MPC Breaks uses). It's less detailed than the desktop's.
 - **No pad colours:** plugins can't light the MPC's pads.
 - **Content folder only:** the plugin can only read files in its own `Content` folder.
 
@@ -44,5 +64,6 @@ Builds run on GitHub Actions: `choppage-mpc/build.sh` uses the official [MPC Plu
 |---|---|
 | `src/ChoppageMpc.cpp` | The whole MPC-specific layer: `mpc::Plugin` adapter |
 | `app/ChoppageMpcApp.cpp`, `include/` | Platform-independent app: parameter table, mirrors, readouts, worker (tested on desktop by `tests/test_mpc_app.cpp`) |
-| `tools/make_skin.py` | Generates `skins/` (TUI.json, Q-Links.json, PNGs) from `tools/params.json` (`test_mpc_app --dump`) |
+| `tools/make_skin.py` | Generates `skins/` (TUI.json, Q-Links.json, PNGs) from `tools/params.json` (`test_mpc_app --dump`), and checks the hardware rules (no label over a touch area, focus frame first) |
+| `tools/preview_skin.py` | Draws the screens from the generated TUI.json with real values (`test_mpc_app --state`), to check a layout without an MPC |
 | `tools/sync_core.sh` | One `src/core_*.cpp` wrapper per core source |

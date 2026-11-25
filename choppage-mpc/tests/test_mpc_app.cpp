@@ -4,6 +4,7 @@
 #include "choppage/DemoBreak.h"
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #include <map>
 #include <set>
@@ -69,9 +70,55 @@ static int dump(const char* path)
     return 0;
 }
 
+// --state out.json: every parameter's value and text after a representative session (demo break, a rolled
+// pattern, slice 5 selected, playing), for tools/make_skin.py --preview (a true layout check of TUI.json).
+static int state(const char* path, int lcd, int view)
+{
+    const auto dir = std::filesystem::temp_directory_path() / "choppage-mpc-state";
+    std::filesystem::create_directories(dir / "Breaks");
+    for (double bpm : { 136.0, 160.0, 170.0, 174.0, 178.0 })
+    {
+        auto b = DemoBreak::make(44100.0, bpm);
+        const float* ch[2] = { b->ch[0].data(), b->ch[1].data() };
+        AudioFile::writeWav24((dir / "Breaks" / ("think_break_" + std::to_string((int)bpm) + ".wav")).string(), ch, 2, b->numSamples, 44100.0);
+    }
+    FakePlatform pf;
+    pf.dir = dir.string();
+    ChoppageMpcApp app(pf, false);
+    pf.app = &app;
+    app.prepare(44100.0, 512);
+    settle(app);
+    set(app, MP_DICE_PAT, 1);
+    set(app, MP_DICE_FX, 1);
+    set(app, MP_SLICE, 5);
+    set(app, MP_BROWSE, 2);
+    set(app, P_LCD_COLOUR, (float)lcd);
+    if (view > 0) set(app, MP_SHOW_PAT + view - 1, 1);
+    set(app, P_PAD1 + 2, 1);
+    render(app, 60, { MidiMsg::noteOn(36, 100) });
+    settle(app);
+    FILE* f = std::fopen(path, "w");
+    if (!f) return 1;
+    std::fprintf(f, "{\n");
+    for (int i = 0; i < kMpcNumParams; ++i)
+    {
+        std::string t;
+        const float v = app.getParam(i);
+        if (!app.formatValue(i, v, t)) t = "";
+        std::string e;
+        for (char c : t) { if (c == '"' || c == '\\') e += '\\'; e += c; }
+        std::fprintf(f, "  \"%d\": [%g, \"%s\"]%s\n", i, v, e.c_str(), i + 1 < kMpcNumParams ? "," : "");
+    }
+    std::fprintf(f, "}\n");
+    std::fclose(f);
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
     if (argc >= 3 && std::string(argv[1]) == "--dump") return dump(argv[2]);
+    if (argc >= 3 && std::string(argv[1]) == "--state")
+        return state(argv[2], argc >= 4 ? std::atoi(argv[3]) : 0, argc >= 5 ? std::atoi(argv[4]) : 0);
     std::printf("parameter table\n");
     {
         std::set<std::string> ids;
@@ -202,6 +249,143 @@ int main(int argc, char** argv)
     app.formatValue(MP_INFO_MSG, 0, t);
     CHECK(t.find("AKAIZED") == 0, ("akaize message: " + t).c_str());
     CHECK(std::filesystem::exists(dir / "Renders") && !std::filesystem::is_empty(dir / "Renders"), "render written to Content/Renders");
+
+    std::printf("waveform\n");
+    {
+        set(app, MP_BREAK, 0);
+        set(app, MP_ZOOM, 0);
+        const auto& c = *app.session().slot(0).content;
+        int lit = 0, marks = 0, tabsStart = 0;
+        for (int k = 0; k < kWaveCols; ++k)
+        {
+            const int f = (int)std::lround(app.getParam(MP_WAVE0 + k));
+            lit += f % kWaveLevels > 0;
+            marks += (f / kWaveLevels) % 2;
+            const int t = (int)std::lround(app.getParam(MP_TAB0 + k)) % kTabFrames;
+            tabsStart += t >= 1 && t <= 12;
+        }
+        CHECK(lit > kWaveCols / 2, "the waveform columns show the break");
+        CHECK(marks >= std::min(c.slices.count, kWaveCols) / 2 && marks <= c.slices.count, "slice markers in the waveform");
+        CHECK(tabsStart == marks, "a hit letter under every marker");
+
+        set(app, MP_SLICE, 4);
+        const int before = c.slices.starts[3];
+        std::vector<int> wBefore;
+        for (int k = 0; k < kWaveCols; ++k) wBefore.push_back((int)std::lround(app.getParam(MP_WAVE0 + k)));
+        set(app, MP_SL_NUDGE_R, 1);
+        const int after = app.session().slot(0).content->slices.starts[3];
+        CHECK(after > before, "NUDGE > moves the marker later");
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.02f);
+        const int moved = app.session().slot(0).content->slices.starts[3];
+        CHECK(moved > after && moved < app.session().slot(0).content->slices.starts[4], "MOVE moves the marker, never past the next one");
+        int changed = 0;
+        for (int k = 0; k < kWaveCols; ++k) changed += (int)std::lround(app.getParam(MP_WAVE0 + k)) != wBefore[(size_t)k];
+        CHECK(changed > 0, "the waveform redraws as the marker moves");
+
+        const int count = app.session().slot(0).content->slices.count;
+        set(app, MP_SL_ADD, 1);
+        CHECK(app.session().slot(0).content->slices.count == count + 1 && app.session().selectedSlice() == 4, "ADD splits the slice");
+        set(app, MP_SL_DEL, 1);
+        CHECK(app.session().slot(0).content->slices.count == count && app.session().selectedSlice() == 3, "DELETE joins it back");
+
+        set(app, MP_WAVE_TAP, 1);
+        CHECK(app.session().selectedSlice() == 0 && app.getParam(MP_WAVE_TAP) == 0.0f, "a tap on the first column picks slice 1");
+        set(app, MP_SLICE, 6);
+        set(app, MP_ZOOM, 1);
+        const auto r = app.session().slot(0).content->slices.region(5, app.session().slot(0).content->buffer->numSamples);
+        int selCols = 0;
+        for (int k = 0; k < kWaveCols; ++k) selCols += ((int)std::lround(app.getParam(MP_WAVE0 + k)) / (2 * kWaveLevels)) % 3 == 1;
+        CHECK(selCols > kWaveCols / 3 && r.length() > 0, "ZOOM SLICE fills the screen with the selected slice");
+
+        set(app, P_LCD_COLOUR, 2);
+        CHECK((int)std::lround(app.getParam(MP_WAVE0)) / (3 * 2 * kWaveLevels) == 2, "LCD AMBER picks the amber frames");
+        set(app, P_LCD_COLOUR, 0);
+        set(app, MP_ZOOM, 0);
+
+        set(app, MP_BRK_NEXT, 1);
+        CHECK(app.session().selectedSlot() == 1, "break > steps to the next break");
+        set(app, MP_BRK_PREV, 1);
+        set(app, MP_BRK_PREV, 1);
+        CHECK(app.session().selectedSlot() == 7, "break < wraps to break 8");
+        set(app, MP_BREAK, 0);
+
+        app.formatValue(MP_INFO_SLPARAMS, 0, t);
+        CHECK(t.find("PITCH") != std::string::npos && t.find("XFADE") != std::string::npos, ("slice line: " + t).c_str());
+        set(app, MP_LIST_TAP, 2);
+        CHECK((int)app.getParam(MP_BROWSE) == 1 && app.getParam(MP_LIST_TAP) == 0.0f, "a tap on list line 2 picks file 2");
+        app.formatValue(MP_LIST0 + 1, 0, t);
+        CHECK(t.find("> ") == 0, ("picked list line: " + t).c_str());
+    }
+
+    std::printf("SEQ grid\n");
+    {
+        set(app, MP_BREAK, 0);
+        set(app, MP_SEQ_FOLLOW, 0);
+        set(app, MP_SEQ_PAGE, 0);
+        set(app, MP_DICE_PAT, 1);
+        const auto& pat = app.session().slot(0).program.pattern;
+        const auto& c = *app.session().slot(0).content;
+        int shown = 0, hits = 0;
+        for (int col = 0; col < 16; ++col)
+        {
+            if (pat.slice[(size_t)col] >= 0) ++hits;
+            for (int lane = 0; lane < 5; ++lane)
+            {
+                const int f = (int)std::lround(app.getParam(MP_CELL0 + lane * 16 + col)) % kCellFrames;
+                if (f >= 2 && f < 66) { ++shown; CHECK(f - 2 == pat.slice[(size_t)col], "a grid cell shows its slice number"); break; }
+            }
+        }
+        CHECK(shown == hits, "every hit of steps 1-16 is on the grid, in its hit's lane");
+        int emptyStep = -1;
+        for (int col = 0; col < 16 && emptyStep < 0; ++col) if (pat.slice[(size_t)col] < 0) emptyStep = col;
+        if (emptyStep >= 0)
+        {
+            set(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);   // KICK lane
+            const int sl = app.session().slot(0).program.pattern.slice[(size_t)emptyStep];
+            CHECK(sl >= 0 && c.badges[(size_t)sl] == Badge::kick, "a tap on an empty KICK cell puts a kick there");
+            set(app, MP_SEQ_TAP, 0 * 16 + emptyStep + 1);
+            CHECK(app.session().slot(0).program.pattern.slice[(size_t)emptyStep] < 0, "a second tap takes it off");
+        }
+        set(app, MP_SEQ_TAP, 5 * 16 + 3 + 1);              // FX lane, step 4
+        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::stutter, "a tap on the FX lane adds STUTTER");
+        set(app, MP_SEQ_TAP, 5 * 16 + 3 + 1);
+        CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::reverse, "... then REVERSE");
+        set(app, MP_VSTEP0 + 2, 9);
+        CHECK(app.session().slot(0).program.pattern.slice[2] == 8, "step knob 3 sets step 3's slice");
+        set(app, MP_SEQ_PAGE, 1);
+        set(app, MP_VSTEP0 + 2, 7);
+        CHECK(app.session().slot(0).program.pattern.slice[18] == 6, "on page 17-32 step knob 3 is step 19");
+        set(app, MP_SEQ_PAGE, 0);
+    }
+
+    std::printf("a break pad switches every screen\n");
+    {
+        set(app, MP_BREAK, 0);
+        set(app, MP_DICE_PAT, 1);
+        app.session().loadDemo(3);
+        settle(app);
+        const int wave0 = (int)std::lround(app.getParam(MP_WAVE0 + 10));
+        const int cells0 = (int)std::lround(app.getParam(MP_VSTEP0));
+        set(app, MP_PAD_NOTES, 0);
+        render(app, 4, { MidiMsg::noteOn(36 + 3, 100) });   // pad 4 (notes 36-51)
+        settle(app);
+        std::string nm;
+        app.formatValue(MP_INFO_NAME, 0, nm);
+        CHECK(app.session().selectedSlot() == 3 && nm.find("BREAK 4/8") == 0, ("pad 4: the LCD shows break 4: " + nm).c_str());
+        const auto& pat4 = app.session().slot(3).program.pattern;
+        CHECK((int)std::lround(app.getParam(MP_VSTEP0)) == pat4.slice[0] + 1, "the SEQ grid / step knobs show break 4's pattern");
+        CHECK((int)std::lround(app.getParam(MP_SL_PITCH)) == (int)app.session().slot(3).program.slice[(size_t)app.session().selectedSlice()].pitch,
+              "the slice controls show break 4's slice");
+        (void)wave0; (void)cells0;
+    }
+
+    std::printf("sections\n");
+    set(app, MP_SHOW_PAT, 1);
+    CHECK(app.getParam(MP_VIEW) == 3.0f, "the PATTERN bar opens the pattern section");
+    set(app, MP_SHOW_FX, 1);
+    CHECK(app.getParam(MP_VIEW) == 1.0f && app.getParam(MP_SHOW_PAT) == 0.0f, "the FX bar swaps to the FX section");
+    set(app, MP_SHOW_FX, 0);
+    CHECK(app.getParam(MP_VIEW) == 0.0f, "tapping FX again goes back to MAIN");
 
     std::printf("state\n");
     const std::string st = app.saveState();

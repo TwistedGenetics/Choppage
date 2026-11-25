@@ -50,9 +50,10 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 Saved with the project: breaks (by path), slices, badges, slice settings, pattern, FX lane and memories.
 
 ## MPC edition
-Pads 1–8 play the breaks and pads 9–16 hold the FX, on an S950-style touchscreen with SEQ step knobs on the Q-Links. Install and pages: [choppage-mpc/README.md](choppage-mpc/README.md). It comes as `choppage-*-mpc.zip` on each release (untested on hardware).
+The desktop's main screen on the MPC's touchscreen: the S950 LCD with the waveform and slice markers, the PATTERN / FX dice, the 8 FX pads and the FILTER / DISTORTION / CRUSH / REVERB knobs, plus the BR3AK SEQ grid. Pads 1–8 play the breaks (every screen follows) and pads 9–16 hold the FX. Install and pages: [choppage-mpc/README.md](choppage-mpc/README.md). It comes as `choppage-*-mpc.zip` on each release (untested on hardware).
 
-![MPC SAMPLE page](docs/mpc-sample.png)
+![MPC main screen](docs/mpc-main.png)
+![MPC SEQ grid](docs/mpc-seq.png)
 
 ## Layout
 

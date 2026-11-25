@@ -305,10 +305,239 @@ def box_image(w, h):
     return done(im, w, h)
 
 def slug(t):
+    """A file-name-safe name for a caption; a short hash keeps "NUDGE <" and "NUDGE >" apart."""
+    import hashlib
     out = "".join(c.lower() if c.isalnum() else "_" for c in t)
     while "__" in out:
         out = out.replace("__", "_")
-    return out.strip("_") or "x"
+    out = out.strip("_") or "x"
+    if out.replace("_", "") != "".join(c.lower() for c in t if c.isalnum()) or not t.replace(" ", "").replace("\n", "").isalnum():
+        out += "_" + hashlib.md5(t.encode()).hexdigest()[:5]
+    return out
+
+
+# ---------------------------------------------------------------- main-screen art (desktop BR3AK arrangement)
+WCOLS, WLEVELS = 84, 12          # MpcParams.h kWaveCols / kWaveLevels
+WCOL_W, WAVE_H, TAB_H = 14, 136, 26
+WX0 = 640 - WCOLS * WCOL_W // 2  # 52
+TAB_FRAMES = 15
+SEL_YELLOW = (255, 214, 64)
+PAD_TOP, PAD_BOT, PAD_EDGE = (124, 146, 178), (88, 108, 138), (52, 64, 84)
+PAD_ON_TOP, PAD_ON_BOT = (255, 196, 92), (232, 140, 40)
+BADGES = "KSGHOX"
+
+def mix(a, b, t):
+    return tuple(int(a[k] + (b[k] - a[k]) * t) for k in range(3))
+
+def mono_font(size):
+    return ImageFont.truetype(MONO, size) if MONO else pil_font(size)
+
+def lcd_art(theme, w, h, boxes=(), rules=()):
+    """An LCD panel: black bezel, the theme's glass, faint dot rows, outlined boxes and divider rules (tab coords
+    relative to the panel)."""
+    bgc, ink, dim, faint = LCD[theme]
+    im, d = aa(w, h)
+    s = SS
+    d.rounded_rectangle((0, 0, w * s - 1, h * s - 1), radius=10 * s, fill=BEZEL + (255,))
+    d.rounded_rectangle((8 * s, 8 * s, (w - 8) * s - 1, (h - 8) * s - 1), radius=4 * s, fill=bgc + (255,))
+    for y in range(12, h - 12, 4):
+        d.line([(10 * s, y * s), ((w - 10) * s, y * s)], fill=faint + (14,), width=s)
+    for (x, y, bw, bh) in boxes:
+        d.rectangle((x * s, y * s, (x + bw) * s - 1, (y + bh) * s - 1), outline=ink + (255,), width=2 * s)
+    for (x0, y0, x1) in rules:
+        d.line([(x0 * s, y0 * s), (x1 * s, y0 * s)], fill=dim + (160,), width=2 * s)
+    return done(im, w, h)
+
+def lcd_key(theme, w, h, text, on, size=28):
+    """A key drawn on the LCD, like the desktop's: outlined; lit = filled with ink, text in glass colour."""
+    bgc, ink, dim, faint = LCD[theme]
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    if on:
+        d.rectangle((0, 0, w - 1, h - 1), fill=ink + (255,))
+    else:
+        d.rectangle((0, 0, w - 1, h - 1), fill=bgc + (255,), outline=ink + (255,), width=2)
+    while size > 14 and mono_font(size).getlength(text) > w - 10:
+        size -= 1
+    d.text((w / 2, h / 2 + 1), text, font=mono_font(size), fill=(bgc if on else ink) + (255,), anchor="mm")
+    return im
+
+def wave_frames():
+    """((theme * 3 + look) * 2 + mark) * WLEVELS + level: the desktop's white trace on the LCD glass.
+    look 1 = the selected slice (yellow edges, like the desktop's yellow box), 2 = the slice playing now."""
+    import random
+    rnd = random.Random(950)
+    w, h = WCOL_W * SS, WAVE_H * SS
+    grain = [rnd.uniform(0.35, 1.0) for _ in range(WCOL_W)]
+    frames = []
+    for theme in range(4):
+        bgc, ink, dim, faint = LCD[theme]
+        for look in range(3):
+            for mark in range(2):
+                for level in range(WLEVELS):
+                    base = bgc if look == 0 else mix(bgc, SEL_YELLOW, 0.16) if look == 1 else mix(bgc, ink, 0.22)
+                    im = Image.new("RGB", (w, h), base)
+                    d = ImageDraw.Draw(im)
+                    d.line([(0, h // 2), (w, h // 2)], fill=mix(base, ink, 0.35), width=SS)
+                    hh = (h / 2 - 5 * SS) * level / (WLEVELS - 1)
+                    if level > 0:
+                        for x, g in enumerate(grain):
+                            a = max(SS, hh * g)
+                            d.line([(x * SS + SS // 2, h / 2 - a), (x * SS + SS // 2, h / 2 + a)], fill=ink, width=SS)
+                    if look == 1:
+                        d.rectangle((0, 0, w, 3 * SS), fill=SEL_YELLOW)
+                        d.rectangle((0, h - 3 * SS, w, h), fill=SEL_YELLOW)
+                    if mark:
+                        d.rectangle((0, 0, 2 * SS - 1, h), fill=SEL_YELLOW if look == 1 else ink)
+                    frames.append(im.resize((WCOL_W, WAVE_H), Image.LANCZOS))
+    return frames
+
+def tab_frames():
+    """theme * 15 + t: 0 none, 1-6 a slice starts here (K S G H O X), 7-12 the same selected, 13 inside a slice,
+    14 inside the selected slice. Together they draw the desktop's row of hit boxes under the waveform."""
+    frames = []
+    for theme in range(4):
+        bgc, ink, dim, faint = LCD[theme]
+        for t in range(TAB_FRAMES):
+            im = Image.new("RGB", (WCOL_W * SS, TAB_H * SS), bgc)
+            d = ImageDraw.Draw(im)
+            W_, H_ = WCOL_W * SS, TAB_H * SS
+            sel = t in range(7, 13) or t == 14
+            if t > 0:
+                if sel:
+                    d.rectangle((0, 0, W_, H_ - 1), fill=ink)
+                else:
+                    d.line([(0, SS), (W_, SS)], fill=ink, width=2 * SS)
+                    d.line([(0, H_ - SS - 1), (W_, H_ - SS - 1)], fill=ink, width=2 * SS)
+                if t <= 12:
+                    d.rectangle((0, 0, 2 * SS - 1, H_), fill=ink if not sel else bgc)
+                    letter = BADGES[(t - 1) % 6]
+                    d.text((W_ / 2 + SS, H_ / 2 + SS), letter, font=mono_font(20 * SS), fill=bgc if sel else ink, anchor="mm")
+            frames.append(im.resize((WCOL_W, TAB_H), Image.LANCZOS))
+    return frames
+
+def clear_png(w, h):
+    return Image.new("RGBA", (w, h), (0, 0, 0, 0))
+
+def pad_key(w, h, name, on, win, hold_text=None):
+    """An FX pad as on the desktop: slate key, white name, a window for the setting (transparent: the setting label
+    under the pad shows through). on = held (amber)."""
+    im, d = aa(w, h)
+    s = SS
+    d.rounded_rectangle((0, 0, w * s - 1, h * s - 1), radius=6 * s, fill=PAD_EDGE + (255,))
+    inner = Image.new("RGBA", ((w - 4) * s, (h - 6) * s))
+    vgrad(ImageDraw.Draw(inner), (0, 0, inner.width, inner.height), PAD_ON_TOP if on else PAD_TOP, PAD_ON_BOT if on else PAD_BOT)
+    mask = Image.new("L", inner.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, inner.width - 1, inner.height - 1), radius=5 * s, fill=255)
+    im.paste(inner, (2 * s, 2 * s), mask)
+    out = done(im, w, h)
+    size = fit_size(name, w - 12, 24)
+    text_centre(out, name, w / 2, 22, size, (255, 255, 255) if not on else (40, 24, 6))
+    wx, wy, ww, wh = win
+    dd = ImageDraw.Draw(out)
+    dd.rectangle((wx - 2, wy - 2, wx + ww + 1, wy + wh + 1), fill=(20, 24, 32, 255))
+    if hold_text:
+        dd.rectangle((wx, wy, wx + ww - 1, wy + wh - 1), fill=LCD[0][0] + (255,))
+        dd.text((wx + ww / 2, wy + wh / 2 + 1), hold_text, font=mono_font(22), fill=LCD[0][1] + (255,), anchor="mm")
+    else:
+        dd.rectangle((wx, wy, wx + ww - 1, wy + wh - 1), fill=(0, 0, 0, 0))
+    return out
+
+def dice_icon(d, x, y, size, pip=(255, 255, 255)):
+    d.rounded_rectangle((x, y, x + size, y + size), radius=size // 6, fill=(26, 26, 26, 255))
+    r = size / 11
+    for px, py in ((0.27, 0.27), (0.73, 0.27), (0.5, 0.5), (0.27, 0.73), (0.73, 0.73)):
+        cx, cy = x + px * size, y + py * size
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=pip + (255,))
+
+def dice_key(w, h, on):
+    k = keycap(w, h, "", on, led=False, picked=on)
+    d = ImageDraw.Draw(k)
+    sz = min(w, h) - 22
+    dice_icon(d, (w - sz) / 2, (h - sz) / 2, sz)
+    return k
+
+def bar_key(w, h, text, on):
+    """The PATTERN / FX bar: tap to open its section under the LCD (amber while open), again to go back."""
+    k = keycap(w, h, "", on, led=False, picked=on)
+    d = ImageDraw.Draw(k)
+    d.text((24, h / 2), text, font=pil_font(34), fill=INK + (255,), anchor="lm")
+    hint = "BACK TO MAIN" if on else "OPEN"
+    d.text((w - 22, h / 2), hint, font=pil_font(20), fill=(60, 60, 60, 255), anchor="rm")
+    # the desktop's LED dash
+    lx = w - 22 - pil_font(20).getlength(hint) - 46
+    d.rounded_rectangle((lx, h / 2 - 4, lx + 30, h / 2 + 4), radius=2, fill=(LED_ON if on else (60, 60, 60)) + (255,))
+    return k
+
+
+# ---------------------------------------------------------------- the BR3AK SEQ grid
+CELL_FRAMES = 82                 # MpcParams.h kCellFrames
+LANES = ["KICK", "SNARE", "GHOST", "HAT", "OPEN", "FX"]
+GX0, GPITCH, GCELL = 140, 69, 63 # grid columns: x of column 0, pitch, cell width
+FX_LETTER = "SRAT"               # STUTTER REVERSE STRETCH (Akaize) TAPE STOP, as on the desktop
+
+def cell_frames(w, h):
+    frames = []
+    for theme in range(4):
+        bgc, ink, dim, faint = LCD[theme]
+        for c in range(CELL_FRAMES):
+            im = Image.new("RGB", (w, h), bgc)
+            d = ImageDraw.Draw(im)
+            if c <= 1:
+                d.rectangle((1, 1, w - 2, h - 2), outline=dim if c == 1 else mix(bgc, dim, 0.55), width=2)
+            else:
+                d.rectangle((0, 0, w - 1, h - 1), fill=ink)
+                if c < 66:
+                    t = str(c - 1)
+                else:
+                    k = c - 66
+                    t = FX_LETTER[k // 4] + str((8, 16, 32, 64)[k % 4])
+                size = min(int(h * 0.72), 26)
+                while size > 10 and mono_font(size).getlength(t) > w - 6:
+                    size -= 1
+                d.text((w / 2, h / 2 + 1), t, font=mono_font(size), fill=bgc, anchor="mm")
+            frames.append(im)
+    return frames
+
+def head_frames(h):
+    """The step numbers over the grid, the step playing now inverted: theme * 17 + (0 none, 1-16)."""
+    w = 16 * GPITCH
+    frames = []
+    for theme in range(4):
+        bgc, ink, dim, faint = LCD[theme]
+        for now in range(17):
+            im = Image.new("RGB", (w, h), bgc)
+            d = ImageDraw.Draw(im)
+            for k in range(16):
+                x = k * GPITCH
+                lit = now == k + 1
+                if lit:
+                    d.rectangle((x, 0, x + GCELL - 1, h - 1), fill=ink)
+                t = str(k + 1) if k % 4 == 0 or lit else "·"
+                d.text((x + GCELL / 2, h / 2 + 1), t, font=mono_font(min(22, h - 4)), fill=bgc if lit else ink, anchor="mm")
+            frames.append(im)
+    return frames
+
+def grid_cover(theme, w, h, lane_y, lane_h):
+    """The LCD under the grid: glass + lane names."""
+    bgc, ink, dim, faint = LCD[theme]
+    im = Image.new("RGB", (w, h), bgc)
+    d = ImageDraw.Draw(im)
+    for y in range(0, h, 4):
+        d.line([(0, y), (w, y)], fill=mix(bgc, faint, 0.06))
+    for i, n in enumerate(LANES):
+        y = lane_y + i * lane_h + (lane_h - 6) / 2
+        d.text((8, y), n, font=mono_font(min(24, lane_h - 4)), fill=ink, anchor="lm")
+    return im
+
+def dice_bar(w, h, text, on):
+    """The SEQ page's dice: the whole bar rolls (the desktop's PATTERN / FX bars)."""
+    k = keycap(w, h, "", on, led=False, picked=on)
+    d = ImageDraw.Draw(k)
+    sz = h - 22
+    dice_icon(d, 14, 11, sz)
+    d.text((14 + sz + 18, h / 2), text, font=pil_font(34), fill=INK + (255,), anchor="lm")
+    return k
 
 # ---------------------------------------------------------------- page description
 # Cell kinds: knob, toggle (two-state key), trig (momentary key), pick (row of keys), read (readout box), step knob.
@@ -332,21 +561,6 @@ def steps(first):
 
 def pages():
     return [
-        {"fn": 0, "sub": 0, "name": "SAMPLE", "rows": [
-            [K("break", "BREAK"), K("browse", "BROWSE CONTENT/BREAKS", span=2), G("load", "LOAD")],
-            [G("dicePattern", "PATTERN\nDICE"), K("patAmount", "PATTERN AMOUNT"), G("diceFx", "FX\nDICE"), K("fxAmount", "FX AMOUNT")],
-            [G("undo", "UNDO"), G("redo", "REDO"), T("original", "ORIGINAL"), T("play", "PLAY\n(MPC STOPPED)")],
-            [G("akaize", "AKAIZE TO\nMPC BPM"), G("demo", "DEMO\nBREAK"), R("infoMsg", "MESSAGE", span=2)]]},
-        {"fn": 1, "sub": 0, "name": "SLICE", "rows": [
-            [K("slice", "SLICE"), K("slPitch", "PITCH", bi=True), K("slGate", "GATE"), K("slStretch", "STRETCH")],
-            [T("slReverse", "REVERSE"), K("slStutter", "STUTTER"), K("slTrans", "TRANSIENT"), K("slXfade", "XFADE")],
-            [T("editAll", "EDIT\nALL SLICES"), T("slMute", "MUTE"), P("slBadge", "HIT", ["K", "S", "G", "H", "O", "X"], span=2)],
-            [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
-             G("reslice", "RESLICE")]]},
-        {"fn": 2, "sub": 0, "name": "SEQ 1-16", "rows": steps(1)},
-        {"fn": 2, "sub": 1, "name": "SEQ 17-32", "rows": steps(17)},
-        {"fn": 2, "sub": 2, "name": "SEQ 33-48", "rows": steps(33)},
-        {"fn": 2, "sub": 3, "name": "SEQ 49-64", "rows": steps(49)},
         {"fn": 3, "sub": 0, "name": "PATTERN", "rows": [
             [P("length", "LENGTH", ["1 BAR", "2 BARS", "4 BARS"], span=2), K("style", "STYLE"), T("layers", "LAYERS")],
             [G("dicePattern", "PATTERN\nDICE"), K("patAmount", "PATTERN AMOUNT"), K("swing", "SWING"), G("clear", "CLEAR")],
@@ -573,6 +787,485 @@ class Builder:
         return o(("Tab", page["fn"] + 1), ("SubTab", page["sub"] + 1), ("Bank Direction", "RowTopDown"),
                  ("Q-Links", o(*[("Q-Link %d" % i, q.get(i, -1)) for i in range(1, 17)])))
 
+
+    # ================================================================ free-layout helpers
+    def vis_theme(self, t):
+        return ["IndexedEnabling/%d/4/%s" % (t, self.h("lcdColour"))]
+
+    def vis_view(self, v):
+        return ["IndexedEnabling/%d/4/%s" % (v, self.h("view"))]
+
+    def image_at(self, png, rect, vis=None, name="image"):
+        return entry(name, "Image", o(("version", 2), ("imageType", "Regular"), ("colour", "0"), ("image", png)),
+                     bounds(rect, inval=vis))
+
+    def strip_at(self, png, frames, rect, pid, vis=None, name=None):
+        return entry(name or "strip " + pid, "Image",
+                     o(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", png), ("numFrames", frames),
+                       ("handleName", "Data")), bounds(rect, inval=vis), remap=[("Data", self.h(pid))])
+
+    def label_at(self, pid, rect, size, colour=VALUE, just="left verticallyCentred", vis=None, style="Bold"):
+        return entry("label " + pid, "Label", label("Value", size, style, colour, just), bounds(rect, inval=vis),
+                     remap=[("Data", self.h(pid))])
+
+    def caption_at(self, text, pid, rect, size=20, vis=None, just="left verticallyCentred", colour=LABEL):
+        return entry("caption", "Label", label("Name", size, "Bold", colour, just, handle=self.named(text, pid)),
+                     bounds(rect, inval=vis))
+
+    def knob_at(self, pid, rect, ksize, vis=None, bi=False, value_size=28, layout="side"):
+        """A knob cell: film-strip knob + its value in a window. The whole rect is the touch area; the caption is
+        a separate label added before it. layout side: knob left, value right; under: value under the knob."""
+        p = self.p(pid)
+        if p["kind"] == "choice":
+            self.discrete(pid)
+        x, y, w, h = rect
+        strip = "knob%d%s.png" % (ksize, "_bi" if bi else "")
+        if strip not in self.images:
+            self.save(strip, film([knob_frame(ksize, i / (FRAMES - 1), bi) for i in range(FRAMES)]))
+        if layout == "side":
+            kx, ky = 4, (h - ksize) // 2
+            vr = (ksize + 12, h - 44, w - ksize - 16, 40)
+        else:
+            kx, ky = (w - ksize) // 2, 2
+            vr = (6, ksize + 6, w - 12, h - ksize - 8)
+        key = "cp knob2 %dx%d k%d %s%s" % (w, h, ksize, layout, "_bi" if bi else "")
+        self.define(key, component([
+            focus_entry(),
+            entry("knob", "Knob", o(("version", 2), ("knobType", "FilmStrip"), ("filmStrip", strip), ("numFrames", FRAMES),
+                                    ("invert", False), ("handleName", "Data")), bounds((kx, ky, ksize, ksize))),
+            entry("value", "Label", label("Value", value_size, "Bold", VALUE, "horizontallyCentred verticallyCentred"),
+                  bounds(vr))], knob_actions(bi)))
+        return [entry(pid, key, o(("version", 1), ("handleName", "Data")), bounds(rect, focus="Yes", invalid="Hide", inval=vis),
+                      remap=[("Data", self.h(pid))])], (x + vr[0], y + vr[1], vr[2], vr[3])
+
+    def flip_at(self, pid, rect, png, vis=None, qlink=True):
+        """A two-frame picture flipped by a tap (Toggle Switch): keys, triggers, the PATTERN / FX bars, pads."""
+        x, y, w, h = rect
+        key = "cp flip %s" % png
+        acts = [act("Mouse Down", "Toggle Switch", "Data")]
+        if qlink:
+            acts.append(act("Mouse Down", "Q-Link", "Data"))
+        self.define(key, component([
+            entry("state", "Image", o(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", png),
+                                      ("numFrames", 2), ("handleName", "Data")), bounds((0, 0, w, h))),
+            focus_entry()], acts))
+        return entry(pid, key, o(("version", 1), ("handleName", "Data")), bounds(rect, focus="Yes", invalid="Hide", inval=vis),
+                     remap=[("Data", self.h(pid))])
+
+    def radio_at(self, pid, rect, images, vis=None, ids=None, name=None, focus=True, qlink=True):
+        """A button group: images = [(on, off, (x, y, w, h) relative)], buttonId = position (or ids)."""
+        x, y, w, h = rect
+        n = len(images)
+        count = max(ids) + 1 if ids else n
+        key = name or "cp radio %s %d" % (pid, x * 10000 + y)
+        kids = [focus_entry()] if focus else []
+        for i, (on, off, r) in enumerate(images):
+            kids.append(entry("choice %d" % i, "Button",
+                              o(("version", 2), ("onImage", on), ("offImage", off), ("buttonId", ids[i] if ids else i),
+                                ("numButtonsInGroup", count), ("handleName", "Data"), ("gestureBehaviour", "Instant")), bounds(r)))
+        self.define(key, component(kids, [act("Mouse Down", "Q-Link", "Data")] if qlink else []))
+        return entry(pid, key, o(("version", 1), ("handleName", "Data")),
+                     bounds(rect, focus="Yes" if focus else "No", invalid="Hide", inval=vis), remap=[("Data", self.h(pid))])
+
+    def key_png(self, text, w, h):
+        fname = "key_%s_%dx%d.png" % (slug(text), w, h)
+        if fname not in self.images:
+            self.save(fname, film([keycap(w, h, text, False), keycap(w, h, text, True)]))
+        return fname
+
+    def lcd_key_png(self, theme, text, w, h, size=28):
+        fname = "lcdkey_%d_%s_%dx%d.png" % (theme, slug(text) if slug(text) != "x" else "sym%d" % (sum(map(ord, text))), w, h)
+        if fname not in self.images:
+            self.save(fname, film([lcd_key(theme, w, h, text, False, size), lcd_key(theme, w, h, text, True, size)]))
+        return fname
+
+    def lcd_radio_pngs(self, theme, text, w, h, size=24):
+        base = "lcdbtn_%d_%s_%dx%d" % (theme, slug(text), w, h)
+        on = self.save(base + "_on.png", lcd_key(theme, w, h, text, True, size))
+        off = self.save(base + "_off.png", lcd_key(theme, w, h, text, False, size))
+        return on, off
+
+    def wave_block(self, y_wave, y_tab, tap_vis=None):
+        """The 84 waveform columns, the hit-letter row and the tap area over both."""
+        kids = []
+        if "wave_cols.png" not in self.images:
+            self.save("wave_cols.png", film(wave_frames()))
+            self.save("wave_tabs.png", film(tab_frames()))
+            self.save("clear_col.png", clear_png(WCOL_W, WAVE_H + TAB_H + 4))
+        nw, nt = 4 * 3 * 2 * WLEVELS, 4 * TAB_FRAMES
+        assert nw == self.p("wave1")["max"] + 1 and nt == self.p("tab1")["max"] + 1, "frame counts differ from MpcParams.h"
+        for c in range(WCOLS):
+            kids.append(self.strip_at("wave_cols.png", nw, (WX0 + c * WCOL_W, y_wave, WCOL_W, WAVE_H), "wave%d" % (c + 1), name="wave"))
+        for c in range(WCOLS):
+            kids.append(self.strip_at("wave_tabs.png", nt, (WX0 + c * WCOL_W, y_tab, WCOL_W, TAB_H), "tab%d" % (c + 1), name="tab"))
+        imgs = [("clear_col.png", "clear_col.png", (c * WCOL_W, 0, WCOL_W, WAVE_H + TAB_H + 4)) for c in range(WCOLS)]
+        kids.append(self.radio_at("waveTap", (WX0, y_wave, WCOLS * WCOL_W, WAVE_H + TAB_H + 4), imgs, tap_vis,
+                                  ids=list(range(1, WCOLS + 1)), name="cp wave tap", focus=False, qlink=False))
+        return kids
+
+    def lcd_panel(self, rect, boxes, rules, tag):
+        x, y, w, h = rect
+        png = "lcdpanel_%s.png" % tag
+        rel_boxes = [(bx - x, by - y, bw, bh) for (bx, by, bw, bh) in boxes]
+        rel_rules = [(a - x, b - y, c - x) for (a, b, c) in rules]
+        self.save(png, film([lcd_art(t, w, h, rel_boxes, rel_rules) for t in range(4)]))
+        return self.strip_at(png, 4, rect, "lcdColour", name="lcd panel")
+
+    def lcd_text(self, pid, rect, size, just="left verticallyCentred", style="Bold", dim=False):
+        out = []
+        for t in range(4):
+            out.append(self.label_at(pid, rect, size, argb(LCD[t][2] if dim else LCD[t][1]), just, vis=self.vis_theme(t), style=style))
+        return out
+
+    # ================================================================ MAIN: the desktop's main screen
+    def main_tab(self):
+        kids = []
+        # background: panel, value windows for the always-on cells
+        bgim = Image.new("RGB", (W, H), PANEL)
+        d = ImageDraw.Draw(bgim)
+        for y in range(H):
+            t = y / (H - 1)
+            d.line([(0, y), (W, y)], fill=mix(PANEL, PANEL_LO, t))
+        windows = []
+
+        # ---- the LCD (desktop rows: transport + name + LOAD + BPM, break keys, wave, hits, slice line, status)
+        LX, LY, LW, LH = 10, 4, 1260, 344
+        rowA, rowB = (16, 44), (66, 38)
+        name_box = (166, rowA[0], 596, rowA[1])
+        bpm_box = (978, rowA[0], 276, rowA[1])
+        kids.append(self.lcd_panel((LX, LY, LW, LH), [name_box, bpm_box], [(26, 312, 1254)], "main"))
+        kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1] + 2, name_box[2] - 20, name_box[3] - 4), 30,
+                              "horizontallyCentred verticallyCentred")
+        kids += self.lcd_text("infoBpm", (bpm_box[0] + 10, bpm_box[1] + 2, bpm_box[2] - 20, bpm_box[3] - 4), 30,
+                              "horizontallyCentred verticallyCentred")
+        kids += self.lcd_text("infoSlParams", (26, 284, 1228, 28), 22, style="Bold")
+        kids += self.lcd_text("infoStatus", (26, 316, 900, 28), 22, style="SemiBold")
+        kids += self.lcd_text("infoSlice", (930, 316, 324, 28), 22, "right verticallyCentred")
+        # keys on the glass (one set per LCD colour)
+        for t in range(4):
+            v = self.vis_theme(t)
+            kids.append(self.flip_at("play", (26, rowA[0], 62, rowA[1]), self.lcd_key_png(t, "▶", 62, rowA[1]), v))
+            kids.append(self.flip_at("brkPrev", (96, rowA[0], 62, rowA[1]), self.lcd_key_png(t, "◀", 62, rowA[1]), v, qlink=False))
+            kids.append(self.flip_at("brkNext", (770, rowA[0], 62, rowA[1]), self.lcd_key_png(t, "▶ ", 62, rowA[1]), v, qlink=False))
+            kids.append(self.flip_at("showDisk", (840, rowA[0], 130, rowA[1]), self.lcd_key_png(t, "LOAD", 130, rowA[1]), v, qlink=False))
+            notes = ["1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1"]
+            bw = (1228 - 7 * 8) // 8
+            imgs = []
+            for i, n in enumerate(notes):
+                on, off = self.lcd_radio_pngs(t, n, bw, rowB[1], 24)
+                imgs.append((on, off, (i * (bw + 8), 0, bw, rowB[1])))
+            kids.append(self.radio_at("break", (26, rowB[0], 1228, rowB[1]), imgs, v, name="cp breaks %d" % t))
+        kids += self.wave_block(110, 250, ["RangedEnabling/0/2/4/%s" % self.h("view")])
+
+        # ---- the dice row: PATTERN bar + AMOUNT, FX bar + AMOUNT
+        DY, DH = 356, 66
+        for (dice, show, amount, text, x) in (("dicePattern", "showPattern", "patAmount", "PATTERN", 10),
+                                               ("diceFx", "showFx", "fxAmount", "FX", 650)):
+            dk = "dice_%dx%d.png" % (DH, DH)
+            if dk not in self.images:
+                self.save(dk, film([dice_key(DH, DH, False), dice_key(DH, DH, True)]))
+            kids.append(self.flip_at(dice, (x, DY, DH, DH), dk))
+            bk = "bar_%s.png" % slug(text)
+            self.save(bk, film([bar_key(404 - 6, DH, text, False), bar_key(404 - 6, DH, text, True)]))
+            kids.append(self.flip_at(show, (x + DH + 6, DY, 404 - 6, DH), bk, qlink=False))
+            kids.append(self.caption_at("AMOUNT", amount, (x + 476 + 72, DY, 74, 22), 18))
+            k, win = self.knob_at(amount, (x + 476, DY, 150, DH), 60, value_size=24)
+            windows.append(win)
+            kids += k
+
+        # ---- sections under the dice row (one shows, by MP_VIEW)
+        SY = 430
+        pad_w, pad_h, gap = 152, 88, 6
+        settings = ["stutRate", "rollRate", None, "tapeMs", None, "akCycle", "diveRes", "dropRate"]
+        names = ["STUTTER", "ROLL", "REVERSE", "TAPE STOP", "HALF-TIME", "AKAIZE", "FILT DIVE", "S950 DROP"]
+        win = (10, 44, pad_w - 20, 34)
+        for view in (0, 1):     # the 8 FX pads along the bottom (MAIN and FX sections)
+            vv = self.vis_view(view)
+            for i in range(8):
+                x = 11 + i * (pad_w + gap)
+                if settings[i]:
+                    # the setting shows through the pad's window; drawn first so the pad on top keeps the touch
+                    kids.append(self.label_at(settings[i], (x + win[0], SY + win[1], win[2], win[3]), 22, argb(LCD[0][1]),
+                                              "horizontallyCentred verticallyCentred", vis=vv))
+                png = "pad_%d.png" % i
+                if png not in self.images:
+                    hold = None if settings[i] else "HOLD"
+                    self.save(png, film([pad_key(pad_w, pad_h, names[i], False, win, hold),
+                                         pad_key(pad_w, pad_h, names[i], True, win, hold)]))
+                kids.append(self.flip_at("pad%d" % (i + 1), (x, SY, pad_w, pad_h), png, vv, qlink=False))
+        # windows behind the pad settings: shown with the pads only (MAIN and FX sections)
+        padwin = Image.new("RGBA", (W, pad_h), (0, 0, 0, 0))
+        dw = ImageDraw.Draw(padwin)
+        for i in range(8):
+            if settings[i]:
+                x = 11 + i * (pad_w + gap)
+                dw.rectangle((x + win[0], win[1], x + win[0] + win[2] - 1, win[1] + win[3] - 1), fill=LCD[0][0] + (255,))
+        self.save("pad_windows.png", padwin)
+        for view in (1, 0):
+            kids.insert(1, self.image_at("pad_windows.png", (0, SY, W, pad_h), self.vis_view(view), "pad windows"))
+
+        # MAIN: SAMPLE RATE, FILTER, DISTORTION, CRUSH, REVERB, VOLUME (the desktop's bottom knobs + slider + VOL)
+        KY, KH = 526, 98
+        vv = self.vis_view(0)
+        sec_main = Image.new("RGBA", (W, KH), (0, 0, 0, 0))
+        for i, (pid, cap) in enumerate((("srate", "SAMPLE RATE"), ("filter", "FILTER"), ("dist", "DISTORTION"),
+                                        ("crush", "CRUSH"), ("reverb", "REVERB"), ("volume", "VOLUME"))):
+            x = 10 + i * 210
+            kids.append(self.caption_at(cap, pid, (x + 96, KY + 6, 110, 26), 20, vis=vv))
+            k, wv = self.knob_at(pid, (x, KY, 206, KH), 84, vis=vv, value_size=26)
+            sec_main.paste(box_image(wv[2], wv[3]), (wv[0], wv[1] - KY))
+            kids += k
+        self.save("sec_main.png", sec_main)
+        kids.insert(1, self.image_at("sec_main.png", (0, KY, W, KH), vv, "section main"))
+
+        # FX: each pad's setting knob under it
+        vv = self.vis_view(1)
+        sec_fx = Image.new("RGBA", (W, KH), (0, 0, 0, 0))
+        dfx = ImageDraw.Draw(sec_fx)
+        for i in range(8):
+            x = 11 + i * (pad_w + gap)
+            if settings[i]:
+                k, wv = self.knob_at(settings[i], (x, KY, pad_w, KH), 60, vis=vv, value_size=22, layout="under")
+                kids += k
+            else:
+                dfx.text((x + pad_w / 2, KH / 2), "HOLD ONLY", font=pil_font(20), fill=(90, 90, 90, 255), anchor="mm")
+        self.save("sec_fx.png", sec_fx)
+        kids.insert(1, self.image_at("sec_fx.png", (0, KY, W, KH), vv, "section fx"))
+
+        # PATTERN: the grid takes the LCD under the break keys (BR3AK's SEQ tab), the tools come up underneath
+        vv = self.vis_view(3)
+        gy, gh = 108, 236
+        for t in range(4):
+            pass
+        cover = "gridcover_main.png"
+        self.save(cover, film([grid_cover(t, 1236, gh, 26, 35) for t in range(4)]))
+        kids.append(entry("grid cover", "Image", o(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", cover),
+                                                     ("numFrames", 4), ("handleName", "Data")),
+                          bounds((22, gy, 1236, gh), inval=vv), remap=[("Data", self.h("lcdColour"))]))
+        kids += self.grid_block(gy + 2, 22, gy + 26, 35, 29, vv, "main")
+        r0, r1, rh = SY, SY + 98, 92
+        sec_pat = Image.new("RGBA", (W, H - SY), (0, 0, 0, 0))
+        def pick_row(pid, rect, labels, cap):
+            self.discrete(pid)
+            x0, y0, w0, h0 = rect
+            kids.append(self.caption_at(cap, pid, (x0 + 6, y0 + 2, w0 - 12, 24), 20, vis=vv))
+            n = len(labels)
+            bw = (w0 - 2 * FM + 2 * (n - 1)) // n
+            imgs = []
+            for i, l in enumerate(labels):
+                on = self.save("pick_%d_%s_on.png" % (bw, slug(l)), keycap(bw, 58, l, True, led=False, picked=True))
+                off = self.save("pick_%d_%s_off.png" % (bw, slug(l)), keycap(bw, 58, l, False, led=False))
+                imgs.append((on, off, (FM + i * (bw - 2), FM, bw, 58)))
+            kids.append(self.radio_at(pid, (x0, y0 + 24, w0, 70), imgs, vv))
+        pick_row("length", (10, r0, 330, rh), ["1 BAR", "2 BARS", "4 BARS"], "LENGTH")
+        pick_row("seqPage", (346, r0, 420, rh), ["1-16", "17-32", "33-48", "49-64"], "STEPS SHOWN")
+        x = 772
+        for pid, text in (("seqFollow", "FOLLOW"), ("original", "ORIGINAL"), ("clear", "CLEAR")):
+            w_ = 164 if pid != "clear" else 1270 - x
+            kids.append(self.flip_at(pid, (x, r0 + 4, w_ - 4, rh - 8), self.key_png(text, w_ - 4, rh - 8), vv, qlink=False))
+            x += w_
+        x = 10
+        for pid, cap in (("style", "STYLE"), ("swing", "SWING"), ("memory", "MEMORY")):
+            kids.append(self.caption_at(cap, pid, (x + 96, r1 + 6, 110, 24), 20, vis=vv))
+            k, wv = self.knob_at(pid, (x, r1, 206, rh), 80, vis=vv, value_size=24)
+            sec_pat.paste(box_image(wv[2], wv[3]), (wv[0], wv[1] - SY))
+            kids += k
+            x += 210
+        for pid, text in (("memSave", "SAVE"), ("memRecall", "RECALL"), ("undo", "UNDO"), ("redo", "REDO")):
+            w_ = 157
+            kids.append(self.flip_at(pid, (x, r1 + 4, w_ - 4, rh - 8), self.key_png(text, w_ - 4, rh - 8), vv))
+            x += w_
+        self.save("sec_pattern.png", sec_pat)
+        kids.insert(1, self.image_at("sec_pattern.png", (0, SY, W, H - SY), vv, "section pattern"))
+
+        # DISK: the break list (tap a line), BROWSE, LOAD, DEMO, AKAIZE
+        vv = self.vis_view(2)
+        sec_disk = Image.new("RGBA", (W, H - SY), (0, 0, 0, 0))
+        list_rect = (10, SY, 820, 192)
+        sec_disk.paste(box_image(820, 192), (10, 0))
+        for k_ in range(5):
+            kids.append(self.label_at("list%d" % (k_ + 1), (24, SY + 6 + k_ * 36, 792, 36), 26, VALUE, vis=vv))
+        if "clear_line.png" not in self.images:
+            self.save("clear_line.png", clear_png(820, 36))
+        imgs = [("clear_line.png", "clear_line.png", (0, 6 + k_ * 36, 820, 36)) for k_ in range(5)]
+        kids.append(self.radio_at("listTap", list_rect, imgs, vv, ids=list(range(1, 6)), name="cp list tap", focus=False, qlink=False))
+        kids.append(self.caption_at("BROWSE", "browse", (940, r0 + 6, 120, 24), 20, vis=vv))
+        k, wv = self.knob_at("browse", (840, r0, 220, rh), 84, vis=vv, value_size=20)
+        sec_disk.paste(box_image(wv[2], wv[3]), (wv[0], wv[1] - SY))
+        kids += k
+        kids.append(self.flip_at("load", (1066, r0 + 4, 204, rh - 8), self.key_png("LOAD", 204, rh - 8), vv))
+        kids.append(self.flip_at("demo", (840, r1 + 4, 214, rh - 8), self.key_png("DEMO\nBREAK", 214, rh - 8), vv))
+        kids.append(self.flip_at("akaize", (1058, r1 + 4, 212, rh - 8), self.key_png("AKAIZE TO\nMPC BPM", 212, rh - 8), vv))
+        self.save("sec_disk.png", sec_disk)
+        kids.insert(1, self.image_at("sec_disk.png", (0, SY, W, H - SY), vv, "section disk"))
+
+        for (x, y, w, h) in windows:
+            bgim.paste(box_image(w, h).convert("RGB"), (x, y))
+        self.save("bg_main.png", bgim)
+        kids.insert(0, self.image_at("bg_main.png", (0, 0, W, H), name="background"))
+        qb = ["10 526 1260 98", "10 356 1260 66", "10 4 1260 344", "10 430 1260 90"]
+        tab = o(("version", 1), ("tabName", "MAIN"), ("fnKeyIndex", 0), ("fnKeySubIndex", 0),
+                ("componentDefinition", component(kids, colour=argb(PANEL))), ("qlinkBoundsData", qb))
+        q = {13: "filter", 14: "dist", 15: "crush", 16: "reverb",
+             9: "srate", 10: "volume", 11: "patAmount", 12: "fxAmount",
+             5: "break", 6: "slice", 7: "slMove", 8: "browse",
+             1: "stutRate", 2: "rollRate", 3: "tapeMs", 4: "akCycle"}
+        qm = o(("Tab", 1), ("SubTab", 1), ("Bank Direction", "RowTopDown"),
+               ("Q-Links", o(*[("Q-Link %d" % i, self.p(q[i])["index"]) for i in range(1, 17)])))
+        return tab, qm
+
+    # ================================================================ SLICE / CHOP: the waveform with editing under it
+    def slice_tab(self, sub):
+        kids = []
+        LX, LY, LW, LH = 10, 4, 1260, 302
+        name_box = (26, 16, 700, 40)
+        bpm_box = (1004, 16, 250, 40)
+        kids.append(self.lcd_panel((LX, LY, LW, LH), [name_box, bpm_box], [(26, 268, 1254)], "slice"))
+        kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1], name_box[2] - 20, name_box[3]), 28)
+        kids += self.lcd_text("infoBpm", (bpm_box[0] + 8, bpm_box[1], bpm_box[2] - 16, bpm_box[3]), 28,
+                              "horizontallyCentred verticallyCentred")
+        kids += self.lcd_text("infoSlParams", (26, 240, 1228, 28), 22)
+        kids += self.lcd_text("infoStatus", (26, 272, 900, 26), 22, style="SemiBold")
+        kids += self.lcd_text("infoSlice", (930, 272, 324, 26), 22, "right verticallyCentred")
+        for t in range(4):
+            imgs = []
+            for i, z in enumerate(["ALL", "SLICE"]):
+                on, off = self.lcd_radio_pngs(t, "ZOOM " + z, 128, 40, 22)
+                imgs.append((on, off, (i * 134, 0, 128, 40)))
+            self.discrete("zoom")
+            kids.append(self.radio_at("zoom", (736, 16, 262, 40), imgs, self.vis_theme(t), name="cp zoom %d" % t))
+        kids += self.wave_block(62, 204)
+        # three rows of four, as on the grid pages
+        if sub == 0:
+            name = "SLICE"
+            rows = [[K("slice", "SLICE"), K("slMove", "MOVE MARKER"), G("slNudgeL", "NUDGE\n<"), G("slNudgeR", "NUDGE\n>")],
+                    [K("slPitch", "PITCH", bi=True), K("slGate", "GATE"), K("slStretch", "STRETCH"), K("slTrans", "TRANSIENT")],
+                    [T("slReverse", "REVERSE"), K("slStutter", "STUTTER"), K("slXfade", "XFADE"), T("slMute", "MUTE")]]
+        else:
+            name = "CHOP"
+            rows = [[K("slice", "SLICE"), K("slMove", "MOVE MARKER"), G("slAdd", "ADD\n(SPLIT)"), G("slDel", "DELETE\n(JOIN)")],
+                    [T("editAll", "EDIT\nALL SLICES"), P("slBadge", "HIT", ["K", "S", "G", "H", "O", "X"], span=2), G("reslice", "RESLICE")],
+                    [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
+                     T("slMute", "MUTE")]]
+        page = {"fn": 1, "sub": sub, "name": name, "rows": rows}
+        global ROW_Y0, ROW_H
+        saved = (ROW_Y0, ROW_H)
+        ROW_Y0, ROW_H = 312, 100
+        try:
+            bgim = self.background(page)
+            # the LCD sits on top of the background's top part
+            png = "bg_1_%d.png" % sub
+            self.save(png, bgim)
+            kids.insert(0, self.image_at(png, (0, 0, W, H), name="background"))
+            for r, row in enumerate(rows):
+                x = M
+                for c in row:
+                    kids += self.cell(c, x, row_y(r))
+                    x += COL_W * c["span"]
+            qb = ["%d %d %d %d" % (M, row_y(r), W - 2 * M, ROW_H) for r in range(3)]
+        finally:
+            ROW_Y0, ROW_H = saved
+        tab = o(("version", 1), ("tabName", name), ("fnKeyIndex", 1), ("fnKeySubIndex", sub),
+                ("componentDefinition", component(kids, colour=argb(PANEL))), ("qlinkBoundsData", qb))
+        return tab, self.qmap(page)
+
+
+    def grid_block(self, y_head, head_h, y_lanes, lane_h, cell_h, vis=None, tag=""):
+        """The SEQ grid: step row, 6 x 16 cells, the tap area over them."""
+        kids = []
+        cs = "cells_%d.png" % cell_h
+        if cs not in self.images:
+            self.save(cs, film(cell_frames(GCELL, cell_h)))
+        hs = "seqhead_%d.png" % head_h
+        if hs not in self.images:
+            self.save(hs, film(head_frames(head_h)))
+        assert 4 * CELL_FRAMES == self.p("cell1")["max"] + 1 and 4 * 17 == self.p("seqHead")["max"] + 1
+        kids.append(self.strip_at(hs, 68, (GX0, y_head, 16 * GPITCH, head_h), "seqHead", vis, "step row"))
+        for lane in range(6):
+            for col in range(16):
+                kids.append(self.strip_at(cs, 4 * CELL_FRAMES, (GX0 + col * GPITCH, y_lanes + lane * lane_h, GCELL, cell_h),
+                                          "cell%d" % (lane * 16 + col + 1), vis, "cell"))
+        cl = "clear_cell_%d.png" % lane_h
+        if cl not in self.images:
+            self.save(cl, clear_png(GPITCH, lane_h))
+        imgs = [(cl, cl, (col * GPITCH, lane * lane_h, GPITCH, lane_h)) for lane in range(6) for col in range(16)]
+        kids.append(self.radio_at("seqTap", (GX0, y_lanes, 16 * GPITCH, 6 * lane_h), imgs, vis, ids=list(range(1, 97)),
+                                  name="cp grid tap %s" % tag, focus=False, qlink=False))
+        return kids
+
+    def lcd_radio(self, pid, rect, labels, size=22, gap=6, vis_extra=None):
+        """A row of LCD keys for a choice, one set per LCD colour."""
+        x, y, w, h = rect
+        self.discrete(pid)
+        n = len(labels)
+        bw = (w - gap * (n - 1)) // n
+        out = []
+        for t in range(4):
+            imgs = []
+            for i, l in enumerate(labels):
+                on, off = self.lcd_radio_pngs(t, l, bw, h, size)
+                imgs.append((on, off, (i * (bw + gap), 0, bw, h)))
+            out.append(self.radio_at(pid, rect, imgs, self.vis_theme(t), name="cp lcdradio %s %d %d" % (pid, t, x * 1000 + y)))
+        return out
+
+    def lcd_toggle(self, pid, rect, text, size=22, qlink=False):
+        x, y, w, h = rect
+        return [self.flip_at(pid, rect, self.lcd_key_png(t, text, w, h, size), self.vis_theme(t), qlink=qlink) for t in range(4)]
+
+    def seq_tab(self):
+        kids = []
+        LX, LY, LW, LH = 10, 4, 1260, 466
+        kids.append(self.lcd_panel((LX, LY, LW, LH), [], [], "seq"))
+        HY, HH = 16, 42
+        self.discrete("original")
+        kids += self.lcd_radio("original", (26, HY, 330, HH), ["PATTERN", "ORIGINAL"], 24)
+        kids += self.lcd_radio("length", (376, HY, 360, HH), ["1 BAR", "2 BARS", "4 BARS"], 22)
+        kids += self.lcd_radio("seqPage", (756, HY, 370, HH), ["1-16", "17-32", "33-48", "49-64"], 22)
+        kids += self.lcd_toggle("seqFollow", (1140, HY, 114, HH), "FOLLOW", 20)
+        lane_y, lane_h = 100, 58
+        for t in range(4):
+            png = "gridcover_seq_%d.png" % t
+            self.save(png, grid_cover(t, 1228, 6 * lane_h + 2, 0, lane_h))
+            kids.append(self.image_at(png, (26, lane_y, 1228, 6 * lane_h + 2), self.vis_theme(t), "grid lanes"))
+        kids += self.grid_block(66, 28, lane_y, lane_h, lane_h - 8, tag="seq")
+        kids += self.lcd_text("infoBrk", (30, 64, 104, 32), 26)
+        # under the LCD: the two dice bars (the whole bar rolls) and the pattern tools
+        DY, DH = 478, 66
+        for (dice, amount, text, x) in (("dicePattern", "patAmount", "PATTERN", 10), ("diceFx", "fxAmount", "FX", 650)):
+            png = "dicebar_%s.png" % slug(text)
+            self.save(png, film([dice_bar(470, DH, text, False), dice_bar(470, DH, text, True)]))
+            kids.append(self.flip_at(dice, (x, DY, 470, DH), png))
+            kids.append(self.caption_at("AMOUNT", amount, (x + 476 + 72, DY, 74, 22), 18))
+            k, win = self.knob_at(amount, (x + 476, DY, 150, DH), 60, value_size=24)
+            kids += k
+            self._seq_windows.append(win)
+        RY, RH = 552, 72
+        x = 10
+        for pid, text in (("undo", "UNDO"), ("redo", "REDO"), ("clear", "CLEAR"), ("layers", "LAYERS")):
+            kids.append(self.flip_at(pid, (x, RY, 204, RH), self.key_png(text, 204, RH)))
+            x += 210
+        for pid, cap in (("style", "STYLE"), ("swing", "SWING")):
+            kids.append(self.caption_at(cap, pid, (x + 76, RY, 124, 22), 18))
+            k, win = self.knob_at(pid, (x, RY, 206, RH), 64, value_size=22)
+            kids += k
+            self._seq_windows.append(win)
+            x += 210
+        bgim = Image.new("RGB", (W, H), PANEL)
+        d = ImageDraw.Draw(bgim)
+        for yy in range(H):
+            d.line([(0, yy), (W, yy)], fill=mix(PANEL, PANEL_LO, yy / (H - 1)))
+        for (wx, wy, ww, wh) in self._seq_windows:
+            bgim.paste(box_image(ww, wh).convert("RGB"), (wx, wy))
+        self.save("bg_seq.png", bgim)
+        kids.insert(0, self.image_at("bg_seq.png", (0, 0, W, H), name="background"))
+        qb = ["%d %d %d %d" % (GX0, lane_y + r * lane_h, 16 * GPITCH, lane_h) for r in range(4)]
+        tab = o(("version", 1), ("tabName", "SEQ"), ("fnKeyIndex", 2), ("fnKeySubIndex", 0),
+                ("componentDefinition", component(kids, colour=argb(PANEL))), ("qlinkBoundsData", qb))
+        q = {13 + c - 4 * r: "vstep%d" % (r * 4 + c + 1) for r in range(4) for c in range(4)}
+        qm = o(("Tab", 3), ("SubTab", 1), ("Bank Direction", "RowTopDown"),
+               ("Q-Links", o(*[("Q-Link %d" % i, self.p(q[i])["index"]) for i in range(1, 17)])))
+        return tab, qm
+
     def build(self):
         os.makedirs(self.out, exist_ok=True)
         for f in os.listdir(self.out):
@@ -582,6 +1275,10 @@ class Builder:
             self.define(OVERLAY[bi], overlay_component(knob_overlay(bi)))
         self.discrete("lcdColour")
         tabs, qmaps = [], []
+        self._seq_windows = []
+        for t, q in (self.main_tab(), self.slice_tab(0), self.slice_tab(1), self.seq_tab()):
+            tabs.append(t)
+            qmaps.append(q)
         for page in pages():
             for row in page["rows"]:
                 if sum(c["span"] for c in row) > 4:
@@ -674,6 +1371,60 @@ def preview(builder, outdir, theme=0):
         shots.append(path)
     return shots
 
+
+# ---------------------------------------------------------------- hardware rules (learned on Twisted-Helix)
+def check_skin(path):
+    """1. A Label drawn over a touch area takes the touch on the MPC (Helix 0.2.2): no tab-level label may overlap
+          an interactive entry painted before it.
+       2. The focus frame must be the first child of a pressable component (Helix 0.2.6).
+       3. A cell that opens an overlay must contain something reading its Data handle (Helix 0.2.3)."""
+    t = json.load(open(path))
+    defs = {d["key"]: d["value"] for d in t["pageData"]["componentDefinitions"]["localComponentDefinitions"]}
+    def shown_when(b):
+        """{handle: index} for IndexedEnabling conditions."""
+        out = {}
+        for c in b.get("additionalInvalidatingHandles", []):
+            parts = c.split("/")
+            if parts[0] == "IndexedEnabling":
+                out["/".join(parts[3:])] = int(parts[1])
+        return out
+
+    def exclusive(a, b):
+        return any(h in b and b[h] != v for h, v in a.items())
+
+    bad = []
+    for tab in t["pageData"]["tabs"]:
+        seen = []
+        for e in tab["componentDefinition"]["componentsData"]:
+            typ, b = e["componentData"]["type"], e["bounds"]
+            x, y, w, h = map(float, b["bounds"].split())
+            vis = shown_when(b)
+            if typ == "Label":
+                for nm, (X, Y, W_, H_), v2 in seen:
+                    if x < X + W_ and X < x + w and y < Y + H_ and Y < y + h and not exclusive(vis, v2):
+                        bad.append("%s: label '%s' over '%s'" % (tab["tabName"], e["componentData"]["name"], nm))
+            elif typ not in ("Image", "Focus"):
+                seen.append((e["componentData"]["name"], (x, y, w, h), vis))
+    late, empty = [], []
+    for key, v in defs.items():
+        types = [k["componentData"]["type"] for k in v["componentsData"]]
+        pressable = {"Button", "Knob", "Slider", "Envelope"} & set(types)
+        if pressable and "Focus" in types and types.index("Focus") > min(types.index(x) for x in pressable):
+            late.append(key)
+        if any(a_["handler"] == "Show Overlay" for a_ in v["actions"]):
+            if not any(k["componentData"]["type"] != "Focus" and k["componentData"]["data"].get("handleName") == "Data"
+                       for k in v["componentsData"]):
+                empty.append(key)
+    msgs = []
+    if bad:
+        msgs.append("labels on top of touch areas:\n  " + "\n  ".join(bad[:20]))
+    if late:
+        msgs.append("focus frame not first in: " + ", ".join(late))
+    if empty:
+        msgs.append("overlay cells with nothing reading Data: " + ", ".join(empty))
+    if msgs:
+        raise SystemExit("make_skin: " + "\n".join(msgs))
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--params", default=os.path.join(HERE, "params.json"))
@@ -684,6 +1435,7 @@ def main():
     params = json.load(open(a.params))
     b = Builder(params, a.out)
     n = b.build()
+    check_skin(os.path.join(a.out, "TUI.json"))
     print("make_skin: %d tabs, %d images, %d components -> %s" % (n, len(b.images), len(b.defs), a.out))
     if a.preview:
         for p in preview(b, a.preview, a.preview_theme):

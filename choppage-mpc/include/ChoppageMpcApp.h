@@ -55,6 +55,12 @@ private:
     void write(int index, float v);           // the app changes a parameter: remembered as seen, host told
     void syncMirrors(bool force);
     void syncReadouts(bool force);
+    void syncWave(bool force);
+    void syncList(bool force);
+    void syncSeq(bool force);
+    struct View { int start = 0, length = 1; };
+    View viewOf(const SlotContent& c, int sel);
+    void moveSelectedMarker(int position);
     void setText(int index, const std::string& s);
     std::string browserText(int k) const;
     std::string stepText(int step, int value) const;
@@ -68,6 +74,7 @@ private:
     std::vector<std::string> text_;                 // readout texts, by parameter index
     std::vector<Session::BrowserEntry> browser_;             // copy for formatValue
     std::vector<std::string> badgeLetters_;         // per slice of the selected break (step text)
+    std::string moveText_ = "-";                    // MOVE knob text: the marker's time
 
     // shared with the audio thread
     std::atomic<double> fallbackBpm_{170.0};        // the selected break's tempo, when the MPC sends none
@@ -80,6 +87,13 @@ private:
     uint32_t lastVersion_ = ~0u;
     int lastSlot_ = -1, lastSlice_ = -1, lastBrowserCount_ = -1, lastStepShown_ = -2;
     bool lastEditAll_ = false;
+    // waveform: the shown span is frozen while a marker is edited inside it
+    View frozen_;
+    int viewSlot_ = -1, viewSel_ = -1, viewZoom_ = -1, viewN_ = -1;
+    uint64_t waveKey_ = ~0ull;
+    int listTop_ = 0;
+    uint64_t listKey_ = ~0ull;
+    uint64_t seqKey_ = ~0ull;
     std::string message_;
     int messageTicks_ = 0;
 

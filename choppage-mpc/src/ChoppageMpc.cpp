@@ -23,7 +23,7 @@ static mpc::Param toSdkParam(int index)
         case MpcKind::Int: p = mpc::intParam(d.id.c_str(), d.name.c_str(), (int)d.min, (int)d.max, (int)d.def); break;
         default: p = mpc::floatParam(d.id.c_str(), d.name.c_str(), d.min, d.max, d.def, "", 2, d.skew); break;
     }
-    if (d.hidden || d.readout || d.trigger) p.automatable = false;
+    if (d.hidden || d.readout || d.trigger || d.uiOnly) p.automatable = false;
     return p;
 }
 
@@ -36,7 +36,7 @@ public:
         i.name = "CHOPPAGE";
         i.vendor = "Twisted Genetics";
         i.uniqueId = MPC_FOURCC('T', 'g', 'C', 'h');   // == "uid" in plugin.json
-        i.version = 2000;                               // 0.2.0
+        i.version = 3000;                               // 0.3.0
         i.isInstrument = true;
         i.numInputs = 0;
         i.numOutputs = 2;
