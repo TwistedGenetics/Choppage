@@ -53,7 +53,7 @@ class Renderer:
         return self.cache[name]
 
     def pindex(self, handle):
-        m = re.search(r"Parameter (\d+)$", handle or "")
+        m = re.search(r"Parameter (\d+)$", handle or "")   # also through wrappers like ResetOnGestureEnd/
         return int(m.group(1)) if m else None
 
     def value(self, handle):

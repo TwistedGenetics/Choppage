@@ -15,7 +15,9 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 | Pads | Notes (default) | What |
 |---|---|---|
 | 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. Hit one to switch to it; it plays locked to the MPC's tempo, and **every screen changes to that break**: the LCD, the waveform and slices, the SEQ grid, the slice settings |
-| 9–16 (top two rows) | G#1–D#2 (44–51) | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP |
+| 9–16 (top two rows) | G#1–D#2 (44–51) | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP. The FX plays while you hold the pad and stops when you let go |
+
+The 8 FX pads on the touchscreen work the same way: they play while touched and stop when your finger lifts.
 
 If the program's pads send other notes, set **SET > PAD NOTES** to 37 (the MPC's default) or 48. Slices 1–16 of the playing break are on E2–G3, and pattern memories are on G#3–B4. These are the same as the desktop edition.
 

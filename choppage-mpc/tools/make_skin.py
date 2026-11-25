@@ -838,6 +838,19 @@ class Builder:
         return [entry(pid, key, o(("version", 1), ("handleName", "Data")), bounds(rect, focus="Yes", invalid="Hide", inval=vis),
                       remap=[("Data", self.h(pid))])], (x + vr[0], y + vr[1], vr[2], vr[3])
 
+    def momentary_at(self, pid, rect, on_png, off_png, vis=None):
+        """A pad held for as long as it's touched: a one-button group in Hold mode, its handle wrapped in
+        ResetOnGestureEnd so the parameter goes back to its default (off) when the finger lifts."""
+        x, y, w, h = rect
+        key = "cp hold %s" % on_png
+        self.define(key, component([
+            focus_entry(),
+            entry("pad", "Button", o(("version", 2), ("onImage", on_png), ("offImage", off_png), ("buttonId", 1),
+                                     ("numButtonsInGroup", 1), ("handleName", "Data"), ("gestureBehaviour", "Hold")),
+                  bounds((0, 0, w, h)))]))
+        return entry(pid, key, o(("version", 1), ("handleName", "Data")), bounds(rect, focus="Yes", invalid="Hide", inval=vis),
+                     remap=[("Data", "ResetOnGestureEnd/" + self.h(pid))])
+
     def flip_at(self, pid, rect, png, vis=None, qlink=True):
         """A two-frame picture flipped by a tap (Toggle Switch): keys, triggers, the PATTERN / FX bars, pads."""
         x, y, w, h = rect
@@ -987,12 +1000,10 @@ class Builder:
                     # the setting shows through the pad's window; drawn first so the pad on top keeps the touch
                     kids.append(self.label_at(settings[i], (x + win[0], SY + win[1], win[2], win[3]), 22, argb(LCD[0][1]),
                                               "horizontallyCentred verticallyCentred", vis=vv))
-                png = "pad_%d.png" % i
-                if png not in self.images:
-                    hold = None if settings[i] else "HOLD"
-                    self.save(png, film([pad_key(pad_w, pad_h, names[i], False, win, hold),
-                                         pad_key(pad_w, pad_h, names[i], True, win, hold)]))
-                kids.append(self.flip_at("pad%d" % (i + 1), (x, SY, pad_w, pad_h), png, vv, qlink=False))
+                hold = None if settings[i] else "HOLD"
+                off = self.save("pad_%d_off.png" % i, pad_key(pad_w, pad_h, names[i], False, win, hold))
+                on = self.save("pad_%d_on.png" % i, pad_key(pad_w, pad_h, names[i], True, win, hold))
+                kids.append(self.momentary_at("pad%d" % (i + 1), (x, SY, pad_w, pad_h), on, off, vv))
         # windows behind the pad settings: shown with the pads only (MAIN and FX sections)
         padwin = Image.new("RGBA", (W, pad_h), (0, 0, 0, 0))
         dw = ImageDraw.Draw(padwin)

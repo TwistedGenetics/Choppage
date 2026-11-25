@@ -243,6 +243,14 @@ int main(int argc, char** argv)
     CHECK(t.find("SLICES") != std::string::npos, ("status readout: " + t).c_str());
     CHECK(pf.notified[MP_PLAYHEAD] > 0, "the playhead moves");
 
+    std::printf("on-screen FX pads are momentary\n");
+    app.setParam(P_PAD1 + 2, 1.0f);
+    render(app, 2);
+    CHECK(app.session().engine().uiPad[2].load(), "touching the REVERSE pad holds it");
+    app.setParam(P_PAD1 + 2, 0.0f);   // the MPC puts it back to its default when the finger lifts
+    render(app, 2);
+    CHECK(!app.session().engine().uiPad[2].load(), "lifting the finger lets it go");
+
     std::printf("akaize\n");
     set(app, MP_BREAK, 1);
     set(app, MP_AKAIZE, 1);

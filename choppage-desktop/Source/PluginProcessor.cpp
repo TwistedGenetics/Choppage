@@ -108,8 +108,11 @@ void ChoppageProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mi
         }
 
     auto s = readSettings();
-    for (int p = 0; p < kFxPads; ++p)                     // pads automated as host parameters
-        if (values[(size_t) (P_PAD1 + p)]->load() > 0.5f) sess.setPadHeld (p, true);
+    for (int p = 0; p < kFxPads; ++p)                     // pads automated as host parameters: press and release,
+    {                                                     // on change only (the panel's pads hold on their own)
+        const bool down = values[(size_t) (P_PAD1 + p)]->load() > 0.5f;
+        if (down != padParamDown[(size_t) p]) { padParamDown[(size_t) p] = down; sess.setPadHeld (p, down); }
+    }
 
     const auto& sel = sess.slot (sess.selectedSlot()).content;
     const double bpm = host.hasInfo ? host.bpm : (sel != nullptr ? sel->bpm : 120.0);

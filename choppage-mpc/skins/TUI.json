@@ -5580,18 +5580,10 @@
      }
     },
     {
-     "key": "cp flip pad_0.png",
+     "key": "cp hold pad_0_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -5608,34 +5600,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_0.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -5661,24 +5625,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_0_on.png",
+          "offImage": "pad_0_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_1.png",
+     "key": "cp hold pad_1_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -5695,34 +5680,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_1.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -5748,24 +5705,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_1_on.png",
+          "offImage": "pad_1_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_2.png",
+     "key": "cp hold pad_2_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -5782,34 +5760,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_2.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -5835,24 +5785,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_2_on.png",
+          "offImage": "pad_2_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_3.png",
+     "key": "cp hold pad_3_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -5869,34 +5840,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_3.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -5922,24 +5865,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_3_on.png",
+          "offImage": "pad_3_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_4.png",
+     "key": "cp hold pad_4_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -5956,34 +5920,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_4.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -6009,24 +5945,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_4_on.png",
+          "offImage": "pad_4_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_5.png",
+     "key": "cp hold pad_5_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -6043,34 +6000,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_5.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -6096,24 +6025,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_5_on.png",
+          "offImage": "pad_5_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_6.png",
+     "key": "cp hold pad_6_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -6130,34 +6080,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_6.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -6183,24 +6105,45 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_6_on.png",
+          "offImage": "pad_6_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
      }
     },
     {
-     "key": "cp flip pad_7.png",
+     "key": "cp hold pad_7_on.png",
      "value": {
       "version": 2,
-      "actions": [
-       {
-        "version": 1,
-        "onAction": "Mouse Down",
-        "handler": "Toggle Switch",
-        "handleName": "Data",
-        "additionalData": ""
-       }
-      ],
+      "actions": [],
       "backgroundData": {
        "version": 1,
        "focussed": {
@@ -6217,34 +6160,6 @@
       "ignoreMousePresses": false,
       "disableCoarseDataWheel": false,
       "componentsData": [
-       {
-        "version": 2,
-        "componentData": {
-         "version": 1,
-         "name": "state",
-         "type": "Image",
-         "data": {
-          "version": 2,
-          "imageType": "FilmStrip",
-          "colour": "0",
-          "image": "pad_7.png",
-          "numFrames": 2,
-          "handleName": "Data"
-         }
-        },
-        "handle remapping": {
-         "version": 1,
-         "map": []
-        },
-        "bounds": {
-         "version": 1,
-         "acceptsHWFocus": "No",
-         "showWhenDataModelInvalid": "Show",
-         "whenVisible": "Always",
-         "boundsType": "Absolute",
-         "bounds": "0 0 152 88"
-        }
-       },
        {
         "version": 2,
         "componentData": {
@@ -6270,6 +6185,35 @@
          "whenVisible": "WhenFocussed",
          "boundsType": "Proportional",
          "bounds": "0 0 1 1"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "pad",
+         "type": "Button",
+         "data": {
+          "version": 2,
+          "onImage": "pad_7_on.png",
+          "offImage": "pad_7_off.png",
+          "buttonId": 1,
+          "numButtonsInGroup": 1,
+          "handleName": "Data",
+          "gestureBehaviour": "Hold"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 152 88"
         }
        }
       ]
@@ -28973,7 +28917,7 @@
        "componentData": {
         "version": 1,
         "name": "pad1",
-        "type": "cp flip pad_0.png",
+        "type": "cp hold pad_0_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -28984,7 +28928,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 40"
+          "value": "ResetOnGestureEnd/Parameter 40"
          }
         ]
        },
@@ -29046,7 +28990,7 @@
        "componentData": {
         "version": 1,
         "name": "pad2",
-        "type": "cp flip pad_1.png",
+        "type": "cp hold pad_1_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29057,7 +29001,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 41"
+          "value": "ResetOnGestureEnd/Parameter 41"
          }
         ]
        },
@@ -29076,7 +29020,7 @@
        "componentData": {
         "version": 1,
         "name": "pad3",
-        "type": "cp flip pad_2.png",
+        "type": "cp hold pad_2_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29087,7 +29031,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 42"
+          "value": "ResetOnGestureEnd/Parameter 42"
          }
         ]
        },
@@ -29149,7 +29093,7 @@
        "componentData": {
         "version": 1,
         "name": "pad4",
-        "type": "cp flip pad_3.png",
+        "type": "cp hold pad_3_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29160,7 +29104,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 43"
+          "value": "ResetOnGestureEnd/Parameter 43"
          }
         ]
        },
@@ -29179,7 +29123,7 @@
        "componentData": {
         "version": 1,
         "name": "pad5",
-        "type": "cp flip pad_4.png",
+        "type": "cp hold pad_4_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29190,7 +29134,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 44"
+          "value": "ResetOnGestureEnd/Parameter 44"
          }
         ]
        },
@@ -29252,7 +29196,7 @@
        "componentData": {
         "version": 1,
         "name": "pad6",
-        "type": "cp flip pad_5.png",
+        "type": "cp hold pad_5_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29263,7 +29207,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 45"
+          "value": "ResetOnGestureEnd/Parameter 45"
          }
         ]
        },
@@ -29325,7 +29269,7 @@
        "componentData": {
         "version": 1,
         "name": "pad7",
-        "type": "cp flip pad_6.png",
+        "type": "cp hold pad_6_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29336,7 +29280,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 46"
+          "value": "ResetOnGestureEnd/Parameter 46"
          }
         ]
        },
@@ -29398,7 +29342,7 @@
        "componentData": {
         "version": 1,
         "name": "pad8",
-        "type": "cp flip pad_7.png",
+        "type": "cp hold pad_7_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29409,7 +29353,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 47"
+          "value": "ResetOnGestureEnd/Parameter 47"
          }
         ]
        },
@@ -29471,7 +29415,7 @@
        "componentData": {
         "version": 1,
         "name": "pad1",
-        "type": "cp flip pad_0.png",
+        "type": "cp hold pad_0_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29482,7 +29426,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 40"
+          "value": "ResetOnGestureEnd/Parameter 40"
          }
         ]
        },
@@ -29544,7 +29488,7 @@
        "componentData": {
         "version": 1,
         "name": "pad2",
-        "type": "cp flip pad_1.png",
+        "type": "cp hold pad_1_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29555,7 +29499,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 41"
+          "value": "ResetOnGestureEnd/Parameter 41"
          }
         ]
        },
@@ -29574,7 +29518,7 @@
        "componentData": {
         "version": 1,
         "name": "pad3",
-        "type": "cp flip pad_2.png",
+        "type": "cp hold pad_2_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29585,7 +29529,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 42"
+          "value": "ResetOnGestureEnd/Parameter 42"
          }
         ]
        },
@@ -29647,7 +29591,7 @@
        "componentData": {
         "version": 1,
         "name": "pad4",
-        "type": "cp flip pad_3.png",
+        "type": "cp hold pad_3_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29658,7 +29602,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 43"
+          "value": "ResetOnGestureEnd/Parameter 43"
          }
         ]
        },
@@ -29677,7 +29621,7 @@
        "componentData": {
         "version": 1,
         "name": "pad5",
-        "type": "cp flip pad_4.png",
+        "type": "cp hold pad_4_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29688,7 +29632,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 44"
+          "value": "ResetOnGestureEnd/Parameter 44"
          }
         ]
        },
@@ -29750,7 +29694,7 @@
        "componentData": {
         "version": 1,
         "name": "pad6",
-        "type": "cp flip pad_5.png",
+        "type": "cp hold pad_5_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29761,7 +29705,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 45"
+          "value": "ResetOnGestureEnd/Parameter 45"
          }
         ]
        },
@@ -29823,7 +29767,7 @@
        "componentData": {
         "version": 1,
         "name": "pad7",
-        "type": "cp flip pad_6.png",
+        "type": "cp hold pad_6_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29834,7 +29778,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 46"
+          "value": "ResetOnGestureEnd/Parameter 46"
          }
         ]
        },
@@ -29896,7 +29840,7 @@
        "componentData": {
         "version": 1,
         "name": "pad8",
-        "type": "cp flip pad_7.png",
+        "type": "cp hold pad_7_on.png",
         "data": {
          "version": 1,
          "handleName": "Data"
@@ -29907,7 +29851,7 @@
         "map": [
          {
           "key": "Data",
-          "value": "Parameter 47"
+          "value": "ResetOnGestureEnd/Parameter 47"
          }
         ]
        },

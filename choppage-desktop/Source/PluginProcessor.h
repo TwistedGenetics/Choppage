@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 /*
     ChoppageProcessor — the desktop (JUCE) host for choppage-core.
 
@@ -124,6 +125,7 @@ private:
     juce::AudioFormatManager formats;
     std::vector<std::atomic<float>*> values;
     std::vector<bc::MidiMsg> midiScratch;
+    std::array<bool, bc::kFxPads> padParamDown {};
     juce::File browserFolder;
     std::atomic<double> hostBpm { 0.0 };
     std::atomic<bool> hostPlaying { false };

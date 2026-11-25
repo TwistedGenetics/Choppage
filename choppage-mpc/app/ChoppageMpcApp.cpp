@@ -236,8 +236,12 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
     float v[kNumCoreParams];
     for (int i = 0; i < kNumCoreParams; ++i) v[i] = values_[i].load(std::memory_order_relaxed);
     Engine::Settings s = settingsFromParams(v);
+    // on-screen pads: follow the parameter both ways (press and release), only when it changes
     for (int p = 0; p < kFxPads; ++p)
-        if (v[P_PAD1 + p] > 0.5f) session_.setPadHeld(p, true);
+    {
+        const bool down = v[P_PAD1 + p] > 0.5f;
+        if (down != padDown_[p]) { padDown_[p] = down; session_.setPadHeld(p, down); }
+    }
 
     Engine::Host host;
     host.hasInfo = tr.valid;

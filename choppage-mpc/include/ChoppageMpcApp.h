@@ -82,6 +82,7 @@ private:
     std::atomic<bool> hostPlaying_{false};
     double sampleRate_ = 44100.0;
     std::vector<MidiMsg> midiScratch_;
+    bool padDown_[kFxPads] = {};                    // audio thread: last on-screen pad state
 
     // worker-side change detection
     uint32_t lastVersion_ = ~0u;
