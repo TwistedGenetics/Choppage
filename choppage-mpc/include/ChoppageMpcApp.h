@@ -1,0 +1,90 @@
+// CHOPPAGE on a hardware host: the core Session, the MPC-only controls and the worker that keeps the screen's
+// mirror parameters and readouts in step with the session. Platform-independent (talks to the MPC through
+// IPlatform), so it is tested on the desktop (tests/test_mpc_app.cpp).
+//
+// Threads: process() is the audio thread. setParam() / formatValue() can come from any host thread and only touch
+// atomics or a short mutex. Everything else (loading, dice, editing, readouts) happens on the app's worker, which
+// is the session's "message thread".
+#pragma once
+#include "IPlatform.h"
+#include "MpcParams.h"
+#include "choppage/Session.h"
+#include <atomic>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+namespace bc {
+
+class ChoppageMpcApp
+{
+public:
+    struct Transport
+    {
+        bool valid = false, playing = false;
+        double bpm = 120.0, ppq = 0.0;
+    };
+
+    explicit ChoppageMpcApp(IPlatform& platform, bool startWorker = true);
+    ~ChoppageMpcApp();
+
+    // ---- audio thread
+    void prepare(double sampleRate, int maxBlock);
+    void process(float* l, float* r, int frames, const MidiMsg* midi, int numMidi, const Transport& tr) noexcept;
+
+    // ---- parameters (any thread)
+    void setParam(int index, float plain);
+    float getParam(int index) const;
+    // Value text for every parameter whose text the app owns (core units, readouts, browser, steps).
+    bool formatValue(int index, float plain, std::string& out) const;
+
+    // ---- state (non-real-time)
+    std::string saveState() const;
+    void loadState(const std::string& text);
+
+    // One round of the worker (the thread runs it ~30 times a second; tests call it directly).
+    void tick();
+    void waitIdle() { session_.waitUntilIdle(); }
+    Session& session() { return session_; }
+
+private:
+    void workerLoop();
+    void handle(int index, float v);
+    void write(int index, float v);           // the app changes a parameter: remembered as seen, host told
+    void syncMirrors(bool force);
+    void syncReadouts(bool force);
+    void setText(int index, const std::string& s);
+    std::string browserText(int k) const;
+    std::string stepText(int step, int value) const;
+
+    IPlatform& platform_;
+    Session session_;
+    std::atomic<float> values_[kMpcNumParams];
+    float seen_[kMpcNumParams];
+
+    mutable std::mutex textMutex_;
+    std::vector<std::string> text_;                 // readout texts, by parameter index
+    std::vector<Session::BrowserEntry> browser_;             // copy for formatValue
+    std::vector<std::string> badgeLetters_;         // per slice of the selected break (step text)
+
+    // shared with the audio thread
+    std::atomic<double> fallbackBpm_{170.0};        // the selected break's tempo, when the MPC sends none
+    std::atomic<double> hostBpm_{0.0};
+    std::atomic<bool> hostPlaying_{false};
+    double sampleRate_ = 44100.0;
+    std::vector<MidiMsg> midiScratch_;
+
+    // worker-side change detection
+    uint32_t lastVersion_ = ~0u;
+    int lastSlot_ = -1, lastSlice_ = -1, lastBrowserCount_ = -1, lastStepShown_ = -2;
+    bool lastEditAll_ = false;
+    std::string message_;
+    int messageTicks_ = 0;
+
+    std::atomic<bool> quit_{false};
+    std::thread worker_;
+};
+
+} // namespace bc

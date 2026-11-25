@@ -49,6 +49,11 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 
 Saved with the project: breaks (by path), slices, badges, slice settings, pattern, FX lane and memories.
 
+## MPC edition
+Pads 1–8 play the breaks and pads 9–16 hold the FX, on an S950-style touchscreen with SEQ step knobs on the Q-Links. Install and pages: [choppage-mpc/README.md](choppage-mpc/README.md). It comes as `choppage-*-mpc.zip` on each release (untested on hardware).
+
+![MPC SAMPLE page](docs/mpc-sample.png)
+
 ## Layout
 
 | Folder | What |

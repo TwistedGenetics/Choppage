@@ -19,6 +19,32 @@ jobs:
           cmake -B build-core -S . -DCMAKE_BUILD_TYPE=Release -DCHOP_BUILD_DESKTOP=OFF
           cmake --build build-core -j 4
           ./build-core/test_core
+          ./build-core/choppage-mpc/test_mpc_app
+      - name: MPC skin parameter table is current
+        run: |
+          ./build-core/choppage-mpc/test_mpc_app --dump /tmp/params.json
+          diff -u choppage-mpc/tools/params.json /tmp/params.json || {
+            echo "::error title=MPC skin::choppage-mpc/tools/params.json is stale: run test_mpc_app --dump choppage-mpc/tools/params.json, then tools/make_skin.py"
+            exit 1; }
+
+  mpc:
+    name: MPC plugin (official SDK, arm32 + arm64)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - name: Build (zig cross-compile)
+        run: choppage-mpc/build.sh
+      - name: SDK host simulator (break pad + FX pad, MPC playing)
+        run: |
+          MPC_PLUGIN_FOLDER=$PWD/choppage-mpc external/mpc-plugin-builder-sdk/.sdk-tools/host_sim \
+            choppage-mpc/build/native/choppage.so test --seconds 3 --notes 36,44 --playing
+      - name: Package
+        run: python3 external/mpc-plugin-builder-sdk/tools/package.py choppage-mpc --out dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CHOPPAGE-MPC
+          path: dist/*.zip
 
   macos:
     name: macOS universal (AU + VST3 + Standalone)
@@ -124,23 +150,36 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: CHOPPAGE-macOS
-          path: CHOPPAGE-macOS.zip
+          path: |
+            CHOPPAGE-macOS.zip
+            ui-tab0.png
 
-      # Every green build of main becomes a downloadable Release.
+  release:
+    # Every green build of main becomes a downloadable Release: the macOS plugins and the MPC plugin together.
+    needs: [core, macos, mpc]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: out, merge-multiple: true }
       - name: Publish release
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=$(sed -n 's/^project(Choppage VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
+          MPCV=$(python3 -c 'import json; print(json.load(open("choppage-mpc/plugin.json"))["version"])')
+          [ "$VERSION" = "$MPCV" ] || { echo "::error::CMakeLists.txt says $VERSION, choppage-mpc/plugin.json says $MPCV"; exit 1; }
           TAG="v${VERSION}-build.${{ github.run_number }}"
-          gh release create "$TAG" CHOPPAGE-macOS.zip ui-tab0.png \
+          gh release create "$TAG" out/*.zip out/ui-tab0.png \
             --target "${{ github.sha }}" \
             --title "CHOPPAGE ${VERSION} (build ${{ github.run_number }})" \
             --latest \
             --notes "$(git log -1 --pretty=%B)
 
-          Install: unzip, then follow INSTALL.txt (copy the .component / .vst3 into your plug-in folders or the app into Applications, clear quarantine, rescan)."
+          **macOS** (CHOPPAGE-macOS.zip): unzip, then follow INSTALL.txt (copy the .component / .vst3 into your plug-in folders or the app into Applications, clear quarantine, rescan).
+
+          **MPC** (choppage-*-mpc.zip, untested on hardware): MPC OS 3.10.1+. Unzip and copy the folder into \`VST2 Plugins\` on a drive, then Preferences > Enhancements (Beta) > Enable Enhancements + External Plugin Support. Put your breaks (WAV / AIFF) in the plugin's Content/Breaks folder. See INSTALL.txt and README.md in the zip."
 
   linux-tests:
     name: Linux (VST3 build + tests)

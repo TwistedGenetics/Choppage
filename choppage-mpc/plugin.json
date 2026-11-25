@@ -1,0 +1,15 @@
+{
+  "name": "CHOPPAGE",
+  "manufacturer": "Twisted Genetics",
+  "version": "0.2.0",
+  "format": "vst2",
+  "kind": "instrument",
+  "uid": "TgCh",
+  "numInputs": 0,
+  "numOutputs": 2,
+  "category": "Sampler",
+  "file32": "VST/choppage-arm32.so",
+  "file64": "VST/choppage-arm64.so",
+  "description": "Break chopper in an Akai S950 front panel: 8 breaks on pads 1-8, 8 hold FX on pads 9-16, pattern and FX dice, slice editing, step knobs, Akaize render.",
+  "license": "All rights reserved (no licence chosen yet)"
+}
