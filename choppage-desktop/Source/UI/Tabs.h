@@ -60,8 +60,23 @@ namespace ui
         void mouseDrag (const juce::MouseEvent&) override;
         void mouseUp (const juce::MouseEvent&) override;
         void mouseDoubleClick (const juce::MouseEvent&) override;
+        void mouseWheelMove (const juce::MouseEvent&, const juce::MouseWheelDetails&) override;
         static constexpr int badgeRowH = 34;
+
+        // ---- zoom: the part of the break shown (samples). Wheel = zoom round the mouse, shift / sideways wheel = scroll.
+        void zoomBy (double factor, int anchorX = -1);   // < 1 in, > 1 out
+        void scrollBy (double fractionOfView);          // - left, + right
+        void zoomSlice();                               // the selected slice, with a little either side
+        void zoomAll();
+        bool zoomed() const;
+        juce::String viewText() const;                  // "0.62 - 0.71 S  x12"
+        std::function<void()> onViewChanged;
     private:
+        int numSamples() const;
+        bool followBreak();                              // a new break or file: back to the whole break (true if reset)
+        void setView (double start, double length);
+        double viewStart = 0.0, viewLen = 0.0;          // viewLen 0 = the whole break
+        int viewSlot = -1, viewN = -1;                   // a new break or file shows it all again
         int xForSample (int s) const;
         int sampleForX (int x) const;
         int sliceAtX (int x) const;
@@ -81,7 +96,8 @@ namespace ui
     private:
         ChoppageProcessor& proc;
         WaveView wave;
-        LcdCell sliceRow, allRow;
+        LcdCell sliceRow, allRow, viewInfo;
+        std::vector<std::unique_ptr<LcdCell>> zoomKeys;
         std::vector<std::unique_ptr<LcdCell>> headers, cells;
     };
 

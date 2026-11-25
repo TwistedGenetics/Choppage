@@ -9,6 +9,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "UI/Tabs.h"
 #include "choppage/DemoBreak.h"
 #include <iostream>
 
@@ -114,6 +115,37 @@ static void tests()
     }
 }
 
+static ui::WaveView* findWave (juce::Component& c)
+{
+    if (auto* w = dynamic_cast<ui::WaveView*> (&c)) return w;
+    for (auto* k : c.getChildren()) if (auto* w = findWave (*k)) return w;
+    return nullptr;
+}
+
+static void zoomTests()
+{
+    Rig r;
+    r.p.loadDemo (0);
+    r.p.selectSlice (4, false);
+    ui::WaveView w (r.p);
+    w.setSize (1200, 300);
+    (void) w.createComponentSnapshot (w.getLocalBounds());          // first paint: the view starts on the whole break
+    check (! w.zoomed(), "SAMPLE: the whole break shows to start with");
+    const auto all = w.viewText();
+    w.zoomBy (0.5, 0);
+    check (w.zoomed() && w.viewText().startsWith ("0.00 - "), "ZOOM + round the left edge keeps the start in view (" + w.viewText() + ")");
+    w.scrollBy (0.5);
+    check (! w.viewText().startsWith ("0.00"), "scroll right moves the view (" + w.viewText() + ")");
+    w.zoomSlice();
+    check (w.zoomed() && w.viewText().contains ("X"), "ZOOM SLICE (" + w.viewText() + ")");
+    for (int i = 0; i < 40; ++i) w.zoomBy (0.5);
+    check (w.zoomed(), "zooming in stops at a sensible limit (" + w.viewText() + ")");
+    for (int i = 0; i < 40; ++i) w.zoomBy (2.0);
+    check (! w.zoomed() && w.viewText() == all, "zooming out ends on the whole break");
+    w.zoomSlice(); w.zoomAll();
+    check (! w.zoomed(), "ZOOM OUT ALL");
+}
+
 static int snapshot (const juce::String& path, int tab, int width, int lcd)
 {
     Rig r;
@@ -143,6 +175,8 @@ static int snapshot (const juce::String& path, int tab, int width, int lcd)
     if (auto* ce = dynamic_cast<ChoppageEditor*> (ed.get())) ce->showTab (tab);
     ed->setSize (width, width * ChoppageEditor::designH / ChoppageEditor::designW);
     pump (300);
+    if (juce::SystemStats::getEnvironmentVariable ("CHOP_SNAP_ZOOM", {}).isNotEmpty())
+        if (auto* w = findWave (*ed)) { w->zoomSlice(); pump (100); }
     auto img = ed->createComponentSnapshot (ed->getLocalBounds(), true, 1.0f);
     juce::File f (juce::File::getCurrentWorkingDirectory().getChildFile (path));
     f.deleteFile();
@@ -161,6 +195,7 @@ int main (int argc, char** argv)
                          argc >= 5 ? juce::String (argv[4]).getIntValue() : ChoppageEditor::designW,
                          argc >= 6 ? juce::String (argv[5]).getIntValue() : 0);
     tests();
+    zoomTests();
     std::cout << "\n" << (checks - failures) << " / " << checks << " checks passed" << std::endl;
     return failures == 0 ? 0 : 1;
 }

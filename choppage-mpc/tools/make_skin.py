@@ -999,7 +999,7 @@ class Builder:
         LX, LY, LW, LH = 10, 4, 1260, 344
         rowA, rowB = (16, 44), (66, 38)
         name_box = (166, rowA[0], 596, rowA[1])
-        bpm_box = (978, rowA[0], 276, rowA[1])
+        bpm_box = (978, rowA[0], 156, rowA[1])
         kids.append(self.lcd_panel((LX, LY, LW, LH), [name_box, bpm_box], [(26, 312, 1254)], "main"))
         kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1] + 2, name_box[2] - 20, name_box[3] - 4), 30,
                               "horizontallyCentred verticallyCentred")
@@ -1015,6 +1015,8 @@ class Builder:
             kids.append(self.flip_at("brkPrev", (96, rowA[0], 62, rowA[1]), self.lcd_key_png(t, "◀", 62, rowA[1]), v, qlink=False))
             kids.append(self.flip_at("brkNext", (770, rowA[0], 62, rowA[1]), self.lcd_key_png(t, "▶ ", 62, rowA[1]), v, qlink=False))
             kids.append(self.flip_at("showDisk", (840, rowA[0], 130, rowA[1]), self.lcd_key_png(t, "LOAD", 130, rowA[1]), v, qlink=False))
+            # the waveform here is the same picture as on SLICE: its zoom can be put back from MAIN too (lit = ZOOM SLICE)
+            kids.append(self.flip_at("zoom", (1142, rowA[0], 112, rowA[1]), self.lcd_key_png(t, "ZOOM", 112, rowA[1], 24), v, qlink=False))
             notes = ["1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1"]
             bw = (1228 - 7 * 8) // 8
             imgs = []

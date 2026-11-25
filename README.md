@@ -25,7 +25,8 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 ## The panel
 - **Tabs**: **SAMPLE** · **SEQ** · **FX** · **SET** · **AKAI** · **DISK**
 - **Status line**: the selected break's MUTE GROUP (GRP 1–4) and PLAYING / OTHER PLAYING (another break is running) / STOPPED. Hits show as K S GS H O P.
-- **SAMPLE**: waveform with slice markers and badges (K1, S2, G1, H3, O1…).
+- **SAMPLE**: waveform with slice markers and badges (K1, S2, GS1, H3, O1, P1…).
+  - Zoom: **ZOOM SLICE** (fills the view with the selected slice), **ZOOM +** / **ZOOM -**, **◀ ▶** to scroll, **ZOOM OUT ALL**. The mouse wheel zooms round the pointer; shift + wheel (or a sideways scroll) moves along. The view's times and zoom show beside the keys.
   - Click a slice to select it and hear it.
   - Drag a marker to move it; double-click to add one; right-click to mute, change the badge or delete the marker.
   - **SLICE / ALL** table: PITCH, GATE, STRETCH, REVERSE, STUTTER, TRANS, XFADE. Drag or scroll a value; double-click resets it.

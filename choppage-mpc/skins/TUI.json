@@ -471,6 +471,93 @@
      }
     },
     {
+     "key": "cp flip lcdkey_0_zoom_112x44.png",
+     "value": {
+      "version": 2,
+      "actions": [
+       {
+        "version": 1,
+        "onAction": "Mouse Down",
+        "handler": "Toggle Switch",
+        "handleName": "Data",
+        "additionalData": ""
+       }
+      ],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "state",
+         "type": "Image",
+         "data": {
+          "version": 2,
+          "imageType": "FilmStrip",
+          "colour": "0",
+          "image": "lcdkey_0_zoom_112x44.png",
+          "numFrames": 2,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 112 44"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       }
+      ]
+     }
+    },
+    {
      "key": "cp breaks 0",
      "value": {
       "version": 2,
@@ -1070,6 +1157,93 @@
          "whenVisible": "Always",
          "boundsType": "Absolute",
          "bounds": "0 0 130 44"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp flip lcdkey_1_zoom_112x44.png",
+     "value": {
+      "version": 2,
+      "actions": [
+       {
+        "version": 1,
+        "onAction": "Mouse Down",
+        "handler": "Toggle Switch",
+        "handleName": "Data",
+        "additionalData": ""
+       }
+      ],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "state",
+         "type": "Image",
+         "data": {
+          "version": 2,
+          "imageType": "FilmStrip",
+          "colour": "0",
+          "image": "lcdkey_1_zoom_112x44.png",
+          "numFrames": 2,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 112 44"
         }
        },
        {
@@ -1735,6 +1909,93 @@
      }
     },
     {
+     "key": "cp flip lcdkey_2_zoom_112x44.png",
+     "value": {
+      "version": 2,
+      "actions": [
+       {
+        "version": 1,
+        "onAction": "Mouse Down",
+        "handler": "Toggle Switch",
+        "handleName": "Data",
+        "additionalData": ""
+       }
+      ],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "state",
+         "type": "Image",
+         "data": {
+          "version": 2,
+          "imageType": "FilmStrip",
+          "colour": "0",
+          "image": "lcdkey_2_zoom_112x44.png",
+          "numFrames": 2,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 112 44"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       }
+      ]
+     }
+    },
+    {
      "key": "cp breaks 2",
      "value": {
       "version": 2,
@@ -2334,6 +2595,93 @@
          "whenVisible": "Always",
          "boundsType": "Absolute",
          "bounds": "0 0 130 44"
+        }
+       },
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "focus",
+         "type": "Focus",
+         "data": {
+          "version": 1,
+          "backgroundColour": "24c0141c",
+          "outlineColour": "ffc0141c",
+          "backgroundInset": 0.0,
+          "outlineThickness": 4.0
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "WhenFocussed",
+         "boundsType": "Proportional",
+         "bounds": "0 0 1 1"
+        }
+       }
+      ]
+     }
+    },
+    {
+     "key": "cp flip lcdkey_3_zoom_112x44.png",
+     "value": {
+      "version": 2,
+      "actions": [
+       {
+        "version": 1,
+        "onAction": "Mouse Down",
+        "handler": "Toggle Switch",
+        "handleName": "Data",
+        "additionalData": ""
+       }
+      ],
+      "backgroundData": {
+       "version": 1,
+       "focussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       },
+       "unfocussed": {
+        "version": 1,
+        "colour": "0",
+        "image": ""
+       }
+      },
+      "ignoreMousePresses": false,
+      "disableCoarseDataWheel": false,
+      "componentsData": [
+       {
+        "version": 2,
+        "componentData": {
+         "version": 1,
+         "name": "state",
+         "type": "Image",
+         "data": {
+          "version": 2,
+          "imageType": "FilmStrip",
+          "colour": "0",
+          "image": "lcdkey_3_zoom_112x44.png",
+          "numFrames": 2,
+          "handleName": "Data"
+         }
+        },
+        "handle remapping": {
+         "version": 1,
+         "map": []
+        },
+        "bounds": {
+         "version": 1,
+         "acceptsHWFocus": "No",
+         "showWhenDataModelInvalid": "Show",
+         "whenVisible": "Always",
+         "boundsType": "Absolute",
+         "bounds": "0 0 112 44"
         }
        },
        {
@@ -39139,7 +39487,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "988 18 256 40",
+        "bounds": "988 18 136 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
        }
       },
@@ -39182,7 +39530,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "988 18 256 40",
+        "bounds": "988 18 136 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -39225,7 +39573,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "988 18 256 40",
+        "bounds": "988 18 136 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
        }
       },
@@ -39268,7 +39616,7 @@
         "showWhenDataModelInvalid": "Show",
         "whenVisible": "Always",
         "boundsType": "Absolute",
-        "bounds": "988 18 256 40",
+        "bounds": "988 18 136 40",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },
@@ -39912,6 +40260,36 @@
        "version": 2,
        "componentData": {
         "version": 1,
+        "name": "zoom",
+        "type": "cp flip lcdkey_0_zoom_112x44.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 209"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1142 16 112 44",
+        "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
         "name": "break",
         "type": "cp breaks 0",
         "data": {
@@ -40055,6 +40433,36 @@
         "whenVisible": "Always",
         "boundsType": "Absolute",
         "bounds": "840 16 130 44",
+        "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "zoom",
+        "type": "cp flip lcdkey_1_zoom_112x44.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 209"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1142 16 112 44",
         "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
        }
       },
@@ -40212,6 +40620,36 @@
        "version": 2,
        "componentData": {
         "version": 1,
+        "name": "zoom",
+        "type": "cp flip lcdkey_2_zoom_112x44.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 209"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1142 16 112 44",
+        "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
         "name": "break",
         "type": "cp breaks 2",
         "data": {
@@ -40355,6 +40793,36 @@
         "whenVisible": "Always",
         "boundsType": "Absolute",
         "bounds": "840 16 130 44",
+        "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+       }
+      },
+      {
+       "version": 2,
+       "componentData": {
+        "version": 1,
+        "name": "zoom",
+        "type": "cp flip lcdkey_3_zoom_112x44.png",
+        "data": {
+         "version": 1,
+         "handleName": "Data"
+        }
+       },
+       "handle remapping": {
+        "version": 1,
+        "map": [
+         {
+          "key": "Data",
+          "value": "Parameter 209"
+         }
+        ]
+       },
+       "bounds": {
+        "version": 2,
+        "acceptsHWFocus": "Yes",
+        "showWhenDataModelInvalid": "Hide",
+        "whenVisible": "Always",
+        "boundsType": "Absolute",
+        "bounds": "1142 16 112 44",
         "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
        }
       },

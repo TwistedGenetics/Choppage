@@ -140,18 +140,99 @@ namespace ui
     // =====================================================================================
     //  SAMPLE — waveform
     // =====================================================================================
-    int WaveView::xForSample (int s) const
+    int WaveView::numSamples() const
     {
         const auto& slot = proc.getSlot (proc.getSelectedSlot());
-        const int n = slot.content != nullptr ? slot.content->buffer->numSamples : 1;
-        return (int) ((juce::int64) s * getWidth() / juce::jmax (1, n));
+        return slot.content != nullptr ? juce::jmax (1, slot.content->buffer->numSamples) : 1;
+    }
+
+    // the view in samples; a different break (or file) starts from the whole break again
+    void WaveView::setView (double start, double length)
+    {
+        followBreak();
+        const double n = (double) numSamples();
+        const double minLen = juce::jmin (n, juce::jmax (64.0, (double) getWidth() / 4.0));
+        length = juce::jlimit (minLen, n, length);
+        start = juce::jlimit (0.0, n - length, start);
+        viewStart = start;
+        viewLen = length >= n ? 0.0 : length;
+        if (viewLen == 0.0) viewStart = 0.0;
+        repaint();
+        if (onViewChanged) onViewChanged();
+    }
+
+    bool WaveView::zoomed() const { return viewLen > 0.0; }
+
+    bool WaveView::followBreak()
+    {
+        const int slot = proc.getSelectedSlot();
+        const int n = proc.getSlot (slot).content != nullptr ? numSamples() : -1;
+        if (slot == viewSlot && n == viewN) return false;
+        viewSlot = slot; viewN = n;
+        const bool was = viewLen > 0.0;
+        viewStart = 0.0; viewLen = 0.0;
+        return was;
+    }
+
+    void WaveView::zoomBy (double factor, int anchorX)
+    {
+        followBreak();
+        const double n = (double) numSamples();
+        const double len = viewLen > 0.0 ? viewLen : n;
+        const double frac = anchorX >= 0 ? juce::jlimit (0.0, 1.0, (double) anchorX / juce::jmax (1, getWidth())) : 0.5;
+        const double at = viewStart + frac * len;                    // this sample stays under the mouse
+        const double newLen = len * factor;
+        setView (at - frac * newLen, newLen);
+    }
+
+    void WaveView::scrollBy (double fractionOfView)
+    {
+        followBreak();
+        if (viewLen <= 0.0) return;
+        setView (viewStart + fractionOfView * viewLen, viewLen);
+    }
+
+    void WaveView::zoomSlice()
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr) return;
+        const auto reg = slot.content->region (proc.getSelectedSlice());
+        const double margin = juce::jmax (256.0, reg.length() * 0.15);
+        setView (reg.start - margin, reg.length() + 2.0 * margin);
+    }
+
+    void WaveView::zoomAll() { setView (0.0, (double) numSamples()); }
+
+    juce::String WaveView::viewText() const
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr) return "-";
+        const double sr = juce::jmax (1.0, slot.content->buffer->sampleRate);
+        const double n = (double) numSamples(), len = viewLen > 0.0 ? viewLen : n;
+        const double x = n / len;
+        return juce::String (viewStart / sr, 2) + " - " + juce::String ((viewStart + len) / sr, 2) + " S  X"
+             + (x < 10.0 ? juce::String (x, 1) : juce::String (juce::roundToInt (x)));
+    }
+
+    int WaveView::xForSample (int s) const
+    {
+        const double len = viewLen > 0.0 ? viewLen : (double) numSamples();
+        return (int) std::floor ((s - viewStart) * getWidth() / len);
     }
 
     int WaveView::sampleForX (int x) const
     {
-        const auto& slot = proc.getSlot (proc.getSelectedSlot());
-        const int n = slot.content != nullptr ? slot.content->buffer->numSamples : 0;
-        return (int) ((juce::int64) juce::jlimit (0, getWidth(), x) * n / juce::jmax (1, getWidth()));
+        const double len = viewLen > 0.0 ? viewLen : (double) numSamples();
+        const int n = proc.getSlot (proc.getSelectedSlot()).content != nullptr ? numSamples() : 0;
+        return juce::jlimit (0, n, (int) std::lround (viewStart + (double) juce::jlimit (0, getWidth(), x) * len / juce::jmax (1, getWidth())));
+    }
+
+    void WaveView::mouseWheelMove (const juce::MouseEvent& e, const juce::MouseWheelDetails& w)
+    {
+        // sideways or shift: scroll; up / down: zoom in / out round the mouse
+        const float side = w.deltaX != 0.0f ? w.deltaX : (e.mods.isShiftDown() ? w.deltaY : 0.0f);
+        if (side != 0.0f) { scrollBy (-side * 2.0); return; }
+        if (w.deltaY != 0.0f) zoomBy (w.deltaY > 0 ? 0.8 : 1.25, e.x);
     }
 
     int WaveView::sliceAtX (int x) const
@@ -188,6 +269,7 @@ namespace ui
         const auto& c = *slot.content;
         const auto& buf = *c.buffer;
         const int n = buf.numSamples;
+        if (followBreak() && onViewChanged) juce::MessageManager::callAsync ([f = onViewChanged] { f(); });
         const float mid = (float) r.getCentreY(), half = (float) r.getHeight() * 0.48f;
 
         // muted slices are shaded, the selected one is lit
@@ -212,9 +294,9 @@ namespace ui
         g.setColour (lcdc().ink);
         for (int x = 0; x < r.getWidth(); ++x)
         {
-            const int s0 = (int) ((juce::int64) x * n / r.getWidth());
-            const int s1 = (int) ((juce::int64) (x + 1) * n / r.getWidth());
-            const auto pk = buf.peakRange (s0, juce::jmax (s0 + 1, s1));
+            const int s0 = juce::jlimit (0, n - 1, sampleForX (x));
+            const int s1 = juce::jlimit (s0 + 1, n, sampleForX (x + 1));
+            const auto pk = buf.peakRange (s0, s1);
             const float top = mid - juce::jlimit (0.0f, 1.0f, pk.second) * half;
             const float bot = mid - juce::jlimit (-1.0f, 0.0f, pk.first) * half;
             g.fillRect ((float) x, top, 1.0f, juce::jmax (1.0f, bot - top));
@@ -375,6 +457,32 @@ namespace ui
     SampleTab::SampleTab (ChoppageProcessor& p) : proc (p), wave (p)
     {
         addAndMakeVisible (wave);
+        // zoom keys above the waveform (the mouse wheel zooms too, round the pointer; shift + wheel scrolls)
+        auto key = [this] (juce::String t, std::function<void()> fn, std::function<bool()> on, juce::String tip)
+        {
+            auto c = std::make_unique<LcdCell>();
+            c->text = [t] { return t; };
+            c->boxed = true;
+            c->fontSize = 24.0f;
+            c->just = juce::Justification::centred;
+            c->isOn = std::move (on);
+            c->onClick = [fn] (const juce::MouseEvent&) { fn(); };
+            c->setTooltip (tip);
+            addAndMakeVisible (*c);
+            zoomKeys.push_back (std::move (c));
+        };
+        key ("ZOOM SLICE", [this] { wave.zoomSlice(); }, nullptr, "Fill the waveform with the selected slice");
+        key ("ZOOM +", [this] { wave.zoomBy (0.5); }, nullptr, "Zoom in (or scroll the mouse wheel up over the waveform)");
+        key ("ZOOM -", [this] { wave.zoomBy (2.0); }, nullptr, "Zoom out (or scroll the mouse wheel down)");
+        key (juce::String::fromUTF8 ("\xe2\x97\x80"), [this] { wave.scrollBy (-0.5); }, nullptr, "Scroll left (or shift + wheel)");
+        key (juce::String::fromUTF8 ("\xe2\x96\xb6"), [this] { wave.scrollBy (0.5); }, nullptr, "Scroll right (or shift + wheel)");
+        key ("ZOOM OUT ALL", [this] { wave.zoomAll(); }, [this] { return ! wave.zoomed(); }, "Show the whole break");
+        viewInfo.text = [this] { return wave.viewText(); };
+        viewInfo.fontSize = 22.0f;
+        viewInfo.just = juce::Justification::centredRight;
+        viewInfo.setInterceptsMouseClicks (false, false);
+        addAndMakeVisible (viewInfo);
+        wave.onViewChanged = [this] { for (auto& k : zoomKeys) k->repaint(); viewInfo.repaint(); };
         for (auto* row : { &sliceRow, &allRow })
         {
             const bool isAll = row == &allRow;
@@ -437,7 +545,12 @@ namespace ui
         const int rowH = 40;
         auto table = r.removeFromBottom (rowH * 3);
         r.removeFromBottom (8);
+        auto keys = r.removeFromTop (38);
+        r.removeFromTop (6);
         wave.setBounds (r);
+        const int kw[] = { 170, 110, 110, 60, 60, 190 };
+        for (size_t i = 0; i < zoomKeys.size(); ++i) { zoomKeys[i]->setBounds (keys.removeFromLeft (kw[i]).withTrimmedRight (8)); }
+        viewInfo.setBounds (keys);
         const int labelW = 170;
         const int colW = (table.getWidth() - labelW) / 7;
         auto head = table.removeFromTop (rowH);
@@ -460,7 +573,8 @@ namespace ui
     void SampleTab::refresh()
     {
         wave.repaint();
-        sliceRow.repaint(); allRow.repaint();
+        sliceRow.repaint(); allRow.repaint(); viewInfo.repaint();
+        for (auto& k : zoomKeys) k->repaint();
         for (auto& c : cells) c->repaint();
     }
 

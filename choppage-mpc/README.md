@@ -48,6 +48,7 @@ The sections:
 - **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo. Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
+- **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
 - **Drag with your finger** on the strip under the hit letters (`< START >`): the selected slice's start marker follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
