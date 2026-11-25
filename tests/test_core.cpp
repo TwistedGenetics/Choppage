@@ -1,0 +1,389 @@
+/*
+    test_core — choppage-core on its own (no JUCE, no host): the same engine the
+    desktop and MPC plugins run.
+
+      analysis · generators · playback (BAR SYNC, LATCH / HOLD, MIDI mode, swing, FIT)
+      FX pads + character · editing, history, memories · state round trip
+      WAV / AIFF in and out · break browser · Akaize render · bounce
+*/
+#include "choppage/Analysis.h"
+#include "choppage/DemoBreak.h"
+#include "choppage/Generator.h"
+#include "choppage/Params.h"
+#include "choppage/Session.h"
+#include <cstdio>
+#include <filesystem>
+#include <iostream>
+
+using namespace bc;
+namespace fs = std::filesystem;
+
+static int failures = 0, checks = 0;
+static void check (bool ok, const std::string& what)
+{
+    ++checks;
+    if (! ok) ++failures;
+    std::cout << (ok ? "  [PASS] " : "  [FAIL] ") << what << std::endl;
+}
+
+struct Audio { std::vector<float> l, r; };
+
+struct Rig
+{
+    Session s;
+    std::vector<float> plain;
+    Engine::Host host;
+    double sr = 44100.0;
+    int block = 512;
+
+    Rig()
+    {
+        for (int i = 0; i < kNumCoreParams; ++i) plain.push_back (paramDefs()[(size_t) i].def);
+        host.playing = true; host.hasInfo = true; host.bpm = 170.0; host.ppq = 0.0;
+        s.prepare (sr, block);
+    }
+
+    void set (int p, float v) { plain[(size_t) p] = v; }
+
+    Audio run (double seconds, std::vector<MidiMsg> events = {})
+    {
+        const int total = (int) (seconds * sr);
+        Audio a; a.l.assign ((size_t) total, 0.0f); a.r.assign ((size_t) total, 0.0f);
+        auto settings = settingsFromParams (plain.data());
+        for (int pos = 0; pos < total; pos += block)
+        {
+            const int n = std::min (block, total - pos);
+            std::vector<MidiMsg> m;
+            for (auto e : events) if (e.offset >= pos && e.offset < pos + n) { e.offset -= pos; m.push_back (e); }
+            settings.sound.echoSamples = echoBeats ((int) plain[P_ECHO_TIME]) * sr * 60.0 / host.bpm;
+            for (int p = 0; p < kFxPads; ++p) if (plain[(size_t) (P_PAD1 + p)] > 0.5f) s.setPadHeld (p, true);
+            s.process (a.l.data() + pos, a.r.data() + pos, n, m.data(), (int) m.size(), host, settings);
+            if (host.playing) host.ppq += n * host.bpm / 60.0 / sr;
+            s.poll();
+        }
+        return a;
+    }
+};
+
+static float rms (const Audio& a, int from = 0, int len = -1)
+{
+    if (len < 0) len = (int) a.l.size() - from;
+    if (len <= 0) return 0.0f;
+    double s = 0;
+    for (int i = from; i < from + len; ++i) s += (double) a.l[(size_t) i] * a.l[(size_t) i];
+    return (float) std::sqrt (s / len);
+}
+static bool finite (const Audio& a)
+{
+    for (size_t i = 0; i < a.l.size(); ++i)
+        if (! std::isfinite (a.l[i]) || ! std::isfinite (a.r[i]) || std::abs (a.l[i]) > 8.0f) return false;
+    return true;
+}
+static float difference (const Audio& a, const Audio& b)
+{
+    const size_t n = std::min (a.l.size(), b.l.size());
+    double d = 0;
+    for (size_t i = 0; i < n; ++i) d += std::abs (a.l[i] - b.l[i]);
+    return (float) (d / std::max<size_t> (1, n));
+}
+static std::string fmt (double v, int dec = 1) { char b[32]; std::snprintf (b, sizeof b, "%.*f", dec, v); return b; }
+static fs::path tmp() { auto p = fs::temp_directory_path() / "choppage-core-test"; fs::create_directories (p); return p; }
+
+static void writeDemo (const std::string& path, double bpm)
+{
+    auto b = DemoBreak::make (44100.0, bpm);
+    const float* ch[2] = { b->ch[0].data(), b->ch[1].data() };
+    AudioFile::writeWav24 (path, ch, 2, b->numSamples, 44100.0);
+}
+
+// =====================================================================================
+static void analysisTests()
+{
+    std::cout << "\n== Analysis ==" << std::endl;
+    auto t = Analysis::estimateTempo (60.0 / 170.0 * 8.0, "amen");
+    check (std::abs (t.bpm - 170.0) < 0.5 && t.bars == 2, "2 bars at 170 BPM from its length (" + fmt (t.bpm) + ")");
+    auto h = Analysis::estimateTempo (60.0 / 136.0 * 4.0, "think_break_136");
+    check (std::abs (h.bpm - 136.0) < 0.5 && h.bars == 1, "BPM hint in the file name (think_break_136 -> 136, 1 bar)");
+    auto h2 = Analysis::estimateTempo (60.0 / 85.0 * 8.0, "funky 170bpm");
+    check (std::abs (h2.bpm - 170.0) < 0.5, "name says 170: 85-BPM-length loop read as 4 bars at 170");
+
+    auto buf = DemoBreak::make (44100.0, 170.0);
+    SlotContent c;
+    c.buffer = buf; c.bars = 2; c.bpm = 170.0;
+    c.slices = Analysis::gridSlices (buf->numSamples, 2, 16);
+    c.badges = Analysis::classify (*buf, c.slices);
+    const char* lay = DemoBreak::layout();
+    int right = 0, hits = 0;
+    std::string got, want;
+    for (int k = 0; k < 32; ++k)
+    {
+        if (lay[k] == '.') continue;
+        ++hits;
+        const char g = badgeLetter (c.badges[(size_t) k])[0];
+        got += g; want += lay[k];
+        if (g == lay[k]) ++right;
+    }
+    check (right == hits, "classifier badges every demo hit (" + std::to_string (right) + "/" + std::to_string (hits) + ": " + got + ")");
+    auto orig = Analysis::originalPattern (c);
+    check (orig.numSteps == 32 && orig.slice[0] == 0 && orig.slice[31] == 31, "original pattern = slices in order on their 16ths");
+}
+
+static void generatorTests()
+{
+    std::cout << "\n== Generators ==" << std::endl;
+    auto buf = DemoBreak::make();
+    auto c = std::make_shared<SlotContent>();
+    c->buffer = buf; c->bars = 2; c->bpm = 170.0;
+    c->slices = Analysis::gridSlices (buf->numSamples, 2, 16);
+    c->badges = Analysis::classify (*buf, c->slices);
+
+    Generator::Input in;
+    in.content = c.get();
+    in.original = Analysis::originalPattern (*c);
+    in.current = in.original;
+    in.amount = 0.0f; in.layers = false; in.seed = 42;
+    check (Generator::pattern (in) == in.original, "AMOUNT 0 gives back the original order");
+    in.amount = 1.0f;
+    auto a = Generator::pattern (in);
+    check (! (a == in.original), "AMOUNT 100% rewrites the pattern");
+    check (a == Generator::pattern (in), "same seed, same pattern");
+    in.current.slice[5] = 3; in.current.locked[5] = true;
+    check (Generator::pattern (in).slice[5] == 3, "a locked step survives the dice");
+    int kicks = 0;
+    for (int st : { 0, 16 }) if (a.slice[(size_t) st] >= 0 && c->badges[(size_t) a.slice[(size_t) st]] == Badge::kick) ++kicks;
+    check (kicks == 2, "JUNGLE puts kicks on the ones");
+    auto fx = Generator::fx (in.original, 1.0f, 7);
+    int ev = 0; for (int i = 0; i < fx.numSteps; ++i) ev += fx.fx[(size_t) i].type != FxType::none;
+    check (ev > 2 && fx.fx[0].type == FxType::none, "FX dice scatters events and leaves the one clean (" + std::to_string (ev) + ")");
+    const int nxt = Generator::nextWithSameBadge (*c, 4);
+    check (nxt != 4 && c->badges[(size_t) nxt] == c->badges[4], "swap finds another slice with the same badge");
+}
+
+static void playbackTests()
+{
+    std::cout << "\n== Playback ==" << std::endl;
+    {
+        Rig r;
+        check (r.s.slot (0).status == Session::Status::ready, "demo break ready in slot 1");
+        auto a = r.run (1.0);
+        check (rms (a) > 0.01f && finite (a), "host playing: the break plays (rms " + fmt (rms (a), 3) + ")");
+        r.host.ppq = 4.0;
+        r.run (0.01);
+        check (r.s.engine().currentStep.load() == 16, "BAR SYNC: bar 2 starts on step 17 (got " + std::to_string (r.s.engine().currentStep.load() + 1) + ")");
+        r.host.ppq = 2.0;    // relocate backwards (loop brace)
+        r.run (0.01);
+        check (r.s.engine().currentStep.load() == 8, "BAR SYNC follows a relocate (step 9)");
+        r.s.loadDemo (1);
+        r.run (0.2, { MidiMsg::noteOn (kFirstBreakNote + 1, 100) });
+        check (r.s.engine().playingSlot.load() == 1, "C#1 switches to break 2");
+        r.host.playing = false;
+        auto stopped = r.run (0.5);
+        check (rms (stopped, (int) (0.2 * r.sr)) < 0.001f, "host stop: silence");
+    }
+    {
+        Rig r;
+        r.host.playing = false;
+        check (rms (r.run (0.3)) < 0.0001f, "host stopped, nothing latched: silent");
+        auto on = r.run (0.6, { MidiMsg::noteOn (kFirstBreakNote, 100), MidiMsg::noteOff (kFirstBreakNote, 1000) });
+        check (rms (on) > 0.01f, "LATCH: a tap on C1 runs the break on the internal clock");
+        r.run (0.1, { MidiMsg::noteOn (kFirstBreakNote, 100) });
+        check (rms (r.run (0.4), (int) (0.1 * r.sr)) < 0.001f, "LATCH: the same key again stops it");
+        r.set (P_GATE_MODE, 1);
+        auto held = r.run (0.5, { MidiMsg::noteOn (kFirstBreakNote, 100), MidiMsg::noteOff (kFirstBreakNote, (int) (0.25 * r.sr)) });
+        check (rms (held, 0, (int) (0.2 * r.sr)) > 0.01f && rms (held, (int) (0.33 * r.sr)) < 0.001f, "HOLD: plays while held, stops on release");
+    }
+    {
+        Rig r;
+        r.host.playing = false;
+        r.set (P_TRIGGER, 1);
+        auto a = r.run (0.4, { MidiMsg::noteOn (kFirstSliceNote, 100, 100) });
+        check (rms (a, 0, 90) < 0.0001f && rms (a, 100) > 0.005f, "MIDI mode: E2 plays slice 1 on the sample it arrives");
+    }
+    {
+        Rig a, b; b.set (P_SWING, 0.7f);
+        check (difference (a.run (2.0), b.run (2.0)) > 0.002f, "SWING moves the off-beat 16ths");
+        Rig k, q; k.set (P_FIT_MODE, 1); k.host.bpm = 120; q.host.bpm = 120;
+        auto ka = k.run (1.0);
+        check (difference (ka, q.run (1.0)) > 0.002f && finite (ka), "FIT: REPITCH and KEEP differ at 120 BPM");
+    }
+}
+
+static void fxTests()
+{
+    std::cout << "\n== FX pads and character ==" << std::endl;
+    Rig base;
+    auto dry = base.run (1.5);
+    for (int pad = 0; pad < kFxPads; ++pad)
+    {
+        Rig r;
+        auto wet = r.run (1.5, { MidiMsg::noteOn (kFirstFxNote + pad, 110, (int) (0.4 * r.sr)), MidiMsg::noteOff (kFirstFxNote + pad, (int) (1.2 * r.sr)) });
+        const float d = difference (dry, wet);
+        check (d > 0.001f && finite (wet), std::string ("pad ") + fxPadName (pad) + " changes the sound (" + fmt (d, 4) + ")");
+    }
+    {
+        Rig clean, s950, low;
+        clean.set (P_CHARACTER, 0);
+        low.set (P_SRATE, 4000.0f);
+        auto a = clean.run (1.0), b = s950.run (1.0), c = low.run (1.0);
+        check (difference (a, b) > 0.001f, "S950 character differs from CLEAN");
+        check (difference (b, c) > 0.001f && finite (c), "SAMPLE RATE fader at 4 kHz crunches it");
+    }
+    {
+        Rig r;
+        r.set (P_DIST, 0.8f); r.set (P_CRUSH, 0.7f); r.set (P_REVERB, 0.6f); r.set (P_ECHO_MIX, 0.5f); r.set (P_FILTER, 0.3f);
+        auto a = r.run (2.0);
+        check (finite (a) && rms (a) > 0.005f, "all post FX at once: stable");
+        r.set (P_FILTER_TYPE, 1); r.set (P_FILTER, 0.9f);
+        check (finite (r.run (0.5)), "HP filter: stable");
+    }
+    {
+        Rig r;
+        for (int st = 1; st < 32; st += 2) r.s.setFxStep (st, FxType::stutter, 32);
+        auto a = r.run (1.5);
+        check (difference (dry, a) > 0.001f && finite (a), "FX lane events change the sound");
+    }
+}
+
+static void editTests()
+{
+    std::cout << "\n== Editing, history, state ==" << std::endl;
+    Rig r;
+    const auto& s = r.s.slot (0);
+    r.s.rollPattern (Style::jungle, 0.8f, true);
+    r.s.rollPattern (Style::jungle, 0.8f, true);
+    const auto after2 = s.current;
+    r.s.historyBack();
+    check (! (s.current == after2), "history back goes back a roll");
+    r.s.historyForward();
+    check (s.current == after2, "history forward comes back");
+    r.s.setShowOriginal (true);
+    check (s.program.pattern == s.original, "ORIGINAL plays the break as recorded");
+    r.s.setShowOriginal (false);
+
+    r.s.selectSlice (4, false);
+    r.s.setSliceValue (Session::SliceField::pitch, 5.0f, false);
+    check (std::abs (s.program.slice[4].pitch - 5.0f) < 1e-6f && std::abs (s.program.slice[3].pitch) < 1e-6f, "SLICE edits only the selected slice");
+    r.s.setSliceValue (Session::SliceField::gate, 0.5f, true);
+    check (std::abs (s.program.all.gate - 0.5f) < 1e-6f, "ALL edits the whole break");
+    const int before = s.content->numSlices();
+    r.s.addMarker ((s.content->slices.starts[2] + s.content->slices.starts[3]) / 2);
+    check (s.content->numSlices() == before + 1, "add a marker");
+    r.s.deleteMarker (3);
+    check (s.content->numSlices() == before, "delete it");
+    r.s.setBadge (6, Badge::open);
+    r.s.toggleMute (7);
+    check (s.content->badges[6] == Badge::open && s.program.slice[7].mute, "badge override + mute");
+    r.s.setStepSlice (2, 9);
+    check (s.current.slice[2] == 9, "set a step's slice (MPC step knob)");
+    r.s.saveMemory (3);
+    r.s.clearPattern();
+    check (s.current.hits() == 0, "clear pattern");
+    r.s.recallMemory (3);
+    check (s.current.hits() > 0, "memory 4 recalled");
+    r.s.setFxStep (9, FxType::reverse, 16);
+
+    const auto state = r.s.saveState();
+    Rig q;
+    q.s.loadState (state);
+    q.s.waitUntilIdle();
+    const auto& t = q.s.slot (0);
+    check (t.status == Session::Status::ready && t.current == s.current, "restore: pattern + FX lane");
+    check (t.program.slice[7].mute && std::abs (t.program.all.gate - 0.5f) < 1e-6f && t.content->badges[6] == Badge::open, "restore: mutes, ALL, badges");
+    check (t.memories[3].has_value(), "restore: memories");
+    check (finite (q.run (0.5)), "restored session plays");
+
+    // memory notes from the keyboard / pads
+    r.run (0.05, { MidiMsg::noteOn (kFirstMemoryNote + 3, 100) });
+    r.s.clearPattern();
+    r.run (0.05, { MidiMsg::noteOn (kFirstMemoryNote + 3, 100) });
+    check (s.current.hits() > 0, "G#3+3 (memory 4) recalls on the next poll");
+}
+
+static void fileTests()
+{
+    std::cout << "\n== Files, browser, renders ==" << std::endl;
+    const auto dir = tmp();
+    const auto wav = (dir / "think_break_136.wav").string();
+    writeDemo (wav, 136.0);
+    Rig r;
+    r.s.loadFile (2, wav);
+    r.s.waitUntilIdle();
+    const auto& w = r.s.slot (2);
+    check (w.status == Session::Status::ready && w.content && std::abs (w.content->bpm - 136.0) < 0.5, "WAV loads and reads 136 BPM from its name");
+    check (w.content && w.content->numSlices() >= 8, "transient slicer finds the hits (" + std::to_string (w.content ? w.content->numSlices() : 0) + ")");
+    r.s.loadFile (3, "/no/such/break.wav");
+    r.s.waitUntilIdle();
+    check (r.s.slot (3).status == Session::Status::missing, "a missing file says so");
+
+    // AIFF (big-endian 16-bit) written by hand
+    {
+        const auto aif = (dir / "aiff_break_170.aif").string();
+        auto b = DemoBreak::make (44100.0, 170.0);
+        std::vector<uint8_t> d;
+        auto be32 = [&d] (uint32_t v) { for (int i = 3; i >= 0; --i) d.push_back ((uint8_t) (v >> (8 * i))); };
+        auto be16 = [&d] (uint16_t v) { d.push_back ((uint8_t) (v >> 8)); d.push_back ((uint8_t) v); };
+        const uint32_t frames = (uint32_t) b->numSamples, ssnd = frames * 4 + 8;
+        d.insert (d.end(), { 'F','O','R','M' }); be32 (4 + 26 + 8 + ssnd + 8); d.insert (d.end(), { 'A','I','F','F' });
+        d.insert (d.end(), { 'C','O','M','M' }); be32 (18); be16 (2); be32 (frames); be16 (16);
+        const uint8_t rate[10] = { 0x40, 0x0E, 0xAC, 0x44, 0, 0, 0, 0, 0, 0 }; d.insert (d.end(), rate, rate + 10);
+        d.insert (d.end(), { 'S','S','N','D' }); be32 (ssnd); be32 (0); be32 (0);
+        for (uint32_t i = 0; i < frames; ++i) for (int c = 0; c < 2; ++c) be16 ((uint16_t) (int16_t) std::lround (b->ch[c][i] * 32767.0f));
+        FILE* f = std::fopen (aif.c_str(), "wb"); std::fwrite (d.data(), 1, d.size(), f); std::fclose (f);
+        AudioFile::Status st;
+        auto a = AudioFile::load (aif, st);
+        check (st == AudioFile::Status::ok && a && a->numSamples == b->numSamples && std::abs (a->sampleRate - 44100.0) < 1.0
+               && std::abs (a->ch[0][5000] - b->ch[0][5000]) < 0.001f, "AIFF reads back sample-exact (16-bit)");
+    }
+
+    // browser: sorted by BPM
+    writeDemo ((dir / "fast_175.wav").string(), 175.0);
+    writeDemo ((dir / "slow_94.wav").string(), 94.0);
+    r.s.scanFolder (dir.string());
+    r.s.waitUntilIdle();
+    auto e = r.s.browserEntries();
+    bool sorted = e.size() >= 4;
+    for (size_t i = 1; i < e.size(); ++i) sorted = sorted && e[i - 1].bpm <= e[i].bpm;
+    check (sorted && std::abs (e.front().bpm - 94.0) < 0.5, "browser lists " + std::to_string (e.size()) + " breaks, slowest first (" + (e.empty() ? std::string ("-") : e.front().name) + ")");
+
+    // Akaize render: 136 -> 170 BPM
+    r.s.setDataFolder (dir.string());
+    r.s.selectSlot (2);
+    const int before = r.s.slot (2).content->buffer->numSamples;
+    check (r.s.akaizeSlot (2, 170.0, 0.0, 800), "AKAIZE RENDER runs");
+    const auto& k = r.s.slot (2);
+    const double ratio = (double) k.content->buffer->numSamples / before;
+    check (std::abs (ratio - 136.0 / 170.0) < 0.01 && std::abs (k.content->bpm - 170.0) < 0.01, "renders to 170 BPM (length x" + fmt (ratio, 3) + ")");
+    check (fs::exists (k.file) && k.file.find ("Renders") != std::string::npos, "render saved in Renders/ so the project finds it");
+
+    // bounce
+    r.s.selectSlot (0);
+    auto settings = settingsFromParams (r.plain.data());
+    auto b = r.s.bounce (settings, 170.0, 44100.0);
+    const int expect = (int) std::ceil (32 / 4.0 * 60.0 / 170.0 * 44100.0);
+    check (b && b->numSamples == expect, "bounce: one pattern pass (" + std::to_string (b ? b->numSamples : 0) + " samples)");
+    fs::remove_all (dir);
+}
+
+static void paramTests()
+{
+    std::cout << "\n== Params ==" << std::endl;
+    check ((int) paramDefs().size() == kNumCoreParams, "table matches the index enum (" + std::to_string (paramDefs().size()) + ")");
+    check (paramIndex ("srate") == P_SRATE && paramIndex ("pad8") == P_PAD8 && paramIndex ("lcdColour") == P_LCD_COLOUR, "ids sit at their indices");
+    const float n = paramToNorm (P_SRATE, 15000.0f);
+    check (std::abs (n - 0.5f) < 0.01f && std::abs (paramFromNorm (P_SRATE, n) - 15000.0f) < 1.0f, "SAMPLE RATE skew: 15 kHz mid-travel");
+    check (formatParam (P_SRATE, 10000.0f) == "10.0 kHz" && formatParam (P_PAT_AMOUNT, 0.35f) == "35%" && formatParam (P_STYLE, 2) == "ROLLERS",
+           "value text: " + formatParam (P_SRATE, 10000.0f) + " / " + formatParam (P_PAT_AMOUNT, 0.35f) + " / " + formatParam (P_STYLE, 2));
+}
+
+int main()
+{
+    analysisTests();
+    generatorTests();
+    playbackTests();
+    fxTests();
+    editTests();
+    fileTests();
+    paramTests();
+    std::cout << "\n" << (checks - failures) << " / " << checks << " checks passed" << std::endl;
+    return failures == 0 ? 0 : 1;
+}

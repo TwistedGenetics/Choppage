@@ -1,25 +1,29 @@
 # What CHOPPAGE reuses
 
-| From | File(s) | Status in CHOPPAGE |
-|---|---|---|
-| [Twisted-Breaks](https://github.com/TwistedGenetics/Twisted-Breaks) | `Engine/SampleBuffer.h`, `Engine/SampleLoader.*` | Copied as is (namespace `tb`) |
-| Twisted-Breaks | `Engine/TransientDetector.*` | Copied as is |
-| Twisted-Breaks | `Engine/SliceTable.h` | Copied; limit raised from 16 to 64 slices |
-| Twisted-Breaks | `CMakeLists.txt` layout, headless `TestMain` / `HostTest` pattern | Followed |
-| [Twisted-Timestretch](https://github.com/TwistedGenetics/Twisted-Timestretch) | `Engine/Akaizer.*` (the exact Akaizer v1.2 port) | Copied as is; kept for the offline AKAIZE RENDER (next phase) |
-| Twisted-Timestretch | CI workflow, `HostTest.cpp`, Linux minimal-deps build | Adapted |
-| [Twisted-MPC-Breaks](https://github.com/TwistedGenetics/Twisted-MPC-Breaks) | MPC host shim, skin, Docker toolchains | To follow for the MPC edition (not in this phase) |
+CHOPPAGE follows the Twisted-Helix layout: a JUCE-free core shared by a JUCE desktop wrapper and an MPC wrapper built with the official inMusic MPC Plugin SDK.
 
-## New in CHOPPAGE
+| From | What | Status in CHOPPAGE |
+|---|---|---|
+| [Twisted-Breaks](https://github.com/TwistedGenetics/Twisted-Breaks) | Transient detector, slice table, sample buffer | Ported into `choppage-core` without JUCE; slice limit raised from 16 to 64 |
+| Twisted-Breaks | Headless `TestMain` / `HostTest` pattern | Followed in `choppage-desktop/Tests` |
+| [Twisted-Timestretch](https://github.com/TwistedGenetics/Twisted-Timestretch) | The Akaizer v1.2 cyclic stretch | `choppage-core/src/Akaizer.cpp`; drives the AKAIZE pad, the slice STRETCH and the AKAIZE TO HOST BPM render |
+| Twisted-Timestretch | CI workflow, Linux minimal-deps build | Adapted |
+| [Twisted-Helix](https://github.com/TwistedGenetics/Twisted-Helix) | core / desktop / mpc split, append-only shared parameter table, generated MPC skin, `build.sh`, MPC CI + release | Followed |
+| [Twisted-MPC-Breaks](https://github.com/TwistedGenetics/Twisted-MPC-Breaks) | Pad layout ideas for the MPC | Ideas only; its community-toolkit host shim is replaced by the official SDK |
+
+## New in CHOPPAGE (`choppage-core`)
 
 | File | What |
 |---|---|
-| `Engine/Model.h` | Slots, badges, slice settings, patterns (fixed-size POD for the audio thread) |
-| `Engine/Analysis.*` | Hit classifier (K / S / G / H / O), BPM + bars from length and file name, grid slicing |
-| `Engine/Generator.*` | PATTERN dice (8 styles, AMOUNT, locks) and FX dice |
-| `Engine/SliceVoice.*` | One slice: rate, reverse, stutter, cyclic (Akai) stretch, transient shaping, gate |
-| `Engine/PerfFx.*` | The 8 hold pads on a 4 s output ring |
-| `Engine/SoundChain.*` | Machine character (S950, SP-1200, MPC60, S1000, LO-FI, CLEAN), SAMPLE RATE fader, filter, distortion, crush, echo, reverb |
-| `Engine/Engine.*` | Mono-break playback, host-locked sequencer, MIDI note map |
-| `Engine/DemoBreak.h` | Synthesised demo break so it makes a sound on first open |
-| `UI/*`, `PluginEditor.*` | The S950 panel in BR3AK's arrangement |
+| `Model.h` | Slots, badges, slice settings, patterns (fixed-size data for the audio thread) |
+| `Dsp.h` | Filters, smoothing, RNG, FFT, reverb: the small DSP kit that replaces JUCE's |
+| `AudioFile.*` | WAV / AIFF reader and 24-bit WAV writer |
+| `Analysis.*` | Hit classifier (K / S / G / H / O), BPM + bars from length and file name, grid slicing |
+| `Generator.*` | PATTERN dice (8 styles, AMOUNT, locks) and FX dice |
+| `SliceVoice.*` | One slice: rate, reverse, stutter, cyclic (Akai) stretch, transient shaping, gate |
+| `PerfFx.*` | The 8 hold pads on a 4 s output ring |
+| `SoundChain.*` | Machine character, SAMPLE RATE, filter, distortion, crush, echo, reverb |
+| `Engine.*` | Mono-break playback, host-locked sequencer, MIDI note map |
+| `Params.*` | The parameter table shared by the desktop and MPC editions |
+| `Session.*` | Break slots, edit history, memories, folder browser, Akaize render, bounce, saved state; worker thread |
+| `DemoBreak.h` | Synthesised demo break, so it makes a sound on first open |

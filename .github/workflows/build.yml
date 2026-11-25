@@ -9,6 +9,17 @@ permissions:
   contents: write   # lets the build publish a GitHub Release
 
 jobs:
+  core:
+    name: Core engine (no JUCE)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build + test choppage-core
+        run: |
+          cmake -B build-core -S . -DCMAKE_BUILD_TYPE=Release -DCHOP_BUILD_DESKTOP=OFF
+          cmake --build build-core -j 4
+          ./build-core/test_core
+
   macos:
     name: macOS universal (AU + VST3 + Standalone)
     runs-on: macos-15
@@ -44,7 +55,7 @@ jobs:
 
       - name: Render UI snapshots (one per tab)
         run: |
-          for t in 0 1 2 3; do ./build/ChoppageTests_artefacts/Release/ChoppageTests --snapshot ui-tab$t.png $t; done
+          for t in 0 1 2 3 4; do ./build/ChoppageTests_artefacts/Release/ChoppageTests --snapshot ui-tab$t.png $t; done
 
       - name: Ad-hoc sign
         run: |
@@ -145,6 +156,8 @@ jobs:
         run: cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build -j 4
+      - name: Core tests
+        run: ./build/test_core
       - name: Run tests
         run: xvfb-run -a ./build/ChoppageTests_artefacts/Release/ChoppageTests
       - name: Host round trip (VST3)

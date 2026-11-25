@@ -39,6 +39,9 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - Trigger: SYNC / MIDI, break switching (RESTART / BAR SYNC / QUANT), GATE LATCH / HOLD, velocity → start slice.
   - Sound: CHARACTER (CLEAN, S950, SP-1200, MPC60, S1000, LO-FI), slicing TRANSIENTS / GRID.
   - Generate: STYLE, LAYERS, SWING.
+  - LCD colour: BLUE (S950), GREEN, AMBER, WHITE.
+  - Render: **AKAIZE TO HOST BPM** writes the selected break, cyclic-stretched to the host tempo the Akaizer way, to `~/Music/CHOPPAGE/Renders` and loads it back in.
+- **DISK tab**: a break browser for `~/Music/CHOPPAGE/Breaks` (or any folder) listing BPM, bars, length and name. Click loads into the selected break; shift-click loads into the next empty one.
 - **PATTERN dice / FX dice** with AMOUNT. Every roll goes into the history.
 - **SAMPLE RATE fader** 44.1 → 4.0 kHz · **FILTER · DISTORTION · CRUSH · REVERB** · **VOL**
 - **LCD top bar**: ▶ (plays on CHOPPAGE's own clock when the host is stopped), break picker, LOAD, **DRAG** (drags the pattern out as a WAV), BPM.
@@ -46,15 +49,26 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 
 Saved with the project: breaks (by path), slices, badges, slice settings, pattern, FX lane and memories.
 
+## Layout
+
+| Folder | What |
+|---|---|
+| `choppage-core/` | The whole instrument in plain C++17, no JUCE: analysis, generators, playback engine, FX, the break session (slots, history, memories, browser, Akaize render, state). Shared by every edition. |
+| `choppage-desktop/` | The JUCE AU / VST3 / Standalone wrapper and the S950 panel. |
+| `choppage-mpc/` | The MPC standalone edition (official inMusic MPC Plugin SDK). |
+| `tests/test_core.cpp` | Core tests, no JUCE needed. |
+
 ## Build
-Builds run on GitHub Actions: macOS (universal AU + VST3 + app, auval, pluginval, host round trip) and Linux (VST3 + tests).
+Builds run on GitHub Actions: core tests, macOS (universal AU + VST3 + app, auval, pluginval, host round trip) and Linux (VST3 + tests).
 To build locally:
 
 ```bash
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release -j
 ./build/ChoppageTests_artefacts/Release/ChoppageTests                         # headless tests
-./build/ChoppageTests_artefacts/Release/ChoppageTests --snapshot ui.png 1     # render a tab to PNG
+./build/ChoppageTests_artefacts/Release/ChoppageTests --snapshot ui.png 1     # render a tab (0-4) to PNG
+./build/test_core                                                             # core tests
+# core only (no JUCE): cmake -B build -S . -DCHOP_BUILD_DESKTOP=OFF
 ```
 
 What came from Twisted Breaks and Twisted Timestretch: [docs/REUSE.md](docs/REUSE.md).

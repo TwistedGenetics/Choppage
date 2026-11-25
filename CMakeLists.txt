@@ -1,10 +1,14 @@
 # =============================================================================
 #  CHOPPAGE — Twisted Genetics break chopper: one break at a time, S950 skin
-#  CMake build for JUCE 8 (AU + VST3 + Standalone on macOS; VST3 + Standalone elsewhere)
+#
+#    choppage-core/     the engine, slots, patterns, files, state (plain C++17, no JUCE)
+#    choppage-desktop/  JUCE wrapper: AU + VST3 + Standalone with the S950 panel
+#    choppage-mpc/      Akai MPC plugin (official MPC Plugin SDK), built by choppage-mpc/build.sh
+#    tests/             core tests (no JUCE)
 # =============================================================================
 cmake_minimum_required(VERSION 3.22)
 
-project(Choppage VERSION 0.1.0 LANGUAGES C CXX)
+project(Choppage VERSION 0.2.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,10 +19,29 @@ if(APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
 endif()
 set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
 
-option(CHOP_BUILD_TESTS        "Build the headless test runner"                       ON)
-option(CHOP_COPY_AFTER_BUILD   "Copy plugins into ~/Library/Audio/Plug-Ins after build" OFF)
-option(CHOP_MINIMAL_LINUX_DEPS "Linux only: disable optional X11/ALSA features"       OFF)
+option(CHOP_BUILD_DESKTOP     "Build the desktop plugin (needs JUCE)"                ON)
+option(CHOP_BUILD_TESTS       "Build the tests"                                       ON)
+option(CHOP_COPY_AFTER_BUILD  "Copy plugins into ~/Library/Audio/Plug-Ins after build" OFF)
+option(CHOP_MINIMAL_LINUX_DEPS "Linux only: disable optional X11/ALSA features"      OFF)
 set(CHOP_JUCE_PATH "" CACHE PATH "Path to a local JUCE checkout (leave empty to download JUCE)")
+
+add_subdirectory(choppage-core)
+
+if(CHOP_BUILD_TESTS)
+    enable_testing()
+    add_executable(test_core tests/test_core.cpp)
+    target_link_libraries(test_core PRIVATE choppage-core)
+    add_test(NAME core COMMAND test_core)
+endif()
+
+# MPC: the app logic is tested natively; the plugin .so is built by choppage-mpc/build.sh (MPC Plugin SDK).
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/choppage-mpc/CMakeLists.txt)
+    add_subdirectory(choppage-mpc)
+endif()
+
+if(NOT CHOP_BUILD_DESKTOP)
+    return()
+endif()
 
 # -----------------------------------------------------------------------------
 #  JUCE
@@ -61,9 +84,9 @@ juce_add_plugin(Choppage
 
 juce_generate_juce_header(Choppage)
 
-include(cmake/Sources.cmake)
+include(choppage-desktop/cmake/Sources.cmake)
 target_sources(Choppage PRIVATE ${CHOP_PLUGIN_SOURCES})
-target_include_directories(Choppage PRIVATE Source)
+target_include_directories(Choppage PRIVATE choppage-desktop/Source)
 
 set(CHOP_JUCE_DEFINES
     JUCE_WEB_BROWSER=0
@@ -86,7 +109,7 @@ target_link_libraries(Choppage
     PRIVATE
         juce::juce_audio_utils
         juce::juce_audio_formats
-        juce::juce_dsp
+        choppage-core
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -97,8 +120,8 @@ target_link_libraries(Choppage
 # -----------------------------------------------------------------------------
 if(CHOP_BUILD_TESTS)
     juce_add_console_app(ChoppageTests PRODUCT_NAME "ChoppageTests")
-    target_sources(ChoppageTests PRIVATE Tests/TestMain.cpp ${CHOP_PLUGIN_SOURCES})
-    target_include_directories(ChoppageTests PRIVATE Source)
+    target_sources(ChoppageTests PRIVATE choppage-desktop/Tests/TestMain.cpp ${CHOP_PLUGIN_SOURCES})
+    target_include_directories(ChoppageTests PRIVATE choppage-desktop/Source)
     target_compile_definitions(ChoppageTests PRIVATE
         ${CHOP_JUCE_DEFINES}
         JucePlugin_Name="CHOPPAGE"
@@ -110,13 +133,13 @@ if(CHOP_BUILD_TESTS)
         JUCE_MODAL_LOOPS_PERMITTED=1
         CHOP_TEST_BUILD=1)
     target_link_libraries(ChoppageTests PRIVATE
-        juce::juce_audio_utils juce::juce_audio_formats juce::juce_dsp
+        juce::juce_audio_utils juce::juce_audio_formats choppage-core
         juce::juce_recommended_config_flags juce::juce_recommended_warning_flags)
     juce_generate_juce_header(ChoppageTests)
 
     # Loads the BUILT VST3 (and the installed AU on macOS) the way a DAW does.
     juce_add_console_app(ChoppageHostTest PRODUCT_NAME "ChoppageHostTest")
-    target_sources(ChoppageHostTest PRIVATE Tests/HostTest.cpp)
+    target_sources(ChoppageHostTest PRIVATE choppage-desktop/Tests/HostTest.cpp)
     target_compile_definitions(ChoppageHostTest PRIVATE
         ${CHOP_JUCE_DEFINES} JUCE_PLUGINHOST_VST3=1 JUCE_MODAL_LOOPS_PERMITTED=1
         $<$<PLATFORM_ID:Darwin>:JUCE_PLUGINHOST_AU=1>)

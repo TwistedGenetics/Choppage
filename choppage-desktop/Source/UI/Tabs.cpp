@@ -1,0 +1,866 @@
+#include "UI/Tabs.h"
+
+namespace ui
+{
+    using namespace skin;
+    using bc::Badge;
+
+    // =====================================================================================
+    //  ParamPage
+    // =====================================================================================
+    ParamPage::ParamPage (ChoppageProcessor& p) : proc (p) {}
+
+    void ParamPage::addRow (const juce::String& group, const juce::String& title)
+    {
+        rows.push_back ({ group, title, {}, nextRule });
+        nextRule = false;
+    }
+
+    void ParamPage::addRule() { nextRule = true; }
+
+    void ParamPage::addText (const juce::String& t, int width)
+    {
+        auto c = std::make_unique<LcdCell>();
+        c->text = [t] { return t; };
+        c->fontSize = kFont;
+        c->setInterceptsMouseClicks (false, false);
+        addAndMakeVisible (*c);
+        rows.back().items.push_back ({ std::move (c), width > 0 ? width : textWidth (t) });
+    }
+
+    void ParamPage::addValue (const char* id, const juce::String& caption, int width, float fineStep)
+    {
+        if (caption.isNotEmpty()) addText (caption);
+        auto c = std::make_unique<LcdCell>();
+        const Param prm = param (id);
+        c->text = [prm] { return prm.text().toUpperCase(); };
+        c->underline = true;
+        c->fontSize = kFont;
+        c->just = juce::Justification::centred;
+        c->onDrag = [prm, fineStep] (float steps, const juce::ModifierKeys& m)
+        {
+            if (auto* ch = dynamic_cast<juce::AudioParameterChoice*> (prm.p))
+                prm.set ((float) juce::jlimit (0, ch->choices.size() - 1, prm.choice() + (int) steps));
+            else if (dynamic_cast<juce::AudioParameterBool*> (prm.p) != nullptr)
+                prm.set (steps > 0 ? 1.0f : 0.0f);
+            else
+                prm.setNorm (prm.norm() + steps * (m.isShiftDown() ? fineStep * 0.2f : fineStep));
+        };
+        c->onClick = [prm] (const juce::MouseEvent& e)
+        {
+            if (e.mods.isAltDown() || e.getNumberOfClicks() > 1)   // back to default
+                prm.setNorm (prm.p->getDefaultValue());
+        };
+        c->setTooltip ("Drag up / down or scroll. Shift = fine. Double-click = default.");
+        addAndMakeVisible (*c);
+        rows.back().items.push_back ({ std::move (c), width });
+    }
+
+    void ParamPage::addChoice (const char* id, juce::StringArray labels)
+    {
+        const Param prm = param (id);
+        auto* ch = dynamic_cast<juce::AudioParameterChoice*> (prm.p);
+        if (ch == nullptr) return;
+        if (labels.isEmpty()) labels = ch->choices;
+        for (int i = 0; i < labels.size(); ++i)
+            addAction (labels[i], [prm, i] { prm.set ((float) i); }, [prm, i] { return prm.choice() == i; });
+    }
+
+    void ParamPage::addBool (const char* id, const juce::String& on, const juce::String& off)
+    {
+        const Param prm = param (id);
+        addAction (on,  [prm] { prm.set (1.0f); }, [prm] { return prm.get() > 0.5f; });
+        addAction (off, [prm] { prm.set (0.0f); }, [prm] { return prm.get() <= 0.5f; });
+    }
+
+    void ParamPage::addAction (const juce::String& t, std::function<void()> fn, std::function<bool()> isOn, int width)
+    {
+        auto c = std::make_unique<LcdCell>();
+        c->text = [t] { return t; };
+        c->isOn = isOn;
+        c->boxed = true;
+        c->fontSize = kFont;
+        c->just = juce::Justification::centred;
+        c->onClick = [fn] (const juce::MouseEvent&) { if (fn) fn(); };
+        addAndMakeVisible (*c);
+        rows.back().items.push_back ({ std::move (c), width > 0 ? width : textWidth (t) });
+    }
+
+    void ParamPage::resized()
+    {
+        int y = 0;
+        for (auto& r : rows)
+        {
+            if (r.ruleAbove) y += 8;
+            int x = 150 + titleW;
+            for (auto& it : r.items)
+            {
+                it.cell->setBounds (x, y + 3, it.width, rowHeight - 6);
+                x += it.width + 10;
+            }
+            y += rowHeight;
+        }
+    }
+
+    void ParamPage::paint (juce::Graphics& g)
+    {
+        int y = 0;
+        g.setFont (lcd (kFont));
+        for (auto& r : rows)
+        {
+            if (r.ruleAbove)
+            {
+                g.setColour (lcdc().dim);
+                g.fillRect (0, y + 2, getWidth(), 2);
+                y += 8;
+            }
+            g.setColour (lcdc().ink);
+            g.drawText (r.group, 0, y, 150, rowHeight, juce::Justification::centredLeft);
+            if (titleW > 0) g.drawText (r.title, 150, y, titleW, rowHeight, juce::Justification::centredLeft);
+            y += rowHeight;
+        }
+    }
+
+    void ParamPage::refresh() { for (auto& r : rows) for (auto& it : r.items) it.cell->repaint(); }
+
+    // =====================================================================================
+    //  SAMPLE — waveform
+    // =====================================================================================
+    int WaveView::xForSample (int s) const
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        const int n = slot.content != nullptr ? slot.content->buffer->numSamples : 1;
+        return (int) ((juce::int64) s * getWidth() / juce::jmax (1, n));
+    }
+
+    int WaveView::sampleForX (int x) const
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        const int n = slot.content != nullptr ? slot.content->buffer->numSamples : 0;
+        return (int) ((juce::int64) juce::jlimit (0, getWidth(), x) * n / juce::jmax (1, getWidth()));
+    }
+
+    int WaveView::sliceAtX (int x) const
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr) return -1;
+        return slot.content->slices.sliceAt (sampleForX (x));
+    }
+
+    int WaveView::markerNear (int x) const
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr) return -1;
+        for (int k = 1; k < slot.content->slices.count; ++k)          // marker 0 (the start) stays put
+            if (std::abs (xForSample (slot.content->slices.starts[(size_t) k]) - x) <= 6) return k;
+        return -1;
+    }
+
+    void WaveView::paint (juce::Graphics& g)
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        auto r = getLocalBounds();
+        auto badgeRow = r.removeFromBottom (badgeRowH);
+        r.removeFromBottom (6);
+
+        if (slot.content == nullptr)
+        {
+            g.setColour (lcdc().ink);
+            g.setFont (lcd (34.0f));
+            g.drawText (slot.status == ChoppageProcessor::Status::loading ? "LOADING..." : "DROP A BREAK OR PRESS LOAD",
+                        r, juce::Justification::centred);
+            return;
+        }
+        const auto& c = *slot.content;
+        const auto& buf = *c.buffer;
+        const int n = buf.numSamples;
+        const float mid = (float) r.getCentreY(), half = (float) r.getHeight() * 0.48f;
+
+        // muted slices are shaded, the selected one is lit
+        for (int k = 0; k < c.numSlices(); ++k)
+        {
+            const auto reg = c.region (k);
+            const int x0 = xForSample (reg.start), x1 = xForSample (reg.end);
+            if (slot.program.slice[(size_t) k].mute)
+            {
+                g.setColour (lcdc().shade.withAlpha (0.55f));
+                g.fillRect (x0, r.getY(), x1 - x0, r.getHeight());
+            }
+            if (k == proc.getSelectedSlice())
+            {
+                g.setColour (juce::Colours::white.withAlpha (0.2f));
+                g.fillRect (x0, r.getY(), x1 - x0, r.getHeight());
+            }
+        }
+
+        g.setColour (lcdc().faint);
+        g.fillRect ((float) r.getX(), mid, (float) r.getWidth(), 1.0f);
+        g.setColour (lcdc().ink);
+        for (int x = 0; x < r.getWidth(); ++x)
+        {
+            const int s0 = (int) ((juce::int64) x * n / r.getWidth());
+            const int s1 = (int) ((juce::int64) (x + 1) * n / r.getWidth());
+            const auto pk = buf.peakRange (s0, juce::jmax (s0 + 1, s1));
+            const float top = mid - juce::jlimit (0.0f, 1.0f, pk.second) * half;
+            const float bot = mid - juce::jlimit (-1.0f, 0.0f, pk.first) * half;
+            g.fillRect ((float) x, top, 1.0f, juce::jmax (1.0f, bot - top));
+        }
+
+        // markers (the one being dragged follows the mouse)
+        for (int k = 0; k < c.slices.count; ++k)
+        {
+            const int x = k == dragMarker && dragX >= 0 ? dragX : xForSample (c.slices.starts[(size_t) k]);
+            g.setColour (juce::Colours::white);
+            g.fillRect (x, r.getY(), 2, r.getHeight());
+        }
+
+        // envelope handle of the selected slice: its gate (yellow)
+        {
+            const int k = proc.getSelectedSlice();
+            const auto reg = c.region (k);
+            const float gate = slot.program.slice[(size_t) k].gate * slot.program.all.gate;
+            const float x0 = (float) xForSample (reg.start) + 2.0f;
+            const float x1 = x0 + ((float) xForSample (reg.end) - x0) * gate;
+            juce::Path env;
+            env.startNewSubPath (x0, (float) r.getBottom() - 4.0f);
+            env.lineTo (x0 + 6.0f, (float) r.getY() + 8.0f);
+            env.lineTo (juce::jmax (x0 + 8.0f, x1 - 8.0f), (float) r.getY() + 8.0f);
+            env.lineTo (x1, (float) r.getBottom() - 4.0f);
+            g.setColour (lcdc().mark);
+            g.strokePath (env, juce::PathStrokeType (3.0f));
+        }
+
+        // play head: the slice playing now
+        if (proc.getPlayingSlot() == proc.getSelectedSlot() && proc.getCurrentSlice() >= 0)
+        {
+            const auto reg = c.region (proc.getCurrentSlice());
+            g.setColour (lcdc().mark);
+            g.fillRect (xForSample (reg.start), r.getY(), juce::jmax (4, (xForSample (reg.end) - xForSample (reg.start)) / 6), 6);
+        }
+
+        // badges: K1, H2, S3 ... (letter only when slices get narrow)
+        std::array<int, bc::kNumBadges> counts {};
+        g.setFont (lcd (23.0f));
+        for (int k = 0; k < c.numSlices(); ++k)
+        {
+            const auto reg = c.region (k);
+            const int x0 = xForSample (reg.start), x1 = xForSample (reg.end);
+            auto cell = juce::Rectangle<int> (x0 + 1, badgeRow.getY(), juce::jmax (4, x1 - x0 - 2), badgeRow.getHeight());
+            const auto b = c.badges[(size_t) k];
+            const int num = ++counts[(size_t) b];
+            const bool sel = k == proc.getSelectedSlice();
+            const bool muted = slot.program.slice[(size_t) k].mute;
+            if (sel) { g.setColour (lcdc().ink); g.fillRect (cell); }
+            else     { g.setColour (lcdc().dim); g.drawRect (cell, 2); }
+            g.setColour (sel ? lcdc().inv : lcdc().ink);
+            juce::String t = muted ? "M" : juce::String (bc::badgeLetter (b));
+            if (! muted && cell.getWidth() > 38) t << num;
+            g.drawFittedText (t, cell, juce::Justification::centred, 1, 0.6f);
+        }
+    }
+
+    void WaveView::mouseDown (const juce::MouseEvent& e)
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr) return;
+        const int slice = sliceAtX (e.x);
+        if (e.mods.isPopupMenu()) { popup (slice, markerNear (e.x)); return; }
+        dragMarker = markerNear (e.x);
+        dragX = -1;
+        if (dragMarker < 0) proc.selectSlice (slice, true);
+        repaint();
+    }
+
+    void WaveView::mouseDrag (const juce::MouseEvent& e)
+    {
+        if (dragMarker < 0) return;
+        dragX = juce::jlimit (0, getWidth() - 1, e.x);
+        repaint();
+    }
+
+    void WaveView::mouseUp (const juce::MouseEvent&)
+    {
+        if (dragMarker >= 0 && dragX >= 0) proc.moveMarker (dragMarker, sampleForX (dragX));
+        dragMarker = dragX = -1;
+        repaint();
+    }
+
+    void WaveView::mouseDoubleClick (const juce::MouseEvent& e)
+    {
+        if (markerNear (e.x) < 0) proc.addMarker (sampleForX (e.x));
+    }
+
+    void WaveView::popup (int slice, int marker)
+    {
+        const auto& slot = proc.getSlot (proc.getSelectedSlot());
+        if (slot.content == nullptr || slice < 0) return;
+        proc.selectSlice (slice, false);
+        juce::PopupMenu m, badges;
+        m.addSectionHeader ("SLICE " + juce::String (slice + 1).paddedLeft ('0', 2));
+        m.addItem (slot.program.slice[(size_t) slice].mute ? "UNMUTE" : "MUTE", [this, slice] { proc.toggleMute (slice); });
+        for (int b = 0; b < bc::kNumBadges; ++b)
+            badges.addItem (bc::badgeName ((Badge) b), true, slot.content->badges[(size_t) slice] == (Badge) b,
+                            [this, slice, b] { proc.setBadge (slice, (Badge) b); });
+        m.addSubMenu ("BADGE", badges);
+        if (marker > 0) m.addItem ("DELETE MARKER", [this, marker] { proc.deleteMarker (marker); });
+        m.addItem ("ADD MARKER HERE (or double-click)", [this, slice]
+        {
+            const auto reg = proc.getSlot (proc.getSelectedSlot()).content->region (slice);
+            proc.addMarker (reg.start + reg.length() / 2);
+        });
+        m.showMenuAsync (juce::PopupMenu::Options().withMousePosition());
+    }
+
+    // =====================================================================================
+    //  SAMPLE — tab
+    // =====================================================================================
+    namespace
+    {
+        using F = ChoppageProcessor::SliceField;
+        const F kFields[] = { F::pitch, F::gate, F::stretch, F::reverse, F::stutter, F::trans, F::xfade };
+        const char* kFieldNames[] = { "PITCH", "GATE", "STRETCH", "REVERSE", "STUTTER", "TRANS", "XFADE" };
+
+        juce::String fieldText (F f, float v)
+        {
+            switch (f)
+            {
+                case F::pitch:   return (v > 0.0f ? "+" : "") + juce::String (v, std::abs (v - std::round (v)) > 0.01f ? 1 : 0);
+                case F::gate:    return juce::String (juce::roundToInt (v * 100.0f));
+                case F::stretch: return juce::String (v, 2);
+                case F::reverse: return v > 0.5f ? "ON" : "OFF";
+                case F::stutter: return v < 1.5f ? "OFF" : "x" + juce::String ((int) v);
+                case F::trans:   return juce::String (juce::roundToInt (v * 100.0f)) + "%";
+                case F::xfade:   return juce::String (v, 1) + "MS";
+                case F::level:   return juce::String (v, 2);
+            }
+            return {};
+        }
+
+        float fieldStep (F f, float v, float steps, bool fine)
+        {
+            switch (f)
+            {
+                case F::pitch:   return v + steps * (fine ? 0.1f : 1.0f);
+                case F::gate:    return v + steps * (fine ? 0.01f : 0.05f);
+                case F::stretch: return v + steps * (fine ? 0.01f : 0.05f);
+                case F::reverse: return steps > 0 ? 1.0f : 0.0f;
+                case F::stutter:
+                {
+                    static const int seq[] = { 0, 2, 3, 4, 6, 8 };
+                    int i = 0; while (i < 5 && seq[i] < (int) v) ++i;
+                    return (float) seq[juce::jlimit (0, 5, i + (steps > 0 ? 1 : -1))];
+                }
+                case F::trans:   return v + steps * (fine ? 0.01f : 0.05f);
+                case F::xfade:   return v + steps * (fine ? 0.1f : 0.5f);
+                case F::level:   return v + steps * 0.05f;
+            }
+            return v;
+        }
+    }
+
+    SampleTab::SampleTab (ChoppageProcessor& p) : proc (p), wave (p)
+    {
+        addAndMakeVisible (wave);
+        for (auto* row : { &sliceRow, &allRow })
+        {
+            const bool isAll = row == &allRow;
+            row->fontSize = 26.0f;
+            row->text = [this, isAll]
+            {
+                return isAll ? juce::String ("ALL") : "SLICE " + juce::String (proc.getSelectedSlice() + 1).paddedLeft ('0', 2);
+            };
+            row->isOn = [this, isAll] { return proc.isEditingAll() == isAll; };
+            row->onClick = [this, isAll] (const juce::MouseEvent&) { proc.setEditingAll (isAll); };
+            addAndMakeVisible (*row);
+        }
+        for (int i = 0; i < 7; ++i)
+        {
+            auto h = std::make_unique<LcdCell>();
+            const juce::String name = kFieldNames[i];
+            h->text = [name] { return name; };
+            h->fontSize = 22.0f;
+            h->just = juce::Justification::centred;
+            h->setInterceptsMouseClicks (false, false);
+            addAndMakeVisible (*h);
+            headers.push_back (std::move (h));
+        }
+        for (int row = 0; row < 2; ++row)
+            for (int i = 0; i < 7; ++i)
+            {
+                const bool all = row == 1;
+                const F f = kFields[i];
+                auto c = std::make_unique<LcdCell>();
+                c->fontSize = 28.0f;
+                c->just = juce::Justification::centred;
+                c->underline = true;
+                c->text = [this, f, all] { return fieldText (f, proc.getSliceValue (f, all)); };
+                c->onDrag = [this, f, all] (float steps, const juce::ModifierKeys& m)
+                {
+                    proc.setEditingAll (all);
+                    proc.setSliceValue (f, fieldStep (f, proc.getSliceValue (f, all), steps, m.isShiftDown()), all);
+                };
+                c->onClick = [this, f, all] (const juce::MouseEvent& e)
+                {
+                    proc.setEditingAll (all);
+                    if (f == F::reverse) proc.setSliceValue (f, proc.getSliceValue (f, all) > 0.5f ? 0.0f : 1.0f, all);
+                    else if (e.getNumberOfClicks() > 1)
+                    {
+                        const bc::SliceParams d;
+                        const float def = f == F::pitch ? d.pitch : f == F::gate ? d.gate : f == F::stretch ? d.stretch
+                                        : f == F::stutter ? 0.0f : f == F::trans ? d.trans : d.xfadeMs;
+                        proc.setSliceValue (f, def, all);
+                    }
+                };
+                c->setTooltip ("Drag up / down or scroll (shift = fine). Double-click = default. REVERSE: click.");
+                addAndMakeVisible (*c);
+                cells.push_back (std::move (c));
+            }
+    }
+
+    void SampleTab::resized()
+    {
+        auto r = getLocalBounds();
+        const int rowH = 40;
+        auto table = r.removeFromBottom (rowH * 3);
+        r.removeFromBottom (8);
+        wave.setBounds (r);
+        const int labelW = 170;
+        const int colW = (table.getWidth() - labelW) / 7;
+        auto head = table.removeFromTop (rowH);
+        head.removeFromLeft (labelW);
+        for (int i = 0; i < 7; ++i) headers[(size_t) i]->setBounds (head.removeFromLeft (colW));
+        for (int row = 0; row < 2; ++row)
+        {
+            auto line = table.removeFromTop (rowH);
+            (row == 0 ? sliceRow : allRow).setBounds (line.removeFromLeft (labelW).reduced (0, 3));
+            for (int i = 0; i < 7; ++i) cells[(size_t) (row * 7 + i)]->setBounds (line.removeFromLeft (colW).reduced (4, 3));
+        }
+    }
+
+    void SampleTab::paint (juce::Graphics& g)
+    {
+        g.setColour (lcdc().dim);
+        g.fillRect (0, getHeight() - 40 * 3 - 4, getWidth(), 2);
+    }
+
+    void SampleTab::refresh()
+    {
+        wave.repaint();
+        sliceRow.repaint(); allRow.repaint();
+        for (auto& c : cells) c->repaint();
+    }
+
+    // =====================================================================================
+    //  SEQ
+    // =====================================================================================
+    namespace
+    {
+        const char* kLaneNames[] = { "KICK", "SNARE", "GHOST", "HAT", "OPEN", "FX" };
+        const Badge kLaneBadge[] = { Badge::kick, Badge::snare, Badge::ghost, Badge::hat, Badge::open, Badge::other };
+        const char* fxLetter (bc::FxType t)
+        {
+            switch (t) { case bc::FxType::stutter: return "S"; case bc::FxType::reverse: return "R";
+                         case bc::FxType::stretch: return "A"; case bc::FxType::tapeStop: return "T"; case bc::FxType::none: return ""; }
+            return "";
+        }
+        int laneOf (Badge b) { for (int i = 0; i < 5; ++i) if (kLaneBadge[i] == b) return i; return 1; }   // OTHER shows on SNARE
+    }
+
+    int SeqGrid::visibleSteps() const
+    {
+        const auto& s = proc.getSlot (proc.getSelectedSlot());
+        return juce::jmin (32, s.program.pattern.numSteps);
+    }
+
+    juce::Rectangle<int> SeqGrid::cell (int lane, int column) const
+    {
+        const int head = 26;
+        const int rowH = (getHeight() - head) / kLanes;
+        const int cols = visibleSteps();
+        const float colW = (float) (getWidth() - laneW) / (float) cols;
+        const int x0 = laneW + (int) (column * colW), x1 = laneW + (int) ((column + 1) * colW);
+        return { x0 + 2, head + lane * rowH + 3, x1 - x0 - 4, rowH - 6 };
+    }
+
+    void SeqGrid::paint (juce::Graphics& g)
+    {
+        const auto& s = proc.getSlot (proc.getSelectedSlot());
+        const auto& pat = s.program.pattern;
+        const int cols = visibleSteps();
+        const int first = page * 32;
+        const int playing = proc.getPlayingSlot() == proc.getSelectedSlot() ? proc.getCurrentStep() : -1;
+
+        g.setFont (lcd (20.0f));
+        g.setColour (lcdc().ink);
+        for (int c = 0; c < cols; c += 4)
+            g.drawText (juce::String (first + c + 1), cell (0, c).withY (0).withHeight (24).withWidth (60), juce::Justification::centredLeft);
+
+        for (int lane = 0; lane < kLanes; ++lane)
+        {
+            const auto row = cell (lane, 0);
+            g.setColour (lcdc().ink);
+            g.setFont (lcd (23.0f));
+            g.drawText (kLaneNames[lane], 0, row.getY(), laneW, row.getHeight(), juce::Justification::centredLeft);
+            for (int c = 0; c < cols; ++c)
+            {
+                const int step = first + c;
+                if (step >= pat.numSteps) break;
+                auto r = cell (lane, c);
+                juce::String t;
+                bool hit = false;
+                if (lane < 5)
+                {
+                    const int sl = pat.slice[(size_t) step];
+                    if (sl >= 0 && s.content != nullptr && laneOf (s.content->badges[(size_t) sl]) == lane)
+                    {
+                        hit = true;
+                        t = juce::String (sl + 1);
+                    }
+                }
+                else if (pat.fx[(size_t) step].type != bc::FxType::none)
+                {
+                    hit = true;
+                    t = juce::String (fxLetter (pat.fx[(size_t) step].type)) + juce::String (pat.fx[(size_t) step].rate);
+                }
+                if (step == playing)
+                {
+                    g.setColour (lcdc().mark.withAlpha (0.35f));
+                    g.fillRect (r.expanded (2, 3));
+                }
+                if (hit)
+                {
+                    g.setColour (lcdc().ink);
+                    g.fillRect (r);
+                    g.setColour (lcdc().inv);
+                    g.setFont (lcd (lane < 5 ? 21.0f : 16.0f));
+                    g.drawFittedText (t, r, juce::Justification::centred, 1, 0.5f);
+                }
+                else
+                {
+                    g.setColour (c % 4 == 0 ? lcdc().dim : lcdc().faint);
+                    g.drawRect (r, 2);
+                }
+                if (pat.locked[(size_t) step] && lane == 0)
+                {
+                    g.setColour (lcdc().mark);
+                    g.fillRect (r.getX(), r.getY() - 3, r.getWidth(), 3);
+                }
+            }
+        }
+    }
+
+    void SeqGrid::mouseDown (const juce::MouseEvent& e)
+    {
+        const auto& s = proc.getSlot (proc.getSelectedSlot());
+        if (s.content == nullptr) return;
+        const int cols = visibleSteps();
+        for (int lane = 0; lane < kLanes; ++lane)
+            for (int c = 0; c < cols; ++c)
+                if (cell (lane, c).expanded (2, 3).contains (e.getPosition()))
+                {
+                    const int step = page * 32 + c;
+                    const auto& pat = s.current;
+                    if (e.mods.isShiftDown()) { proc.toggleLock (step); repaint(); return; }
+                    if (lane < 5)
+                    {
+                        if (e.mods.isPopupMenu()) proc.swapStep (step);
+                        else proc.toggleStep (step, kLaneBadge[lane]);
+                    }
+                    else
+                    {
+                        if (e.mods.isPopupMenu()) proc.cycleFxRate (step);
+                        else if (pat.fx[(size_t) step].type != bc::FxType::none) proc.setFxStep (step, bc::FxType::none, 16);
+                        else
+                        {
+                            juce::PopupMenu m;
+                            m.addSectionHeader ("ADD FX ON STEP " + juce::String (step + 1));
+                            for (auto t : { bc::FxType::stutter, bc::FxType::reverse, bc::FxType::stretch, bc::FxType::tapeStop })
+                                m.addItem (bc::fxTypeName (t), [this, step, t] { proc.setFxStep (step, t, 16); });
+                            m.showMenuAsync (juce::PopupMenu::Options().withMousePosition());
+                        }
+                    }
+                    repaint();
+                    return;
+                }
+    }
+
+    SeqTab::SeqTab (ChoppageProcessor& p) : proc (p), grid (p)
+    {
+        addAndMakeVisible (grid);
+        auto tool = [this] (juce::String t, std::function<void()> fn, std::function<bool()> on)
+        {
+            auto c = std::make_unique<LcdCell>();
+            c->text = [t] { return t; };
+            c->isOn = on;
+            c->boxed = true;
+            c->fontSize = 24.0f;
+            c->just = juce::Justification::centred;
+            c->onClick = [fn] (const juce::MouseEvent&) { fn(); };
+            addAndMakeVisible (*c);
+            tools.push_back (std::move (c));
+        };
+        auto slot = [this]() -> const ChoppageProcessor::Slot& { return proc.getSlot (proc.getSelectedSlot()); };
+        tool ("PATTERN",  [this] { proc.setShowOriginal (false); }, [slot] { return ! slot().showOriginal; });
+        tool ("ORIGINAL", [this] { proc.setShowOriginal (true); },  [slot] { return slot().showOriginal; });
+        tool ("1 BAR",  [this] { proc.setPatternLength (1); }, [slot] { return slot().program.pattern.numSteps == 16; });
+        tool ("2 BARS", [this] { proc.setPatternLength (2); }, [slot] { return slot().program.pattern.numSteps == 32; });
+        tool ("4 BARS", [this] { proc.setPatternLength (4); }, [slot] { return slot().program.pattern.numSteps == 64; });
+        tool ("1", [this] { grid.page = 0; grid.repaint(); }, [this] { return grid.page == 0; });
+        tool ("2", [this, slot] { if (slot().program.pattern.numSteps > 32) { grid.page = 1; grid.repaint(); } }, [this] { return grid.page == 1; });
+        tool (juce::String::fromUTF8 ("\xe2\x97\x80"), [this] { proc.historyBack(); }, nullptr);
+        tool (juce::String::fromUTF8 ("\xe2\x96\xb6"), [this] { proc.historyForward(); }, nullptr);
+        tool ("CLEAR", [this] { proc.clearPattern(); }, nullptr);
+
+        memLabel.text = [] { return juce::String ("MEMORY"); };
+        memLabel.fontSize = 23.0f;
+        memLabel.setInterceptsMouseClicks (false, false);
+        addAndMakeVisible (memLabel);
+        for (int m = 0; m < bc::kMemories; ++m)
+        {
+            auto c = std::make_unique<LcdCell>();
+            c->text = [m] { return juce::String (m + 1); };
+            c->isOn = [slot, m] { return slot().memories[(size_t) m].has_value(); };
+            c->boxed = true;
+            c->fontSize = 22.0f;
+            c->just = juce::Justification::centred;
+            c->onClick = [this, m] (const juce::MouseEvent& e) { if (e.mods.isShiftDown()) proc.saveMemory (m); else proc.recallMemory (m); };
+            c->setTooltip ("Click: recall (or play G#3-B4).  Shift-click: save the pattern here.");
+            addAndMakeVisible (*c);
+            memories.push_back (std::move (c));
+        }
+        help.text = [] { return juce::String::fromUTF8 ("CLICK ADD/REMOVE \xc2\xb7 RIGHT-CLICK SWAP SLICE / FX RATE \xc2\xb7 SHIFT-CLICK LOCK"); };
+        help.fontSize = 20.0f;
+        help.setInterceptsMouseClicks (false, false);
+        addAndMakeVisible (help);
+    }
+
+    void SeqTab::resized()
+    {
+        auto r = getLocalBounds();
+        auto top = r.removeFromTop (38);
+        const int widths[] = { 130, 140, 100, 110, 110, 44, 44, 50, 50, 100 };
+        int x = 0;
+        for (size_t i = 0; i < tools.size(); ++i)
+        {
+            if (i == 2 || i == 5 || i == 7 || i == 9) x += 18;
+            tools[i]->setBounds (x, top.getY() + 2, widths[i], 34);
+            x += widths[i] + 6;
+        }
+        auto bottom = r.removeFromBottom (36);
+        auto helpRow = r.removeFromBottom (28);
+        help.setBounds (helpRow);
+        memLabel.setBounds (bottom.removeFromLeft (SeqGrid::laneW));
+        const int w = bottom.getWidth() / bc::kMemories;
+        for (auto& m : memories) m->setBounds (bottom.removeFromLeft (w).reduced (2, 2));
+        r.removeFromTop (4);
+        grid.setBounds (r);
+    }
+
+    void SeqTab::refresh()
+    {
+        const auto& s = proc.getSlot (proc.getSelectedSlot());
+        if (s.program.pattern.numSteps <= 32) grid.page = 0;
+        // follow the play head onto page 2
+        const int st = proc.getCurrentStep();
+        if (proc.getPlayingSlot() == proc.getSelectedSlot() && st >= 0 && s.program.pattern.numSteps > 32) grid.page = st / 32;
+        grid.repaint();
+        for (auto& t : tools) t->repaint();
+        for (auto& m : memories) m->repaint();
+    }
+
+    // =====================================================================================
+    //  DISK
+    // =====================================================================================
+    DiskTab::DiskTab (ChoppageProcessor& p) : proc (p)
+    {
+        auto setup = [this] (LcdCell& c, juce::String t, std::function<void()> fn)
+        {
+            c.text = [t] { return t; };
+            c.boxed = true;
+            c.fontSize = 24.0f;
+            c.just = juce::Justification::centred;
+            c.onClick = [fn] (const juce::MouseEvent&) { fn(); };
+            addAndMakeVisible (c);
+        };
+        setup (folderCell, "FOLDER...", [this] { if (onChooseFolder) onChooseFolder(); });
+        setup (rescanCell, "RESCAN", [this] { proc.scanBrowser (proc.getBrowserFolder()); });
+        setup (upCell, juce::String::fromUTF8 ("\xe2\x96\xb2"), [this] { scroll = std::max (0, scroll - visibleRows()); repaint(); });
+        setup (downCell, juce::String::fromUTF8 ("\xe2\x96\xbc"), [this]
+        { scroll = std::max (0, std::min ((int) entries.size() - visibleRows(), scroll + visibleRows())); repaint(); });
+        pathCell.text = [this]
+        {
+            if (proc.session().browserScanning()) return juce::String ("SCANNING...");
+            return proc.getBrowserFolder().getFullPathName().toUpperCase();
+        };
+        pathCell.fontSize = 20.0f;
+        pathCell.setInterceptsMouseClicks (false, false);
+        addAndMakeVisible (pathCell);
+    }
+
+    int DiskTab::visibleRows() const { return std::max (1, listArea().getHeight() / rowH); }
+
+    juce::Rectangle<int> DiskTab::listArea() const
+    {
+        return getLocalBounds().withTrimmedTop (40 + 34).withTrimmedBottom (30);
+    }
+
+    void DiskTab::resized()
+    {
+        auto top = getLocalBounds().removeFromTop (38);
+        folderCell.setBounds (top.removeFromLeft (150).reduced (0, 2));
+        top.removeFromLeft (10);
+        rescanCell.setBounds (top.removeFromLeft (130).reduced (0, 2));
+        top.removeFromLeft (10);
+        downCell.setBounds (top.removeFromRight (50).reduced (0, 2));
+        top.removeFromRight (6);
+        upCell.setBounds (top.removeFromRight (50).reduced (0, 2));
+        top.removeFromRight (10);
+        pathCell.setBounds (top);
+    }
+
+    void DiskTab::refresh()
+    {
+        const auto v = proc.session().version();
+        if (v != seen) { seen = v; entries = proc.session().browserEntries(); scroll = std::min (scroll, std::max (0, (int) entries.size() - 1)); }
+        repaint();
+        pathCell.repaint();
+    }
+
+    void DiskTab::paint (juce::Graphics& g)
+    {
+        const int cols[] = { 120, 90, 120 };
+        auto head = getLocalBounds().withTrimmedTop (40).withHeight (32);
+        g.setColour (lcdc().ink);
+        g.setFont (lcd (22.0f));
+        int x = 8;
+        for (auto [t, w] : { std::pair<const char*, int> { "BPM", cols[0] }, { "BARS", cols[1] }, { "LENGTH", cols[2] }, { "NAME", 400 } })
+        {
+            g.drawText (t, x, head.getY(), w, head.getHeight(), juce::Justification::centredLeft);
+            x += w;
+        }
+        g.setColour (lcdc().dim);
+        g.fillRect (0, head.getBottom(), getWidth(), 2);
+
+        const auto list = listArea();
+        const auto& sel = proc.getSlot (proc.getSelectedSlot());
+        if (entries.empty())
+        {
+            g.setColour (lcdc().ink);
+            g.setFont (lcd (26.0f));
+            g.drawFittedText (proc.session().browserScanning() ? juce::String ("SCANNING...")
+                                : juce::String ("NO BREAKS HERE. PICK A FOLDER WITH WAV / AIFF / FLAC FILES"), list, juce::Justification::centred, 2);
+            return;
+        }
+        g.setFont (lcd (24.0f));
+        for (int r = 0; r < visibleRows(); ++r)
+        {
+            const int i = scroll + r;
+            if (i >= (int) entries.size()) break;
+            const auto& e = entries[(size_t) i];
+            auto row = juce::Rectangle<int> (list.getX(), list.getY() + r * rowH, list.getWidth(), rowH - 2);
+            const bool loaded = e.path == sel.file;
+            if (loaded) { g.setColour (lcdc().ink); g.fillRect (row); }
+            g.setColour (loaded ? lcdc().inv : lcdc().ink);
+            int cx = 8;
+            g.drawText (e.bpm > 0 ? juce::String (e.bpm, 1) : juce::String ("--"), cx, row.getY(), cols[0], rowH, juce::Justification::centredLeft); cx += cols[0];
+            g.drawText (e.bars > 0 ? juce::String (e.bars) : juce::String ("-"), cx, row.getY(), cols[1], rowH, juce::Justification::centredLeft); cx += cols[1];
+            g.drawText (juce::String (e.seconds, 2) + "S", cx, row.getY(), cols[2], rowH, juce::Justification::centredLeft); cx += cols[2];
+            g.drawFittedText (juce::String (e.name).toUpperCase(), cx, row.getY(), row.getRight() - cx, rowH, juce::Justification::centredLeft, 1, 0.7f);
+        }
+        g.setColour (lcdc().ink);
+        g.setFont (lcd (20.0f));
+        g.drawText (juce::String (entries.size()) + " BREAKS" + juce::String::fromUTF8 (" \xc2\xb7 CLICK: LOAD INTO BREAK ")
+                    + juce::String (proc.getSelectedSlot() + 1) + juce::String::fromUTF8 (" \xc2\xb7 SHIFT-CLICK: NEXT EMPTY SLOT"),
+                    getLocalBounds().removeFromBottom (28), juce::Justification::centredLeft);
+    }
+
+    void DiskTab::mouseDown (const juce::MouseEvent& e)
+    {
+        const auto list = listArea();
+        if (! list.contains (e.getPosition())) return;
+        const int i = scroll + (e.y - list.getY()) / rowH;
+        if (i < 0 || i >= (int) entries.size()) return;
+        int slot = proc.getSelectedSlot();
+        if (e.mods.isShiftDown())
+            for (int k = 0; k < bc::kSlots; ++k)
+                if (proc.getSlot (k).status == ChoppageProcessor::Status::empty) { slot = k; break; }
+        proc.loadFile (slot, juce::File (entries[(size_t) i].path));
+        proc.selectSlot (slot);
+    }
+
+    void DiskTab::mouseWheelMove (const juce::MouseEvent&, const juce::MouseWheelDetails& w)
+    {
+        if (std::abs (w.deltaY) <= 0.0f) return;
+        scroll = juce::jlimit (0, std::max (0, (int) entries.size() - visibleRows()), scroll + (w.deltaY > 0 ? -3 : 3));
+        repaint();
+    }
+
+    // =====================================================================================
+    //  FX
+    // =====================================================================================
+    FxTab::FxTab (ChoppageProcessor& p) : ParamPage (p)
+    {
+        namespace P = bc::params;
+        rowHeight = 36;
+        titleW = 0;
+        addRow ("FILTER", "");
+        addValue (P::filter, "CUTOFF", 110); addChoice (P::filterType); addValue (P::filterRes, "RES", 100);
+        addRow ("DISTORT", "");
+        addValue (P::dist, "DRIVE", 110); addValue (P::distTone, "TONE", 110, 0.02f);
+        addRow ("CRUSH", "");
+        addValue (P::crush, "AMOUNT", 110);
+        addRow ("REVERB", "");
+        addValue (P::reverb, "MIX", 90); addValue (P::revDecay, "DECAY", 90); addValue (P::revDamp, "DAMP", 90);
+        addValue (P::revPre, "PRE", 110, 0.01f); addValue (P::revWidth, "WIDTH", 90);
+        addRow ("ECHO +", "");
+        addValue (P::echoTime, "TIME", 90); addValue (P::echoFb, "FDBK", 90); addValue (P::echoMix, "MIX", 90);
+        addBool (P::echoMono, "MONO", "STEREO");
+        addRule();
+        addRow ("PADS", "");
+        addValue (P::stutRate, "STUTTER", 90); addValue (P::rollRate, "ROLL", 90); addValue (P::tapeMs, "TAPE STOP", 130);
+        addRow ("", "");
+        addValue (P::akCycle, "AKAIZE", 120); addValue (P::akRatio, "", 90); addValue (P::diveRes, "FILT DIVE RES", 100);
+        addRow ("", "");
+        addValue (P::dropRate, "S950 DROP", 140); addText ("QUANT"); addChoice (P::padQuant);
+        addRow ("SLICES", "");
+        addValue (P::stretchCycle, "STRETCH CYCLE", 120);
+    }
+
+    // =====================================================================================
+    //  SET
+    // =====================================================================================
+    SetTab::SetTab (ChoppageProcessor& p) : ParamPage (p)
+    {
+        namespace P = bc::params;
+        rowHeight = 36;
+        titleW = 160;
+        addRow ("TEMPO", "SOURCE");
+        addChoice (P::tempoSrc); addText ("SPEED"); addChoice (P::speed);
+        addRow ("", "FIT");
+        addBool (P::fit, "ON", "OFF"); addChoice (P::fitMode);
+        addRow ("", "TRIGGER");
+        addChoice (P::trigger); addText ("BREAK"); addValue (P::breakMode, "", 150);
+        addRow ("", "GATE");
+        addChoice (P::gateMode); addText ("VEL>SLICE"); addBool (P::velSlice, "ON", "OFF");
+        addRule();
+        addRow ("SOUND", "CHARACTER");
+        addValue (P::character, "", 160); addText ("LCD"); addChoice (P::lcdColour);
+        addRow ("", "RENDER");
+        addAction ("AKAIZE TO HOST BPM", [this] { proc.akaizeSelected(); });
+        addText ("(OR X AKAIZE STRETCH, NO HOST)");
+        addRow ("", "SLICING");
+        auto sel = [this]() -> const ChoppageProcessor::Slot& { return proc.getSlot (proc.getSelectedSlot()); };
+        addAction ("TRANSIENTS", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, s.sensitivity, s.gridPerBar); },
+                   [sel] { return ! sel().gridSlicing; });
+        addAction ("GRID", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), true, s.sensitivity, s.gridPerBar); },
+                   [sel] { return sel().gridSlicing; });
+        for (int g : { 8, 16, 32 })
+            addAction ("1/" + juce::String (g), [this, sel, g] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), true, s.sensitivity, g); },
+                       [sel, g] { return sel().gridSlicing && sel().gridPerBar == g; });
+        addAction ("SENS-", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, juce::jmax (0.05f, s.sensitivity - 0.1f), s.gridPerBar); });
+        addAction ("SENS+", [this, sel] { const auto& s = sel(); proc.reslice (proc.getSelectedSlot(), false, juce::jmin (0.95f, s.sensitivity + 0.1f), s.gridPerBar); });
+        addRule();
+        addRow ("GENERATE", "STYLE");
+        addValue (P::style, "", 170); addText ("LAYERS"); addBool (P::layers, "ON", "OFF"); addText ("SWING"); addValue (P::swing, "", 100, 0.02f);
+    }
+}
