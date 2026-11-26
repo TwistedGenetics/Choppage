@@ -18,6 +18,9 @@ public:
     virtual const char* platformName() const = 0;
     // <plugin folder>/Content on the MPC.
     virtual std::string contentDir() const = 0;
+    // The breaks folder shared by every plugin: <the folder the plugins are installed in>/Content/Breaks
+    // ("" = none: the plugin's own Content/Breaks is used)
+    virtual std::string sharedBreaksDir() const { return {}; }
     // A parameter changed inside the plugin (mirrors, readouts, trigger reset): tell the host so the screen follows.
     // Never called from the audio thread.
     virtual void notifyParameter(int index, float plainValue) = 0;

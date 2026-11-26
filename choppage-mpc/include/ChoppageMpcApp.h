@@ -76,6 +76,9 @@ private:
     std::vector<std::string> text_;                 // readout texts, by parameter index
     std::vector<Session::BrowserEntry> browser_;             // copy for formatValue
     std::vector<std::string> badgeLetters_;         // per slice of the selected break (step text)
+    std::string breaksDir_;                         // where DISK lists breaks from (see the constructor)
+    std::string breaksLabel_ = "CONTENT/BREAKS";    // the same, for the screen
+    void chooseBreaksFolder();
     int dragTicks_ = 0;                             // a drag on the strip is under way: hold the view, don't mirror
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
     std::string endText_ = "-";                     // END knob text

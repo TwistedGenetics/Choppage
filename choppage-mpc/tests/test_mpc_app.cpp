@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
+#include <thread>
 #include <map>
 #include <set>
 
@@ -22,6 +23,8 @@ struct FakePlatform : IPlatform
     std::map<int, int> notified;
     const char* platformName() const override { return "test"; }
     std::string contentDir() const override { return dir; }
+    std::string shared;
+    std::string sharedBreaksDir() const override { return shared; }
     // The MPC stores a parameter as 0..1 and hands the plugin back min + (max - min) x norm^(1/skew): a skewed
     // value does not come back exactly as it was written. Do the same here.
     void notifyParameter(int index, float v) override
@@ -300,6 +303,29 @@ int main(int argc, char** argv)
         for (auto& [k, n] : pf.notified) { const int d = n - (before.count(k) ? before.at(k) : 0); if (d > most) { most = d; busiest = k; } }
         CHECK(most <= 2, ("idle: parameter " + std::to_string(busiest) + " re-sent " + std::to_string(most) + " times").c_str());
     }
+    std::printf("shared breaks folder\n");
+    {
+        // the plugins' folder: <root>/Twisted Genetics - VST - CHOPPAGE/Content and <root>/Content/Breaks beside it
+        const auto root = std::filesystem::temp_directory_path() / "choppage-vst2-plugins";
+        std::filesystem::remove_all(root);
+        FakePlatform p2;
+        p2.dir = (root / "Twisted Genetics - VST - CHOPPAGE" / "Content").string();
+        p2.shared = (root / "Content" / "Breaks").string();
+        {
+            ChoppageMpcApp a2(p2, false);
+            p2.app = &a2;
+            CHECK(std::filesystem::is_directory(p2.shared), "VST2 Plugins/Content/Breaks is made beside the plugins");
+        }
+        // a break there is listed
+        std::filesystem::copy_file(std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() / "tests" / "data" / "120Stereo.rx2",
+                                   root / "Content" / "Breaks" / "loop.rx2");
+        ChoppageMpcApp a3(p2, false);
+        p2.app = &a3;
+        for (int i = 0; i < 400 && a3.session().browserEntries().empty(); ++i) { a3.tick(); std::this_thread::sleep_for(std::chrono::milliseconds(5)); }
+        const auto e = a3.session().browserEntries();
+        CHECK(!e.empty() && a3.session().browserFolder() == p2.shared, "DISK lists the shared folder");
+        p2.app = nullptr;
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);
@@ -393,6 +419,20 @@ int main(int argc, char** argv)
         for (int k = 0; k < kWaveCols; ++k) selCols += ((int)std::lround(app.getParam(MP_WAVE0 + k)) / (2 * kWaveLevels)) % 3 == 1;
         CHECK(selCols > kWaveCols / 3 && r.length() > 0, "ZOOM SLICE fills the screen with the selected slice");
 
+        // the drag strip: its thumb sits on the selected marker; sliding moves the marker, the view holds still
+        {
+            auto start5 = [&] { return app.session().slot(0).content->slices.starts[5]; };
+            for (int i = 0; i < 40; ++i) app.tick();
+            const float shown = app.getParam(MP_SL_DRAG);
+            CHECK(shown > 0.05f && shown < 0.95f, "ZOOM SLICE: the drag thumb sits on the marker inside the view");
+            const int s0 = start5();
+            set(app, MP_SL_DRAG, shown + 0.05f);
+            const int s1 = start5();
+            set(app, MP_SL_DRAG, shown + 0.10f);
+            CHECK(start5() > s1 && s1 > s0, "dragging right moves the start later, step by step");
+            set(app, MP_SL_DRAG, shown);
+            CHECK(std::abs(start5() - s0) < 64, "dragging back puts it back (the view held still)");
+        }
         // the strip under the waveform: 84 touch columns; the lit one is the selected start, a touch moves it there
         {
             auto start5 = [&] { return app.session().slot(0).content->slices.starts[5]; };   // (content is replaced on edit)

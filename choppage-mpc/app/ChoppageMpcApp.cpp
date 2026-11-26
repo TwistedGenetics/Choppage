@@ -131,10 +131,10 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
-    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->hidden = true; }   // (0.6.1-0.7.3; see MP_SL_PLACE)
+    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->uiOnly = true; }   // the SLICE pages' drag strip
     T("resetOrig", "Reset");
     T("memSaveOrig", "Save Original");
-    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->uiOnly = true; }
+    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->hidden = true; }   // (0.7.4 only: the touch columns)
     return v;
 }
 
@@ -228,8 +228,37 @@ ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform
     std::error_code ec;
     std::filesystem::create_directories(content + "/Breaks", ec);
     session_.setDataFolder(content);
-    session_.scanFolder(content + "/Breaks");
+    chooseBreaksFolder();
+    session_.scanFolder(breaksDir_);
     if (startWorker) worker_ = std::thread([this] { workerLoop(); });
+}
+
+// DISK lists the shared folder beside the plugins (VST2 Plugins/Content/Breaks), made on first use, so every
+// plugin can share one set of breaks. Breaks still in the plugin's own Content/Breaks are listed while the
+// shared folder has none.
+static bool hasAudio(const std::string& dir)
+{
+    std::error_code ec;
+    for (std::filesystem::directory_iterator it(dir, ec), end; !ec && it != end; it.increment(ec))
+        if (it->is_regular_file(ec) && AudioFile::isAudioFile(it->path().string())) return true;
+    return false;
+}
+
+void ChoppageMpcApp::chooseBreaksFolder()
+{
+    const std::string own = platform_.contentDir() + "/Breaks";
+    const std::string shared = platform_.sharedBreaksDir();
+    breaksDir_ = own;
+    breaksLabel_ = "CONTENT/BREAKS";
+    if (shared.empty()) return;
+    std::error_code ec;
+    std::filesystem::create_directories(shared, ec);
+    if (!std::filesystem::is_directory(shared, ec)) return;
+    if (!hasAudio(shared) && hasAudio(own)) return;     // not moved over yet: the old place
+    breaksDir_ = shared;
+    const auto parent = std::filesystem::path(shared).parent_path().parent_path().filename().string();
+    breaksLabel_ = (parent.empty() ? std::string() : parent + "/") + "CONTENT/BREAKS";
+    for (auto& c : breaksLabel_) c = (char)std::toupper((unsigned char)c);
 }
 
 ChoppageMpcApp::~ChoppageMpcApp()
@@ -563,6 +592,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             {
                 for (int i = MP_SHOW_PAT; i <= MP_SHOW_DISK; ++i) if (i != index && seen_[i] != 0.0f) write(i, 0.0f);
                 write(MP_VIEW, (float)mine);
+                if (mine == 2) { chooseBreaksFolder(); session_.scanFolder(breaksDir_); }   // DISK: new files show
             }
             else if (roundi(seen_[MP_VIEW]) == mine) write(MP_VIEW, 0.0f);
             break;
@@ -638,7 +668,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
                 session_.loadFile(slot, entries[(size_t)k].path);
                 say("LOADING " + upper(entries[(size_t)k].name));
             }
-            else say("PUT WAV / AIFF / REX BREAKS IN CONTENT/BREAKS");
+            else say("PUT WAV / AIFF / REX BREAKS IN " + breaksLabel_);
             break;
         }
         case MP_DEMO: session_.loadDemo(slot); say("DEMO BREAK"); break;
@@ -1015,7 +1045,7 @@ void ChoppageMpcApp::syncList(bool force)
     {
         const int i = listTop_ + k;
         std::string line;
-        if (count == 0 && k == 0) line = "PUT WAV / AIFF BREAKS IN CONTENT/BREAKS";
+        if (count == 0 && k == 0) line = "PUT BREAKS IN " + breaksLabel_;
         else if (i < count)
         {
             std::string t;

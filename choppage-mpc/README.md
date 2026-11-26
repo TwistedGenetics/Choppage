@@ -8,7 +8,7 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 ## Install
 1. Unzip and copy the `Twisted Genetics - VST - CHOPPAGE` folder into `VST2 Plugins` on an MPC drive (SD card, SSD or USB).
 2. On the MPC, go to Preferences > Enhancements (Beta) and turn on **Enable Enhancements** and **External Plugin Support**, then restart.
-3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in the plugin's `Content/Breaks` folder. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
+3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders (CHOPPAGE makes it the first time it loads), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
 ## Pads
@@ -45,12 +45,12 @@ Under the LCD:
 The sections:
 - **PATTERN** turns the LCD into the SEQ grid (below), with LENGTH, STEPS SHOWN, FOLLOW, ORIGINAL, CLEAR, the selected step's FX and RATE, UNDO and REDO underneath. STYLE, SWING and the memories are on the PATTERN screen.
 - **FX** puts each pad's setting knob under it.
-- **LOAD** opens the DISK section: the files in `Content/Breaks` with their tempo. Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
+- **LOAD** opens the DISK section: the files in `VST2 Plugins/Content/Breaks` with their tempo (read again each time DISK opens, so new files show). Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
-- **Touch the strip** under the hit letters (TOUCH HERE TO PUT THE START): the selected slice's start goes to the column you touch; the red column shows where it is. Use ZOOM SLICE for fine placing, and the MOVE knob or jog wheel to fine-tune.
+- **Drag with your finger** on the strip under the hit letters: the **START** handle sits on the selected slice's start marker and follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves; the MOVE knob or jog wheel fine-tune.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.

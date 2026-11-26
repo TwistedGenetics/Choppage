@@ -36,7 +36,7 @@ public:
         i.name = "CHOPPAGE";
         i.vendor = "Twisted Genetics";
         i.uniqueId = MPC_FOURCC('T', 'g', 'C', 'h');   // == "uid" in plugin.json
-        i.version = 7005;                               // 0.7.5
+        i.version = 8000;                               // 0.8.0
         i.isInstrument = true;
         i.numInputs = 0;
         i.numOutputs = 2;
@@ -91,6 +91,14 @@ public:
     // ---- IPlatform
     const char* platformName() const override { return "MPC (Plugin SDK)"; }
     std::string contentDir() const override { return mpc::contentFolder(); }
+    std::string sharedBreaksDir() const override
+    {
+        // the plugin is ".../VST2 Plugins/Twisted Genetics - VST - CHOPPAGE": the shared folder is
+        // ".../VST2 Plugins/Content/Breaks", beside the plugin folders
+        const std::string& f = mpc::pluginFolder();
+        const auto slash = f.find_last_of('/');
+        return f.empty() || slash == std::string::npos || slash == 0 ? std::string() : f.substr(0, slash) + "/Content/Breaks";
+    }
     void notifyParameter(int index, float plainValue) override
     {
         set(index, plainValue);            // framework value (the host reads this) -> parameterChanged -> app
