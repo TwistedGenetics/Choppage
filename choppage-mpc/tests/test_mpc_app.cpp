@@ -310,6 +310,7 @@ int main(int argc, char** argv)
         FakePlatform pp;
         pp.dir = (root / "Twisted Genetics - VST - CHOPPAGE" / "Content").string();
         pp.shared = (root / "Content" / "Breaks").string();
+        std::filesystem::create_directories(root / "Content");   // the user's shared Content folder
         ChoppageMpcApp a4(pp, false);
         pp.app = &a4;
         a4.prepare(44100.0, 256);
@@ -317,7 +318,7 @@ int main(int argc, char** argv)
         press(a4, MP_DEMO, 1);
         settle(a4);
         const auto folder = root / "Content" / "Presets" / "CHOPPAGE";
-        CHECK(std::filesystem::is_directory(folder), "VST2 Plugins/Content/Presets/CHOPPAGE is made");
+        CHECK(!std::filesystem::exists(folder), "no preset folder is made on load");
         std::string t;
         a4.formatValue(MP_PRE_BROWSE, 0, t);
         CHECK(t == "NO PRESETS YET", ("empty list: " + t).c_str());
@@ -399,8 +400,9 @@ int main(int argc, char** argv)
         {
             ChoppageMpcApp a2(p2, false);
             p2.app = &a2;
-            CHECK(std::filesystem::is_directory(p2.shared), "VST2 Plugins/Content/Breaks is made beside the plugins");
+            CHECK(!std::filesystem::exists(root / "Content"), "nothing is made in VST2 Plugins on load");
         }
+        std::filesystem::create_directories(p2.shared);
         // a break there is listed
         std::filesystem::copy_file(std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() / "tests" / "data" / "120Stereo.rx2",
                                    root / "Content" / "Breaks" / "loop.rx2");

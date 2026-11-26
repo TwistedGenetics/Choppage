@@ -266,7 +266,7 @@ void ChoppageMpcApp::chooseBreaksFolder()
     breaksLabel_ = "CONTENT/BREAKS";
     if (shared.empty()) return;
     std::error_code ec;
-    std::filesystem::create_directories(shared, ec);
+    // never make folders in VST2 Plugins: only use the shared folder if it is already there
     if (!std::filesystem::is_directory(shared, ec)) return;
     if (!hasAudio(shared) && hasAudio(own)) return;     // not moved over yet: the old place
     breaksDir_ = shared;
@@ -338,8 +338,10 @@ void ChoppageMpcApp::choosePresetsFolder()
     const std::string shared = platform_.sharedBreaksDir();
     presetsDir_ = shared.empty() ? platform_.contentDir() + "/Presets"
                                  : (std::filesystem::path(shared).parent_path() / "Presets" / "CHOPPAGE").string();
+    // the folder is made by the first save, not here (nothing is created in VST2 Plugins on load)
     std::error_code ec;
-    std::filesystem::create_directories(presetsDir_, ec);
+    if (!shared.empty() && !std::filesystem::is_directory(std::filesystem::path(shared).parent_path(), ec))
+        presetsDir_ = platform_.contentDir() + "/Presets";
 }
 
 void ChoppageMpcApp::refreshPresets()
