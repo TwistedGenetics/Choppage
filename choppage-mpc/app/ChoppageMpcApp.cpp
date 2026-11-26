@@ -131,10 +131,10 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
-    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->uiOnly = true; }   // the SLICE pages' drag strip
+    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->hidden = true; }
     T("resetOrig", "Reset");
     T("memSaveOrig", "Save Original");
-    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->hidden = true; }   // (0.7.4 only: the touch columns)
+    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->uiOnly = true; }
     return v;
 }
 
