@@ -91,6 +91,17 @@ def dump(v, ind=0):
         return repr(round(v, 3))
     return json.dumps(v)
 
+# The MPC will not show a TUI.json much over 1.9 MB: CHOPPAGE 0.6.0 (1,932,352 bytes) showed, 0.6.1 (1,970,044) left
+# the plugin screen blank. It also rejects the file (the default red controls) when it is all on one line. So: one
+# value per line as dump() lays it out, but no indentation (a third of the size), and a hard stop well under the limit.
+TUI_MAX_BYTES = 1_850_000
+
+def skin_json(v):
+    text = "\n".join(line.lstrip(" ") for line in dump(v).split("\n")) + "\n"
+    if len(text) > TUI_MAX_BYTES:
+        sys.exit("make_skin: %d bytes of JSON: the MPC shows nothing over about 1.9 MB (limit here %d)" % (len(text), TUI_MAX_BYTES))
+    return text
+
 def img(colour="0", image=""):
     return o(("version", 1), ("colour", colour), ("image", image))
 
@@ -1425,7 +1436,7 @@ class Builder:
                                ("info", o(("version", 1), ("type", "CompleteDescription"))),
                                ("tabs", tabs))))
         with open(os.path.join(self.out, "TUI.json"), "w") as f:
-            f.write(dump(tui) + "\n")
+            f.write(skin_json(tui))
         # Program mode (no screen page open): the sound and the dice amounts
         prog = [self.p(i)["index"] for i in ("filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
                                               "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycLen")]
@@ -1433,7 +1444,7 @@ class Builder:
                ("Screen Mode Q-Links", o(("version", 4), ("map", qmaps))),
                ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), prog[i]) for i in range(16)])))
         with open(os.path.join(self.out, "Q-Links.json"), "w") as f:
-            f.write(dump(ql) + "\n")
+            f.write(skin_json(ql))
         return len(tabs)
 
 # ---------------------------------------------------------------- approximate preview (layout check, not the MPC)
