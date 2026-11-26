@@ -157,7 +157,7 @@ jobs:
   release:
     # Every green build of main becomes a downloadable Release: the macOS plugins and the MPC plugin together.
     needs: [core, macos, mpc]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: startsWith(github.ref, 'refs/heads/diag-') && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -170,11 +170,11 @@ jobs:
           VERSION=$(sed -n 's/^project(Choppage VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
           MPCV=$(python3 -c 'import json; print(json.load(open("choppage-mpc/plugin.json"))["version"])')
           [ "$VERSION" = "$MPCV" ] || { echo "::error::CMakeLists.txt says $VERSION, choppage-mpc/plugin.json says $MPCV"; exit 1; }
-          TAG="v${VERSION}-build.${{ github.run_number }}"
+          TAG="${{ github.ref_name }}-${{ github.run_number }}"
           gh release create "$TAG" out/*.zip out/ui-tab0.png \
             --target "${{ github.sha }}" \
             --title "CHOPPAGE ${VERSION} (build ${{ github.run_number }})" \
-            --latest \
+            --prerelease \
             --notes "$(git log -1 --pretty=%B)
 
           **macOS** (CHOPPAGE-macOS.zip): unzip, then follow INSTALL.txt (copy the .component / .vst3 into your plug-in folders or the app into Applications, clear quarantine, rescan).

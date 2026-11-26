@@ -133,10 +133,10 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }
     C("muteGroup", "Mute Group", { "1", "2", "3", "4" }, 0);
     F("akrLoopBpm", "Loop BPM", 0.0f, 300.0f, 0.0f);
-    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->uiOnly = true; }   // the SLICE pages' drag strip
+    { auto* p = F("slDrag", "Drag Start", 0.0f, 1.0f, 0.0f); p->hidden = true; }   // (the drag strip of 0.6.1 and 0.8.0 - 0.9.1 left the MPC screen blank)
     T("resetOrig", "Reset");
     T("memSaveOrig", "Save Original");
-    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->hidden = true; }   // (0.7.4 only: the touch columns)
+    { auto* p = I("slPlace", "Place Start", 0, kWaveCols, 0); p->uiOnly = true; }   // the touch columns under the waveform
     { auto* p = C("slMode", "Touch", { "SELECT", "ADD", "DEL" }, 0); p->uiOnly = true; }
     { auto* p = I("sliceTap", "Slice Tap", 0, kWaveCols, 0); p->uiOnly = true; }
     { auto* p = B("slPlay", "Play Slice", false); p->uiOnly = true; }   // the jog wheel's push flips it: every change plays
