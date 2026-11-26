@@ -90,6 +90,10 @@ private:
     void savePlaces();
     void placeTap(int k);
     void syncPlaces();
+    std::string settingsFile() const;
+    void exportSettings();
+    void importSettings();
+    void syncSettingsInfo();
     // presets (VST2 Plugins/Content/Presets/CHOPPAGE)
     static constexpr int kPresetNameMax = 24;
     std::string presetsDir_;

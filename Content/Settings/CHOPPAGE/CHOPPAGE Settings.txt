@@ -1,0 +1,36 @@
+CHOPPAGE SETTINGS 1
+param gateMode 0
+param breakMode 1
+param trigger 0
+param velSlice 0
+param tempoSrc 0
+param speed 1
+param fit 1
+param fitMode 0
+param padQuant 1
+param lcdColour 0
+param noteMap 0
+param padNotes 0
+param slicing 0
+param sens 0.62
+param grid 1
+param snap 1
+place1 /home/claude/choppage/Content/Breaks
+last /home
+breaks /home/claude/choppage/Content/Breaks
+qlink1 filter
+qlink2 filterRes
+qlink3 dist
+qlink4 crush
+qlink5 srate
+qlink6 reverb
+qlink7 echoMix
+qlink8 volume
+qlink9 patAmount
+qlink10 fxAmount
+qlink11 swing
+qlink12 style
+qlink13 stutRate
+qlink14 rollRate
+qlink15 tapeMs
+qlink16 akCycLen

@@ -636,6 +636,10 @@ def pages():
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
         # presets: VST2 Plugins/Content/Presets/CHOPPAGE. Type a name, SAVE NEW; or pick one with PRESET and LOAD.
+        # SETTINGS: export how CHOPPAGE is set up (play, notes, chopping, LCD, the 8 places, Q-Links) and load it back
+        {"fn": 6, "sub": 2, "name": "SETTINGS", "rows": [
+            [G("setExport", "EXPORT\nSETTINGS"), G("setImport", "LOAD\nSETTINGS"), R("setInfo", "SETTINGS FILE", span=2)],
+            [R("infoMsg", "MESSAGE", span=4)]]},
         # Q-LINKS: what each of the MPC's 16 Q-Link knobs turns (on every page)
         {"fn": 8, "sub": 0, "name": "Q-LINKS", "rows": [
             [K("qt1", "Q-LINK 1"), K("qt2", "Q-LINK 2"), K("qt3", "Q-LINK 3"), K("qt4", "Q-LINK 4")],
@@ -1277,22 +1281,25 @@ class Builder:
                                     (14, PY, 1250, 26), 20, vis=vis))
         ky, kh = PY + 30, H - (PY + 30) - 8
         kids.append(self.flip_at("placeStore", (10, ky, 230, kh), self.key_png("STORE", 230, kh), vis, qlink=False))
+        # 8 places: two rows of four
         pw = (1270 - 250 - 3 * 8) // 4
-        cap = "placecap_%dx%d.png" % (pw, kh)
+        ph = (kh - 8) // 2
+        cap = "placecap_%dx%d.png" % (pw, ph)
         if cap not in self.images:
-            self.save(cap, keycap(pw, kh, "", False, led=False))
+            self.save(cap, keycap(pw, ph, "", False, led=False))
         imgs = []
-        for k_ in range(4):
-            x = 250 + k_ * (pw + 8)
-            kids.append(self.image_at(cap, (x, ky, pw, kh), vis, name="place key"))
-            kids.append(self.caption_at("PLACE %d" % (k_ + 1), "place%d" % (k_ + 1), (x + 12, ky + 6, pw - 24, 24), 20, vis=vis))
-            kids.append(self.label_at("place%d" % (k_ + 1), (x + 8, ky + 30, pw - 16, kh - 36), 30,
+        for k_ in range(8):
+            x = 250 + (k_ % 4) * (pw + 8)
+            y_ = ky + (k_ // 4) * (ph + 8)
+            kids.append(self.image_at(cap, (x, y_, pw, ph), vis, name="place key"))
+            kids.append(self.caption_at("PLACE %d" % (k_ + 1), "place%d" % (k_ + 1), (x + 10, y_ + 4, pw - 20, 20), 18, vis=vis))
+            kids.append(self.label_at("place%d" % (k_ + 1), (x + 8, y_ + 22, pw - 16, ph - 24), 26,
                                       just="horizontallyCentred verticallyCentred", vis=vis))
-        if "clear_place.png" not in self.images:
-            self.save("clear_place.png", clear_png(pw, kh))
-        for k_ in range(4):
-            imgs.append(("clear_place.png", "clear_place.png", (k_ * (pw + 8), 0, pw, kh)))
-        kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, vis, ids=[1, 2, 3, 4], name="cp place keys",
+        if "clear_place2.png" not in self.images:
+            self.save("clear_place2.png", clear_png(pw, ph))
+        for k_ in range(8):
+            imgs.append(("clear_place2.png", "clear_place2.png", ((k_ % 4) * (pw + 8), (k_ // 4) * (ph + 8), pw, ph)))
+        kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, vis, ids=list(range(1, 9)), name="cp place keys 8",
                                   focus=False, qlink=False))
         self.save("bg_disk_%s.png" % tag, bg)
         under = [self.image_at("bg_disk_%s.png" % tag, (0, 0, W, H), vis, name="disk background")]

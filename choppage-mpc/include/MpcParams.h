@@ -114,6 +114,11 @@ enum MpcParam : int
     MP_ZOOM_SLICE_KEY,             // key: ZOOM SLICE, again = its start, again = its end, again = the slice
     MP_ZOOM_LEVEL,                 // 0 the slice, 1 its start, 2 its end (while ZOOM = SLICE)
     MP_ZOOM_VIS,                   // for the LCD's zoom keys: theme + 4 x (0 all, 1 slice, 2 start, 3 end)
+    // ---- 0.14: 8 places (the first 4 readouts are MP_PLACE0..), settings export / load
+    MP_PLACE4,                     // readouts: places 5-8
+    MP_SET_EXPORT = MP_PLACE4 + 4, // key: write the settings file
+    MP_SET_IMPORT,                 // key: read it back
+    MP_SET_INFO,                   // readout: where the settings file is
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
@@ -129,7 +134,8 @@ constexpr int kWaveLevels = 12;
 constexpr int kWaveFrames = 4 * 3 * 2 * kWaveLevels;
 constexpr int kTabFrames = 15;
 constexpr int kListLines = 5;
-constexpr int kPlaces = 4;
+constexpr int kPlaces = 8;
+inline int placeParam(int k) { return k < 4 ? MP_PLACE0 + k : MP_PLACE4 + (k - 4); }
 constexpr int kQLinks = 16;
 inline int waveFrame(int theme, int look, int mark, int level) { return ((theme * 3 + look) * 2 + mark) * kWaveLevels + level; }
 inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }

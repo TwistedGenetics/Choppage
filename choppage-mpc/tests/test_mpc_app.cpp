@@ -668,6 +668,25 @@ int main(int argc, char** argv)
         CHECK(app.getParam(MP_ZOOM_VIS) == (float)((int)std::lround(app.getParam(P_LCD_COLOUR)) + 4 * 3), "the keys show END lit");
         press(app, MP_ZOOM_ALL_KEY);
     }
+    std::printf("settings: export and load\n");
+    {
+        const float lcd = app.getParam(P_LCD_COLOUR), q1 = app.getParam(MP_QT0);
+        set(app, P_LCD_COLOUR, 2);
+        set(app, MP_SNAP, 0);
+        press(app, MP_SET_EXPORT);
+        std::string f;
+        app.formatValue(MP_SET_INFO, 0, f);
+        CHECK(f.find("NOT EXPORTED") == std::string::npos && f.find("SETTINGS") != std::string::npos, ("the settings folder is shown: " + f).c_str());
+        set(app, P_LCD_COLOUR, 0);
+        set(app, MP_SNAP, 1);
+        set(app, MP_QT0, q1 + 1);
+        press(app, MP_SET_IMPORT);
+        for (int i = 0; i < 4; ++i) app.tick();
+        CHECK(app.getParam(P_LCD_COLOUR) == 2.0f && app.getParam(MP_SNAP) == 0.0f, "LOAD SETTINGS puts the settings back");
+        CHECK(app.getParam(MP_QT0) == q1, "and the Q-Links");
+        set(app, P_LCD_COLOUR, lcd);
+        set(app, MP_SNAP, 1);
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);

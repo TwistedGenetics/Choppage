@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 namespace bc {
 
@@ -155,7 +156,7 @@ std::vector<MpcParamDef> buildDefs()
     T("refresh", "Refresh");
     { auto* p = I("placeTap", "Place Tap", 0, kPlaces, 0); p->uiOnly = true; }
     { auto* p = B("placeStore", "Store Place", false); p->uiOnly = true; }
-    for (int k = 0; k < kPlaces; ++k) R(("place" + std::to_string(k + 1)).c_str(), ("Place " + std::to_string(k + 1)).c_str());
+    for (int k = 0; k < 4; ++k) R(("place" + std::to_string(k + 1)).c_str(), ("Place " + std::to_string(k + 1)).c_str());
     F("brkBpm", "Break BPM", 40.0f, 300.0f, 170.0f);
     T("winPrev", "Bars Earlier");
     T("winNext", "Bars Later");
@@ -168,6 +169,10 @@ std::vector<MpcParamDef> buildDefs()
     T("zoomSlice", "Zoom Slice");
     { auto* p = C("zoomLevel", "Zoom Level", { "SLICE", "START", "END" }, 0); p->uiOnly = true; }
     { auto* p = I("zoomVis", "Zoom Keys", 0, 15, 0); p->uiOnly = true; }
+    for (int k = 4; k < 8; ++k) R(("place" + std::to_string(k + 1)).c_str(), ("Place " + std::to_string(k + 1)).c_str());
+    T("setExport", "Export Settings");
+    T("setImport", "Load Settings");
+    R("setInfo", "Settings File");
     // the knobs start on the sound and the dice (what Program mode had before 0.11)
     const auto list = buildQList(v);
     const char* start[kQLinks] = { "filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
@@ -297,7 +302,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_ZOOM_VIS + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_SET_INFO + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -371,6 +376,7 @@ void ChoppageMpcApp::setupFolders()
     }
     session_.listFolder(browseDir_, topDir_);
     syncPlaces();
+    syncSettingsInfo();
 }
 
 void ChoppageMpcApp::loadPlaces()
@@ -464,8 +470,125 @@ void ChoppageMpcApp::syncPlaces()
         std::string t = names[k].empty() ? std::string("EMPTY") : upper(std::filesystem::path(cleanDir(names[k])).filename().string());
         if (t.empty()) t = "/";
         if (t.size() > 14) t = t.substr(0, 13) + ".";
-        setText(MP_PLACE0 + k, t);
+        setText(placeParam(k), t);
     }
+}
+
+// ===================================================================================== settings file
+// SETTINGS (PLAY, third page): EXPORT writes how CHOPPAGE is set up to a text file; LOAD reads it back (on this
+// MPC after a reinstall, or on another one). Breaks, slices, patterns and the sound are presets, not settings.
+// The file: VST2 Plugins/Content/Settings/CHOPPAGE/CHOPPAGE Settings.txt (if VST2 Plugins/Content is there),
+// else the plugin's own Content/Settings.
+static const char* kSettingIds[] = {
+    // how breaks play
+    "gateMode", "breakMode", "trigger", "velSlice", "tempoSrc", "speed", "fit", "fitMode", "padQuant",
+    // the screen, the notes, chopping
+    "lcdColour", "noteMap", "padNotes", "slicing", "sens", "grid", "snap" };
+
+std::string ChoppageMpcApp::settingsFile() const
+{
+    namespace fs = std::filesystem;
+    const std::string shared = platform_.sharedBreaksDir();
+    std::error_code ec;
+    const fs::path content = shared.empty() ? fs::path() : fs::path(shared).parent_path();
+    const fs::path dir = !content.empty() && fs::is_directory(content, ec) ? content / "Settings" / "CHOPPAGE"
+                                                                           : fs::path(platform_.contentDir()) / "Settings";
+    return (dir / "CHOPPAGE Settings.txt").string();
+}
+
+static int paramIndexOf(const std::string& id)
+{
+    for (int i = 0; i < kMpcNumParams; ++i) if (mpcParamDef(i).id == id) return i;
+    return -1;
+}
+
+void ChoppageMpcApp::exportSettings()
+{
+    std::string t = "CHOPPAGE SETTINGS 1\n";
+    char buf[64];
+    for (const char* id : kSettingIds)
+        if (const int i = paramIndexOf(id); i >= 0)
+        {
+            std::snprintf(buf, sizeof buf, "%g", values_[i].load());
+            t += std::string("param ") + id + " " + buf + "\n";
+        }
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        for (int k = 0; k < kPlaces; ++k) if (!places_[k].empty()) t += "place" + std::to_string(k + 1) + " " + places_[k] + "\n";
+    }
+    t += "last " + browseDir_ + "\n";
+    t += "breaks " + breaksDir_ + "\n";
+    const auto& list = qLinkList();
+    for (int k = 0; k < kQLinks; ++k)
+    {
+        const int q = qTarget(k);
+        t += "qlink" + std::to_string(k + 1) + " " + (q >= 0 ? mpcParamDef(q).id : std::string("-")) + "\n";
+    }
+    (void)list;
+    const std::string path = settingsFile();
+    if (!Preset::writeFile(path, t)) { message_ = "CAN'T WRITE THE SETTINGS (CARD FULL OR LOCKED?)"; messageTicks_ = 150; return; }
+    message_ = "SETTINGS EXPORTED";
+    messageTicks_ = 120;
+    syncSettingsInfo();
+}
+
+void ChoppageMpcApp::importSettings()
+{
+    std::string text;
+    const std::string path = settingsFile();
+    if (!Preset::readFile(path, text) || text.rfind("CHOPPAGE SETTINGS", 0) != 0) { message_ = "NO SETTINGS FILE TO LOAD (EXPORT FIRST)"; messageTicks_ = 150; return; }
+    std::istringstream in(text);
+    std::string line;
+    const auto& list = qLinkList();
+    while (std::getline(in, line))
+    {
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        const auto sp = line.find(' ');
+        if (sp == std::string::npos) continue;
+        const std::string key = line.substr(0, sp), val = line.substr(sp + 1);
+        if (key == "param")
+        {
+            const auto sp2 = val.find(' ');
+            if (sp2 == std::string::npos) continue;
+            const int i = paramIndexOf(val.substr(0, sp2));
+            if (i < 0) continue;
+            const auto& d = mpcParamDef(i);
+            const float v = std::clamp((float)std::atof(val.c_str() + sp2 + 1), d.min, d.max);
+            values_[i].store(v, std::memory_order_relaxed);          // as if the MPC set it: the worker acts on it
+            platform_.notifyParameter(i, v);
+        }
+        else if (key.rfind("place", 0) == 0)
+        {
+            const int k = std::atoi(key.c_str() + 5) - 1;
+            if (k >= 0 && k < kPlaces) { std::lock_guard<std::mutex> l(textMutex_); places_[k] = val; }
+        }
+        else if (key == "last") { std::error_code ec; if (std::filesystem::is_directory(val, ec)) browseDir_ = val; }
+        else if (key.rfind("qlink", 0) == 0)
+        {
+            const int k = std::atoi(key.c_str() + 5) - 1;
+            if (k < 0 || k >= kQLinks) continue;
+            int e = 0;
+            for (size_t j = 1; j < list.size(); ++j) if (mpcParamDef(list[j]).id == val) e = (int)j;
+            values_[MP_QT0 + k].store((float)e, std::memory_order_relaxed);
+            platform_.notifyParameter(MP_QT0 + k, (float)e);
+        }
+    }
+    savePlaces();
+    session_.listFolder(browseDir_, topDir_);
+    syncPlaces();
+    message_ = "SETTINGS LOADED";
+    messageTicks_ = 120;
+}
+
+void ChoppageMpcApp::syncSettingsInfo()
+{
+    // which folder it is in (VST2 Plugins/Content/Settings/CHOPPAGE, or the plugin's own Content/Settings)
+    const std::string f = settingsFile();
+    std::error_code ec;
+    const bool shared = f.find("/Settings/CHOPPAGE/") != std::string::npos;
+    std::string shown = shared ? "CONTENT/SETTINGS/CHOPPAGE" : "PLUGIN'S CONTENT/SETTINGS";
+    if (!std::filesystem::exists(f, ec)) shown = "NOT EXPORTED YET";
+    setText(MP_SET_INFO, shown);
 }
 
 // A touch on the SLICE pages' waveform, by the TOUCH mode on the LCD:
@@ -1175,6 +1298,8 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BRK_PREV: session_.selectSlot((slot + kSlots - 1) % kSlots); break;
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
         case MP_ZOOM: if (roundi(v) == 0) write(MP_ZOOM_LEVEL, 0.0f); lastVersion_ = ~0u; break;   // syncWave follows
+        case MP_SET_EXPORT: exportSettings(); break;
+        case MP_SET_IMPORT: importSettings(); break;
         case MP_ZOOM_ALL_KEY: write(MP_ZOOM, 0.0f); write(MP_ZOOM_LEVEL, 0.0f); lastVersion_ = ~0u; break;
         case MP_ZOOM_SLICE_KEY:
         {

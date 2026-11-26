@@ -541,7 +541,7 @@
   {"index": 539, "id": "dir", "name": "Folder", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
   {"index": 540, "id": "up", "name": "Up", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 541, "id": "refresh", "name": "Refresh", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
-  {"index": 542, "id": "placeTap", "name": "Place Tap", "kind": "int", "min": 0, "max": 4, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 542, "id": "placeTap", "name": "Place Tap", "kind": "int", "min": 0, "max": 8, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 543, "id": "placeStore", "name": "Store Place", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 544, "id": "place1", "name": "Place 1", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
   {"index": 545, "id": "place2", "name": "Place 2", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
@@ -587,5 +587,12 @@
   {"index": 585, "id": "zoomAll", "name": "Zoom All", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 586, "id": "zoomSlice", "name": "Zoom Slice", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 587, "id": "zoomLevel", "name": "Zoom Level", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["SLICE", "START", "END"], "hidden": false, "readout": false, "trigger": false},
-  {"index": 588, "id": "zoomVis", "name": "Zoom Keys", "kind": "int", "min": 0, "max": 15, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false}
+  {"index": 588, "id": "zoomVis", "name": "Zoom Keys", "kind": "int", "min": 0, "max": 15, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 589, "id": "place5", "name": "Place 5", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 590, "id": "place6", "name": "Place 6", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 591, "id": "place7", "name": "Place 7", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 592, "id": "place8", "name": "Place 8", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 593, "id": "setExport", "name": "Export Settings", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 594, "id": "setImport", "name": "Load Settings", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 595, "id": "setInfo", "name": "Settings File", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false}
 ]

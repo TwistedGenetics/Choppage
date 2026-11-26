@@ -57,7 +57,7 @@ The sections:
 **DISK page** (press MAIN again, or LOAD on MAIN): browse **any folder on the MPC's drives**, your own samples folders included.
 - The top line shows the folder. **UP** goes to the folder above; at the top you see the drives (internal SSD, SD card, USB).
 - The list shows `[ .. ]` (up), the folders as `[ NAME ]`, then the breaks with their tempo. **Touch a folder** to open it. **Touch a break** to hear it, touch it again to load it. Or turn the jog wheel (one line a click) and push it (or **LOAD / OPEN**).
-- **PLACES**: four keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
+- **PLACES**: eight keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
 - The places and the last folder are kept in the plugin's own `Content/places.txt`, so the next load opens where you left off. **REFRESH** reads the folder again (after copying files in).
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DELETE** on the LCD.
@@ -83,6 +83,8 @@ The sections:
 - **FX on a step:** tap a step, or the FX row under the grid, to select it. Then pick its FX (STUTTER, REVERSE, STRETCH, TAPE STOP or OFF) and RATE (1/8 to 1/64). The FX row shows each step's FX.
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
+
+**SETTINGS** (press PLAY three times): **EXPORT SETTINGS** writes how CHOPPAGE is set up to `CHOPPAGE Settings.txt` (in `VST2 Plugins/Content/Settings/CHOPPAGE` if you have made `VST2 Plugins/Content`, else in the plugin's own `Content/Settings`): GATE, BREAK SWITCH, TRIGGER, VELOCITY > SLICE, TEMPO SOURCE, SPEED, FIT, PAD QUANTISE, LCD colour, NOTE MAP, PAD NOTES, SLICING / SENSITIVITY / GRID, SNAP, the 8 places, the last folder and the 16 Q-Link assignments. **LOAD SETTINGS** reads it back (after a reinstall, or on another MPC). Breaks, slices, patterns and the sound are presets (SAVE/LOAD), not settings.
 
 **PLAY / SET** (press again for SET):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
