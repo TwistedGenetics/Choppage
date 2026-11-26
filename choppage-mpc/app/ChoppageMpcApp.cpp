@@ -154,6 +154,10 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I("placeTap", "Place Tap", 0, kPlaces, 0); p->uiOnly = true; }
     { auto* p = B("placeStore", "Store Place", false); p->uiOnly = true; }
     for (int k = 0; k < kPlaces; ++k) R(("place" + std::to_string(k + 1)).c_str(), ("Place " + std::to_string(k + 1)).c_str());
+    F("brkBpm", "Break BPM", 40.0f, 300.0f, 170.0f);
+    T("winPrev", "Bars Earlier");
+    T("winNext", "Bars Later");
+    R("winInfo", "Bars Used");
     return v;
 }
 
@@ -235,7 +239,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_PLACE0 + kPlaces, "parameter table");
+    static_assert(kMpcNumParams == MP_WIN_INFO + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -410,7 +414,7 @@ void ChoppageMpcApp::syncPlaces()
 //   SELECT  the slice under the finger (and it plays)
 //   ADD     a new marker under the finger (SNAP: on the nearest drum hit); the new slice is selected and plays
 //   DEL     the slice under the finger goes (joined to the one before; the first joins the second)
-void ChoppageMpcApp::sliceTap(int column)
+void ChoppageMpcApp::sliceTap(int column, bool doubleTap)
 {
     auto say = [this](const std::string& m) { message_ = m; messageTicks_ = 90; };
     const auto& s = session_.slot(session_.selectedSlot());
@@ -418,7 +422,28 @@ void ChoppageMpcApp::sliceTap(int column)
     const View vw = viewOf(*s.content, session_.selectedSlice());
     const int at = vw.start + (int)((int64_t)vw.length * (2 * column + 1) / (2 * kWaveCols));
     const int under = s.content->slices.sliceAt(at);
-    switch (roundi(values_[MP_SL_MODE].load()))
+    int mode = roundi(values_[MP_SL_MODE].load());
+    if (doubleTap && mode == 0)
+    {
+        // a double tap in SELECT: on a marker (within about a column) it goes; anywhere else a marker is added there
+        const double sr = s.content->buffer->sampleRate;
+        const int near = std::max((int)(sr * 0.015), vw.length / kWaveCols + 1);
+        int best = -1, bestD = near + 1;
+        for (int k = 1; k < s.content->slices.count; ++k)
+        {
+            const int d = std::abs(s.content->slices.starts[(size_t)k] - at);
+            if (d < bestD) { bestD = d; best = k; }
+        }
+        if (best > 0)
+        {
+            session_.deleteMarker(best);
+            session_.selectSlice(best - 1, true);
+            say("REMOVED THE MARKER - NOW SLICE " + std::to_string(best));
+            return;
+        }
+        mode = 1;
+    }
+    switch (mode)
     {
         case 1:
         {
@@ -620,7 +645,7 @@ void ChoppageMpcApp::setParam(int index, float plain)
     {
         // a touch: kept until the worker's next tick, so a tap shorter than a tick still counts
         std::lock_guard<std::mutex> l(tapMutex_);
-        if (taps_.size() < 32) taps_.emplace_back(index, plain);
+        if (taps_.size() < 32) taps_.push_back({ index, plain, std::chrono::steady_clock::now() });
     }
 }
 
@@ -670,6 +695,7 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
             out = k >= 1 && k <= 40 ? std::string(1, rows[k - 1]) : k == 41 ? "SPACE" : k == 42 ? "DEL" : k == 43 ? "CLEAR" : k == 44 ? "CAPS" : "-";
             return true;
         }
+        case MP_BRK_BPM: std::snprintf(buf, sizeof buf, "%.1f BPM", plain); out = buf; return true;
         case MP_AKR_LOOP_BPM:
             if (plain < 0.05f) out = "AUTO"; else { std::snprintf(buf, sizeof buf, "%.1f", plain); out = buf; }
             return true;
@@ -768,11 +794,26 @@ void ChoppageMpcApp::tick()
         lastVersion_ = ~0u; seqKey_ = ~0ull; waveKey_ = ~0ull; listKey_ = ~0ull;
     }
     {
-        std::vector<std::pair<int, float>> taps;
+        std::vector<Tap> taps;
         { std::lock_guard<std::mutex> l(tapMutex_); taps.swap(taps_); }
-        for (auto [i, v] : taps) handle(i, v, 0.0f);
+        for (const auto& t : taps)
+        {
+            if (t.index == MP_SLICE_TAP && roundi(t.value) >= 1)
+            {
+                // two taps close together in time and place: a double tap
+                const int col = roundi(t.value) - 1;
+                const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(t.when - lastTapWhen_).count();
+                const bool dbl = haveLastTap_ && ms >= 0 && ms < 450 && std::abs(col - lastTapCol_) <= 2;
+                haveLastTap_ = !dbl;
+                lastTapWhen_ = t.when;
+                lastTapCol_ = col;
+                sliceTap(col, dbl);
+                continue;
+            }
+            handle(t.index, t.value, 0.0f);
+        }
         if (!taps.empty())
-            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY }) seen_[i] = values_[i].load(std::memory_order_relaxed);
+            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY, (int)MP_PLACE_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
     }
     // a slice pad was played: the screen goes to that slice (of that break)
     if (const int hit = session_.engine().sliceHit.exchange(-1, std::memory_order_relaxed); hit >= 0)
@@ -782,7 +823,7 @@ void ChoppageMpcApp::tick()
     }
     for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i)
     {
-        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
+        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY || i == MP_PLACE_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
         const float v = values_[i].load(std::memory_order_relaxed);
         if (v == seen_[i]) continue;
         const float prev = seen_[i];
@@ -829,8 +870,47 @@ void ChoppageMpcApp::tick()
     if (messageTicks_ > 0 && --messageTicks_ == 0) message_.clear();
 }
 
+// The data wheel moves a parameter by a fixed fraction of its range (coarse; fine with SHIFT), so a list of 255
+// moves 2 at a time and times and tempos land between whole numbers. For these parameters each move becomes an
+// exact step instead: coarse or fine (told apart by the size of the MPC's move), on a grid of that step.
+// A big jump (a touch, the overlay knob) is taken as it is, only put on the fine grid.
+float ChoppageMpcApp::jogged(int index, float v, float prev) const
+{
+    double fine = 0, coarse = 0, scale = 1;              // in the parameter's own units (scale: units per 1.0)
+    switch (index)
+    {
+        case MP_BROWSE: case MP_PRE_BROWSE: fine = coarse = 1; break;
+        case MP_AKR_LOOP_BPM: case MP_BRK_BPM: fine = 0.1; coarse = 1; break;
+        case MP_SL_MOVE: case MP_SL_END:
+        {
+            const auto& s = session_.slot(session_.selectedSlot());
+            if (s.content == nullptr || s.content->buffer == nullptr || s.content->buffer->sampleRate <= 0) return v;
+            scale = (double)s.content->buffer->numSamples / s.content->buffer->sampleRate * 1000.0;   // ms across the break
+            fine = 1; coarse = 10;
+            break;
+        }
+        default: return v;
+    }
+    const auto& d = mpcParamDef(index);
+    const double range = std::max(1e-9, (double)(d.max - d.min));
+    const double dn = ((double)v - prev) / range;
+    if (std::fabs(dn) < 1e-7) return v;
+    const double was = prev * scale;
+    double now;
+    if (std::fabs(dn) > 0.04) now = std::round(v * scale / fine) * fine;
+    else
+    {
+        const double step = std::fabs(dn) < 0.003 ? fine : coarse;
+        now = std::round((was + (dn > 0 ? step : -step)) / step) * step;
+        if (std::fabs(now - was) < 1e-9) now = was + (dn > 0 ? step : -step);
+    }
+    now /= scale;
+    return (float)std::clamp(now, (double)d.min, (double)d.max);
+}
+
 void ChoppageMpcApp::handle(int index, float v, float prev)
 {
+    if (const float j = jogged(index, v, prev); j != v) { write(index, j); v = j; }
     auto say = [this](const std::string& m) { message_ = m; messageTicks_ = 90; };
     const auto& d = mpcParamDef(index);
     const bool on = v >= 0.5f;
@@ -905,12 +985,18 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const int n = (int)session_.browserEntries().size();
             const int pick = listTop_ + k;
-            if (pick < n && pick == roundi(seen_[MP_BROWSE]))
+            // a folder opens at a touch; a break plays at the first touch and loads at the second
+            const auto entries = session_.browserEntries();
+            if (pick < (int)entries.size() && entries[(size_t)pick].isDir) { goFolder(entries[(size_t)pick].path); return; }
+            if (pick < (int)entries.size() && pick == roundi(seen_[MP_BROWSE]))
             {
-                const auto entries = session_.browserEntries();
-                if (pick < (int)entries.size() && entries[(size_t)pick].isDir) { goFolder(entries[(size_t)pick].path); return; }
+                session_.auditionStop();
+                session_.loadFile(slot, entries[(size_t)pick].path);
+                message_ = "LOADING " + upper(entries[(size_t)pick].name) + " INTO BREAK " + std::to_string(slot + 1);
+                messageTicks_ = 90;
+                return;
             }
-            if (pick < n) write(MP_BROWSE, (float)pick);
+            if (pick < n) { write(MP_BROWSE, (float)pick); browsePickSeen_ = -1; }   // (a touch plays it, on any page)
             syncList(true);
             return;
         }
@@ -928,6 +1014,21 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
         case MP_ZOOM: lastVersion_ = ~0u; break;   // syncWave follows (and the drag strip)
         case MP_MUTE_GROUP: session_.setMuteGroup(slot, roundi(v)); break;
+        case MP_WIN_PREV: case MP_WIN_NEXT:
+        {
+            const int n = session_.fullBars(slot);
+            if (n <= Session::kWindowBars) { say(n > 0 ? "THIS BREAK IS " + std::to_string(n) + " BAR" + (n > 1 ? "S" : "") + ": ALL OF IT IS USED" : "NO BREAK HERE"); break; }
+            const int w = std::clamp(session_.window(slot) + (index == MP_WIN_NEXT ? 1 : -1), 0, n - Session::kWindowBars);
+            if (w == session_.window(slot)) { say(index == MP_WIN_NEXT ? "THESE ARE THE LAST BARS" : "THESE ARE THE FIRST BARS"); break; }
+            session_.setWindow(slot, w);
+            say("USING BARS " + std::to_string(w + 1) + "-" + std::to_string(w + Session::kWindowBars) + " OF " + std::to_string(n) + " (SLICED AGAIN)");
+            break;
+        }
+        case MP_BRK_BPM:
+            if (session_.slot(slot).content == nullptr) { say("NO BREAK HERE"); lastVersion_ = ~0u; break; }
+            session_.setBreakBpm(slot, v);
+            say("BREAK " + std::to_string(slot + 1) + " PLAYS AS " + (std::fabs(v - std::round(v)) < 0.05f ? std::to_string((int)std::lround(v)) : std::to_string((int)v) + "." + std::to_string((int)std::lround(std::fabs(v - (int)v) * 10.0f) % 10)) + " BPM");
+            break;
         case MP_AKR_LOOP_BPM:
             // AUTO at the bottom; the first nudge up from AUTO starts at the break's own tempo
             if (v < 0.05f) session_.setLoopBpm(slot, 0.0);
@@ -1187,6 +1288,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
     put(MP_SLICING, s.gridSlicing ? 1.0f : 0.0f);
     put(MP_MUTE_GROUP, (float)session_.muteGroup(slot));
     put(MP_AKR_LOOP_BPM, session_.loopBpmSet(slot) ? (float)session_.loopBpm(slot) : 0.0f);
+    if (s.content != nullptr && std::fabs(seen_[MP_BRK_BPM] - (float)session_.breakBpm(slot)) > 0.01f) write(MP_BRK_BPM, (float)session_.breakBpm(slot));
     put(MP_SENS, s.sensitivity);
     put(MP_GRID, s.gridPerBar <= 8 ? 0.0f : s.gridPerBar <= 16 ? 1.0f : 2.0f);
     const int steps = s.program.pattern.numSteps;
@@ -1273,6 +1375,13 @@ void ChoppageMpcApp::syncReadouts(bool force)
     auto& eng = session_.engine();
     char buf[200];
 
+    // the 2-bar window of a longer break
+    {
+        const int n = session_.fullBars(slot), w = session_.window(slot);
+        setText(MP_WIN_INFO, s.content == nullptr ? std::string("-")
+                             : n > Session::kWindowBars ? "BARS " + std::to_string(w + 1) + "-" + std::to_string(w + Session::kWindowBars) + " OF " + std::to_string(n)
+                             : "ALL " + std::to_string(std::max(1, s.content->bars)) + (s.content->bars == 1 ? " BAR" : " BARS"));
+    }
     // break name + BPM
     std::string name;
     switch (s.status)

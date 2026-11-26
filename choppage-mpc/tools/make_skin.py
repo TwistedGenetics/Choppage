@@ -637,7 +637,7 @@ def pages():
             [P("trigger", "TRIGGER", ["SYNC", "MIDI"], span=2), P("padNotes", "PAD NOTES (PAD 1)", ["36 C1", "37 MPC", "48 C2"], span=2)]]},
         {"fn": 6, "sub": 1, "name": "SET", "rows": [
             [P("tempoSrc", "TEMPO SOURCE", ["AUTO", "/2", "X2"], span=2), P("speed", "SPEED", ["0.5X", "1X", "2X"], span=2)],
-            [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2)],
+            [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2), K("brkBpm", "BREAK BPM")],
             [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)],
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
@@ -1209,36 +1209,16 @@ class Builder:
         self.save("sec_pattern.png", sec_pat)
         kids.insert(1, self.image_at("sec_pattern.png", (0, SY, W, H - SY), vv, "section pattern"))
 
-        # DISK: the break list. Tap it (or a line), turn the jog wheel: the break under it plays; push the jog
-        # wheel to load it into the selected break. DEMO and AKAIZE beside it.
-        vv = self.vis_view(2)
-        sec_disk = Image.new("RGBA", (W, H - SY), (0, 0, 0, 0))
-        LW_, LH_, line_h = 1036, 192, 32
-        sec_disk.paste(box_image(LW_, LH_), (10, 0))
-        kids.append(self.caption_at("TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD OR OPEN A FOLDER  -  MAIN AGAIN: DISK PAGE", "browse",
-                                    (24, SY + 2, LW_ - 28, 26), 20, vis=vv, colour=argb((150, 24, 30))))
-        for k_ in range(5):
-            kids.append(self.label_at("list%d" % (k_ + 1), (24, SY + 30 + k_ * line_h, LW_ - 28, line_h), 26, VALUE, vis=vv))
-        if "clear_line.png" not in self.images:
-            self.save("clear_line.png", clear_png(LW_, line_h))
-        lines = [entry("line %d" % k_, "Button", o(("version", 2), ("onImage", "clear_line.png"), ("offImage", "clear_line.png"),
-                                                   ("buttonId", k_ + 1), ("numButtonsInGroup", 6), ("handleName", "Tap"),
-                                                   ("gestureBehaviour", "Instant")),
-                       bounds((0, 30 + k_ * line_h, LW_, line_h))) for k_ in range(5)]
-        self.define("cp disk list", component([focus_entry()] + lines,
-                                              [act("Enter Pressed", "Toggle Switch", "Load"), act("Mouse Down", "Q-Link", "Data")]))
-        kids.append(entry("browse", "cp disk list", o(("version", 1), ("handleName", "Data")),
-                          bounds((10, SY, LW_, LH_), focus="Yes", invalid="Hide", inval=vv),
-                          remap=[("Data", self.h("browse")), ("Tap", "ResetOnGestureEnd/" + self.h("listTap")), ("Load", self.h("load"))]))
-        kids.append(self.flip_at("demo", (1052, r0 + 4, 218, rh - 8), self.key_png("DEMO\nBREAK", 218, rh - 8), vv))
-        kids.append(self.flip_at("akaize", (1052, r1 + 4, 218, rh - 8), self.key_png("AKAIZE TO\nMPC BPM", 218, rh - 8), vv))
-        self.save("sec_disk.png", sec_disk)
-        kids.insert(1, self.image_at("sec_disk.png", (0, SY, W, H - SY), vv, "section disk"))
+        # DISK (the LOAD key): the DISK screen over the whole tab (the same as the DISK page, with BACK)
+        self.define("cp disk screen", component(self.disk_kids(True), colour=argb(PANEL)))
+        disk_screen = entry("disk screen", "cp disk screen", o(("version", 1), ("handleName", "Data")),
+                            bounds((0, 0, W, H), invalid="Hide", inval=self.vis_view(2)))
 
         for (x, y, w, h) in windows:
             bgim.paste(box_image(w, h).convert("RGB"), (x, y))
         self.save("bg_main.png", bgim)
         kids.insert(0, self.image_at("bg_main.png", (0, 0, W, H), name="background"))
+        kids.append(disk_screen)
         qb = ["10 526 1260 98", "10 356 1260 66", "10 4 1260 344", "10 430 1260 90"]
         tab = o(("version", 1), ("tabName", "MAIN"), ("fnKeyIndex", 0), ("fnKeySubIndex", 0),
                 ("componentDefinition", component(kids, colour=argb(PANEL))), ("qlinkBoundsData", qb))
@@ -1251,20 +1231,27 @@ class Builder:
         return tab, qm
 
     # ================================================================ DISK (MAIN again): any folder, 4 places
-    def disk_tab(self):
-        """The folder shown, UP; the list (5 big lines: tap a line, turn the jog wheel to hear, push to load a break
-        or open a folder; tap a picked folder again to open it); LOAD, REFRESH, DEMO; STORE and the 4 PLACE keys."""
+    def disk_kids(self, back):
+        """The DISK screen: the folder shown, UP (and BACK on MAIN); the list (5 big lines: a touch on a folder opens
+        it, on a break plays it, a second touch loads it; the jog wheel moves one line, its push loads / opens);
+        LOAD / OPEN, REFRESH, DEMO, AKAIZE; STORE and the 4 PLACE keys. On MAIN (LOAD key) and on the DISK page."""
         kids = []
+        tag = "main" if back else "page"
         bg = Image.new("RGBA", (W, H), PANEL + (255,))
         # the folder shown
-        bg.paste(box_image(1016, 60), (10, 8))
-        kids.append(self.label_at("dir", (24, 8, 990, 60), 32))
-        kids.append(self.flip_at("up", (1036, 8, 234, 60), self.key_png("UP", 234, 60)))
+        dw = 760 if back else 1016
+        bg.paste(box_image(dw, 60), (10, 8))
+        kids.append(self.label_at("dir", (24, 8, dw - 26, 60), 32))
+        if back:
+            kids.append(self.flip_at("up", (780, 8, 240, 60), self.key_png("UP", 240, 60)))
+            kids.append(self.flip_at("showDisk", (1030, 8, 240, 60), self.key_png("BACK", 240, 60), qlink=False))
+        else:
+            kids.append(self.flip_at("up", (1036, 8, 234, 60), self.key_png("UP", 234, 60)))
         # the list
         LX, LY, LW_, line_h = 10, 76, 1016, 62
         LH_ = 32 + 5 * line_h + 6
         bg.paste(box_image(LW_, LH_), (LX, LY))
-        kids.append(self.caption_at("TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD A BREAK OR OPEN A FOLDER", "browse",
+        kids.append(self.caption_at("TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT", "browse",
                                     (LX + 14, LY + 2, LW_ - 28, 28), 20, colour=argb((150, 24, 30))))
         for k_ in range(5):
             kids.append(self.label_at("list%d" % (k_ + 1), (LX + 14, LY + 32 + k_ * line_h, LW_ - 28, line_h), 34))
@@ -1281,9 +1268,10 @@ class Builder:
                           remap=[("Data", self.h("browse")), ("Tap", "ResetOnGestureEnd/" + self.h("listTap")), ("Load", self.h("load"))]))
         # beside the list
         bx, bw = 1036, 234
-        kids.append(self.flip_at("load", (bx, LY, bw, 110), self.key_png("LOAD /\nOPEN", bw, 110)))
-        kids.append(self.flip_at("refresh", (bx, LY + 120, bw, 90), self.key_png("REFRESH", bw, 90)))
-        kids.append(self.flip_at("demo", (bx, LY + 220, bw, 98), self.key_png("DEMO\nBREAK", bw, 98)))
+        kids.append(self.flip_at("load", (bx, LY, bw, 100), self.key_png("LOAD /\nOPEN", bw, 100)))
+        kids.append(self.flip_at("refresh", (bx, LY + 108, bw, 74), self.key_png("REFRESH", bw, 74)))
+        kids.append(self.flip_at("demo", (bx, LY + 190, bw, 74), self.key_png("DEMO BREAK", bw, 74)))
+        kids.append(self.flip_at("akaize", (bx, LY + 272, bw, 80), self.key_png("AKAIZE TO\nMPC BPM", bw, 80)))
         # places
         PY = LY + LH_ + 10
         kids.append(self.caption_at("PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)", "placeStore",
@@ -1307,8 +1295,12 @@ class Builder:
             imgs.append(("clear_place.png", "clear_place.png", (k_ * (pw + 8), 0, pw, kh)))
         kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, ids=[1, 2, 3, 4], name="cp place keys",
                                   focus=False, qlink=False))
-        self.save("bg_disk.png", bg)
-        kids.insert(0, self.image_at("bg_disk.png", (0, 0, W, H), name="background"))
+        self.save("bg_disk_%s.png" % tag, bg)
+        kids.insert(0, self.image_at("bg_disk_%s.png" % tag, (0, 0, W, H), name="background"))
+        return kids
+
+    def disk_tab(self):
+        kids = self.disk_kids(False)
         tab = o(("version", 1), ("tabName", "DISK"), ("fnKeyIndex", 0), ("fnKeySubIndex", 1),
                 ("componentDefinition", component(kids, colour=argb(PANEL))),
                 ("qlinkBoundsData", ["10 76 1016 352", "1036 76 234 318", "10 446 1260 174", "10 8 1260 60"]))
@@ -1330,24 +1322,14 @@ class Builder:
         kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1], name_box[2] - 20, name_box[3]), 26)
         kids += self.lcd_text("infoBpm", (bpm_box[0] + 8, bpm_box[1], bpm_box[2] - 16, bpm_box[3]), 26,
                               "horizontallyCentred verticallyCentred")
-        # the strip under the hit row: touch a column and the selected slice's start goes there (84 touch columns,
-        # like the waveform's own tap area; the red column is where the start is). A slider here (0.6.1 - 0.7.3)
-        # left the MPC's plugin screen blank.
+        # under the hit row: which 2 bars of a longer break are used (the touch strip of 0.7.4 - 0.10.0 is gone)
+        kw = 300
+        sw = WCOLS * WCOL_W
         for t in range(4):
-            track = "placetrack_%d.png" % t
-            if track not in self.images:
-                self.save(track, lcd_key(t, WCOLS * WCOL_W, 34, "TOUCH HERE TO PUT THE START", False, 20))
-            kids.append(self.image_at(track, (WX0, 234, WCOLS * WCOL_W, 34), self.vis_theme(t), name="place track"))
-        if "place_on.png" not in self.images:
-            mark = Image.new("RGBA", (WCOL_W, 34), (0, 0, 0, 0))
-            dm = ImageDraw.Draw(mark)
-            dm.rectangle((3, 0, WCOL_W - 4, 33), fill=(214, 28, 36, 255))
-            dm.polygon([(0, 0), (WCOL_W - 1, 0), (WCOL_W // 2, 8)], fill=(255, 255, 255, 255))
-            self.save("place_on.png", mark)
-            self.save("place_off.png", clear_png(WCOL_W, 34))
-        kids.append(self.radio_at("slPlace", (WX0, 234, WCOLS * WCOL_W, 34),
-                                  [("place_on.png", "place_off.png", (c * WCOL_W, 0, WCOL_W, 34)) for c in range(WCOLS)],
-                                  None, ids=list(range(1, WCOLS + 1)), name="cp place", focus=False, qlink=False))
+            for pid, text, x in (("winPrev", "<  EARLIER BARS", WX0), ("winNext", "LATER BARS  >", WX0 + sw - kw)):
+                on, off = self.lcd_radio_pngs(t, text, kw, 34, 20)
+                kids.append(self.momentary_at(pid, (x, 234, kw, 34), on, off, self.vis_theme(t)))
+        kids += self.lcd_text("winInfo", (WX0 + kw + 10, 234, sw - 2 * kw - 20, 34), 24, "horizontallyCentred verticallyCentred")
         for t in range(4):
             v = self.vis_theme(t)
             # TOUCH: what a touch on the waveform does (SELECT / ADD a marker / DEL the slice), beside the zoom keys

@@ -14,6 +14,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <chrono>
 #include <vector>
 
 namespace bc {
@@ -101,9 +102,14 @@ private:
     void savePreset(int overIndex);                               // -1 = a new file
     void typeKey(int key);
     std::mutex tapMutex_;
-    std::vector<std::pair<int, float>> taps_;        // touches queued by setParam: a quick tap is never missed
+    struct Tap { int index; float value; std::chrono::steady_clock::time_point when; };
+    std::vector<Tap> taps_;                          // touches queued by setParam: a quick tap is never missed
+    std::chrono::steady_clock::time_point lastTapWhen_{};
+    int lastTapCol_ = -100;
+    bool haveLastTap_ = false;
     bool dragMoved_ = false;                        // the drag strip moved a marker (it snaps when the drag ends)
-    void sliceTap(int column);                      // SELECT / ADD / DEL at a column of the SLICE waveform
+    float jogged(int index, float v, float prev) const;
+    void sliceTap(int column, bool doubleTap = false);                      // SELECT / ADD / DEL at a column of the SLICE waveform
     int dragTicks_ = 0;                             // a drag on the strip is under way: hold the view, don't mirror
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
     std::string endText_ = "-";                     // END knob text

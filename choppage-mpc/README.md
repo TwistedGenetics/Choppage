@@ -45,24 +45,25 @@ Under the LCD:
 The sections:
 - **PATTERN** turns the LCD into the SEQ grid (below), with LENGTH, STEPS SHOWN, FOLLOW, ORIGINAL, CLEAR, the selected step's FX and RATE, UNDO and REDO underneath. STYLE, SWING and the memories are on the PATTERN screen.
 - **FX** puts each pad's setting knob under it.
-- **LOAD** opens the DISK section: the files in `VST2 Plugins/Content/Breaks` with their tempo (read again each time DISK opens, so new files show). Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
+- **LOAD** opens the **DISK screen** over the whole page (the same as the DISK page below, with **BACK** to return).
 
-**DISK page** (press MAIN again): browse **any folder on the MPC's drives**, your own samples folders included.
+**DISK page** (press MAIN again, or LOAD on MAIN): browse **any folder on the MPC's drives**, your own samples folders included.
 - The top line shows the folder. **UP** goes to the folder above; at the top you see the drives (internal SSD, SD card, USB).
-- The list shows `[ .. ]` (up), the folders as `[ NAME ]`, then the breaks with their tempo. Turn the jog wheel to hear a break; **push** it (or **LOAD / OPEN**) to load the break, or to open the folder. Tapping a picked folder again opens it too.
+- The list shows `[ .. ]` (up), the folders as `[ NAME ]`, then the breaks with their tempo. **Touch a folder** to open it. **Touch a break** to hear it, touch it again to load it. Or turn the jog wheel (one line a click) and push it (or **LOAD / OPEN**).
 - **PLACES**: four keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
 - The places and the last folder are kept in the plugin's own `Content/places.txt`, so the next load opens where you left off. **REFRESH** reads the folder again (after copying files in).
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Chopping by touch**: the **SELECT / ADD / DEL** keys on the LCD say what a touch on the waveform does.
-  - SELECT: the slice you touch is selected and plays.
+  - SELECT: the slice you touch is selected and plays. **Double-tap** empty waveform to add a marker there (SNAP puts it on the nearest hit); double-tap a marker to remove it.
   - ADD: a new slice starts where you touch. With **SNAP TO HITS** on (CHOP page), it lands on the nearest drum hit; the new slice is selected and plays.
   - DEL: the slice you touch goes (joined to the one before).
 - **Slice pads** (E2–G3, pad bank B with PAD NOTES at 36) select the slice they play, so you can pick a slice by ear.
 - **Jog wheel**: after touching the waveform, turning the jog wheel moves the selected slice's start; pushing it plays the slice.
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
-- **Touch the strip** under the hit letters: the selected slice's start goes where you touch (the red column shows where it is). The MOVE knob or jog wheel fine-tune. (A finger-drag slider here crashed the MPC's screen in 0.6.1 and 0.8.0 - 0.9.1, so it is gone.)
+- **Bars of a longer break**: a 1- or 2-bar break is used whole. A longer one uses 2 bars: **EARLIER BARS / LATER BARS** under the hit letters pick which ("BARS 3-4 OF 8"); the break is sliced again for those bars, and the choice is saved.
+- **Data wheel steps**: MOVE and END move the marker 10 ms a click, **1 ms with SHIFT**. BREAK BPM moves in whole BPM, 0.1 with SHIFT. The break and preset lists move one line a click.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.
@@ -78,7 +79,7 @@ The sections:
 
 **PLAY / SET / PRESETS** (press again for SET, and again for PRESETS):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
-- SET has TEMPO SOURCE, SPEED, FIT, the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
+- SET has TEMPO SOURCE, SPEED, FIT, **BREAK BPM** (the selected break's own tempo: if it plays too fast or slow against the MPC, set its real tempo here), the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
 
 **PRESETS** saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
 - **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.

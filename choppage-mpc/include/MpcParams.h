@@ -100,7 +100,11 @@ enum MpcParam : int
     MP_PLACE_STORE,             // on: the next PLACE key tapped stores the folder shown
     MP_PLACE0,                  // readouts: the 4 places' names
     MP_PLACE_END = MP_PLACE0 + 4,
-    kMpcParamEnd = MP_PLACE_END
+    // ---- 0.10.1
+    MP_BRK_BPM = MP_PLACE_END,  // the selected break's own tempo (what it plays at against the MPC's tempo)
+    MP_WIN_PREV, MP_WIN_NEXT,   // triggers: the 2-bar window of a longer break, a bar earlier / later
+    MP_WIN_INFO,                // readout: "BARS 3-4 OF 8"
+    kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 

@@ -546,5 +546,9 @@
   {"index": 544, "id": "place1", "name": "Place 1", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
   {"index": 545, "id": "place2", "name": "Place 2", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
   {"index": 546, "id": "place3", "name": "Place 3", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
-  {"index": 547, "id": "place4", "name": "Place 4", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false}
+  {"index": 547, "id": "place4", "name": "Place 4", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 548, "id": "brkBpm", "name": "Break BPM", "kind": "float", "min": 40, "max": 300, "def": 170, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 549, "id": "winPrev", "name": "Bars Earlier", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 550, "id": "winNext", "name": "Bars Later", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 551, "id": "winInfo", "name": "Bars Used", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false}
 ]

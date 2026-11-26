@@ -18824,21 +18824,94 @@
 }
 },
 {
-"key": "cp disk list",
+"key": "cp hold key_up_240x60__on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "key_up_240x60__on.png",
+"offImage": "key_up_240x60__off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 240 60"
+}
+}
+]
+}
+},
+{
+"key": "cp flip key_back_240x60.png",
 "value": {
 "version": 2,
 "actions": [
 {
 "version": 1,
-"onAction": "Enter Pressed",
-"handler": "Toggle Switch",
-"handleName": "Load",
-"additionalData": ""
-},
-{
-"version": 1,
 "onAction": "Mouse Down",
-"handler": "Q-Link",
+"handler": "Toggle Switch",
 "handleName": "Data",
 "additionalData": ""
 }
@@ -18863,198 +18936,30 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "line 0",
-"type": "Button",
+"name": "state",
+"type": "Image",
 "data": {
 "version": 2,
-"onImage": "clear_line.png",
-"offImage": "clear_line.png",
-"buttonId": 1,
-"numButtonsInGroup": 6,
-"handleName": "Tap",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 30 1036 32"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "line 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "clear_line.png",
-"offImage": "clear_line.png",
-"buttonId": 2,
-"numButtonsInGroup": 6,
-"handleName": "Tap",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 62 1036 32"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "line 2",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "clear_line.png",
-"offImage": "clear_line.png",
-"buttonId": 3,
-"numButtonsInGroup": 6,
-"handleName": "Tap",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 94 1036 32"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "line 3",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "clear_line.png",
-"offImage": "clear_line.png",
-"buttonId": 4,
-"numButtonsInGroup": 6,
-"handleName": "Tap",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 126 1036 32"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "line 4",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "clear_line.png",
-"offImage": "clear_line.png",
-"buttonId": 5,
-"numButtonsInGroup": 6,
-"handleName": "Tap",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 158 1036 32"
-}
-}
-]
-}
-},
-{
-"key": "cp hold key_demo_break_218x84__on.png",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
+"imageType": "FilmStrip",
 "colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
+"image": "key_back_240x60.png",
+"numFrames": 2,
+"handleName": "Data"
 }
 },
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 240 60"
+}
+},
 {
 "version": 2,
 "componentData": {
@@ -19080,195 +18985,6 @@
 "whenVisible": "WhenFocussed",
 "boundsType": "Proportional",
 "bounds": "0 0 1 1"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "pad",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "key_demo_break_218x84__on.png",
-"offImage": "key_demo_break_218x84__off.png",
-"buttonId": 1,
-"numButtonsInGroup": 1,
-"handleName": "Data",
-"gestureBehaviour": "Hold"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 218 84"
-}
-}
-]
-}
-},
-{
-"key": "cp hold key_akaize_to_mpc_bpm_218x84__on.png",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-}
-},
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "pad",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "key_akaize_to_mpc_bpm_218x84__on.png",
-"offImage": "key_akaize_to_mpc_bpm_218x84__off.png",
-"buttonId": 1,
-"numButtonsInGroup": 1,
-"handleName": "Data",
-"gestureBehaviour": "Hold"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 218 84"
-}
-}
-]
-}
-},
-{
-"key": "cp hold key_up_234x60__on.png",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-}
-},
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "pad",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "key_up_234x60__on.png",
-"offImage": "key_up_234x60__off.png",
-"buttonId": 1,
-"numButtonsInGroup": 1,
-"handleName": "Data",
-"gestureBehaviour": "Hold"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 234 60"
 }
 }
 ]
@@ -19486,7 +19202,7 @@
 }
 },
 {
-"key": "cp flip key_load_open_56c40_234x110.png",
+"key": "cp flip key_load_open_56c40_234x100.png",
 "value": {
 "version": 2,
 "actions": [
@@ -19531,7 +19247,7 @@
 "version": 2,
 "imageType": "FilmStrip",
 "colour": "0",
-"image": "key_load_open_56c40_234x110.png",
+"image": "key_load_open_56c40_234x100.png",
 "numFrames": 2,
 "handleName": "Data"
 }
@@ -19546,7 +19262,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 234 110"
+"bounds": "0 0 234 100"
 }
 },
 {
@@ -19580,7 +19296,7 @@
 }
 },
 {
-"key": "cp hold key_refresh_234x90__on.png",
+"key": "cp hold key_refresh_234x74__on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -19635,8 +19351,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "key_refresh_234x90__on.png",
-"offImage": "key_refresh_234x90__off.png",
+"onImage": "key_refresh_234x74__on.png",
+"offImage": "key_refresh_234x74__off.png",
 "buttonId": 1,
 "numButtonsInGroup": 1,
 "handleName": "Data",
@@ -19653,14 +19369,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 234 90"
+"bounds": "0 0 234 74"
 }
 }
 ]
 }
 },
 {
-"key": "cp hold key_demo_break_234x98__on.png",
+"key": "cp hold key_demo_break_234x74__on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -19715,8 +19431,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "key_demo_break_234x98__on.png",
-"offImage": "key_demo_break_234x98__off.png",
+"onImage": "key_demo_break_234x74__on.png",
+"offImage": "key_demo_break_234x74__off.png",
 "buttonId": 1,
 "numButtonsInGroup": 1,
 "handleName": "Data",
@@ -19733,7 +19449,87 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 234 98"
+"bounds": "0 0 234 74"
+}
+}
+]
+}
+},
+{
+"key": "cp hold key_akaize_to_mpc_bpm_234x80__on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "key_akaize_to_mpc_bpm_234x80__on.png",
+"offImage": "key_akaize_to_mpc_bpm_234x80__off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 234 80"
 }
 }
 ]
@@ -19967,7 +19763,1072 @@
 }
 },
 {
-"key": "cp place",
+"key": "cp disk screen",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "background",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "bg_disk_main.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 1280 628"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label dir",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 32.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 539"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 8 734 60"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "up",
+"type": "cp hold key_up_240x60__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 540"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "780 8 240 60"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "showDisk",
+"type": "cp flip key_back_240x60.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 201"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1030 8 240 60"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff96181e",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT]/Parameter 97"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 78 988 28"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list1",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 213"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 108 988 62"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list2",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 214"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 170 988 62"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list3",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 215"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 232 988 62"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list4",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 216"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 294 988 62"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list5",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 217"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 356 988 62"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "browse",
+"type": "cp disk page list",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 97"
+},
+{
+"key": "Tap",
+"value": "ResetOnGestureEnd/Parameter 211"
+},
+{
+"key": "Load",
+"value": "Parameter 98"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 76 1016 348"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "load",
+"type": "cp flip key_load_open_56c40_234x100.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 98"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 76 234 100"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "refresh",
+"type": "cp hold key_refresh_234x74__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 541"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 184 234 74"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "demo",
+"type": "cp hold key_demo_break_234x74__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 99"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 266 234 74"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "akaize",
+"type": "cp hold key_akaize_to_mpc_bpm_234x80__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 100"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 348 234 80"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)]/Parameter 543"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "14 434 1250 26"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "placeStore",
+"type": "cp flip key_store_230x156.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 543"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 464 230 156"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "250 464 249 156"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 1]/Parameter 544"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "262 470 225 24"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place1",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 544"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "258 494 233 120"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "507 464 249 156"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 2]/Parameter 545"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "519 470 225 24"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place2",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 545"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "515 494 233 120"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "764 464 249 156"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 3]/Parameter 546"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "776 470 225 24"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place3",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 546"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "772 494 233 120"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1021 464 249 156"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 4]/Parameter 547"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1033 470 225 24"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place4",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 547"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1029 494 233 120"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "placeTap",
+"type": "cp place keys",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 542"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "250 464 1020 156"
+}
+}
+]
+}
+},
+{
+"key": "cp hold key_up_234x60__on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -19991,16 +20852,43 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
+"onImage": "key_up_234x60__on.png",
+"offImage": "key_up_234x60__off.png",
 "buttonId": 1,
-"numButtonsInGroup": 85,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -20013,1647 +20901,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 14 34"
+"bounds": "0 0 234 60"
 }
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 2,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "14 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 2",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 3,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "28 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 3",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 4,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "42 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 4",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 5,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "56 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 5",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 6,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "70 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 6",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 7,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "84 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 7",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 8,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "98 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 8",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 9,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "112 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 9",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 10,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "126 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 10",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 11,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "140 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 11",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 12,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "154 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 12",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 13,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "168 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 13",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 14,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "182 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 14",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 15,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "196 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 15",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 16,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "210 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 16",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 17,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "224 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 17",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 18,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "238 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 18",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 19,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "252 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 19",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 20,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "266 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 20",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 21,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "280 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 21",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 22,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "294 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 22",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 23,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "308 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 23",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 24,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "322 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 24",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 25,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "336 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 25",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 26,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "350 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 26",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 27,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "364 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 27",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 28,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "378 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 28",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 29,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "392 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 29",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 30,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "406 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 30",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 31,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "420 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 31",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 32,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "434 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 32",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 33,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "448 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 33",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 34,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "462 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 34",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 35,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "476 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 35",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 36,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "490 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 36",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 37,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "504 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 37",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 38,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "518 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 38",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 39,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "532 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 39",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 40,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "546 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 40",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 41,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "560 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 41",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 42,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "574 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 42",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 43,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "588 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 43",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 44,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "602 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 44",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 45,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "616 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 45",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 46,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "630 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 46",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 47,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "644 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 47",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 48,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "658 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 48",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 49,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "672 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 49",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 50,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "686 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 50",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 51,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "700 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 51",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 52,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "714 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 52",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 53,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "728 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 53",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 54,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "742 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 54",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 55,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "756 0 14 34"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 55",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 56,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
 }
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "770 0 14 34"
+]
 }
 },
 {
+"key": "cp hold lcdbtn_0_earlier_bars_eb42d_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 56",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 57,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "784 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 57",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 58,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -21664,25 +20950,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "798 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 58",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 59,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_0_earlier_bars_eb42d_300x34_on.png",
+"offImage": "lcdbtn_0_earlier_bars_eb42d_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21695,81 +20981,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "812 0 14 34"
+"bounds": "0 0 300 34"
 }
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 59",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 60,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
 }
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "826 0 14 34"
+]
 }
 },
 {
+"key": "cp hold lcdbtn_0_later_bars_9663c_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 60",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 61,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "840 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 61",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 62,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -21780,25 +21030,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "854 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 62",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 63,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_0_later_bars_9663c_300x34_on.png",
+"offImage": "lcdbtn_0_later_bars_9663c_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21811,81 +21061,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "868 0 14 34"
+"bounds": "0 0 300 34"
 }
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 63",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 64,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
 }
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "882 0 14 34"
+]
 }
 },
 {
+"key": "cp hold lcdbtn_1_earlier_bars_eb42d_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 64",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 65,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "896 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 65",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 66,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -21896,25 +21110,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "910 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 66",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 67,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_1_earlier_bars_eb42d_300x34_on.png",
+"offImage": "lcdbtn_1_earlier_bars_eb42d_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21927,81 +21141,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "924 0 14 34"
+"bounds": "0 0 300 34"
 }
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 67",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 68,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
 }
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "938 0 14 34"
+]
 }
 },
 {
+"key": "cp hold lcdbtn_1_later_bars_9663c_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 68",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 69,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "952 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 69",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 70,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -22012,25 +21190,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "966 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 70",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 71,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_1_later_bars_9663c_300x34_on.png",
+"offImage": "lcdbtn_1_later_bars_9663c_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -22043,81 +21221,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "980 0 14 34"
+"bounds": "0 0 300 34"
 }
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 71",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 72,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
 }
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "994 0 14 34"
+]
 }
 },
 {
+"key": "cp hold lcdbtn_2_earlier_bars_eb42d_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 72",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 73,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1008 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 73",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 74,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -22128,25 +21270,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1022 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 74",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 75,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_2_earlier_bars_eb42d_300x34_on.png",
+"offImage": "lcdbtn_2_earlier_bars_eb42d_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -22159,52 +21301,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1036 0 14 34"
+"bounds": "0 0 300 34"
+}
 }
+]
+}
 },
 {
+"key": "cp hold lcdbtn_2_later_bars_9663c_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 75",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 76,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1050 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 76",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 77,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -22215,25 +21350,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1064 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 77",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 78,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_2_later_bars_9663c_300x34_on.png",
+"offImage": "lcdbtn_2_later_bars_9663c_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -22246,52 +21381,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1078 0 14 34"
+"bounds": "0 0 300 34"
+}
 }
+]
+}
 },
 {
+"key": "cp hold lcdbtn_3_earlier_bars_eb42d_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 78",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 79,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1092 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 79",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 80,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -22302,25 +21430,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1106 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 80",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 81,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_3_earlier_bars_eb42d_300x34_on.png",
+"offImage": "lcdbtn_3_earlier_bars_eb42d_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -22333,52 +21461,45 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1120 0 14 34"
+"bounds": "0 0 300 34"
+}
 }
+]
+}
 },
 {
+"key": "cp hold lcdbtn_3_later_bars_9663c_300x34_on.png",
+"value": {
 "version": 2,
-"componentData": {
+"actions": [],
+"backgroundData": {
 "version": 1,
-"name": "choice 81",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 82,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
+"focussed": {
 "version": 1,
-"map": []
+"colour": "0",
+"image": ""
 },
-"bounds": {
+"unfocussed": {
 "version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1134 0 14 34"
+"colour": "0",
+"image": ""
 }
 },
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 82",
-"type": "Button",
+"name": "focus",
+"type": "Focus",
 "data": {
-"version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 83,
-"numButtonsInGroup": 85,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
 }
 },
 "handle remapping": {
@@ -22389,25 +21510,25 @@
 "version": 1,
 "acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1148 0 14 34"
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 83",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "place_on.png",
-"offImage": "place_off.png",
-"buttonId": 84,
-"numButtonsInGroup": 85,
+"onImage": "lcdbtn_3_later_bars_9663c_300x34_on.png",
+"offImage": "lcdbtn_3_later_bars_9663c_300x34_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -22420,7 +21541,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1162 0 14 34"
+"bounds": "0 0 300 34"
 }
 }
 ]
@@ -46437,33 +45558,6 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "section disk",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "sec_disk.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 430 1280 198",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
 "name": "section pattern",
 "type": "Image",
 "data": {
@@ -59943,24 +59037,11 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "caption",
-"type": "Label",
+"name": "disk screen",
+"type": "cp disk screen",
 "data": {
 "version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff96181e",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD OR OPEN A FOLDER  -  MAIN AGAIN: DISK PAGE]/Parameter 97"
+"handleName": "Data"
 }
 },
 "handle remapping": {
@@ -59970,323 +59051,10 @@
 "bounds": {
 "version": 2,
 "acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 432 1008 26",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list1",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 26.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 213"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 460 1008 32",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list2",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 26.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 214"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 492 1008 32",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list3",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 26.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 215"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 524 1008 32",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list4",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 26.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 216"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 556 1008 32",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list5",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 26.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 217"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 588 1008 32",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "browse",
-"type": "cp disk list",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 97"
-},
-{
-"key": "Tap",
-"value": "ResetOnGestureEnd/Parameter 211"
-},
-{
-"key": "Load",
-"value": "Parameter 98"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "10 430 1036 192",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "demo",
-"type": "cp hold key_demo_break_218x84__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 99"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1052 434 218 84",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "akaize",
-"type": "cp hold key_akaize_to_mpc_bpm_218x84__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 100"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1052 532 218 84",
+"bounds": "0 0 1280 628",
 "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
 }
 }
@@ -60328,7 +59096,7 @@
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "bg_disk.png"
+"image": "bg_disk_page.png"
 }
 },
 "handle remapping": {
@@ -60436,7 +59204,7 @@
 "case": "Original"
 },
 "type": "Name",
-"handleName": "WithName[TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD A BREAK OR OPEN A FOLDER]/Parameter 97"
+"handleName": "WithName[TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT]/Parameter 97"
 }
 },
 "handle remapping": {
@@ -60704,7 +59472,7 @@
 "componentData": {
 "version": 1,
 "name": "load",
-"type": "cp flip key_load_open_56c40_234x110.png",
+"type": "cp flip key_load_open_56c40_234x100.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -60725,7 +59493,7 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1036 76 234 110"
+"bounds": "1036 76 234 100"
 }
 },
 {
@@ -60733,7 +59501,7 @@
 "componentData": {
 "version": 1,
 "name": "refresh",
-"type": "cp hold key_refresh_234x90__on.png",
+"type": "cp hold key_refresh_234x74__on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -60754,7 +59522,7 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1036 196 234 90"
+"bounds": "1036 184 234 74"
 }
 },
 {
@@ -60762,7 +59530,7 @@
 "componentData": {
 "version": 1,
 "name": "demo",
-"type": "cp hold key_demo_break_234x98__on.png",
+"type": "cp hold key_demo_break_234x74__on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -60783,7 +59551,36 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "1036 296 234 98"
+"bounds": "1036 266 234 74"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "akaize",
+"type": "cp hold key_akaize_to_mpc_bpm_234x80__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 100"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 348 234 80"
 }
 },
 {
@@ -61736,116 +60533,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_0.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_1.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_2.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_3.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "slPlace",
-"type": "cp place",
+"name": "winPrev",
+"type": "cp hold lcdbtn_0_earlier_bars_eb42d_300x34_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61856,17 +60545,400 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 528"
+"value": "ResetOnGestureEnd/Parameter 549"
 }
 ]
 },
 "bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
+"version": 2,
+"acceptsHWFocus": "Yes",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "52 234 1176 34"
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_0_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_1_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_1_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_2_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_2_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_3_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_3_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "fff4f6ff",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff142008",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff241200",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff15171a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
 }
 },
 {
@@ -69187,116 +68259,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_0.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_1.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_2.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place track",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placetrack_3.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "52 234 1176 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "slPlace",
-"type": "cp place",
+"name": "winPrev",
+"type": "cp hold lcdbtn_0_earlier_bars_eb42d_300x34_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -69307,17 +68271,400 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 528"
+"value": "ResetOnGestureEnd/Parameter 549"
 }
 ]
 },
 "bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
+"version": 2,
+"acceptsHWFocus": "Yes",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "52 234 1176 34"
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_0_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_1_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_1_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_2_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_2_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winPrev",
+"type": "cp hold lcdbtn_3_earlier_bars_eb42d_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 549"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "52 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "winNext",
+"type": "cp hold lcdbtn_3_later_bars_9663c_300x34_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 550"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "928 234 300 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "fff4f6ff",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff142008",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff241200",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label winInfo",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 24.0
+},
+"colour": "ff15171a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 551"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "362 234 556 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
 }
 },
 {
@@ -91519,6 +90866,72 @@
 "whenVisible": "Always",
 "boundsType": "Absolute",
 "bounds": "331 308 618 64"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[BREAK BPM]/Parameter 548"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1055 276 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "brkBpm",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 548"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "955 268 315 112"
 }
 },
 {

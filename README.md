@@ -52,6 +52,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - The render is 16-bit like the original Akaizer, written to `~/Music/CHOPPAGE/Renders/<name>_akaized.wav` (a new file each time) and loaded back in.
   - The same cycle settings drive the live **AKAIZE pad** and **slice STRETCH**.
 - **DISK tab**: a break browser for `~/Music/CHOPPAGE/Breaks` (or any folder) listing BPM, bars, length and name. Click loads into the selected break; shift-click loads into the next empty one.
+- **Long breaks**: a break longer than 2 bars uses 2 of its bars (the first 2 here; the MPC edition can pick which).
 - **Presets**: SAVE PRESET / LOAD PRESET on the DISK tab save the whole setup (breaks, slices, patterns, memories, settings) as a `.chp` file in `~/Music/CHOPPAGE/Presets`. The files are the same as the MPC's (`VST2 Plugins/Content/Presets/CHOPPAGE`), so presets move between the two; breaks are found by path, or by file name in the Breaks folder.
 - **PATTERN dice / FX dice** with AMOUNT. Every roll goes into the history.
 - **SAMPLE RATE fader** 44.1 → 4.0 kHz · **FILTER · DISTORTION · CRUSH · REVERB** · **VOL**

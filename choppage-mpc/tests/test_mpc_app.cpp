@@ -192,7 +192,9 @@ int main(int argc, char** argv)
     std::printf("triggers\n");
     set(app, MP_BREAK, 1);
     CHECK(app.session().selectedSlot() == 1, "BREAK selects the break");
-    set(app, MP_BROWSE, 2);
+    set(app, MP_BROWSE, 1);
+    set(app, MP_BROWSE, 7);                        // the data wheel's step (2 of 255): one line
+    CHECK(app.getParam(MP_BROWSE) == 2.0f, "the data wheel moves the list one line at a time");
     push(app);
     CHECK(app.getParam(MP_DICE_PAT) == 0.0f, "keys never stick: the plugin leaves them to the MPC");
     CHECK(app.session().slot(1).content != nullptr && app.session().slot(1).content->name.find("174") != std::string::npos,
@@ -494,6 +496,92 @@ int main(int argc, char** argv)
             CHECK(fs::path(a6.session().browserFolder()) == root / "MPC" / "Samples" / "Jungle", "the next load opens the last folder");
             CHECK(text(a6, MP_PLACE0 + 1) == "JUNGLE", "the places come back");
             p3.app = nullptr;
+        }
+    }
+    std::printf("0.10.1: data wheel steps, break tempo, double tap, 2-bar window\n");
+    {
+        set(app, MP_BREAK, 0);
+        press(app, MP_DEMO);
+        settle(app);
+        // markers: coarse 10 ms, fine (SHIFT) 1 ms, on a grid of the step
+        const auto& c0 = *app.session().slot(0).content;
+        const double lenMs = c0.buffer->numSamples / c0.buffer->sampleRate * 1000.0;
+        set(app, MP_SLICE, 3);
+        const float m0 = app.getParam(MP_SL_MOVE);
+        set(app, MP_SL_MOVE, m0 + 0.0078f);                     // a coarse step of the wheel
+        const double ms1 = app.getParam(MP_SL_MOVE) * lenMs;
+        CHECK(std::fabs(ms1 - std::round(ms1 / 10.0) * 10.0) < 0.05 && ms1 > m0 * lenMs, ("coarse: on to the next 10 ms: " + std::to_string(ms1)).c_str());
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.001f);  // a fine step (SHIFT)
+        const double ms2 = app.getParam(MP_SL_MOVE) * lenMs;
+        CHECK(std::fabs(ms2 - ms1 - 1.0) < 0.05, ("fine: 1 ms on: " + std::to_string(ms2)).c_str());
+        // BREAK BPM: whole numbers on the wheel, 0.1 with SHIFT; the break plays at it
+        const float b0 = app.getParam(MP_BRK_BPM);
+        set(app, MP_BRK_BPM, b0 - 2.0f);                         // a coarse step down (about 1/128 of 40-300)
+        CHECK(std::fabs(app.getParam(MP_BRK_BPM) - std::round(b0 - 1.0f)) < 0.01f, ("BREAK BPM coarse: " + std::to_string(app.getParam(MP_BRK_BPM))).c_str());
+        CHECK(std::fabs(app.session().breakBpm(0) - app.getParam(MP_BRK_BPM)) < 0.01, "the break's tempo follows BREAK BPM");
+        set(app, MP_BRK_BPM, app.getParam(MP_BRK_BPM) + 0.2f);   // fine
+        CHECK(std::fabs(app.getParam(MP_BRK_BPM) - (std::round(b0 - 1.0f) + 0.1f)) < 0.01f, "BREAK BPM fine: 0.1 on");
+        // double tap: on empty waveform adds a marker, on a marker removes it
+        set(app, MP_SL_MODE, 0);
+        set(app, MP_ZOOM, 0);
+        const int n0 = app.session().slot(0).content->slices.count;
+        int empty = -1;
+        {
+            const auto& c = *app.session().slot(0).content;
+            for (int col = 2; col < kWaveCols - 2 && empty < 0; ++col)
+            {
+                const int at = (int)((int64_t)c.buffer->numSamples * (2 * col + 1) / (2 * kWaveCols));
+                bool clear = true;
+                for (int k = 0; k < c.slices.count; ++k) if (std::abs(c.slices.starts[(size_t)k] - at) < c.buffer->numSamples / kWaveCols * 2) clear = false;
+                if (clear) empty = col;
+            }
+        }
+        CHECK(empty >= 0, "a clear spot on the waveform");
+        set(app, MP_SNAP, 0);
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        settle(app);
+        CHECK(app.session().slot(0).content->slices.count == n0 + 1, "double tap on the waveform adds a marker");
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        settle(app);
+        CHECK(app.session().slot(0).content->slices.count == n0, "double tap on a marker removes it");
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        settle(app);
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
+        settle(app);
+        CHECK(app.session().slot(0).content->slices.count == n0, "two slow taps are not a double tap");
+        // a 4-bar break: 2 bars used, the window moves
+        {
+            auto a = DemoBreak::make(44100.0, 170.0);
+            const int n = a->numSamples;
+            std::vector<float> l(2 * (size_t)n), r(2 * (size_t)n);
+            for (int i = 0; i < n; ++i) { l[(size_t)i] = l[(size_t)(i + n)] = a->ch[0][(size_t)i]; r[(size_t)i] = r[(size_t)(i + n)] = a->ch[1][(size_t)i] * 0.5f; }
+            const float* ch[2] = { l.data(), r.data() };
+            std::filesystem::create_directories(dir / "Long");
+            AudioFile::writeWav24((dir / "Long" / "long_170.wav").string(), ch, 2, 2 * n, 44100.0);
+            set(app, MP_BREAK, 4);
+            app.session().loadFile(4, (dir / "Long" / "long_170.wav").string());
+            settle(app); settle(app);
+            const auto& s4 = app.session().slot(4);
+            CHECK(app.session().fullBars(4) == 4 && s4.content != nullptr && std::abs(s4.content->buffer->numSamples - n) < 4 && s4.content->bars == 2,
+                  ("a 4-bar break loads its first 2 bars: " + std::to_string(app.session().fullBars(4))).c_str());
+            std::string w;
+            app.tick();
+            app.formatValue(MP_WIN_INFO, 0, w);
+            CHECK(w == "BARS 1-2 OF 4", ("the bars readout: " + w).c_str());
+            press(app, MP_WIN_NEXT);
+            settle(app); settle(app);
+            app.tick();
+            app.formatValue(MP_WIN_INFO, 0, w);
+            CHECK(app.session().window(4) == 1 && w == "BARS 2-3 OF 4", ("LATER BARS: " + w).c_str());
+            const auto state = app.session().saveState();
+            CHECK(state.find("window 1") != std::string::npos, "the window is saved");
+            press(app, MP_WIN_PREV); press(app, MP_WIN_PREV);
+            settle(app);
+            CHECK(app.session().window(4) == 0, "no earlier than bar 1");
         }
     }
     std::printf("akaizer page\n");
