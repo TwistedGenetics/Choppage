@@ -375,12 +375,17 @@ namespace bc
                 // Slice notes (on the group played last) / a slice picked on screen (on the selected break's group):
                 // one-shots over the top
                 int one = pendingSliceNote, group = lastPlayer;
+                const bool fromPad = one >= 0;
                 pendingSliceNote = -1;
                 if (one < 0) { one = previewSlice.exchange (-1); group = uiGroup; }
                 if (one >= 0)
                 {
                     auto& p = players[(size_t) group];
-                    if (content[(size_t) p.activeSlot] != nullptr) playSlice (p, one, i, 0, s);
+                    if (content[(size_t) p.activeSlot] != nullptr)
+                    {
+                        playSlice (p, one, i, 0, s);
+                        if (fromPad) sliceHit.store (p.activeSlot * kMaxSlices + one, std::memory_order_relaxed);
+                    }
                 }
 
                 if (! host.playing) internalPpq += ppqPerSample;

@@ -109,6 +109,7 @@ namespace bc
         std::array<std::atomic<bool>, kFxPads> padLit {};  // pad audible (for the lamps)
         std::array<std::atomic<bool>, kFxPads> padActive {};   // the pad's effect is on (after PAD QUANTISE)
         std::atomic<int>  previewSlice { -1 };    // UI click on a slice
+        std::atomic<int>  sliceHit { -1 };        // a slice pad was played: slot x kMaxSlices + slice (the MPC selects it)
         std::atomic<int>  memoryRequest { -1 };   // slot * 16 + memory, for the message thread
         std::atomic<int>  lastNote { -1 };
         float getPeak() noexcept { return chain.getPeak(); }

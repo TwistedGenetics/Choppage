@@ -623,6 +623,39 @@ static void quantiseTests()
     }
 }
 
+static void snapTests()
+{
+    std::cout << "\n== Snap to hits ==" << std::endl;
+    // a made-up break: 8 hits on known samples, loud and quiet (decaying noise), over a quiet bed
+    const double sr = 44100.0;
+    const int n = (int) (sr * 2.0);
+    std::vector<float> x ((size_t) n);
+    uint32_t seed = 1;
+    auto rnd = [&] { seed = seed * 1664525u + 1013904223u; return (float) ((seed >> 8) & 0xFFFF) / 32768.0f - 1.0f; };
+    for (auto& v : x) v = 0.003f * rnd();
+    const int hits[] = { 2000, 11500, 22050, 30000, 44100, 55125, 66150, 77000 };
+    const float amp[] = { 0.9f, 0.25f, 0.8f, 0.15f, 0.9f, 0.3f, 0.7f, 0.2f };
+    for (int h = 0; h < 8; ++h)
+        for (int i = 0; i < 9000 && hits[h] + i < n; ++i)
+            x[(size_t) (hits[h] + i)] += amp[h] * std::exp (-i / 1800.0f) * rnd();
+    const auto path = (std::filesystem::temp_directory_path() / "choppage-snap.wav").string();
+    const float* ch[] = { x.data() };
+    AudioFile::writeWav24 (path, ch, 1, n, sr);
+    Rig r;
+    r.s.loadFile (0, path);
+    r.s.waitUntilIdle();
+    int good = 0;
+    std::string misses;
+    for (int h = 0; h < 8; ++h)
+        for (int off : { -500, -150, 150, 500 })   // rough touches up to 11 ms either side
+        {
+            const int got = r.s.snapToHit (hits[h] + off, 1200);
+            if (std::abs (got - hits[h]) <= 48) ++good; else misses += " " + std::to_string (got - hits[h]);
+        }
+    check (good >= 30, "rough touches land on the hit, loud or quiet (" + std::to_string (good) + " of 32" + misses + ")");
+    check (r.s.snapToHit (16000, 1200) == 16000, "nothing near: the touch stays where it was");
+}
+
 static void rexTests()
 {
     std::cout << "\n== REX loops ==" << std::endl;
@@ -661,6 +694,7 @@ int main()
     paramTests();
     rexTests();
     quantiseTests();
+    snapTests();
     std::cout << "\n" << (checks - failures) << " / " << checks << " checks passed" << std::endl;
     return failures == 0 ? 0 : 1;
 }

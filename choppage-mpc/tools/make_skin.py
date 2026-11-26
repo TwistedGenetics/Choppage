@@ -636,7 +636,7 @@ def pages():
     ]
 
 # ---------------------------------------------------------------- build
-TAP_PARAMS = ("waveTap", "listTap", "seqTap")   # tap areas: the MPC resets them when the finger lifts
+TAP_PARAMS = ("waveTap", "listTap", "seqTap", "sliceTap")   # tap areas: the MPC resets them when the finger lifts
 
 class Builder:
     def __init__(self, params, out):
@@ -955,7 +955,7 @@ class Builder:
         off = self.save(base + "_off.png", lcd_key(theme, w, h, text, False, size))
         return on, off
 
-    def wave_block(self, y_wave, y_tab, tap_vis=None):
+    def wave_block(self, y_wave, y_tab, tap_vis=None, slice_page=False):
         """The 84 waveform columns, the hit-letter row and the tap area over both."""
         kids = []
         if "wave_cols.png" not in self.images:
@@ -969,8 +969,22 @@ class Builder:
         for c in range(WCOLS):
             kids.append(self.strip_at("wave_tabs.png", nt, (WX0 + c * WCOL_W, y_tab, WCOL_W, TAB_H), "tab%d" % (c + 1), name="tab"))
         imgs = [("clear_col.png", "clear_col.png", (c * WCOL_W, 0, WCOL_W, WAVE_H + TAB_H + 4)) for c in range(WCOLS)]
-        kids.append(self.radio_at("waveTap", (WX0, y_wave, WCOLS * WCOL_W, WAVE_H + TAB_H + 4), imgs, tap_vis,
-                                  ids=list(range(1, WCOLS + 1)), name="cp wave tap", focus=False, qlink=False))
+        if not slice_page:
+            kids.append(self.radio_at("waveTap", (WX0, y_wave, WCOLS * WCOL_W, WAVE_H + TAB_H + 4), imgs, tap_vis,
+                                      ids=list(range(1, WCOLS + 1)), name="cp wave tap", focus=False, qlink=False))
+            return kids
+        # SLICE / CHOP: a touch selects, adds or deletes (the TOUCH keys); the touched waveform takes the focus, so the
+        # jog wheel then moves the selected start (START) and pushing it plays the slice
+        if "cp slice wave" not in self.keys:
+            cols = [entry("col %d" % (c + 1), "Button",
+                          o(("version", 2), ("onImage", "clear_col.png"), ("offImage", "clear_col.png"), ("buttonId", c + 1),
+                            ("numButtonsInGroup", WCOLS + 1), ("handleName", "Tap"), ("gestureBehaviour", "Instant")),
+                          bounds((c * WCOL_W, 0, WCOL_W, WAVE_H + TAB_H + 4))) for c in range(WCOLS)]
+            self.define("cp slice wave", component([focus_entry()] + cols,
+                                                   [act("Enter Pressed", "Toggle Switch", "Play"), act("Mouse Down", "Q-Link", "Data")]))
+        kids.append(entry("slice wave", "cp slice wave", o(("version", 1), ("handleName", "Data")),
+                          bounds((WX0, y_wave, WCOLS * WCOL_W, WAVE_H + TAB_H + 4), focus="Yes"),
+                          remap=[("Data", self.h("slMove")), ("Tap", "ResetOnGestureEnd/" + self.h("sliceTap")), ("Play", self.h("slPlay"))]))
         return kids
 
     def drag_strip(self, pid, rect, theme):
@@ -1220,10 +1234,13 @@ class Builder:
             kids.append(self.drag_strip("slDrag", (WX0 - DRAG_THUMB // 2, 234, WCOLS * WCOL_W + DRAG_THUMB, 34), t))
         for t in range(4):
             v = self.vis_theme(t)
-            # ADD / DELETE right on the LCD, beside the zoom keys
-            v = self.vis_theme(t)
-            kids.append(self.flip_at("slAdd", (740, 16, 120, 40), self.lcd_key_png(t, "+ ADD", 120, 40, 22), v, qlink=False))
-            kids.append(self.flip_at("slDel", (868, 16, 120, 40), self.lcd_key_png(t, "- DEL", 120, 40, 22), v, qlink=False))
+            # TOUCH: what a touch on the waveform does (SELECT / ADD a marker / DEL the slice), beside the zoom keys
+            imgs = []
+            for i, z in enumerate(("SELECT", "ADD", "DEL")):
+                on, off = self.lcd_radio_pngs(t, z, 98, 40, 22)
+                imgs.append((on, off, (i * 104, 0, 98, 40)))
+            self.discrete("slMode")
+            kids.append(self.radio_at("slMode", (738, 16, 306, 40), imgs, self.vis_theme(t), name="cp touch %d" % t, qlink=False))
         kids += self.lcd_text("infoStatus", (26, 272, 900, 26), 22, style="SemiBold")
         kids += self.lcd_text("infoSlice", (930, 272, 324, 26), 22, "right verticallyCentred")
         for t in range(4):
@@ -1233,7 +1250,7 @@ class Builder:
                 imgs.append((on, off, (i * 134, 0, 128, 40)))
             self.discrete("zoom")
             kids.append(self.radio_at("zoom", (466, 16, 262, 40), imgs, self.vis_theme(t), name="cp zoom %d" % t))
-        kids += self.wave_block(62, 204)
+        kids += self.wave_block(62, 204, slice_page=True)
         # three rows of four, as on the grid pages
         if sub == 0:
             name = "SLICE"
@@ -1245,7 +1262,7 @@ class Builder:
             rows = [[K("slice", "SLICE"), K("slMove", "START"), G("slAdd", "ADD\n(SPLIT)"), G("slDel", "DELETE\n(JOIN)")],
                     [T("editAll", "EDIT\nALL SLICES"), G("slNudgeL", "NUDGE\nSTART <"), G("slNudgeR", "NUDGE\nSTART >"), G("reslice", "RESLICE")],
                     [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
-                     T("slMute", "MUTE")]]
+                     T("snap", "SNAP\nTO HITS")]]
         page = {"fn": 1, "sub": sub, "name": name, "rows": rows}
         global ROW_Y0, ROW_H
         saved = (ROW_Y0, ROW_H)

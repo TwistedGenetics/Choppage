@@ -80,6 +80,11 @@ enum MpcParam : int
     // ---- 0.7.4: touch columns under the waveform (a column = the start goes there). 0.8 has the drag
     //      strip (MP_SL_DRAG) back: the blank screen was TUI.json's size. Kept for its index.
     MP_SL_PLACE,
+    // ---- 0.8.1: fluid chopping on the SLICE pages
+    MP_SL_MODE,                 // what a touch on the SLICE waveform does: 0 SELECT, 1 ADD (a marker there), 2 DEL
+    MP_SLICE_TAP,               // a touch on the SLICE pages' waveform: column + 1 (springs back to 0)
+    MP_SL_PLAY,                 // trigger (push the jog wheel on the waveform): play the selected slice
+    MP_SNAP,                    // added / dragged markers jump to the nearest drum hit
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

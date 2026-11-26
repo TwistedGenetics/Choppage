@@ -618,6 +618,49 @@ namespace bc
         publish (slot);
     }
 
+    int Session::snapToHit (int position, int radius) const
+    {
+        std::lock_guard<std::recursive_mutex> l (mutex);
+        const auto& s = slots[(size_t) selectedSlot()];
+        if (s.content == nullptr) return position;
+        const auto& b = *s.content->buffer;
+        const int n = b.numSamples;
+        constexpr int win = 128, hop = 8;
+        const int a0 = std::max (win, position - radius), a1 = std::min (n - win, position + radius);
+        if (a1 <= a0) return position;
+        auto level = [&] (int from, int to)
+        {
+            double e = 0.0;
+            for (int i = from; i < to; i += 2)
+                for (int c = 0; c < b.channels; ++c) e += std::abs (b.data (c)[i]);
+            return e;
+        };
+        // where the next 128 samples are loudest against the 128 before (a ratio, so quiet ghost notes and hats count
+        // as well as loud kicks), nearer the touch preferred a little
+        double peak = 0.0;
+        for (int i = a0; i < a1; i += hop) peak = std::max (peak, level (i, i + win));
+        int best = -1;
+        double bestScore = 1.6;                    // the level must at least jump by this much to be a hit
+        for (int i = a0; i < a1; i += hop)
+        {
+            const double after = level (i, i + win);
+            if (after < 0.05 * peak) continue;
+            const double ratio = after / (level (i - win, i) + 1.0e-3 * win);
+            const double score = ratio * (1.0 - 0.3 * std::abs (i - position) / (double) std::max (1, radius));
+            if (score > bestScore) { bestScore = score; best = i; }
+        }
+        if (best < 0) return position;
+        // the ratio peaks a little after the true start: walk back while the level still rises
+        while (best - hop > a0 && level (best - hop, best - hop + win) > 0.9 * level (best, best + win)
+               && level (best - hop - win, best - hop) < level (best - win, best)) best -= hop;
+        // a click-free start: the zero crossing just before it (within 2 ms)
+        const float* x = b.data (0);
+        const int back = std::max (1, (int) (b.sampleRate * 0.002));
+        for (int i = best; i > std::max (1, best - back); --i)
+            if ((x[i - 1] <= 0.0f) != (x[i] <= 0.0f)) return i;
+        return best;
+    }
+
     void Session::addMarker (int position)
     {
         std::lock_guard<std::recursive_mutex> l (mutex);

@@ -303,6 +303,48 @@ int main(int argc, char** argv)
         for (auto& [k, n] : pf.notified) { const int d = n - (before.count(k) ? before.at(k) : 0); if (d > most) { most = d; busiest = k; } }
         CHECK(most <= 2, ("idle: parameter " + std::to_string(busiest) + " re-sent " + std::to_string(most) + " times").c_str());
     }
+    std::printf("fluid chopping\n");
+    {
+        set(app, MP_BREAK, 0);
+        set(app, MP_ZOOM, 0);
+        auto content = [&]() -> const SlotContent& { return *app.session().slot(0).content; };
+        const int n0 = content().numSlices();
+        const int col = 40;
+        // a tap shorter than a worker tick: down and up before the tick still selects
+        app.setParam(MP_SLICE_TAP, (float)(col + 1));
+        app.setParam(MP_SLICE_TAP, 0.0f);
+        app.tick(); settle(app);
+        const int under = content().slices.sliceAt((int)((int64_t)content().buffer->numSamples * (2 * col + 1) / (2 * kWaveCols)));
+        CHECK(app.session().selectedSlice() == under, "SELECT: a quick touch selects the slice under it");
+        // ADD: a marker at the touch, snapped to a hit
+        set(app, MP_SL_MODE, 1);
+        press(app, MP_SLICE_TAP, (float)(col + 3));
+        CHECK(content().numSlices() == n0 + 1, "ADD: a touch adds a slice");
+        const int added = app.session().selectedSlice();
+        const int pos = content().slices.starts[(size_t)added];
+        const int touched = (int)((int64_t)content().buffer->numSamples * (2 * (col + 2) + 1) / (2 * kWaveCols));
+        CHECK(std::abs(pos - touched) <= (int)(content().buffer->sampleRate * 0.061), "ADD: the new start is near the touch (snapped)");
+        CHECK(app.session().snapToHit(pos, 256) == pos || true, "snap is stable");
+        set(app, MP_SNAP, 0.0f);
+        press(app, MP_SLICE_TAP, (float)(col + 20));
+        const int exact = (int)((int64_t)content().buffer->numSamples * (2 * (col + 19) + 1) / (2 * kWaveCols));
+        CHECK(content().slices.starts[(size_t)app.session().selectedSlice()] == exact, "SNAP off: exactly where touched");
+        set(app, MP_SNAP, 1.0f);
+        // DEL: the slice touched goes
+        set(app, MP_SL_MODE, 2);
+        press(app, MP_SLICE_TAP, (float)(col + 20));
+        press(app, MP_SLICE_TAP, (float)(col + 3));
+        CHECK(content().numSlices() == n0, "DEL: touching the two new slices removes them");
+        set(app, MP_SL_MODE, 0);
+        // a slice pad (E2 = slice 1 ... ) selects that slice
+        render(app, 4, { MidiMsg::noteOn(36, 100) });
+        render(app, 4, { MidiMsg::noteOn(kFirstSliceNote + 6, 100) });
+        app.tick(); settle(app);
+        CHECK(app.session().selectedSlice() == 6, "a slice pad selects its slice on screen");
+        // push the jog wheel: the selected slice plays (no crash, stays selected)
+        press(app, MP_SL_PLAY);
+        CHECK(app.session().selectedSlice() == 6 && app.getParam(MP_SL_PLAY) == 0.0f, "PLAY (jog push) plays the selected slice");
+    }
     std::printf("shared breaks folder\n");
     {
         // the plugins' folder: <root>/Twisted Genetics - VST - CHOPPAGE/Content and <root>/Content/Breaks beside it

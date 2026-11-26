@@ -49,6 +49,12 @@ The sections:
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
+- **Chopping by touch**: the **SELECT / ADD / DEL** keys on the LCD say what a touch on the waveform does.
+  - SELECT: the slice you touch is selected and plays.
+  - ADD: a new slice starts where you touch. With **SNAP TO HITS** on (CHOP page), it lands on the nearest drum hit; the new slice is selected and plays.
+  - DEL: the slice you touch goes (joined to the one before).
+- **Slice pads** (E2–G3, pad bank B with PAD NOTES at 36) select the slice they play, so you can pick a slice by ear.
+- **Jog wheel**: after touching the waveform, turning the jog wheel moves the selected slice's start; pushing it plays the slice.
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
 - **Drag with your finger** on the strip under the hit letters: the **START** handle sits on the selected slice's start marker and follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves; the MOVE knob or jog wheel fine-tune.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.

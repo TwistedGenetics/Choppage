@@ -527,5 +527,9 @@
   {"index": 525, "id": "slDrag", "name": "Drag Start", "kind": "float", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 526, "id": "resetOrig", "name": "Reset", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 527, "id": "memSaveOrig", "name": "Save Original", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
-  {"index": 528, "id": "slPlace", "name": "Place Start", "kind": "int", "min": 0, "max": 84, "def": 0, "choices": [], "hidden": true, "readout": false, "trigger": false}
+  {"index": 528, "id": "slPlace", "name": "Place Start", "kind": "int", "min": 0, "max": 84, "def": 0, "choices": [], "hidden": true, "readout": false, "trigger": false},
+  {"index": 529, "id": "slMode", "name": "Touch", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["SELECT", "ADD", "DEL"], "hidden": false, "readout": false, "trigger": false},
+  {"index": 530, "id": "sliceTap", "name": "Slice Tap", "kind": "int", "min": 0, "max": 84, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 531, "id": "slPlay", "name": "Play Slice", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 532, "id": "snap", "name": "Snap To Hits", "kind": "bool", "min": 0, "max": 1, "def": 1, "choices": [], "hidden": false, "readout": false, "trigger": false}
 ]

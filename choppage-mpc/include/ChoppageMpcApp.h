@@ -79,6 +79,10 @@ private:
     std::string breaksDir_;                         // where DISK lists breaks from (see the constructor)
     std::string breaksLabel_ = "CONTENT/BREAKS";    // the same, for the screen
     void chooseBreaksFolder();
+    std::mutex tapMutex_;
+    std::vector<std::pair<int, float>> taps_;        // touches queued by setParam: a quick tap is never missed
+    bool dragMoved_ = false;                        // the drag strip moved a marker (it snaps when the drag ends)
+    void sliceTap(int column);                      // SELECT / ADD / DEL at a column of the SLICE waveform
     int dragTicks_ = 0;                             // a drag on the strip is under way: hold the view, don't mirror
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
     std::string endText_ = "-";                     // END knob text
