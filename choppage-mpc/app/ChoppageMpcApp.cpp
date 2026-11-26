@@ -886,7 +886,9 @@ float ChoppageMpcApp::jogged(int index, float v, float prev) const
             const auto& s = session_.slot(session_.selectedSlot());
             if (s.content == nullptr || s.content->buffer == nullptr || s.content->buffer->sampleRate <= 0) return v;
             scale = (double)s.content->buffer->numSamples / s.content->buffer->sampleRate * 1000.0;   // ms across the break
-            fine = 1; coarse = 10;
+            // ZOOM ALL: 10 ms a click, 1 ms with SHIFT; ZOOM SLICE (getting onto a transient): 1 ms, 0.1 ms with SHIFT
+            if (roundi(values_[MP_ZOOM].load()) == 1) { fine = 0.1; coarse = 1; }
+            else { fine = 1; coarse = 10; }
             break;
         }
         default: return v;
@@ -1310,7 +1312,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
         {
             std::lock_guard<std::mutex> l(textMutex_);
             char t[32];
-            std::snprintf(t, sizeof t, "%.3f S", at / s.content->buffer->sampleRate);
+            std::snprintf(t, sizeof t, "%.4f S", at / s.content->buffer->sampleRate);
             moveText_ = t;
         }
         put(MP_SL_MOVE, (float)at / (float)n);
@@ -1326,7 +1328,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
         {
             std::lock_guard<std::mutex> l(textMutex_);
             char t[40];
-            if (slice < last) std::snprintf(t, sizeof t, "%.3f S", endAt / s.content->buffer->sampleRate);
+            if (slice < last) std::snprintf(t, sizeof t, "%.4f S", endAt / s.content->buffer->sampleRate);
             else std::snprintf(t, sizeof t, "END OF BREAK");
             endText_ = t;
         }

@@ -63,7 +63,7 @@ The sections:
 - **Jog wheel**: after touching the waveform, turning the jog wheel moves the selected slice's start; pushing it plays the slice.
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
 - **Bars of a longer break**: a 1- or 2-bar break is used whole. A longer one uses 2 bars: **EARLIER BARS / LATER BARS** under the hit letters pick which ("BARS 3-4 OF 8"); the break is sliced again for those bars, and the choice is saved.
-- **Data wheel steps**: MOVE and END move the marker 10 ms a click, **1 ms with SHIFT**. BREAK BPM moves in whole BPM, 0.1 with SHIFT. The break and preset lists move one line a click.
+- **Data wheel steps**: MOVE and END move the marker 10 ms a click, **1 ms with SHIFT**; in **ZOOM SLICE** 1 ms a click and **0.1 ms with SHIFT** (about 4 samples), for getting right onto a transient. Times show to 0.1 ms. BREAK BPM moves in whole BPM, 0.1 with SHIFT. The break and preset lists move one line a click.
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.

@@ -514,6 +514,14 @@ int main(int argc, char** argv)
         set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.001f);  // a fine step (SHIFT)
         const double ms2 = app.getParam(MP_SL_MOVE) * lenMs;
         CHECK(std::fabs(ms2 - ms1 - 1.0) < 0.05, ("fine: 1 ms on: " + std::to_string(ms2)).c_str());
+        set(app, MP_ZOOM, 1);                                     // ZOOM SLICE: 1 ms, 0.1 ms with SHIFT
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.001f);
+        const double ms3 = app.getParam(MP_SL_MOVE) * lenMs;
+        CHECK(std::fabs(ms3 - ms2 - 0.1) < 0.03, ("ZOOM SLICE fine: 0.1 ms on: " + std::to_string(ms3)).c_str());
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.0078f);
+        const double ms4 = app.getParam(MP_SL_MOVE) * lenMs;
+        CHECK(std::fabs(ms4 - std::round(ms3) - 1.0) < 0.03 || std::fabs(ms4 - ms3 - 1.0) < 0.6, ("ZOOM SLICE coarse: about 1 ms on: " + std::to_string(ms4)).c_str());
+        set(app, MP_ZOOM, 0);
         // BREAK BPM: whole numbers on the wheel, 0.1 with SHIFT; the break plays at it
         const float b0 = app.getParam(MP_BRK_BPM);
         set(app, MP_BRK_BPM, b0 - 2.0f);                         // a coarse step down (about 1/128 of 40-300)
