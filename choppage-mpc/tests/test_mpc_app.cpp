@@ -732,6 +732,15 @@ int main(int argc, char** argv)
         app.tick();
         press(app, MP_SL_DEL, 1);
         CHECK(app.session().slot(0).content->slices.count == count && app.session().selectedSlice() == 3, "DELETE removes the selected slice (joined to the one before)");
+        // a key tapped faster than the worker's tick (down and up before it looks) still acts
+        app.setParam(MP_SL_ADD, 1.0f); app.setParam(MP_SL_ADD, 0.0f);
+        app.tick(); settle(app);
+        CHECK(app.session().slot(0).content->slices.count == count + 1, "a quick tap on ADD adds");
+        app.session().selectSlice(4, false);
+        app.tick();
+        app.setParam(MP_SL_DEL, 1.0f); app.setParam(MP_SL_DEL, 0.0f);
+        app.tick(); settle(app);
+        CHECK(app.session().slot(0).content->slices.count == count, "a quick tap on DELETE deletes");
         const int nextBefore = app.session().slot(0).content->slices.starts[4];
         set(app, MP_SL_END, app.getParam(MP_SL_END) - 0.01f);
         const int nextAfter = app.session().slot(0).content->slices.starts[4];
