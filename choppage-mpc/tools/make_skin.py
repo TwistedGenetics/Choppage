@@ -284,9 +284,7 @@ def lcd_frame(theme, w, h):
     s = SS
     d.rounded_rectangle((0, 0, w * s - 1, h * s - 1), radius=10 * s, fill=BEZEL + (255,))
     d.rounded_rectangle((8 * s, 8 * s, (w - 8) * s - 1, (h - 8) * s - 1), radius=4 * s, fill=bgc + (255,))
-    # faint dot-matrix rows, like the S950's character LCD
-    for y in range(12, h - 12, 4):
-        d.line([(10 * s, y * s), ((w - 10) * s, y * s)], fill=faint + (14,), width=s)
+    # (plain glass: the faint dot-matrix rows were taken out in 0.10.2)
     # divider between the info lines and the playhead bar
     d.line([(20 * s, (h - 34) * s), ((w - 20) * s, (h - 34) * s)], fill=dim + (110,), width=s)
     return done(im, w, h)
@@ -354,8 +352,6 @@ def lcd_art(theme, w, h, boxes=(), rules=()):
     s = SS
     d.rounded_rectangle((0, 0, w * s - 1, h * s - 1), radius=10 * s, fill=BEZEL + (255,))
     d.rounded_rectangle((8 * s, 8 * s, (w - 8) * s - 1, (h - 8) * s - 1), radius=4 * s, fill=bgc + (255,))
-    for y in range(12, h - 12, 4):
-        d.line([(10 * s, y * s), ((w - 10) * s, y * s)], fill=faint + (14,), width=s)
     for (x, y, bw, bh) in boxes:
         d.rectangle((x * s, y * s, (x + bw) * s - 1, (y + bh) * s - 1), outline=ink + (255,), width=2 * s)
     for (x0, y0, x1) in rules:
@@ -560,8 +556,6 @@ def grid_cover(theme, w, h, lane_y, lane_h):
     bgc, ink, dim, faint = LCD[theme]
     im = Image.new("RGB", (w, h), bgc)
     d = ImageDraw.Draw(im)
-    for y in range(0, h, 4):
-        d.line([(0, y), (w, y)], fill=mix(bgc, faint, 0.06))
     for i, n in enumerate(LANES + ["FX"]):
         y = lane_y + i * lane_h + (lane_h - 6) / 2
         d.text((8, y), n, font=mono_font(min(24, lane_h - 4)), fill=ink, anchor="lm")
