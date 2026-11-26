@@ -56,7 +56,7 @@ The sections:
 - **Slice pads** (E2–G3, pad bank B with PAD NOTES at 36) select the slice they play, so you can pick a slice by ear.
 - **Jog wheel**: after touching the waveform, turning the jog wheel moves the selected slice's start; pushing it plays the slice.
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
-- **Drag with your finger** on the strip under the hit letters: the **START** handle sits on the selected slice's start marker and follows your finger. In ZOOM SLICE the view holds still while you drag, for fine moves; the MOVE knob or jog wheel fine-tune.
+- **Touch the strip** under the hit letters: the selected slice's start goes where you touch (the red column shows where it is). The MOVE knob or jog wheel fine-tune. (A finger-drag slider here crashed the MPC's screen in 0.6.1 and 0.8.0 - 0.9.1, so it is gone.)
 - **+ ADD** splits the selected slice in two; **- DEL** joins it to the one before.
 - **SLICE** sets the selected slice's **START** and **END** (the waveform's markers move as you turn them) and its **HIT**: K, S, GS, H, O or P (perc). HIT overrides the automatic one.
 - SLICE also has PITCH, GATE, STRETCH, TRANSIENT, REVERSE, STUTTER, XFADE and MUTE.

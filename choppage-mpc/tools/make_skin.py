@@ -1260,14 +1260,24 @@ class Builder:
         kids += self.lcd_text("infoName", (name_box[0] + 10, name_box[1], name_box[2] - 20, name_box[3]), 26)
         kids += self.lcd_text("infoBpm", (bpm_box[0] + 8, bpm_box[1], bpm_box[2] - 16, bpm_box[3]), 26,
                               "horizontallyCentred verticallyCentred")
-        # the drag strip under the hit row: put a finger on it and slide; the selected slice's start follows. (0.6.1 had
-        # this too; the blank MPC screen of 0.6.1 - 0.7.4 was TUI.json's size, not this slider.)
+        # the strip under the hit row: touch a column and the selected slice's start goes there (84 touch columns,
+        # like the waveform's own tap area; the red column is where the start is). A slider here (0.6.1 - 0.7.3)
+        # left the MPC's plugin screen blank.
         for t in range(4):
-            track = "dragtrack_%d.png" % t
+            track = "placetrack_%d.png" % t
             if track not in self.images:
-                self.save(track, lcd_key(t, WCOLS * WCOL_W, 34, "<   DRAG TO MOVE THE START   >", False, 20))
-            kids.append(self.image_at(track, (WX0, 234, WCOLS * WCOL_W, 34), self.vis_theme(t), name="drag track"))
-            kids.append(self.drag_strip("slDrag", (WX0 - DRAG_THUMB // 2, 234, WCOLS * WCOL_W + DRAG_THUMB, 34), t))
+                self.save(track, lcd_key(t, WCOLS * WCOL_W, 34, "TOUCH HERE TO PUT THE START", False, 20))
+            kids.append(self.image_at(track, (WX0, 234, WCOLS * WCOL_W, 34), self.vis_theme(t), name="place track"))
+        if "place_on.png" not in self.images:
+            mark = Image.new("RGBA", (WCOL_W, 34), (0, 0, 0, 0))
+            dm = ImageDraw.Draw(mark)
+            dm.rectangle((3, 0, WCOL_W - 4, 33), fill=(214, 28, 36, 255))
+            dm.polygon([(0, 0), (WCOL_W - 1, 0), (WCOL_W // 2, 8)], fill=(255, 255, 255, 255))
+            self.save("place_on.png", mark)
+            self.save("place_off.png", clear_png(WCOL_W, 34))
+        kids.append(self.radio_at("slPlace", (WX0, 234, WCOLS * WCOL_W, 34),
+                                  [("place_on.png", "place_off.png", (c * WCOL_W, 0, WCOL_W, 34)) for c in range(WCOLS)],
+                                  None, ids=list(range(1, WCOLS + 1)), name="cp place", focus=False, qlink=False))
         for t in range(4):
             v = self.vis_theme(t)
             # TOUCH: what a touch on the waveform does (SELECT / ADD a marker / DEL the slice), beside the zoom keys

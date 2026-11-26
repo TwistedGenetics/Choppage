@@ -19195,7 +19195,7 @@
 }
 },
 {
-"key": "cp drag 0",
+"key": "cp place",
 "value": {
 "version": 2,
 "actions": [],
@@ -19219,42 +19219,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "focus",
-"type": "Focus",
+"name": "choice 0",
+"type": "Button",
 "data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
-}
-},
-{
 "version": 2,
-"componentData": {
-"version": 1,
-"name": "drag",
-"type": "Slider",
-"data": {
-"version": 3,
-"sliderType": "TrackAndThumb",
-"direction": "Horizontal",
-"thumbImage": "dragthumb_0.png",
-"thumbTrackVisible": false,
-"handleName": "Data"
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
 }
 },
 "handle remapping": {
@@ -19267,73 +19241,23 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 1272 34"
-}
-}
-]
-}
-},
-{
-"key": "cp drag 1",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-}
-},
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
+"bounds": "0 0 14 34"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "drag",
-"type": "Slider",
+"name": "choice 1",
+"type": "Button",
 "data": {
-"version": 3,
-"sliderType": "TrackAndThumb",
-"direction": "Horizontal",
-"thumbImage": "dragthumb_1.png",
-"thumbTrackVisible": false,
-"handleName": "Data"
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 2,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
 }
 },
 "handle remapping": {
@@ -19346,73 +19270,23 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 1272 34"
-}
-}
-]
-}
-},
-{
-"key": "cp drag 2",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-}
-},
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
+"bounds": "14 0 14 34"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "drag",
-"type": "Slider",
+"name": "choice 2",
+"type": "Button",
 "data": {
-"version": 3,
-"sliderType": "TrackAndThumb",
-"direction": "Horizontal",
-"thumbImage": "dragthumb_2.png",
-"thumbTrackVisible": false,
-"handleName": "Data"
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 3,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
 }
 },
 "handle remapping": {
@@ -19425,73 +19299,23 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 1272 34"
-}
-}
-]
-}
-},
-{
-"key": "cp drag 3",
-"value": {
-"version": 2,
-"actions": [],
-"backgroundData": {
-"version": 1,
-"focussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-},
-"unfocussed": {
-"version": 1,
-"colour": "0",
-"image": ""
-}
-},
-"ignoreMousePresses": false,
-"disableCoarseDataWheel": false,
-"componentsData": [
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "focus",
-"type": "Focus",
-"data": {
-"version": 1,
-"backgroundColour": "24c0141c",
-"outlineColour": "ffc0141c",
-"backgroundInset": 0.0,
-"outlineThickness": 4.0
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "WhenFocussed",
-"boundsType": "Proportional",
-"bounds": "0 0 1 1"
+"bounds": "28 0 14 34"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "drag",
-"type": "Slider",
+"name": "choice 3",
+"type": "Button",
 "data": {
-"version": 3,
-"sliderType": "TrackAndThumb",
-"direction": "Horizontal",
-"thumbImage": "dragthumb_3.png",
-"thumbTrackVisible": false,
-"handleName": "Data"
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 4,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
 }
 },
 "handle remapping": {
@@ -19504,7 +19328,2327 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 1272 34"
+"bounds": "42 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 4",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 5,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "56 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 5",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 6,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "70 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 6",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 7,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "84 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 7",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 8,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "98 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 8",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 9,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "112 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 9",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 10,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "126 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 10",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 11,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "140 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 11",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 12,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "154 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 12",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 13,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "168 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 13",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 14,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "182 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 14",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 15,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "196 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 15",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 16,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "210 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 16",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 17,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "224 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 17",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 18,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "238 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 18",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 19,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "252 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 19",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 20,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "266 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 20",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 21,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "280 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 21",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 22,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "294 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 22",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 23,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "308 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 23",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 24,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "322 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 24",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 25,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "336 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 25",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 26,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "350 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 26",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 27,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "364 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 27",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 28,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "378 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 28",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 29,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "392 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 29",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 30,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "406 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 30",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 31,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "420 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 31",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 32,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "434 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 32",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 33,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "448 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 33",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 34,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "462 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 34",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 35,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "476 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 35",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 36,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "490 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 36",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 37,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "504 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 37",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 38,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "518 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 38",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 39,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "532 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 39",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 40,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "546 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 40",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 41,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "560 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 41",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 42,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "574 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 42",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 43,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "588 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 43",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 44,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "602 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 44",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 45,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "616 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 45",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 46,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "630 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 46",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 47,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "644 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 47",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 48,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "658 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 48",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 49,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "672 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 49",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 50,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "686 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 50",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 51,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "700 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 51",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 52,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "714 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 52",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 53,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "728 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 53",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 54,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "742 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 54",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 55,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "756 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 55",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 56,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "770 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 56",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 57,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "784 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 57",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 58,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "798 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 58",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 59,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "812 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 59",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 60,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "826 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 60",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 61,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "840 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 61",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 62,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "854 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 62",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 63,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "868 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 63",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 64,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "882 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 64",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 65,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "896 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 65",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 66,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "910 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 66",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 67,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "924 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 67",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 68,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "938 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 68",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 69,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "952 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 69",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 70,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "966 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 70",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 71,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "980 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 71",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 72,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "994 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 72",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 73,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1008 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 73",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 74,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1022 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 74",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 75,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 75",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 76,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1050 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 76",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 77,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1064 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 77",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 78,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1078 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 78",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 79,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1092 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 79",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 80,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1106 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 80",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 81,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1120 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 81",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 82,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1134 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 82",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 83,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1148 0 14 34"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 83",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "place_on.png",
+"offImage": "place_off.png",
+"buttonId": 84,
+"numButtonsInGroup": 85,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1162 0 14 34"
 }
 }
 ]
@@ -57809,13 +59953,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_0.png"
+"image": "placetrack_0.png"
 }
 },
 "handle remapping": {
@@ -57836,43 +59980,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 0",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_1.png"
+"image": "placetrack_1.png"
 }
 },
 "handle remapping": {
@@ -57893,43 +60007,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 1",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_2.png"
+"image": "placetrack_2.png"
 }
 },
 "handle remapping": {
@@ -57950,43 +60034,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 2",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_3.png"
+"image": "placetrack_3.png"
 }
 },
 "handle remapping": {
@@ -58007,8 +60061,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 3",
+"name": "slPlace",
+"type": "cp place",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -58019,18 +60073,17 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 525"
+"value": "Parameter 528"
 }
 ]
 },
 "bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
+"version": 1,
+"acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+"bounds": "52 234 1176 34"
 }
 },
 {
@@ -65351,13 +67404,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_0.png"
+"image": "placetrack_0.png"
 }
 },
 "handle remapping": {
@@ -65378,43 +67431,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 0",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_1.png"
+"image": "placetrack_1.png"
 }
 },
 "handle remapping": {
@@ -65435,43 +67458,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 1",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_2.png"
+"image": "placetrack_2.png"
 }
 },
 "handle remapping": {
@@ -65492,43 +67485,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 2",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 525"
-}
-]
-},
-"bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "drag track",
+"name": "place track",
 "type": "Image",
 "data": {
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "dragtrack_3.png"
+"image": "placetrack_3.png"
 }
 },
 "handle remapping": {
@@ -65549,8 +67512,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slDrag",
-"type": "cp drag 3",
+"name": "slPlace",
+"type": "cp place",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -65561,18 +67524,17 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 525"
+"value": "Parameter 528"
 }
 ]
 },
 "bounds": {
-"version": 2,
-"acceptsHWFocus": "Yes",
+"version": 1,
+"acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "4 234 1272 34",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+"bounds": "52 234 1176 34"
 }
 },
 {
