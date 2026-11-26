@@ -6,6 +6,7 @@
 #include "choppage/TransientDetector.h"
 #include <chrono>
 #include <filesystem>
+#include <algorithm>
 #include <fstream>
 #include <map>
 #include <sstream>
@@ -306,6 +307,7 @@ namespace bc
                     {
                         const auto name = it->path().filename().string();
                         if (name.empty() || name[0] == '.') continue;          // hidden / system
+                        if (! scan->only.empty() && std::find (scan->only.begin(), scan->only.end(), name) == scan->only.end()) continue;
                         std::error_code e2;
                         if (it->is_directory (e2))
                         {
@@ -1036,7 +1038,14 @@ namespace bc
     void Session::listFolder (const std::string& folder, const std::string& top)
     {
         scanning = true;
-        { std::lock_guard<std::mutex> q (qMutex); scanJobs.push_back ({ folder, top, true }); }
+        std::vector<std::string> only;
+        {
+            std::lock_guard<std::recursive_mutex> l (mutex);
+            std::string f = folder;
+            while (f.size() > 1 && f.back() == '/') f.pop_back();
+            if (f == "/") only = rootFolders;
+        }
+        { std::lock_guard<std::mutex> q (qMutex); scanJobs.push_back ({ folder, top, true, std::move (only) }); }
         qCv.notify_one();
     }
 

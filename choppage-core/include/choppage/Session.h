@@ -140,6 +140,8 @@ namespace bc
         void scanFolder (const std::string& folder);
         // One folder only, for browsing: ".." first (unless folder == top), then its sub-folders (A-Z), then its breaks.
         void listFolder (const std::string& folder, const std::string& top);
+        // In "/" (the device's root) list only these folders (the drives), not the system's.
+        void setRootFolders (std::vector<std::string> names) { std::lock_guard<std::recursive_mutex> l (mutex); rootFolders = std::move (names); }
         std::vector<BrowserEntry> browserEntries() const;
         std::string browserFolder() const;
         bool browserScanning() const { return scanning.load(); }
@@ -218,7 +220,8 @@ namespace bc
         std::condition_variable qCv;
         std::deque<Job> jobs;
         std::deque<Done> done;
-        struct ScanJob { std::string folder, top; bool flat = false; };
+        std::vector<std::string> rootFolders;
+        struct ScanJob { std::string folder, top; bool flat = false; std::vector<std::string> only; };
         std::deque<ScanJob> scanJobs;
         bool quit = false;
         std::atomic<int> pending { 0 };

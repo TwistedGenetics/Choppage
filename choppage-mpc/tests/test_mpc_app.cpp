@@ -695,6 +695,21 @@ int main(int argc, char** argv)
         set(app, P_LCD_COLOUR, lcd);
         set(app, MP_SNAP, 1);
     }
+    std::printf("the device's root lists only the drives' folders\n");
+    {
+        const std::string was = app.session().browserFolder();
+        app.session().setRootFolders({ "tmp" });
+        app.session().listFolder("/", "/");
+        for (int i = 0; i < 300 && (app.session().browserScanning() || app.session().browserFolder() != "/"); ++i)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        const auto e = app.session().browserEntries();
+        CHECK(e.size() == 1 && e[0].name == "tmp", "in / only the drives' folders show (no bin, etc, lib ...)");
+        app.session().setRootFolders({});
+        app.session().listFolder(was, "/");
+        for (int i = 0; i < 300 && (app.session().browserScanning() || app.session().browserFolder() != was); ++i)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        app.tick();
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);

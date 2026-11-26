@@ -366,6 +366,18 @@ void ChoppageMpcApp::setupFolders()
     const fs::path pluginDir = fs::path(cleanDir(platform_.contentDir())).parent_path();
     const fs::path drive = pluginDir.parent_path().parent_path();
     topDir_ = drive.empty() ? std::string("/") : drive.has_parent_path() && drive.parent_path() != drive ? drive.parent_path().string() : drive.string();
+    // At the very top of the MPC ("/") only the places drives are kept are listed, not its system folders.
+    if (cleanDir(topDir_) == "/")
+    {
+        std::vector<std::string> keep { "media", "mnt", "content", "Volumes" };
+        const std::string own = cleanDir(platform_.contentDir());
+        if (own.size() > 1 && own[0] == '/')
+        {
+            const auto slash = own.find('/', 1);
+            keep.push_back(own.substr(1, slash == std::string::npos ? std::string::npos : slash - 1));
+        }
+        session_.setRootFolders(keep);
+    }
     placesFile_ = platform_.contentDir() + "/places.txt";
     loadPlaces();
     std::error_code ec;
