@@ -31,6 +31,29 @@
 }
 },
 {
+"Tab": 1,
+"SubTab": 2,
+"Bank Direction": "RowTopDown",
+"Q-Links": {
+"Q-Link 1": 97,
+"Q-Link 2": 96,
+"Q-Link 3": 2,
+"Q-Link 4": 0,
+"Q-Link 5": 3,
+"Q-Link 6": 6,
+"Q-Link 7": 8,
+"Q-Link 8": 9,
+"Q-Link 9": 18,
+"Q-Link 10": 19,
+"Q-Link 11": 107,
+"Q-Link 12": 204,
+"Q-Link 13": 32,
+"Q-Link 14": 33,
+"Q-Link 15": 34,
+"Q-Link 16": 49
+}
+},
+{
 "Tab": 2,
 "SubTab": 1,
 "Bank Direction": "RowTopDown",

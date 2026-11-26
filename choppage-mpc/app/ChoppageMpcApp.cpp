@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
 
 namespace bc {
 
@@ -147,6 +148,12 @@ std::vector<MpcParamDef> buildDefs()
     T("preOver", "Save Over");
     R("preName", "Name");
     { auto* p = I("preKey", "Key", 0, 44, 0); p->uiOnly = true; }
+    R("dir", "Folder");
+    T("up", "Up");
+    T("refresh", "Refresh");
+    { auto* p = I("placeTap", "Place Tap", 0, kPlaces, 0); p->uiOnly = true; }
+    { auto* p = B("placeStore", "Store Place", false); p->uiOnly = true; }
+    for (int k = 0; k < kPlaces; ++k) R(("place" + std::to_string(k + 1)).c_str(), ("Place " + std::to_string(k + 1)).c_str());
     return v;
 }
 
@@ -228,7 +235,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_PRE_KEY + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_PLACE0 + kPlaces, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -240,8 +247,7 @@ ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform
     std::error_code ec;
     std::filesystem::create_directories(content + "/Breaks", ec);
     session_.setDataFolder(content);
-    chooseBreaksFolder();
-    session_.scanFolder(breaksDir_);
+    setupFolders();
     choosePresetsFolder();
     refreshPresets();
     if (startWorker) worker_ = std::thread([this] { workerLoop(); });
@@ -273,6 +279,131 @@ void ChoppageMpcApp::chooseBreaksFolder()
     const auto parent = std::filesystem::path(shared).parent_path().parent_path().filename().string();
     breaksLabel_ = (parent.empty() ? std::string() : parent + "/") + "CONTENT/BREAKS";
     for (auto& c : breaksLabel_) c = (char)std::toupper((unsigned char)c);
+}
+
+// ===================================================================================== DISK: folders and places
+// The DISK list shows one folder: ".." (up), its folders, then its breaks. It can go anywhere on the MPC's drives:
+// the top is the folder that holds the drives (<top>/<drive>/VST2 Plugins/<this plugin>), where the list is the
+// drives themselves. Four PLACE keys keep favourite folders. The places and the last folder are kept in
+// <plugin>/Content/places.txt (never in VST2 Plugins itself).
+static std::string cleanDir(std::string d)
+{
+    while (d.size() > 1 && d.back() == '/') d.pop_back();
+    return d;
+}
+
+void ChoppageMpcApp::setupFolders()
+{
+    namespace fs = std::filesystem;
+    chooseBreaksFolder();                                   // the default: VST2 Plugins/Content/Breaks, else our own
+    const fs::path pluginDir = fs::path(cleanDir(platform_.contentDir())).parent_path();
+    const fs::path drive = pluginDir.parent_path().parent_path();
+    topDir_ = drive.empty() ? std::string("/") : drive.has_parent_path() && drive.parent_path() != drive ? drive.parent_path().string() : drive.string();
+    placesFile_ = platform_.contentDir() + "/places.txt";
+    loadPlaces();
+    std::error_code ec;
+    if (browseDir_.empty() || !fs::is_directory(browseDir_, ec)) browseDir_ = breaksDir_;
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        if (places_[0].empty()) places_[0] = breaksDir_;    // PLACE 1 starts as the breaks folder
+    }
+    session_.listFolder(browseDir_, topDir_);
+    syncPlaces();
+}
+
+void ChoppageMpcApp::loadPlaces()
+{
+    std::ifstream in(placesFile_);
+    std::string line;
+    std::lock_guard<std::mutex> l(textMutex_);
+    while (std::getline(in, line))
+    {
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        if (line.rfind("last ", 0) == 0) browseDir_ = line.substr(5);
+        for (int k = 0; k < kPlaces; ++k)
+        {
+            const std::string key = "place" + std::to_string(k + 1) + " ";
+            if (line.rfind(key, 0) == 0) places_[k] = line.substr(key.size());
+        }
+    }
+}
+
+void ChoppageMpcApp::savePlaces()
+{
+    std::string text = "last " + browseDir_ + "\n";
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        for (int k = 0; k < kPlaces; ++k)
+            if (!places_[k].empty()) text += "place" + std::to_string(k + 1) + " " + places_[k] + "\n";
+    }
+    std::ofstream out(placesFile_, std::ios::binary | std::ios::trunc);
+    out << text;
+}
+
+void ChoppageMpcApp::goFolder(const std::string& dir, bool remember)
+{
+    std::error_code ec;
+    if (!std::filesystem::is_directory(dir, ec)) { message_ = "CAN'T OPEN THAT FOLDER"; messageTicks_ = 90; return; }
+    browseDir_ = cleanDir(dir);
+    session_.auditionStop();
+    session_.listFolder(browseDir_, topDir_);
+    write(MP_BROWSE, 0.0f);
+    listKey_ = ~0ull;
+    if (remember) savePlaces();
+    syncPlaces();
+}
+
+void ChoppageMpcApp::placeTap(int k)
+{
+    if (k < 0 || k >= kPlaces) return;
+    const std::string n = std::to_string(k + 1);
+    if (values_[MP_PLACE_STORE].load() >= 0.5f)
+    {
+        {
+            std::lock_guard<std::mutex> l(textMutex_);
+            places_[k] = browseDir_;
+        }
+        write(MP_PLACE_STORE, 0.0f);
+        savePlaces();
+        syncPlaces();
+        message_ = "PLACE " + n + " IS NOW " + upper(std::filesystem::path(browseDir_).filename().string());
+        messageTicks_ = 120;
+        return;
+    }
+    std::string dir;
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        dir = places_[k];
+    }
+    if (dir.empty()) { message_ = "PLACE " + n + " IS EMPTY: PRESS STORE, THEN THIS KEY"; messageTicks_ = 120; return; }
+    std::error_code ec;
+    if (!std::filesystem::is_directory(dir, ec)) { message_ = "PLACE " + n + "'S FOLDER IS GONE (DRIVE NOT IN?)"; messageTicks_ = 120; return; }
+    goFolder(dir);
+}
+
+void ChoppageMpcApp::syncPlaces()
+{
+    // the folder shown: its path below the drives ("MPC DRIVE/SAMPLES/BREAKS"), the end kept if it is long
+    std::string shown = cleanDir(browseDir_);
+    const std::string top = cleanDir(topDir_);
+    if (shown == top) shown = "DRIVES";
+    else if (shown.rfind(top + "/", 0) == 0) shown = shown.substr(top.size() + 1);
+    else if (top == "/" && !shown.empty() && shown[0] == '/') shown = shown.substr(1);
+    shown = upper(shown);
+    if (shown.size() > 44) shown = "..." + shown.substr(shown.size() - 41);
+    setText(MP_DIR, shown);
+    std::string names[kPlaces];
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        for (int k = 0; k < kPlaces; ++k) names[k] = places_[k];
+    }
+    for (int k = 0; k < kPlaces; ++k)
+    {
+        std::string t = names[k].empty() ? std::string("EMPTY") : upper(std::filesystem::path(cleanDir(names[k])).filename().string());
+        if (t.empty()) t = "/";
+        if (t.size() > 14) t = t.substr(0, 13) + ".";
+        setText(MP_PLACE0 + k, t);
+    }
 }
 
 // A touch on the SLICE pages' waveform, by the TOUCH mode on the LCD:
@@ -485,7 +616,7 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
 void ChoppageMpcApp::setParam(int index, float plain)
 {
     if (index >= 0 && index < kMpcNumParams) values_[index].store(plain, std::memory_order_relaxed);
-    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY) && plain >= 0.5f)
+    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY || index == MP_PLACE_TAP) && plain >= 0.5f)
     {
         // a touch: kept until the worker's next tick, so a tap shorter than a tick still counts
         std::lock_guard<std::mutex> l(tapMutex_);
@@ -567,9 +698,11 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
 
 std::string ChoppageMpcApp::browserText(int k) const
 {
-    if (browser_.empty()) return "NO BREAKS IN CONTENT/BREAKS";
+    if (browser_.empty()) return "EMPTY FOLDER";
     if (k < 0 || k >= (int)browser_.size()) return "-";
     const auto& e = browser_[(size_t)k];
+    if (e.isUp) return "[ .. ]  UP A FOLDER";
+    if (e.isDir) return "[ " + upper(e.name) + " ]";
     char buf[160];
     if (e.bpm > 0) std::snprintf(buf, sizeof buf, "%.0f  %s", e.bpm, upper(e.name).c_str());
     else std::snprintf(buf, sizeof buf, "%s", upper(e.name).c_str());
@@ -754,6 +887,11 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         typeKey(roundi(v));
         return;
     }
+    if (index == MP_PLACE_TAP)
+    {
+        if (roundi(v) >= 1) placeTap(roundi(v) - 1);
+        return;
+    }
     if (index == MP_SLICE_TAP)
     {
         if (roundi(v) >= 1) sliceTap(roundi(v) - 1);
@@ -767,6 +905,11 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const int n = (int)session_.browserEntries().size();
             const int pick = listTop_ + k;
+            if (pick < n && pick == roundi(seen_[MP_BROWSE]))
+            {
+                const auto entries = session_.browserEntries();
+                if (pick < (int)entries.size() && entries[(size_t)pick].isDir) { goFolder(entries[(size_t)pick].path); return; }
+            }
             if (pick < n) write(MP_BROWSE, (float)pick);
             syncList(true);
             return;
@@ -819,7 +962,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             {
                 for (int i = MP_SHOW_PAT; i <= MP_SHOW_DISK; ++i) if (i != index && seen_[i] != 0.0f) write(i, 0.0f);
                 write(MP_VIEW, (float)mine);
-                if (mine == 2) { chooseBreaksFolder(); session_.scanFolder(breaksDir_); }   // DISK: new files show
+                if (mine == 2) session_.listFolder(browseDir_, topDir_);   // DISK: new files show
             }
             else if (roundi(seen_[MP_VIEW]) == mine) write(MP_VIEW, 0.0f);
             break;
@@ -908,16 +1051,28 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const auto entries = session_.browserEntries();
             const int k = roundi(values_[MP_BROWSE].load());
+            if (k >= 0 && k < (int)entries.size() && entries[(size_t)k].isDir) { goFolder(entries[(size_t)k].path); break; }
             if (k >= 0 && k < (int)entries.size())
             {
                 session_.auditionStop();
                 session_.loadFile(slot, entries[(size_t)k].path);
                 say("LOADING " + upper(entries[(size_t)k].name));
             }
-            else say("PUT WAV / AIFF / REX BREAKS IN " + breaksLabel_);
+            else say("NO BREAKS IN THIS FOLDER");
             break;
         }
         case MP_DEMO: session_.loadDemo(slot); say("DEMO BREAK"); break;
+        case MP_UP:
+        {
+            auto clean = [](std::string d) { while (d.size() > 1 && d.back() == '/') d.pop_back(); return d; };
+            const std::string here = clean(browseDir_);
+            const std::string parent = std::filesystem::path(here).parent_path().string();
+            if (here == clean(topDir_) || parent.empty() || parent == here) { say("THESE ARE THE DRIVES"); break; }
+            goFolder(parent);
+            break;
+        }
+        case MP_REFRESH: session_.listFolder(browseDir_, topDir_); say("READING THE FOLDER AGAIN"); break;
+        case MP_PLACE_STORE: if (v >= 0.5f) say("NOW TAP A PLACE KEY TO STORE THIS FOLDER THERE"); break;
         case MP_AKAIZE:
         {
             const auto& s = session_.slot(slot);
@@ -1178,8 +1333,11 @@ void ChoppageMpcApp::syncReadouts(bool force)
 
     // browser (BROWSE knob text)
     const auto entries = session_.browserEntries();
-    if (force || (int)entries.size() != lastBrowserCount_)
+    const std::string folder = session_.browserFolder();
+    if (force || (int)entries.size() != lastBrowserCount_ || folder != lastBrowserDir_)
     {
+        lastBrowserDir_ = folder;
+        listKey_ = ~0ull;
         {
             std::lock_guard<std::mutex> l(textMutex_);
             browser_ = entries;
@@ -1296,7 +1454,7 @@ void ChoppageMpcApp::syncList(bool force)
     {
         const int i = listTop_ + k;
         std::string line;
-        if (count == 0 && k == 0) line = "PUT BREAKS IN " + breaksLabel_;
+        if (count == 0 && k == 0) line = session_.browserScanning() ? "READING..." : "NO BREAKS OR FOLDERS HERE";
         else if (i < count)
         {
             std::string t;
@@ -1397,7 +1555,15 @@ void ChoppageMpcApp::syncAudition()
 {
     // The DISK section open: the file under the jog wheel plays after a short pause (so scrolling doesn't stutter);
     // closed: quiet.
-    const bool disk = roundi(seen_[MP_VIEW]) == 2;
+    // On the DISK page (MAIN's DISK section not open) a break plays while the jog wheel is being turned, and goes
+    // quiet about 10 seconds after the last turn.
+    const bool section = roundi(seen_[MP_VIEW]) == 2;
+    const int now = roundi(seen_[MP_BROWSE]);
+    if (now != browsePickSeen_) { browsePickSeen_ = now; browseIdle_ = 0; }
+    else if (browseIdle_ < 100000) ++browseIdle_;
+    if (sectionWas_ && !section) browseIdle_ = 100000;      // the DISK section closed: quiet now
+    sectionWas_ = section;
+    const bool disk = section || browseIdle_ < 300;
     if (!disk)
     {
         if (!session_.auditioning().empty()) session_.auditionStop();
@@ -1409,7 +1575,7 @@ void ChoppageMpcApp::syncAudition()
     if (auditionWait_ > 0 && --auditionWait_ == 0)
     {
         const auto entries = session_.browserEntries();
-        if (pick >= 0 && pick < (int)entries.size() && session_.auditioning() != entries[(size_t)pick].path)
+        if (pick >= 0 && pick < (int)entries.size() && !entries[(size_t)pick].isDir && session_.auditioning() != entries[(size_t)pick].path)
             if (!session_.audition(entries[(size_t)pick].path)) { message_ = "CAN'T READ " + upper(entries[(size_t)pick].name); messageTicks_ = 90; }
     }
 }

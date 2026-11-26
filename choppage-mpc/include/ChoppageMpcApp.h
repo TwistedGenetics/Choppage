@@ -79,6 +79,16 @@ private:
     std::string breaksDir_;                         // where DISK lists breaks from (see the constructor)
     std::string breaksLabel_ = "CONTENT/BREAKS";    // the same, for the screen
     void chooseBreaksFolder();
+    // DISK: any folder on the MPC's drives (top = the folder holding the drives), 4 favourite places
+    std::string browseDir_, topDir_, placesFile_;
+    std::string places_[kPlaces];                   // guarded by textMutex_ (formatValue reads names via text_)
+    std::string lastBrowserDir_;
+    void setupFolders();
+    void goFolder(const std::string& dir, bool remember = true);
+    void loadPlaces();
+    void savePlaces();
+    void placeTap(int k);
+    void syncPlaces();
     // presets (VST2 Plugins/Content/Presets/CHOPPAGE)
     static constexpr int kPresetNameMax = 24;
     std::string presetsDir_;
@@ -120,6 +130,8 @@ private:
     uint64_t listKey_ = ~0ull;
     uint64_t seqKey_ = ~0ull;
     int auditionWant_ = -1, auditionWait_ = 0;
+    int browsePickSeen_ = 0, browseIdle_ = 100000;
+    bool sectionWas_ = false;
     std::string message_;
     int messageTicks_ = 0;
 

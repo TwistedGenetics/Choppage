@@ -47,6 +47,12 @@ The sections:
 - **FX** puts each pad's setting knob under it.
 - **LOAD** opens the DISK section: the files in `VST2 Plugins/Content/Breaks` with their tempo (read again each time DISK opens, so new files show). Tap the list, then **turn the jog wheel**: each break plays as you land on it. **Push the jog wheel** to load it into the selected break. DEMO BREAK and AKAIZE TO MPC BPM are beside the list.
 
+**DISK page** (press MAIN again): browse **any folder on the MPC's drives**, your own samples folders included.
+- The top line shows the folder. **UP** goes to the folder above; at the top you see the drives (internal SSD, SD card, USB).
+- The list shows `[ .. ]` (up), the folders as `[ NAME ]`, then the breaks with their tempo. Turn the jog wheel to hear a break; **push** it (or **LOAD / OPEN**) to load the break, or to open the folder. Tapping a picked folder again opens it too.
+- **PLACES**: four keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
+- The places and the last folder are kept in the plugin's own `Content/places.txt`, so the next load opens where you left off. **REFRESH** reads the folder again (after copying files in).
+
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Chopping by touch**: the **SELECT / ADD / DEL** keys on the LCD say what a touch on the waveform does.

@@ -537,5 +537,14 @@
   {"index": 535, "id": "preSave", "name": "Save New", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 536, "id": "preOver", "name": "Save Over", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 537, "id": "preName", "name": "Name", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
-  {"index": 538, "id": "preKey", "name": "Key", "kind": "int", "min": 0, "max": 44, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false}
+  {"index": 538, "id": "preKey", "name": "Key", "kind": "int", "min": 0, "max": 44, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 539, "id": "dir", "name": "Folder", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 540, "id": "up", "name": "Up", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 541, "id": "refresh", "name": "Refresh", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 542, "id": "placeTap", "name": "Place Tap", "kind": "int", "min": 0, "max": 4, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 543, "id": "placeStore", "name": "Store Place", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 544, "id": "place1", "name": "Place 1", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 545, "id": "place2", "name": "Place 2", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 546, "id": "place3", "name": "Place 3", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 547, "id": "place4", "name": "Place 4", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false}
 ]

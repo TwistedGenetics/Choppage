@@ -215,7 +215,7 @@ namespace bc
         for (;;)
         {
             std::optional<Job> job;
-            std::optional<std::string> scan;
+            std::optional<ScanJob> scan;
             Decoder dec;
             {
                 std::unique_lock<std::mutex> l (qMutex);
@@ -242,40 +242,90 @@ namespace bc
             }
             else if (scan)
             {
-                std::vector<BrowserEntry> found;
+                std::vector<BrowserEntry> found, dirs;
                 std::error_code ec;
-                if (fs::is_directory (*scan, ec))
+                auto addFile = [&] (const fs::path& path) -> bool
                 {
-                    for (auto it = fs::recursive_directory_iterator (*scan, fs::directory_options::skip_permission_denied, ec);
+                    const auto p = path.string();
+                    std::string ext = path.extension().string();
+                    for (auto& ch : ext) ch = (char) std::tolower ((unsigned char) ch);
+                    if (ext != ".wav" && ext != ".aif" && ext != ".aiff" && ext != ".flac" && ext != ".mp3"
+                        && ext != ".rx2" && ext != ".rex") return false;
+                    BrowserEntry e;
+                    e.path = p;
+                    e.name = AudioFile::baseName (p);
+                    const auto info = AudioFile::readInfo (p);
+                    e.seconds = info.ok && info.sampleRate > 0 ? (double) info.frames / info.sampleRate : 0.0;
+                    const auto t = Analysis::estimateTempo (e.seconds > 0 ? e.seconds : 60.0 / 170.0 * 8.0, e.name);
+                    e.bpm = e.seconds > 0 ? t.bpm : 0.0;
+                    e.bars = e.seconds > 0 ? t.bars : 0;
+                    if (info.bpm > 1.0) { e.bpm = info.bpm; e.bars = info.bars; }   // REX: from the file
+                    found.push_back (e);
+                    return true;
+                };
+                if (scan->flat)
+                {
+                    for (fs::directory_iterator it (scan->folder, fs::directory_options::skip_permission_denied, ec), end;
+                         ! ec && it != end; it.increment (ec))
+                    {
+                        const auto name = it->path().filename().string();
+                        if (name.empty() || name[0] == '.') continue;          // hidden / system
+                        std::error_code e2;
+                        if (it->is_directory (e2))
+                        {
+                            BrowserEntry d;
+                            d.path = it->path().string();
+                            d.name = name;
+                            d.isDir = true;
+                            dirs.push_back (d);
+                        }
+                        else if (it->is_regular_file (e2)) addFile (it->path());
+                        if (found.size() + dirs.size() >= 2000) break;
+                    }
+                    std::sort (dirs.begin(), dirs.end(), [] (const BrowserEntry& a, const BrowserEntry& b)
+                    {
+                        std::string x = a.name, y = b.name;
+                        for (auto& c : x) c = (char) std::tolower ((unsigned char) c);
+                        for (auto& c : y) c = (char) std::tolower ((unsigned char) c);
+                        return x < y;
+                    });
+                }
+                else if (fs::is_directory (scan->folder, ec))
+                {
+                    for (auto it = fs::recursive_directory_iterator (scan->folder, fs::directory_options::skip_permission_denied, ec);
                          it != fs::recursive_directory_iterator(); it.increment (ec))
                     {
                         if (ec) break;
                         if (it.depth() > 3) { it.disable_recursion_pending(); continue; }
                         if (! it->is_regular_file (ec)) continue;
-                        const auto p = it->path().string();
-                        std::string ext = it->path().extension().string();
-                        for (auto& ch : ext) ch = (char) std::tolower ((unsigned char) ch);
-                        if (ext != ".wav" && ext != ".aif" && ext != ".aiff" && ext != ".flac" && ext != ".mp3"
-                            && ext != ".rx2" && ext != ".rex") continue;
-                        BrowserEntry e;
-                        e.path = p;
-                        e.name = AudioFile::baseName (p);
-                        const auto info = AudioFile::readInfo (p);
-                        e.seconds = info.ok && info.sampleRate > 0 ? (double) info.frames / info.sampleRate : 0.0;
-                        const auto t = Analysis::estimateTempo (e.seconds > 0 ? e.seconds : 60.0 / 170.0 * 8.0, e.name);
-                        e.bpm = e.seconds > 0 ? t.bpm : 0.0;
-                        e.bars = e.seconds > 0 ? t.bars : 0;
-                        if (info.bpm > 1.0) { e.bpm = info.bpm; e.bars = info.bars; }   // REX: from the file
-                        found.push_back (e);
+                        addFile (it->path());
                         if (found.size() >= 2000) break;
                     }
                 }
                 std::sort (found.begin(), found.end(), [] (const BrowserEntry& a, const BrowserEntry& b)
                            { return a.bpm != b.bpm ? a.bpm < b.bpm : a.name < b.name; });
+                if (scan->flat)
+                {
+                    std::vector<BrowserEntry> all;
+                    auto clean = [] (std::string p) { while (p.size() > 1 && p.back() == '/') p.pop_back(); return p; };
+                    const std::string here = clean (scan->folder), top = clean (scan->top);
+                    const auto parent = fs::path (here).parent_path().string();
+                    if ((top.empty() || here != top) && ! parent.empty() && parent != here)
+                    {
+                        BrowserEntry up;
+                        up.path = parent;
+                        up.name = "..";
+                        up.isDir = up.isUp = true;
+                        all.push_back (up);
+                    }
+                    all.insert (all.end(), dirs.begin(), dirs.end());
+                    all.insert (all.end(), found.begin(), found.end());
+                    found = std::move (all);
+                }
                 {
                     std::lock_guard<std::recursive_mutex> l (mutex);
                     browser = std::move (found);
-                    browserDir = *scan;
+                    browserDir = scan->folder;
                 }
                 scanning = false;
                 ++uiVersion;
@@ -932,7 +982,14 @@ namespace bc
     void Session::scanFolder (const std::string& folder)
     {
         scanning = true;
-        { std::lock_guard<std::mutex> q (qMutex); scanJobs.push_back (folder); }
+        { std::lock_guard<std::mutex> q (qMutex); scanJobs.push_back ({ folder, {}, false }); }
+        qCv.notify_one();
+    }
+
+    void Session::listFolder (const std::string& folder, const std::string& top)
+    {
+        scanning = true;
+        { std::lock_guard<std::mutex> q (qMutex); scanJobs.push_back ({ folder, top, true }); }
         qCv.notify_one();
     }
 

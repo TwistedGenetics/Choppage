@@ -49,7 +49,7 @@ namespace bc
             uint32_t version = 0;
         };
 
-        struct BrowserEntry { std::string path, name; double bpm = 0, seconds = 0; int bars = 0; };
+        struct BrowserEntry { std::string path, name; double bpm = 0, seconds = 0; int bars = 0; bool isDir = false; bool isUp = false; };
 
         enum class SliceField { pitch, gate, stretch, reverse, stutter, trans, xfade, level };
 
@@ -136,6 +136,8 @@ namespace bc
         void auditionStop();
         std::string auditioning() const { return auditionPath; }
         void scanFolder (const std::string& folder);
+        // One folder only, for browsing: ".." first (unless folder == top), then its sub-folders (A-Z), then its breaks.
+        void listFolder (const std::string& folder, const std::string& top);
         std::vector<BrowserEntry> browserEntries() const;
         std::string browserFolder() const;
         bool browserScanning() const { return scanning.load(); }
@@ -206,7 +208,8 @@ namespace bc
         std::condition_variable qCv;
         std::deque<Job> jobs;
         std::deque<Done> done;
-        std::deque<std::string> scanJobs;
+        struct ScanJob { std::string folder, top; bool flat = false; };
+        std::deque<ScanJob> scanJobs;
         bool quit = false;
         std::atomic<int> pending { 0 };
         std::atomic<bool> scanning { false };

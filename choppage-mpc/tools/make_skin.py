@@ -650,7 +650,7 @@ def pages():
     ]
 
 # ---------------------------------------------------------------- build
-TAP_PARAMS = ("waveTap", "listTap", "seqTap", "sliceTap")   # tap areas: the MPC resets them when the finger lifts
+TAP_PARAMS = ("waveTap", "listTap", "seqTap", "sliceTap", "placeTap")   # tap areas: the MPC resets them when the finger lifts
 
 class Builder:
     def __init__(self, params, out):
@@ -1215,7 +1215,7 @@ class Builder:
         sec_disk = Image.new("RGBA", (W, H - SY), (0, 0, 0, 0))
         LW_, LH_, line_h = 1036, 192, 32
         sec_disk.paste(box_image(LW_, LH_), (10, 0))
-        kids.append(self.caption_at("TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD", "browse",
+        kids.append(self.caption_at("TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD OR OPEN A FOLDER  -  MAIN AGAIN: DISK PAGE", "browse",
                                     (24, SY + 2, LW_ - 28, 26), 20, vis=vv, colour=argb((150, 24, 30))))
         for k_ in range(5):
             kids.append(self.label_at("list%d" % (k_ + 1), (24, SY + 30 + k_ * line_h, LW_ - 28, line_h), 26, VALUE, vis=vv))
@@ -1247,6 +1247,76 @@ class Builder:
              5: "break", 6: "slice", 7: "slMove", 8: "browse",
              1: "stutRate", 2: "rollRate", 3: "tapeMs", 4: "akCycLen"}
         qm = o(("Tab", 1), ("SubTab", 1), ("Bank Direction", "RowTopDown"),
+               ("Q-Links", o(*[("Q-Link %d" % i, self.p(q[i])["index"]) for i in range(1, 17)])))
+        return tab, qm
+
+    # ================================================================ DISK (MAIN again): any folder, 4 places
+    def disk_tab(self):
+        """The folder shown, UP; the list (5 big lines: tap a line, turn the jog wheel to hear, push to load a break
+        or open a folder; tap a picked folder again to open it); LOAD, REFRESH, DEMO; STORE and the 4 PLACE keys."""
+        kids = []
+        bg = Image.new("RGBA", (W, H), PANEL + (255,))
+        # the folder shown
+        bg.paste(box_image(1016, 60), (10, 8))
+        kids.append(self.label_at("dir", (24, 8, 990, 60), 32))
+        kids.append(self.flip_at("up", (1036, 8, 234, 60), self.key_png("UP", 234, 60)))
+        # the list
+        LX, LY, LW_, line_h = 10, 76, 1016, 62
+        LH_ = 32 + 5 * line_h + 6
+        bg.paste(box_image(LW_, LH_), (LX, LY))
+        kids.append(self.caption_at("TURN THE JOG WHEEL TO HEAR A BREAK  -  PUSH IT TO LOAD A BREAK OR OPEN A FOLDER", "browse",
+                                    (LX + 14, LY + 2, LW_ - 28, 28), 20, colour=argb((150, 24, 30))))
+        for k_ in range(5):
+            kids.append(self.label_at("list%d" % (k_ + 1), (LX + 14, LY + 32 + k_ * line_h, LW_ - 28, line_h), 34))
+        if "clear_bigline.png" not in self.images:
+            self.save("clear_bigline.png", clear_png(LW_, line_h))
+        lines = [entry("line %d" % k_, "Button", o(("version", 2), ("onImage", "clear_bigline.png"), ("offImage", "clear_bigline.png"),
+                                                   ("buttonId", k_ + 1), ("numButtonsInGroup", 6), ("handleName", "Tap"),
+                                                   ("gestureBehaviour", "Instant")),
+                       bounds((0, 32 + k_ * line_h, LW_, line_h))) for k_ in range(5)]
+        self.define("cp disk page list", component([focus_entry()] + lines,
+                                                   [act("Enter Pressed", "Toggle Switch", "Load"), act("Mouse Down", "Q-Link", "Data")]))
+        kids.append(entry("browse", "cp disk page list", o(("version", 1), ("handleName", "Data")),
+                          bounds((LX, LY, LW_, LH_), focus="Yes", invalid="Hide"),
+                          remap=[("Data", self.h("browse")), ("Tap", "ResetOnGestureEnd/" + self.h("listTap")), ("Load", self.h("load"))]))
+        # beside the list
+        bx, bw = 1036, 234
+        kids.append(self.flip_at("load", (bx, LY, bw, 110), self.key_png("LOAD /\nOPEN", bw, 110)))
+        kids.append(self.flip_at("refresh", (bx, LY + 120, bw, 90), self.key_png("REFRESH", bw, 90)))
+        kids.append(self.flip_at("demo", (bx, LY + 220, bw, 98), self.key_png("DEMO\nBREAK", bw, 98)))
+        # places
+        PY = LY + LH_ + 10
+        kids.append(self.caption_at("PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)", "placeStore",
+                                    (14, PY, 1250, 26), 20))
+        ky, kh = PY + 30, H - (PY + 30) - 8
+        kids.append(self.flip_at("placeStore", (10, ky, 230, kh), self.key_png("STORE", 230, kh), qlink=False))
+        pw = (1270 - 250 - 3 * 8) // 4
+        cap = "placecap_%dx%d.png" % (pw, kh)
+        if cap not in self.images:
+            self.save(cap, keycap(pw, kh, "", False, led=False))
+        imgs = []
+        for k_ in range(4):
+            x = 250 + k_ * (pw + 8)
+            kids.append(self.image_at(cap, (x, ky, pw, kh), name="place key"))
+            kids.append(self.caption_at("PLACE %d" % (k_ + 1), "place%d" % (k_ + 1), (x + 12, ky + 6, pw - 24, 24), 20))
+            kids.append(self.label_at("place%d" % (k_ + 1), (x + 8, ky + 30, pw - 16, kh - 36), 30,
+                                      just="horizontallyCentred verticallyCentred"))
+        if "clear_place.png" not in self.images:
+            self.save("clear_place.png", clear_png(pw, kh))
+        for k_ in range(4):
+            imgs.append(("clear_place.png", "clear_place.png", (k_ * (pw + 8), 0, pw, kh)))
+        kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, ids=[1, 2, 3, 4], name="cp place keys",
+                                  focus=False, qlink=False))
+        self.save("bg_disk.png", bg)
+        kids.insert(0, self.image_at("bg_disk.png", (0, 0, W, H), name="background"))
+        tab = o(("version", 1), ("tabName", "DISK"), ("fnKeyIndex", 0), ("fnKeySubIndex", 1),
+                ("componentDefinition", component(kids, colour=argb(PANEL))),
+                ("qlinkBoundsData", ["10 76 1016 352", "1036 76 234 318", "10 446 1260 174", "10 8 1260 60"]))
+        q = {1: "browse", 2: "break", 3: "volume", 4: "srate",
+             5: "filter", 6: "dist", 7: "crush", 8: "reverb",
+             9: "patAmount", 10: "fxAmount", 11: "slice", 12: "slMove",
+             13: "stutRate", 14: "rollRate", 15: "tapeMs", 16: "akCycLen"}
+        qm = o(("Tab", 1), ("SubTab", 2), ("Bank Direction", "RowTopDown"),
                ("Q-Links", o(*[("Q-Link %d" % i, self.p(q[i])["index"]) for i in range(1, 17)])))
         return tab, qm
 
@@ -1473,7 +1543,7 @@ class Builder:
         self.discrete("lcdColour")
         tabs, qmaps = [], []
         self._seq_windows = []
-        for t, q in (self.main_tab(), self.slice_tab(0), self.slice_tab(1), self.seq_tab()):
+        for t, q in (self.main_tab(), self.disk_tab(), self.slice_tab(0), self.slice_tab(1), self.seq_tab()):
             tabs.append(t)
             qmaps.append(q)
         for page in pages():

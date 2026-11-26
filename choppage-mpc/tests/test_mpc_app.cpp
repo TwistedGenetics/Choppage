@@ -183,14 +183,16 @@ int main(int argc, char** argv)
     app.formatValue(MP_INFO_BPM, 0, t);
     CHECK(t.find("BPM") != std::string::npos, ("bpm readout: " + t).c_str());
     app.formatValue(MP_BROWSE, 0, t);
-    CHECK(t.find("136") == 0, ("browser entry 1: " + t).c_str());
+    CHECK(t.find("..") != std::string::npos, ("browser entry 1 is the way up: " + t).c_str());
+    app.formatValue(MP_BROWSE, 1, t);
+    CHECK(t.find("136") == 0, ("browser entry 2: " + t).c_str());
     app.formatValue(P_VOLUME, 0.0f, t);
     CHECK(t.find("dB") != std::string::npos || t.find("DB") != std::string::npos, ("core value text: " + t).c_str());
 
     std::printf("triggers\n");
     set(app, MP_BREAK, 1);
     CHECK(app.session().selectedSlot() == 1, "BREAK selects the break");
-    set(app, MP_BROWSE, 1);
+    set(app, MP_BROWSE, 2);
     push(app);
     CHECK(app.getParam(MP_DICE_PAT) == 0.0f, "keys never stick: the plugin leaves them to the MPC");
     CHECK(app.session().slot(1).content != nullptr && app.session().slot(1).content->name.find("174") != std::string::npos,
@@ -412,6 +414,87 @@ int main(int argc, char** argv)
         const auto e = a3.session().browserEntries();
         CHECK(!e.empty() && a3.session().browserFolder() == p2.shared, "DISK lists the shared folder");
         p2.app = nullptr;
+    }
+    std::printf("DISK: folders and places\n");
+    {
+        // <root>/MPC/VST2 Plugins/<plugin>/Content and <root>/MPC/Samples/Jungle: root is the drives' folder
+        namespace fs = std::filesystem;
+        const auto root = fs::temp_directory_path() / "choppage-drives";
+        fs::remove_all(root);
+        const auto content = root / "MPC" / "VST2 Plugins" / "Twisted Genetics - VST - CHOPPAGE" / "Content";
+        fs::create_directories(content / "Breaks");
+        fs::create_directories(root / "MPC" / "Samples" / "Jungle");
+        fs::create_directories(root / "SD CARD");
+        fs::copy_file(dir / "Breaks" / "break_174.wav", root / "MPC" / "Samples" / "Jungle" / "amen_170.wav");
+        FakePlatform p3;
+        p3.dir = content.string();
+        auto waitList = [](ChoppageMpcApp& a, const fs::path& want)
+        {
+            for (int i = 0; i < 400; ++i)
+            {
+                a.waitIdle(); a.tick();
+                if (fs::path(a.session().browserFolder()) == want && !a.session().browserScanning()) break;
+                std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            }
+            for (int i = 0; i < 4; ++i) a.tick();
+        };
+        auto text = [](ChoppageMpcApp& a, int index, float v = 0) { std::string t; a.formatValue(index, v, t); return t; };
+        {
+            ChoppageMpcApp a5(p3, false);
+            p3.app = &a5;
+            waitList(a5, content / "Breaks");
+            CHECK(text(a5, MP_PLACE0) == "BREAKS", ("PLACE 1 starts as the breaks folder: " + text(a5, MP_PLACE0)).c_str());
+            CHECK(text(a5, MP_PLACE0 + 1) == "EMPTY", "the other places are empty");
+            // up to the drives: Breaks -> Content -> <plugin> -> VST2 Plugins -> MPC -> the drives
+            for (int k = 0; k < 5; ++k) { press(a5, MP_UP); waitList(a5, fs::path(a5.session().browserFolder()).parent_path()); }
+            waitList(a5, root);
+            CHECK(fs::path(a5.session().browserFolder()) == root, "UP climbs to the drives");
+            CHECK(text(a5, MP_DIR) == "DRIVES", ("the folder readout at the top: " + text(a5, MP_DIR)).c_str());
+            const auto top = a5.session().browserEntries();
+            CHECK(top.size() == 2 && !top[0].isUp && top[0].name == "MPC" && top[1].name == "SD CARD", "the top lists the drives, no way up");
+            press(a5, MP_UP);
+            CHECK(fs::path(a5.session().browserFolder()) == root, "no higher than the drives");
+            // into MPC, then Samples, then Jungle with the jog wheel's push
+            auto open = [&](const std::string& name)
+            {
+                const auto e = a5.session().browserEntries();
+                for (size_t i = 0; i < e.size(); ++i)
+                    if (e[i].name == name) { set(a5, MP_BROWSE, (float)i); push(a5); break; }
+                waitList(a5, fs::path(a5.session().browserFolder()) / name);
+            };
+            open("MPC"); open("Samples"); open("Jungle");
+            CHECK(fs::path(a5.session().browserFolder()) == root / "MPC" / "Samples" / "Jungle", "push on a folder opens it");
+            CHECK(text(a5, MP_DIR) == "MPC/SAMPLES/JUNGLE", ("the folder readout: " + text(a5, MP_DIR)).c_str());
+            const auto e = a5.session().browserEntries();
+            CHECK(e.size() == 2 && e[0].isUp && e[1].name == "amen_170", "the folder: up, then its break");
+            // store it in PLACE 2
+            set(a5, MP_PLACE_STORE, 1);
+            press(a5, MP_PLACE_TAP, 2);
+            CHECK(a5.getParam(MP_PLACE_STORE) < 0.5f && text(a5, MP_PLACE0 + 1) == "JUNGLE", "STORE then PLACE 2 keeps the folder");
+            press(a5, MP_PLACE_TAP, 1);
+            waitList(a5, content / "Breaks");
+            CHECK(fs::path(a5.session().browserFolder()) == content / "Breaks", "PLACE 1 goes back to the breaks");
+            press(a5, MP_PLACE_TAP, 3);
+            CHECK(fs::path(a5.session().browserFolder()) == content / "Breaks", "an empty place goes nowhere");
+            press(a5, MP_PLACE_TAP, 2);
+            waitList(a5, root / "MPC" / "Samples" / "Jungle");
+            set(a5, MP_BREAK, 2);
+            set(a5, MP_BROWSE, 1);
+            push(a5);
+            settle(a5);
+            CHECK(a5.session().slot(2).file.find("amen_170") != std::string::npos, "a break loads from any folder");
+            p3.app = nullptr;
+        }
+        CHECK(fs::exists(content / "places.txt") && !fs::exists(root / "MPC" / "VST2 Plugins" / "Content"),
+              "places are kept in the plugin's own Content; nothing new in VST2 Plugins");
+        {
+            ChoppageMpcApp a6(p3, false);
+            p3.app = &a6;
+            waitList(a6, root / "MPC" / "Samples" / "Jungle");
+            CHECK(fs::path(a6.session().browserFolder()) == root / "MPC" / "Samples" / "Jungle", "the next load opens the last folder");
+            CHECK(text(a6, MP_PLACE0 + 1) == "JUNGLE", "the places come back");
+            p3.app = nullptr;
+        }
     }
     std::printf("akaizer page\n");
     {
@@ -660,16 +743,16 @@ int main(int argc, char** argv)
     std::printf("DISK: jog to hear, push to load\n");
     {
         set(app, MP_SHOW_DISK, 1);
-        set(app, MP_BROWSE, 0);
+        set(app, MP_BROWSE, 1);
         for (int i = 0; i < 10; ++i) app.tick();
         CHECK(app.session().auditioning().find("136") != std::string::npos, "the browsed break plays");
-        set(app, MP_BROWSE, 1);
+        set(app, MP_BROWSE, 2);
         for (int i = 0; i < 10; ++i) app.tick();
         CHECK(app.session().auditioning().find("174") != std::string::npos, "the next one plays as the jog moves");
         set(app, MP_BREAK, 6);
         push(app);                                 // the jog wheel's push
         CHECK(app.session().auditioning().empty() && app.session().slot(6).file.find("174") != std::string::npos, "push: loads it into the break, the audition stops");
-        set(app, MP_BROWSE, 0);
+        set(app, MP_BROWSE, 1);
         for (int i = 0; i < 10; ++i) app.tick();
         set(app, MP_SHOW_DISK, 0);
         CHECK(app.session().auditioning().empty(), "closing DISK stops the audition");

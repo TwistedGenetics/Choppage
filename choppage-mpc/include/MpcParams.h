@@ -92,7 +92,15 @@ enum MpcParam : int
     MP_PRE_OVER,                // trigger: save over the preset shown
     MP_PRE_NAME,                // readout: the name being typed
     MP_PRE_KEY,                 // the name keyboard: key id while touched (1-40 characters, 41 SPACE ... 44 CAPS)
-    kMpcParamEnd
+    // ---- 0.10: browse any folder on the MPC's drives, with 4 favourite places
+    MP_DIR,                     // readout: the folder the DISK list shows
+    MP_UP,                      // trigger: the folder above
+    MP_REFRESH,                 // trigger: read the folder again
+    MP_PLACE_TAP,               // a tap on a PLACE key: 1-4 (springs back to 0)
+    MP_PLACE_STORE,             // on: the next PLACE key tapped stores the folder shown
+    MP_PLACE0,                  // readouts: the 4 places' names
+    MP_PLACE_END = MP_PLACE0 + 4,
+    kMpcParamEnd = MP_PLACE_END
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 
@@ -107,6 +115,7 @@ constexpr int kWaveLevels = 12;
 constexpr int kWaveFrames = 4 * 3 * 2 * kWaveLevels;
 constexpr int kTabFrames = 15;
 constexpr int kListLines = 5;
+constexpr int kPlaces = 4;
 inline int waveFrame(int theme, int look, int mark, int level) { return ((theme * 3 + look) * 2 + mark) * kWaveLevels + level; }
 inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
 
