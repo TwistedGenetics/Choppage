@@ -21049,7 +21049,7 @@
 }
 },
 {
-"key": "cp zoom 0",
+"key": "cp hold lit lcdbtn_0_zoom_all_128x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -21100,16 +21100,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
 "onImage": "lcdbtn_0_zoom_all_128x40_on.png",
-"offImage": "lcdbtn_0_zoom_all_128x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 2,
+"offImage": "lcdbtn_0_zoom_all_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21124,21 +21124,72 @@
 "boundsType": "Absolute",
 "bounds": "0 0 128 40"
 }
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_0_zoom_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 1",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
 "onImage": "lcdbtn_0_zoom_slice_128x40_on.png",
 "offImage": "lcdbtn_0_zoom_slice_128x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 2,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21151,14 +21202,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "134 0 128 40"
+"bounds": "0 0 128 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp zoom 1",
+"key": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -21209,16 +21260,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_zoom_all_128x40_on.png",
-"offImage": "lcdbtn_1_zoom_all_128x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 2,
+"onImage": "lcdbtn_0_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_0_zoom_all_128x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21233,21 +21284,392 @@
 "boundsType": "Absolute",
 "bounds": "0 0 128 40"
 }
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_0_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 1",
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_0_slice_128x40_on.png",
+"offImage": "lcdbtn_0_slice_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_0_start_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_0_start_128x40_on.png",
+"offImage": "lcdbtn_0_start_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_0_end_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_0_end_128x40_on.png",
+"offImage": "lcdbtn_0_end_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_1_zoom_all_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_1_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_1_zoom_all_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_1_zoom_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
 "onImage": "lcdbtn_1_zoom_slice_128x40_on.png",
 "offImage": "lcdbtn_1_zoom_slice_128x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 2,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21260,14 +21682,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "134 0 128 40"
+"bounds": "0 0 128 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp zoom 2",
+"key": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -21318,16 +21740,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_zoom_all_128x40_on.png",
-"offImage": "lcdbtn_2_zoom_all_128x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 2,
+"onImage": "lcdbtn_1_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_1_zoom_all_128x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21342,21 +21764,392 @@
 "boundsType": "Absolute",
 "bounds": "0 0 128 40"
 }
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_1_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 1",
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_1_slice_128x40_on.png",
+"offImage": "lcdbtn_1_slice_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_1_start_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_1_start_128x40_on.png",
+"offImage": "lcdbtn_1_start_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_1_end_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_1_end_128x40_on.png",
+"offImage": "lcdbtn_1_end_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_2_zoom_all_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_2_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_2_zoom_all_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_2_zoom_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
 "onImage": "lcdbtn_2_zoom_slice_128x40_on.png",
 "offImage": "lcdbtn_2_zoom_slice_128x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 2,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21369,14 +22162,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "134 0 128 40"
+"bounds": "0 0 128 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp zoom 3",
+"key": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -21427,16 +22220,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_zoom_all_128x40_on.png",
-"offImage": "lcdbtn_3_zoom_all_128x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 2,
+"onImage": "lcdbtn_2_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_2_zoom_all_128x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21451,21 +22244,72 @@
 "boundsType": "Absolute",
 "bounds": "0 0 128 40"
 }
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_2_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 1",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_zoom_slice_128x40_on.png",
-"offImage": "lcdbtn_3_zoom_slice_128x40_off.png",
+"onImage": "lcdbtn_2_slice_128x40_on.png",
+"offImage": "lcdbtn_2_slice_128x40_on.png",
 "buttonId": 1,
-"numButtonsInGroup": 2,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21478,7 +22322,647 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "134 0 128 40"
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_2_start_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_2_start_128x40_on.png",
+"offImage": "lcdbtn_2_start_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_2_end_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_2_end_128x40_on.png",
+"offImage": "lcdbtn_2_end_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_3_zoom_all_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_3_zoom_all_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_3_zoom_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_zoom_slice_128x40_on.png",
+"offImage": "lcdbtn_3_zoom_slice_128x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_zoom_all_128x40_on.png",
+"offImage": "lcdbtn_3_zoom_all_128x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_3_slice_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_slice_128x40_on.png",
+"offImage": "lcdbtn_3_slice_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_3_start_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_start_128x40_on.png",
+"offImage": "lcdbtn_3_start_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lit lcdbtn_3_end_128x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_end_128x40_on.png",
+"offImage": "lcdbtn_3_end_128x40_on.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 128 40"
 }
 }
 ]
@@ -44117,10 +45601,6 @@
 "value": ["36-51 C1", "37-52 MPC", "48-63 C2"]
 },
 {
-"key": "Parameter 209",
-"value": ["ALL", "SLICE"]
-},
-{
 "key": "Parameter 386",
 "value": ["1-16", "17-32", "33-48", "49-64"]
 },
@@ -61280,8 +62760,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 0",
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_0_zoom_all_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61292,7 +62772,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 585"
 }
 ]
 },
@@ -61302,16 +62782,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 1",
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_0_zoom_slice_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61322,7 +62802,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 586"
 }
 ]
 },
@@ -61332,16 +62812,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 2",
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61352,7 +62832,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 585"
 }
 ]
 },
@@ -61362,16 +62842,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/4/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 3",
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_slice_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61382,7 +62862,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 586"
 }
 ]
 },
@@ -61392,8 +62872,848 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/4/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/8/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/8/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/12/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/12/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_1_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/5/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/5/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/9/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/9/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/13/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/13/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_2_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/6/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/6/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/10/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/10/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/14/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/14/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_3_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/7/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/7/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/11/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/11/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/15/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/15/16/Parameter 588"]
 }
 },
 {
@@ -69126,8 +71446,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 0",
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_0_zoom_all_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -69138,7 +71458,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 585"
 }
 ]
 },
@@ -69148,16 +71468,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 1",
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_0_zoom_slice_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -69168,7 +71488,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 586"
 }
 ]
 },
@@ -69178,16 +71498,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 2",
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -69198,7 +71518,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 585"
 }
 ]
 },
@@ -69208,16 +71528,16 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/4/16/Parameter 588"]
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "zoom",
-"type": "cp zoom 3",
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_slice_128x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -69228,7 +71548,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 209"
+"value": "ResetOnGestureEnd/Parameter 586"
 }
 ]
 },
@@ -69238,8 +71558,848 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "466 16 262 40",
-"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/4/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/8/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/8/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_0_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/12/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_0_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/12/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_1_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/5/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/5/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/9/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/9/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_1_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/13/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_1_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/13/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_2_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/6/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/6/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/10/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/10/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_2_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/14/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_2_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/14/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lit lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lcdbtn_3_zoom_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/7/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_slice_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/7/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/11/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_start_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/11/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomAll",
+"type": "cp hold lcdbtn_3_zoom_all_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 585"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "466 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/15/16/Parameter 588"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "zoomSlice",
+"type": "cp hold lit lcdbtn_3_end_128x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 586"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "600 16 128 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/15/16/Parameter 588"]
 }
 },
 {

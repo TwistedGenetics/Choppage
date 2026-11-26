@@ -931,7 +931,7 @@ class Builder:
         """A pad held for as long as it's touched: a one-button group in Hold mode, its handle wrapped in
         ResetOnGestureEnd so the parameter goes back to its default (off) when the finger lifts."""
         x, y, w, h = rect
-        key = "cp hold %s" % on_png
+        key = "cp hold %s" % on_png if off_png != on_png else "cp hold lit %s" % on_png
         self.define(key, component([
             focus_entry(),
             entry("pad", "Button", o(("version", 2), ("onImage", on_png), ("offImage", off_png), ("buttonId", 1),
@@ -1348,13 +1348,16 @@ class Builder:
                 kids.append(self.momentary_at(pid, (x, 16, 146, 40), on, off, v))
         kids += self.lcd_text("infoStatus", (26, 272, 900, 26), 22, style="SemiBold")
         kids += self.lcd_text("infoSlice", (930, 272, 324, 26), 22, "right verticallyCentred")
+        # ZOOM ALL, and ZOOM SLICE: pressed again it goes close up on the slice's START, again its END, again the
+        # slice. The keys show the level (lit) from zoomVis = LCD colour + 4 x (0 all, 1 slice, 2 start, 3 end).
         for t in range(4):
-            imgs = []
-            for i, z in enumerate(["ALL", "SLICE"]):
-                on, off = self.lcd_radio_pngs(t, "ZOOM " + z, 128, 40, 22)
-                imgs.append((on, off, (i * 134, 0, 128, 40)))
-            self.discrete("zoom")
-            kids.append(self.radio_at("zoom", (466, 16, 262, 40), imgs, self.vis_theme(t), name="cp zoom %d" % t))
+            for zs in range(4):
+                vz = ["IndexedEnabling/%d/16/%s" % (t + 4 * zs, self.h("zoomVis"))]
+                on, off = self.lcd_radio_pngs(t, "ZOOM ALL", 128, 40, 22)
+                kids.append(self.momentary_at("zoomAll", (466, 16, 128, 40), on, on if zs == 0 else off, vz))
+                text = ["ZOOM SLICE", "SLICE", "START", "END"][zs]
+                on, off = self.lcd_radio_pngs(t, text, 128, 40, 22)
+                kids.append(self.momentary_at("zoomSlice", (600, 16, 128, 40), on, on if zs > 0 else off, vz))
         kids += self.wave_block(62, 204, slice_page=True)
         # three rows of four, as on the grid pages
         if sub == 0:

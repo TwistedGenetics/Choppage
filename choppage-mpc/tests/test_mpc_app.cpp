@@ -646,6 +646,28 @@ int main(int argc, char** argv)
         for (int i = 0; i < 6; ++i) app.tick();
         CHECK(app.getParam(MP_QK0) > 0.99f, "the knob follows FILTER when it is moved elsewhere");
     }
+    std::printf("ZOOM SLICE: the slice, its start, its end\n");
+    {
+        set(app, MP_BREAK, 0);
+        press(app, MP_ZOOM_ALL_KEY);
+        CHECK(app.getParam(MP_ZOOM) == 0.0f, "ZOOM ALL");
+        press(app, MP_ZOOM_SLICE_KEY);
+        CHECK(app.getParam(MP_ZOOM) == 1.0f && app.getParam(MP_ZOOM_LEVEL) == 0.0f, "ZOOM SLICE: the slice");
+        press(app, MP_ZOOM_SLICE_KEY);
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 1.0f, "again: its start");
+        press(app, MP_ZOOM_SLICE_KEY);
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 2.0f, "again: its end");
+        press(app, MP_ZOOM_SLICE_KEY);
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 0.0f, "again: the slice");
+        set(app, MP_SLICE, 2);
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.0078f);
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 1.0f, "turning START goes close up on the start");
+        set(app, MP_SL_END, app.getParam(MP_SL_END) - 0.0078f);
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 2.0f, "turning END goes close up on the end");
+        app.tick();
+        CHECK(app.getParam(MP_ZOOM_VIS) == (float)((int)std::lround(app.getParam(P_LCD_COLOUR)) + 4 * 3), "the keys show END lit");
+        press(app, MP_ZOOM_ALL_KEY);
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);

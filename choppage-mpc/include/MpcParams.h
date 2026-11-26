@@ -109,7 +109,12 @@ enum MpcParam : int
     MP_QK0,                     // 16 knobs (0-1): what the MPC's Q-Links turn on every page
     MP_QT0 = MP_QK0 + 16,       // 16 targets: an entry in the list of parameters a knob can turn (0 = none)
     MP_QT_END = MP_QT0 + 16,
-    kMpcParamEnd = MP_QT_END
+    // ---- 0.13: ZOOM SLICE has three levels: the slice, its start close up, its end close up
+    MP_ZOOM_ALL_KEY = MP_QT_END,   // key: the whole break
+    MP_ZOOM_SLICE_KEY,             // key: ZOOM SLICE, again = its start, again = its end, again = the slice
+    MP_ZOOM_LEVEL,                 // 0 the slice, 1 its start, 2 its end (while ZOOM = SLICE)
+    MP_ZOOM_VIS,                   // for the LCD's zoom keys: theme + 4 x (0 all, 1 slice, 2 start, 3 end)
+    kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 

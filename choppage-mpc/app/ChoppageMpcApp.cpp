@@ -164,6 +164,10 @@ std::vector<MpcParamDef> buildDefs()
     for (int k = 0; k < kQLinks; ++k) F(("q" + std::to_string(k + 1)).c_str(), ("Q-Link " + std::to_string(k + 1)).c_str(), 0.0f, 1.0f, 0.0f);
     for (int k = 0; k < kQLinks; ++k)
     { auto* p = I(("qt" + std::to_string(k + 1)).c_str(), ("Q-Link " + std::to_string(k + 1) + " Target").c_str(), 0, 255, 0); p->uiOnly = true; }
+    T("zoomAll", "Zoom All");
+    T("zoomSlice", "Zoom Slice");
+    { auto* p = C("zoomLevel", "Zoom Level", { "SLICE", "START", "END" }, 0); p->uiOnly = true; }
+    { auto* p = I("zoomVis", "Zoom Keys", 0, 15, 0); p->uiOnly = true; }
     // the knobs start on the sound and the dice (what Program mode had before 0.11)
     const auto list = buildQList(v);
     const char* start[kQLinks] = { "filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
@@ -293,7 +297,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_QT0 + kQLinks, "parameter table");
+    static_assert(kMpcNumParams == MP_ZOOM_VIS + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -962,6 +966,12 @@ void ChoppageMpcApp::tick()
     syncSeq(false);
     syncAudition();
     syncQLinks();
+    {
+        // the LCD's zoom keys: which is lit, per LCD colour (one value: theme + 4 x state)
+        const int zs = roundi(seen_[MP_ZOOM]) == 0 ? 0 : 1 + std::clamp(roundi(seen_[MP_ZOOM_LEVEL]), 0, 2);
+        const float zv = (float)(std::clamp(roundi(values_[P_LCD_COLOUR].load()), 0, 3) + 4 * zs);
+        if (seen_[MP_ZOOM_VIS] != zv) write(MP_ZOOM_VIS, zv);
+    }
     if (messageTicks_ > 0 && --messageTicks_ == 0) message_.clear();
 }
 
@@ -1164,7 +1174,19 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_BREAK: session_.selectSlot(roundi(v)); break;
         case MP_BRK_PREV: session_.selectSlot((slot + kSlots - 1) % kSlots); break;
         case MP_BRK_NEXT: session_.selectSlot((slot + 1) % kSlots); break;
-        case MP_ZOOM: lastVersion_ = ~0u; break;   // syncWave follows (and the drag strip)
+        case MP_ZOOM: if (roundi(v) == 0) write(MP_ZOOM_LEVEL, 0.0f); lastVersion_ = ~0u; break;   // syncWave follows
+        case MP_ZOOM_ALL_KEY: write(MP_ZOOM, 0.0f); write(MP_ZOOM_LEVEL, 0.0f); lastVersion_ = ~0u; break;
+        case MP_ZOOM_SLICE_KEY:
+        {
+            // ZOOM SLICE, then its start, its end, the slice again ...
+            static const char* names[] = { "THE SLICE", "THE SLICE'S START", "THE SLICE'S END" };
+            const int lv = roundi(seen_[MP_ZOOM]) == 0 ? 0 : (roundi(seen_[MP_ZOOM_LEVEL]) + 1) % 3;
+            write(MP_ZOOM, 1.0f);
+            write(MP_ZOOM_LEVEL, (float)lv);
+            lastVersion_ = ~0u;
+            say(std::string("ZOOMED ON ") + names[lv]);
+            break;
+        }
         case MP_MUTE_GROUP: session_.setMuteGroup(slot, roundi(v)); break;
         case MP_WIN_PREV: case MP_WIN_NEXT:
         {
@@ -1204,6 +1226,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             if (s.content == nullptr) break;
             const int k = session_.selectedSlice();
             if (k + 1 >= s.content->slices.count) { say("THE LAST SLICE ENDS WITH THE BREAK"); lastVersion_ = ~0u; break; }
+            if (roundi(seen_[MP_ZOOM]) == 1 && roundi(seen_[MP_ZOOM_LEVEL]) != 2) { write(MP_ZOOM_LEVEL, 2.0f); lastVersion_ = ~0u; }   // close up on the end
             moveMarkerOf(k + 1, (int)std::lround(v * (double)s.content->buffer->numSamples));
             break;
         }
@@ -1223,6 +1246,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_SL_MOVE:
         {
             const auto& s = session_.slot(slot);
+            if (roundi(seen_[MP_ZOOM]) == 1 && roundi(seen_[MP_ZOOM_LEVEL]) != 1) { write(MP_ZOOM_LEVEL, 1.0f); lastVersion_ = ~0u; }   // close up on the start
             if (s.content != nullptr) moveSelectedMarker((int)std::lround(v * (double)s.content->buffer->numSamples));
             break;
         }
@@ -1633,6 +1657,16 @@ ChoppageMpcApp::View ChoppageMpcApp::viewOf(const SlotContent& c, int sel)
     const auto& t = c.slices;
     if (zoom == 0 || t.isEmpty()) return { 0, n };
     const auto r = t.region(sel, n);
+    const int level = roundi(values_[MP_ZOOM_LEVEL].load());
+    if (level == 1 || level == 2)
+    {
+        // close up on the slice's start (or end): 60 ms, the marker a quarter in (the end three quarters in), so
+        // the transient and a little before it fill the screen
+        const int span = std::clamp((int)(c.buffer->sampleRate * 0.06), kWaveCols * 2, n);
+        const int at = level == 1 ? r.start : r.end;
+        const int from = std::clamp(at - (level == 1 ? span / 4 : span * 3 / 4), 0, std::max(0, n - span));
+        return { from, std::min(span, n - from) };
+    }
     const int margin = std::max(256, r.length() / 4);
     View ideal { std::max(0, r.start - margin), 0 };
     ideal.length = std::max(kWaveCols, std::min(n, r.end + margin) - ideal.start);

@@ -1,7 +1,7 @@
 {
   "name": "CHOPPAGE",
   "manufacturer": "Twisted Genetics",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "format": "vst2",
   "kind": "instrument",
   "uid": "TgCh",

@@ -583,5 +583,9 @@
   {"index": 581, "id": "qt13", "name": "Q-Link 13 Target", "kind": "int", "min": 0, "max": 255, "def": 33, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 582, "id": "qt14", "name": "Q-Link 14 Target", "kind": "int", "min": 0, "max": 255, "def": 34, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 583, "id": "qt15", "name": "Q-Link 15 Target", "kind": "int", "min": 0, "max": 255, "def": 35, "choices": [], "hidden": false, "readout": false, "trigger": false},
-  {"index": 584, "id": "qt16", "name": "Q-Link 16 Target", "kind": "int", "min": 0, "max": 255, "def": 50, "choices": [], "hidden": false, "readout": false, "trigger": false}
+  {"index": 584, "id": "qt16", "name": "Q-Link 16 Target", "kind": "int", "min": 0, "max": 255, "def": 50, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 585, "id": "zoomAll", "name": "Zoom All", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 586, "id": "zoomSlice", "name": "Zoom Slice", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 587, "id": "zoomLevel", "name": "Zoom Level", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["SLICE", "START", "END"], "hidden": false, "readout": false, "trigger": false},
+  {"index": 588, "id": "zoomVis", "name": "Zoom Keys", "kind": "int", "min": 0, "max": 15, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false}
 ]

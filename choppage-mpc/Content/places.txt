@@ -1,2 +1,2 @@
-last /home/claude
+last /home
 place1 /home/claude/choppage/Content/Breaks
