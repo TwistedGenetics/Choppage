@@ -19763,7 +19763,7 @@
 }
 },
 {
-"key": "cp disk screen",
+"key": "cp disk blocker",
 "value": {
 "version": 2,
 "actions": [],
@@ -19771,12 +19771,12 @@
 "version": 1,
 "focussed": {
 "version": 1,
-"colour": "ffe4e1da",
+"colour": "0",
 "image": ""
 },
 "unfocussed": {
 "version": 1,
-"colour": "ffe4e1da",
+"colour": "0",
 "image": ""
 }
 },
@@ -19787,13 +19787,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "background",
-"type": "Image",
+"name": "block",
+"type": "Button",
 "data": {
 "version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "bg_disk_main.png"
+"onImage": "clear_page.png",
+"offImage": "clear_page.png",
+"buttonId": 0,
+"numButtonsInGroup": 6,
+"handleName": "Tap",
+"gestureBehaviour": "Instant"
 }
 },
 "handle remapping": {
@@ -19807,1021 +19810,6 @@
 "whenVisible": "Always",
 "boundsType": "Absolute",
 "bounds": "0 0 1280 628"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label dir",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 32.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 539"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 8 734 60"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "up",
-"type": "cp hold key_up_240x60__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 540"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "780 8 240 60"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "showDisk",
-"type": "cp flip key_back_240x60.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 201"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1030 8 240 60"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff96181e",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT]/Parameter 97"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 78 988 28"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list1",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 34.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 213"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 108 988 62"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list2",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 34.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 214"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 170 988 62"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list3",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 34.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 215"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 232 988 62"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list4",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 34.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 216"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 294 988 62"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label list5",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 34.0
-},
-"colour": "ff1a1a1a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 217"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "24 356 988 62"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "browse",
-"type": "cp disk page list",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 97"
-},
-{
-"key": "Tap",
-"value": "ResetOnGestureEnd/Parameter 211"
-},
-{
-"key": "Load",
-"value": "Parameter 98"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "10 76 1016 348"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "load",
-"type": "cp flip key_load_open_56c40_234x100.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 98"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1036 76 234 100"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "refresh",
-"type": "cp hold key_refresh_234x74__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 541"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1036 184 234 74"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "demo",
-"type": "cp hold key_demo_break_234x74__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 99"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1036 266 234 74"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "akaize",
-"type": "cp hold key_akaize_to_mpc_bpm_234x80__on.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 100"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1036 348 234 80"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff2a2a2a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)]/Parameter 543"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "14 434 1250 26"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "placeStore",
-"type": "cp flip key_store_230x156.png",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 543"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "Yes",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "10 464 230 156"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place key",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placecap_249x156.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "250 464 249 156"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff2a2a2a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[PLACE 1]/Parameter 544"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "262 470 225 24"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label place1",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 30.0
-},
-"colour": "ff1a1a1a",
-"justification": "horizontallyCentred verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 544"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "258 494 233 120"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place key",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placecap_249x156.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "507 464 249 156"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff2a2a2a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[PLACE 2]/Parameter 545"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "519 470 225 24"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label place2",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 30.0
-},
-"colour": "ff1a1a1a",
-"justification": "horizontallyCentred verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 545"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "515 494 233 120"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place key",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placecap_249x156.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "764 464 249 156"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff2a2a2a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[PLACE 3]/Parameter 546"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "776 470 225 24"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label place3",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 30.0
-},
-"colour": "ff1a1a1a",
-"justification": "horizontallyCentred verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 546"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "772 494 233 120"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "place key",
-"type": "Image",
-"data": {
-"version": 2,
-"imageType": "Regular",
-"colour": "0",
-"image": "placecap_249x156.png"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1021 464 249 156"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "caption",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 20.0
-},
-"colour": "ff2a2a2a",
-"justification": "left verticallyCentred",
-"case": "Original"
-},
-"type": "Name",
-"handleName": "WithName[PLACE 4]/Parameter 547"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1033 470 225 24"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "label place4",
-"type": "Label",
-"data": {
-"version": 1,
-"textStyle": {
-"version": 1,
-"font": {
-"version": 1,
-"name": "Roboto",
-"style": "Bold",
-"height": 30.0
-},
-"colour": "ff1a1a1a",
-"justification": "horizontallyCentred verticallyCentred",
-"case": "Original"
-},
-"type": "Value",
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "Parameter 547"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "1029 494 233 120"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "placeTap",
-"type": "cp place keys",
-"data": {
-"version": 1,
-"handleName": "Data"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": [
-{
-"key": "Data",
-"value": "ResetOnGestureEnd/Parameter 542"
-}
-]
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Hide",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "250 464 1020 156"
 }
 }
 ]
@@ -59037,11 +58025,13 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "disk screen",
-"type": "cp disk screen",
+"name": "disk background",
+"type": "Image",
 "data": {
-"version": 1,
-"handleName": "Data"
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "bg_disk_main.png"
 }
 },
 "handle remapping": {
@@ -59051,10 +58041,1084 @@
 "bounds": {
 "version": 2,
 "acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 1280 628",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "disk blocker",
+"type": "cp disk blocker",
+"data": {
+"version": 1,
+"handleName": "Tap"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Tap",
+"value": "ResetOnGestureEnd/Parameter 211"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
 "bounds": "0 0 1280 628",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label dir",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 32.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 539"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 8 734 60",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "up",
+"type": "cp hold key_up_240x60__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 540"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "780 8 240 60",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "showDisk",
+"type": "cp flip key_back_240x60.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 201"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1030 8 240 60",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff96181e",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT]/Parameter 97"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 78 988 28",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list1",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 213"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 108 988 62",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list2",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 214"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 170 988 62",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list3",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 215"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 232 988 62",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list4",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 216"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 294 988 62",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label list5",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 34.0
+},
+"colour": "ff1a1a1a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 217"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "24 356 988 62",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "browse",
+"type": "cp disk page list",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 97"
+},
+{
+"key": "Tap",
+"value": "ResetOnGestureEnd/Parameter 211"
+},
+{
+"key": "Load",
+"value": "Parameter 98"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 76 1016 348",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "load",
+"type": "cp flip key_load_open_56c40_234x100.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 98"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 76 234 100",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "refresh",
+"type": "cp hold key_refresh_234x74__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 541"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 184 234 74",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "demo",
+"type": "cp hold key_demo_break_234x74__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 99"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 266 234 74",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "akaize",
+"type": "cp hold key_akaize_to_mpc_bpm_234x80__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 100"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1036 348 234 80",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)]/Parameter 543"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "14 434 1250 26",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "placeStore",
+"type": "cp flip key_store_230x156.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 543"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 464 230 156",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "250 464 249 156",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 1]/Parameter 544"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "262 470 225 24",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place1",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 544"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "258 494 233 120",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "507 464 249 156",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 2]/Parameter 545"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "519 470 225 24",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place2",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 545"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "515 494 233 120",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "764 464 249 156",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 3]/Parameter 546"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "776 470 225 24",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place3",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 546"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "772 494 233 120",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "place key",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "placecap_249x156.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1021 464 249 156",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 20.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PLACE 4]/Parameter 547"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1033 470 225 24",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "label place4",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 547"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1029 494 233 120",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "placeTap",
+"type": "cp place keys",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 542"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "250 464 1020 156",
 "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 198"]
 }
 }
@@ -59090,7 +59154,7 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "background",
+"name": "disk background",
 "type": "Image",
 "data": {
 "version": 2,

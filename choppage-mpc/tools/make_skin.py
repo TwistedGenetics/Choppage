@@ -1203,16 +1203,15 @@ class Builder:
         self.save("sec_pattern.png", sec_pat)
         kids.insert(1, self.image_at("sec_pattern.png", (0, SY, W, H - SY), vv, "section pattern"))
 
-        # DISK (the LOAD key): the DISK screen over the whole tab (the same as the DISK page, with BACK)
-        self.define("cp disk screen", component(self.disk_kids(True), colour=argb(PANEL)))
-        disk_screen = entry("disk screen", "cp disk screen", o(("version", 1), ("handleName", "Data")),
-                            bounds((0, 0, W, H), invalid="Hide", inval=self.vis_view(2)))
+        # DISK (the LOAD key): the DISK screen over the whole tab (the same as the DISK page, with BACK). Its parts
+        # sit straight in the tab, shown while view = 2 (one custom component holding them all was not drawn).
+        disk_screen = self.disk_kids(True, self.vis_view(2))
 
         for (x, y, w, h) in windows:
             bgim.paste(box_image(w, h).convert("RGB"), (x, y))
         self.save("bg_main.png", bgim)
         kids.insert(0, self.image_at("bg_main.png", (0, 0, W, H), name="background"))
-        kids.append(disk_screen)
+        kids += disk_screen
         qb = ["10 526 1260 98", "10 356 1260 66", "10 4 1260 344", "10 430 1260 90"]
         tab = o(("version", 1), ("tabName", "MAIN"), ("fnKeyIndex", 0), ("fnKeySubIndex", 0),
                 ("componentDefinition", component(kids, colour=argb(PANEL))), ("qlinkBoundsData", qb))
@@ -1225,7 +1224,7 @@ class Builder:
         return tab, qm
 
     # ================================================================ DISK (MAIN again): any folder, 4 places
-    def disk_kids(self, back):
+    def disk_kids(self, back, vis=None):
         """The DISK screen: the folder shown, UP (and BACK on MAIN); the list (5 big lines: a touch on a folder opens
         it, on a break plays it, a second touch loads it; the jog wheel moves one line, its push loads / opens);
         LOAD / OPEN, REFRESH, DEMO, AKAIZE; STORE and the 4 PLACE keys. On MAIN (LOAD key) and on the DISK page."""
@@ -1235,20 +1234,20 @@ class Builder:
         # the folder shown
         dw = 760 if back else 1016
         bg.paste(box_image(dw, 60), (10, 8))
-        kids.append(self.label_at("dir", (24, 8, dw - 26, 60), 32))
+        kids.append(self.label_at("dir", (24, 8, dw - 26, 60), 32, vis=vis))
         if back:
-            kids.append(self.flip_at("up", (780, 8, 240, 60), self.key_png("UP", 240, 60)))
-            kids.append(self.flip_at("showDisk", (1030, 8, 240, 60), self.key_png("BACK", 240, 60), qlink=False))
+            kids.append(self.flip_at("up", (780, 8, 240, 60), self.key_png("UP", 240, 60), vis))
+            kids.append(self.flip_at("showDisk", (1030, 8, 240, 60), self.key_png("BACK", 240, 60), vis, qlink=False))
         else:
-            kids.append(self.flip_at("up", (1036, 8, 234, 60), self.key_png("UP", 234, 60)))
+            kids.append(self.flip_at("up", (1036, 8, 234, 60), self.key_png("UP", 234, 60), vis))
         # the list
         LX, LY, LW_, line_h = 10, 76, 1016, 62
         LH_ = 32 + 5 * line_h + 6
         bg.paste(box_image(LW_, LH_), (LX, LY))
         kids.append(self.caption_at("TOUCH A FOLDER TO OPEN IT  -  TOUCH A BREAK TO HEAR IT, AGAIN TO LOAD IT", "browse",
-                                    (LX + 14, LY + 2, LW_ - 28, 28), 20, colour=argb((150, 24, 30))))
+                                    (LX + 14, LY + 2, LW_ - 28, 28), 20, vis=vis, colour=argb((150, 24, 30))))
         for k_ in range(5):
-            kids.append(self.label_at("list%d" % (k_ + 1), (LX + 14, LY + 32 + k_ * line_h, LW_ - 28, line_h), 34))
+            kids.append(self.label_at("list%d" % (k_ + 1), (LX + 14, LY + 32 + k_ * line_h, LW_ - 28, line_h), 34, vis=vis))
         if "clear_bigline.png" not in self.images:
             self.save("clear_bigline.png", clear_png(LW_, line_h))
         lines = [entry("line %d" % k_, "Button", o(("version", 2), ("onImage", "clear_bigline.png"), ("offImage", "clear_bigline.png"),
@@ -1258,20 +1257,20 @@ class Builder:
         self.define("cp disk page list", component([focus_entry()] + lines,
                                                    [act("Enter Pressed", "Toggle Switch", "Load"), act("Mouse Down", "Q-Link", "Data")]))
         kids.append(entry("browse", "cp disk page list", o(("version", 1), ("handleName", "Data")),
-                          bounds((LX, LY, LW_, LH_), focus="Yes", invalid="Hide"),
+                          bounds((LX, LY, LW_, LH_), focus="Yes", invalid="Hide", inval=vis),
                           remap=[("Data", self.h("browse")), ("Tap", "ResetOnGestureEnd/" + self.h("listTap")), ("Load", self.h("load"))]))
         # beside the list
         bx, bw = 1036, 234
-        kids.append(self.flip_at("load", (bx, LY, bw, 100), self.key_png("LOAD /\nOPEN", bw, 100)))
-        kids.append(self.flip_at("refresh", (bx, LY + 108, bw, 74), self.key_png("REFRESH", bw, 74)))
-        kids.append(self.flip_at("demo", (bx, LY + 190, bw, 74), self.key_png("DEMO BREAK", bw, 74)))
-        kids.append(self.flip_at("akaize", (bx, LY + 272, bw, 80), self.key_png("AKAIZE TO\nMPC BPM", bw, 80)))
+        kids.append(self.flip_at("load", (bx, LY, bw, 100), self.key_png("LOAD /\nOPEN", bw, 100), vis))
+        kids.append(self.flip_at("refresh", (bx, LY + 108, bw, 74), self.key_png("REFRESH", bw, 74), vis))
+        kids.append(self.flip_at("demo", (bx, LY + 190, bw, 74), self.key_png("DEMO BREAK", bw, 74), vis))
+        kids.append(self.flip_at("akaize", (bx, LY + 272, bw, 80), self.key_png("AKAIZE TO\nMPC BPM", bw, 80), vis))
         # places
         PY = LY + LH_ + 10
         kids.append(self.caption_at("PLACES   (STORE, THEN A PLACE KEY: KEEPS THE FOLDER SHOWN THERE)", "placeStore",
-                                    (14, PY, 1250, 26), 20))
+                                    (14, PY, 1250, 26), 20, vis=vis))
         ky, kh = PY + 30, H - (PY + 30) - 8
-        kids.append(self.flip_at("placeStore", (10, ky, 230, kh), self.key_png("STORE", 230, kh), qlink=False))
+        kids.append(self.flip_at("placeStore", (10, ky, 230, kh), self.key_png("STORE", 230, kh), vis, qlink=False))
         pw = (1270 - 250 - 3 * 8) // 4
         cap = "placecap_%dx%d.png" % (pw, kh)
         if cap not in self.images:
@@ -1279,19 +1278,29 @@ class Builder:
         imgs = []
         for k_ in range(4):
             x = 250 + k_ * (pw + 8)
-            kids.append(self.image_at(cap, (x, ky, pw, kh), name="place key"))
-            kids.append(self.caption_at("PLACE %d" % (k_ + 1), "place%d" % (k_ + 1), (x + 12, ky + 6, pw - 24, 24), 20))
+            kids.append(self.image_at(cap, (x, ky, pw, kh), vis, name="place key"))
+            kids.append(self.caption_at("PLACE %d" % (k_ + 1), "place%d" % (k_ + 1), (x + 12, ky + 6, pw - 24, 24), 20, vis=vis))
             kids.append(self.label_at("place%d" % (k_ + 1), (x + 8, ky + 30, pw - 16, kh - 36), 30,
-                                      just="horizontallyCentred verticallyCentred"))
+                                      just="horizontallyCentred verticallyCentred", vis=vis))
         if "clear_place.png" not in self.images:
             self.save("clear_place.png", clear_png(pw, kh))
         for k_ in range(4):
             imgs.append(("clear_place.png", "clear_place.png", (k_ * (pw + 8), 0, pw, kh)))
-        kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, ids=[1, 2, 3, 4], name="cp place keys",
+        kids.append(self.radio_at("placeTap", (250, ky, 4 * pw + 24, kh), imgs, vis, ids=[1, 2, 3, 4], name="cp place keys",
                                   focus=False, qlink=False))
         self.save("bg_disk_%s.png" % tag, bg)
-        kids.insert(0, self.image_at("bg_disk_%s.png" % tag, (0, 0, W, H), name="background"))
-        return kids
+        under = [self.image_at("bg_disk_%s.png" % tag, (0, 0, W, H), vis, name="disk background")]
+        if vis:
+            # over MAIN: a clear key across the whole page takes the touches that fall between the DISK keys, so
+            # nothing of MAIN under it (the LCD's keys) reacts. It sets listTap to 0, which does nothing.
+            if "clear_page.png" not in self.images:
+                self.save("clear_page.png", clear_png(W, H))
+            self.define("cp disk blocker", component([entry("block", "Button", o(("version", 2), ("onImage", "clear_page.png"),
+                ("offImage", "clear_page.png"), ("buttonId", 0), ("numButtonsInGroup", 6), ("handleName", "Tap"),
+                ("gestureBehaviour", "Instant")), bounds((0, 0, W, H)))]))
+            under.append(entry("disk blocker", "cp disk blocker", o(("version", 1), ("handleName", "Tap")),
+                               bounds((0, 0, W, H), invalid="Hide", inval=vis), remap=[("Tap", "ResetOnGestureEnd/" + self.h("listTap"))]))
+        return under + kids
 
     def disk_tab(self):
         kids = self.disk_kids(False)
@@ -1639,16 +1648,22 @@ def check_skin(path):
     bad = []
     for tab in t["pageData"]["tabs"]:
         seen = []
+        covered, cover_vis = set(), None      # MAIN's DISK screen: its labels may cover what lies under its blocker
         for e in tab["componentDefinition"]["componentsData"]:
             typ, b = e["componentData"]["type"], e["bounds"]
             x, y, w, h = map(float, b["bounds"].split())
             vis = shown_when(b)
+            if e["componentData"]["name"] == "disk blocker":
+                covered = {nm for nm, _, _ in seen} | {"disk blocker"}
+                cover_vis = vis
             # 4. everything on the 1280 x 800 screen: one component past an edge leaves the whole plugin screen
             #    blank on the MPC (CHOPPAGE 0.6.1 - 0.7.2: the drag strip started at x = -8)
             if b.get("boundsType", "Absolute") == "Absolute" and (x < 0 or y < 0 or x + w > 1280 or y + h > 800):
                 bad.append("%s: '%s' is off the screen (%g %g %g %g)" % (tab["tabName"], e["componentData"]["name"], x, y, w, h))
             if typ == "Label":
                 for nm, (X, Y, W_, H_), v2 in seen:
+                    if cover_vis is not None and vis == cover_vis and nm in covered:
+                        continue
                     if x < X + W_ and X < x + w and y < Y + H_ and Y < y + h and not exclusive(vis, v2):
                         bad.append("%s: label '%s' over '%s'" % (tab["tabName"], e["componentData"]["name"], nm))
             elif typ not in ("Image", "Focus"):
