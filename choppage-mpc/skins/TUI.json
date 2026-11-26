@@ -41748,6 +41748,1570 @@
 }
 ]
 }
+},
+{
+"key": "cp hold key_load_299__on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "key_load_299__on.png",
+"offImage": "key_load_299__off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 299 96"
+}
+}
+]
+}
+},
+{
+"key": "cp hold key_save_new_299__on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "key_save_new_299__on.png",
+"offImage": "key_save_new_299__off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 299 96"
+}
+}
+]
+}
+},
+{
+"key": "cp hold key_save_over_299__on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "key_save_over_299__on.png",
+"offImage": "key_save_over_299__off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 299 96"
+}
+}
+]
+}
+},
+{
+"key": "cp keys 386",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 1",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_1_on.png",
+"offImage": "kbd_104x50_1_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 2",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_2_on.png",
+"offImage": "kbd_104x50_2_off.png",
+"buttonId": 2,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "108 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 3",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_3_on.png",
+"offImage": "kbd_104x50_3_off.png",
+"buttonId": 3,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "216 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 4",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_4_on.png",
+"offImage": "kbd_104x50_4_off.png",
+"buttonId": 4,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "324 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 5",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_5_on.png",
+"offImage": "kbd_104x50_5_off.png",
+"buttonId": 5,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "432 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 6",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_6_on.png",
+"offImage": "kbd_104x50_6_off.png",
+"buttonId": 6,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "540 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 7",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_7_on.png",
+"offImage": "kbd_104x50_7_off.png",
+"buttonId": 7,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "648 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 8",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_8_on.png",
+"offImage": "kbd_104x50_8_off.png",
+"buttonId": 8,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "756 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 9",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_9_on.png",
+"offImage": "kbd_104x50_9_off.png",
+"buttonId": 9,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "864 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 10",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_10_on.png",
+"offImage": "kbd_104x50_10_off.png",
+"buttonId": 10,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "972 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 42",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_167x50_42_on.png",
+"offImage": "kbd_167x50_42_off.png",
+"buttonId": 42,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1080 0 167 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 11",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_11_on.png",
+"offImage": "kbd_104x50_11_off.png",
+"buttonId": 11,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 12",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_12_on.png",
+"offImage": "kbd_104x50_12_off.png",
+"buttonId": 12,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "108 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 13",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_13_on.png",
+"offImage": "kbd_104x50_13_off.png",
+"buttonId": 13,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "216 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 14",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_14_on.png",
+"offImage": "kbd_104x50_14_off.png",
+"buttonId": 14,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "324 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 15",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_15_on.png",
+"offImage": "kbd_104x50_15_off.png",
+"buttonId": 15,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "432 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 16",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_16_on.png",
+"offImage": "kbd_104x50_16_off.png",
+"buttonId": 16,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "540 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 17",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_17_on.png",
+"offImage": "kbd_104x50_17_off.png",
+"buttonId": 17,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "648 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 18",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_18_on.png",
+"offImage": "kbd_104x50_18_off.png",
+"buttonId": 18,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "756 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 19",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_19_on.png",
+"offImage": "kbd_104x50_19_off.png",
+"buttonId": 19,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "864 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 20",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_20_on.png",
+"offImage": "kbd_104x50_20_off.png",
+"buttonId": 20,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "972 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 43",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_167x50_43_on.png",
+"offImage": "kbd_167x50_43_off.png",
+"buttonId": 43,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1080 54 167 50"
+}
+}
+]
+}
+},
+{
+"key": "cp keys 504",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 21",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_21_on.png",
+"offImage": "kbd_104x50_21_off.png",
+"buttonId": 21,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 22",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_22_on.png",
+"offImage": "kbd_104x50_22_off.png",
+"buttonId": 22,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "108 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 23",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_23_on.png",
+"offImage": "kbd_104x50_23_off.png",
+"buttonId": 23,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "216 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 24",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_24_on.png",
+"offImage": "kbd_104x50_24_off.png",
+"buttonId": 24,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "324 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 25",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_25_on.png",
+"offImage": "kbd_104x50_25_off.png",
+"buttonId": 25,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "432 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 26",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_26_on.png",
+"offImage": "kbd_104x50_26_off.png",
+"buttonId": 26,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "540 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 27",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_27_on.png",
+"offImage": "kbd_104x50_27_off.png",
+"buttonId": 27,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "648 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 28",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_28_on.png",
+"offImage": "kbd_104x50_28_off.png",
+"buttonId": 28,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "756 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 29",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_29_on.png",
+"offImage": "kbd_104x50_29_off.png",
+"buttonId": 29,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "864 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 30",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_30_on.png",
+"offImage": "kbd_104x50_30_off.png",
+"buttonId": 30,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "972 0 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 44",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_167x50_44_on.png",
+"offImage": "kbd_167x50_44_off.png",
+"buttonId": 44,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1080 0 167 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 31",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_31_on.png",
+"offImage": "kbd_104x50_31_off.png",
+"buttonId": 31,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 32",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_32_on.png",
+"offImage": "kbd_104x50_32_off.png",
+"buttonId": 32,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "108 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 33",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_33_on.png",
+"offImage": "kbd_104x50_33_off.png",
+"buttonId": 33,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "216 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 34",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_34_on.png",
+"offImage": "kbd_104x50_34_off.png",
+"buttonId": 34,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "324 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 35",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_35_on.png",
+"offImage": "kbd_104x50_35_off.png",
+"buttonId": 35,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "432 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 36",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_36_on.png",
+"offImage": "kbd_104x50_36_off.png",
+"buttonId": 36,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "540 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 37",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_37_on.png",
+"offImage": "kbd_104x50_37_off.png",
+"buttonId": 37,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "648 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 38",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_38_on.png",
+"offImage": "kbd_104x50_38_off.png",
+"buttonId": 38,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "756 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 39",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_39_on.png",
+"offImage": "kbd_104x50_39_off.png",
+"buttonId": 39,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "864 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 40",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_104x50_40_on.png",
+"offImage": "kbd_104x50_40_off.png",
+"buttonId": 40,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "972 54 104 50"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "key 41",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "kbd_167x50_41_on.png",
+"offImage": "kbd_167x50_41_off.png",
+"buttonId": 41,
+"numButtonsInGroup": 45,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1080 54 167 50"
+}
+}
+]
+}
 }
 ]
 },
@@ -86503,6 +88067,1286 @@
 "whenVisible": "Always",
 "boundsType": "Absolute",
 "bounds": "963 512 299 96"
+}
+}
+]
+},
+"qlinkBoundsData": ["10 150 1260 112", "10 268 1260 112", "10 386 1260 112", "10 504 1260 112"]
+},
+{
+"version": 1,
+"tabName": "PRESETS",
+"fnKeyIndex": 6,
+"fnKeySubIndex": 2,
+"componentDefinition": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "background",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "bg_6_2.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 1280 628"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "lcd_1260x134.png",
+"numFrames": 4,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 48"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 6 1260 134"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "fff4f6ff",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "fff4f6ff",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "fff4f6ff",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "fff4f6ff",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_0.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff142008",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff142008",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff142008",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff142008",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_1.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff241200",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff241200",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff241200",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff241200",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_2.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff15171a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff15171a",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff15171a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff15171a",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_3.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[PRESET]/Parameter 533"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "110 158 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "preBrowse",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 533"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 150 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "preLoad",
+"type": "cp hold key_load_299__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 534"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "333 158 299 96"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "preSave",
+"type": "cp hold key_save_new_299__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 535"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "648 158 299 96"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "preOver",
+"type": "cp hold key_save_over_299__on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 536"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "963 158 299 96"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[NAME (TYPE IT BELOW)]/Parameter 537"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "20 274 925 30"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "read preName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 537"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "28 306 909 66"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[MESSAGE]/Parameter 132"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "965 274 295 30"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "read infoMsg",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 30.0
+},
+"colour": "ff1a1a1a",
+"justification": "horizontallyCentred verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 132"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "973 306 279 66"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "keys 386",
+"type": "cp keys 386",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 538"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "16 390 1248 104"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "keys 504",
+"type": "cp keys 504",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 538"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "16 508 1248 104"
 }
 }
 ]

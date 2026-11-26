@@ -1,5 +1,7 @@
 #include "ChoppageMpcApp.h"
 #include "choppage/AudioFile.h"
+#include "choppage/Preset.h"
+#include "choppage/Params.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -139,6 +141,12 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I("sliceTap", "Slice Tap", 0, kWaveCols, 0); p->uiOnly = true; }
     { auto* p = B("slPlay", "Play Slice", false); p->uiOnly = true; }   // the jog wheel's push flips it: every change plays
     B("snap", "Snap To Hits", true);
+    { auto* p = I("preBrowse", "Preset", 0, 999, 0); p->uiOnly = true; }
+    T("preLoad", "Load Preset");
+    T("preSave", "Save New");
+    T("preOver", "Save Over");
+    R("preName", "Name");
+    { auto* p = I("preKey", "Key", 0, 44, 0); p->uiOnly = true; }
     return v;
 }
 
@@ -220,7 +228,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_SNAP + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_PRE_KEY + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -234,6 +242,8 @@ ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform
     session_.setDataFolder(content);
     chooseBreaksFolder();
     session_.scanFolder(breaksDir_);
+    choosePresetsFolder();
+    refreshPresets();
     if (startWorker) worker_ = std::thread([this] { workerLoop(); });
 }
 
@@ -320,6 +330,102 @@ void ChoppageMpcApp::sliceTap(int column)
     }
 }
 
+// ===================================================================================== presets
+// Presets live beside the plugins, VST2 Plugins/Content/Presets/CHOPPAGE (the same idea as the shared Breaks
+// folder), or in the plugin's own Content/Presets where there is no shared place.
+void ChoppageMpcApp::choosePresetsFolder()
+{
+    const std::string shared = platform_.sharedBreaksDir();
+    presetsDir_ = shared.empty() ? platform_.contentDir() + "/Presets"
+                                 : (std::filesystem::path(shared).parent_path() / "Presets" / "CHOPPAGE").string();
+    std::error_code ec;
+    std::filesystem::create_directories(presetsDir_, ec);
+}
+
+void ChoppageMpcApp::refreshPresets()
+{
+    auto v = Preset::list(presetsDir_);
+    std::lock_guard<std::mutex> l(textMutex_);
+    presets_ = std::move(v);
+}
+
+void ChoppageMpcApp::loadPreset(int index)
+{
+    std::string path, name;
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        if (index < 0 || index >= (int)presets_.size()) { message_ = "NO PRESET TO LOAD"; messageTicks_ = 90; return; }
+        path = presets_[(size_t)index].second;
+        name = presets_[(size_t)index].first;
+    }
+    std::string text;
+    Preset::Parsed p;
+    if (!Preset::readFile(path, text) || !Preset::parse(text, p)) { message_ = "CAN'T READ " + upper(name); messageTicks_ = 90; return; }
+    // the sound and settings first (as the MPC's own knobs), then the breaks, slices and patterns
+    const auto& defs = paramDefs();
+    for (int i = 0; i < kNumCoreParams && i < (int)defs.size(); ++i)
+    {
+        const auto it = p.params.find(defs[(size_t)i].id);
+        if (it != p.params.end() && values_[i].load() != it->second) write(i, it->second);
+    }
+    session_.loadState(p.session);
+    resync_ = true;
+    { std::lock_guard<std::mutex> l(textMutex_); presetName_ = p.name.empty() ? name : p.name; }
+    message_ = "LOADED " + upper(p.name.empty() ? name : p.name);
+    messageTicks_ = 90;
+}
+
+void ChoppageMpcApp::savePreset(int overIndex)
+{
+    std::string name, path;
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        name = presetName_;
+        if (overIndex >= 0)
+        {
+            if (overIndex >= (int)presets_.size()) { message_ = "NO PRESET TO SAVE OVER"; messageTicks_ = 90; return; }
+            path = presets_[(size_t)overIndex].second;
+            if (name.empty()) name = presets_[(size_t)overIndex].first;
+        }
+    }
+    if (name.empty())
+    {
+        // no name typed: the selected break's name
+        const auto& s = session_.slot(session_.selectedSlot());
+        name = s.content != nullptr ? upper(s.content->name) : std::string("CHOPPAGE");
+    }
+    if (path.empty()) path = Preset::freePath(presetsDir_, name);
+    float p[kNumCoreParams];
+    for (int i = 0; i < kNumCoreParams; ++i) p[i] = values_[i].load();
+    if (!Preset::writeFile(path, Preset::make(name, p, session_.saveState()))) { message_ = "CAN'T SAVE (CARD FULL OR LOCKED?)"; messageTicks_ = 120; return; }
+    refreshPresets();
+    int at = 0;
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        for (int k = 0; k < (int)presets_.size(); ++k) if (presets_[(size_t)k].second == path) at = k;
+    }
+    write(MP_PRE_BROWSE, (float)at + (seen_[MP_PRE_BROWSE] == (float)at ? 0.001f : 0.0f));   // (moved a hair: the name redraws)
+    message_ = "SAVED " + upper(name);
+    messageTicks_ = 90;
+}
+
+// The name keyboard: words start with a capital (CAPS: all capitals).
+void ChoppageMpcApp::typeKey(int key)
+{
+    static const char* rows = "1234567890QWERTYUIOPASDFGHJKL&ZXCVBNM-.'";
+    std::lock_guard<std::mutex> l(textMutex_);
+    auto& n = presetName_;
+    if (key == 42) { if (!n.empty()) n.pop_back(); return; }
+    if (key == 43) { n.clear(); return; }
+    if (key == 44) { caps_ = !caps_; return; }
+    if ((int)n.size() >= kPresetNameMax) return;
+    if (key == 41) { if (!n.empty() && n.back() != ' ') n += ' '; return; }
+    if (key < 1 || key > 40) return;
+    char c = rows[key - 1];
+    if (c >= 'A' && c <= 'Z' && !caps_ && !(n.empty() || n.back() == ' ' || n.back() == '-')) c = (char)(c - 'A' + 'a');
+    n += c;
+}
+
 ChoppageMpcApp::~ChoppageMpcApp()
 {
     quit_ = true;
@@ -377,7 +483,7 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
 void ChoppageMpcApp::setParam(int index, float plain)
 {
     if (index >= 0 && index < kMpcNumParams) values_[index].store(plain, std::memory_order_relaxed);
-    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP) && plain >= 0.5f)
+    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY) && plain >= 0.5f)
     {
         // a touch: kept until the worker's next tick, so a tap shorter than a tick still counts
         std::lock_guard<std::mutex> l(tapMutex_);
@@ -417,6 +523,20 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
         case MP_SL_END: { std::lock_guard<std::mutex> l(textMutex_); out = endText_; return true; }
         case MP_SEQ_SEL: std::snprintf(buf, sizeof buf, "STEP %d", roundi(plain)); out = buf; return true;
         case MP_MEMORY: std::snprintf(buf, sizeof buf, "M%02d", roundi(plain)); out = buf; return true;
+        case MP_PRE_BROWSE:
+        {
+            std::lock_guard<std::mutex> l(textMutex_);
+            const int k = roundi(plain);
+            out = presets_.empty() ? std::string("NO PRESETS YET") : k < (int)presets_.size() ? upper(presets_[(size_t)k].first) : std::string("-");
+            return true;
+        }
+        case MP_PRE_KEY:
+        {
+            const int k = roundi(plain);
+            static const char* rows = "1234567890QWERTYUIOPASDFGHJKL&ZXCVBNM-.'";
+            out = k >= 1 && k <= 40 ? std::string(1, rows[k - 1]) : k == 41 ? "SPACE" : k == 42 ? "DEL" : k == 43 ? "CLEAR" : k == 44 ? "CAPS" : "-";
+            return true;
+        }
         case MP_AKR_LOOP_BPM:
             if (plain < 0.05f) out = "AUTO"; else { std::snprintf(buf, sizeof buf, "%.1f", plain); out = buf; }
             return true;
@@ -517,7 +637,7 @@ void ChoppageMpcApp::tick()
         { std::lock_guard<std::mutex> l(tapMutex_); taps.swap(taps_); }
         for (auto [i, v] : taps) handle(i, v, 0.0f);
         if (!taps.empty())
-            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
+            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY }) seen_[i] = values_[i].load(std::memory_order_relaxed);
     }
     // a slice pad was played: the screen goes to that slice (of that break)
     if (const int hit = session_.engine().sliceHit.exchange(-1, std::memory_order_relaxed); hit >= 0)
@@ -527,7 +647,7 @@ void ChoppageMpcApp::tick()
     }
     for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i)
     {
-        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
+        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
         const float v = values_[i].load(std::memory_order_relaxed);
         if (v == seen_[i]) continue;
         const float prev = seen_[i];
@@ -625,6 +745,11 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         const int next = pos < 0 ? (dir > 0 ? 0 : n - 1) : (pos + dir + n) % n;
         session_.setStepSlice(step, pool[(size_t)next]);
         seqKey_ = ~0ull;   // put the right frame back even if nothing changed
+        return;
+    }
+    if (index == MP_PRE_KEY)
+    {
+        typeKey(roundi(v));
         return;
     }
     if (index == MP_SLICE_TAP)
@@ -744,6 +869,17 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             if (session_.slot(slot).content != nullptr) session_.selectSlice(session_.selectedSlice(), true);
             break;
         case MP_SNAP: break;
+        case MP_PRE_BROWSE:
+        {
+            // shown by formatValue; LOAD / SAVE OVER act on it. Kept inside the list.
+            int n;
+            { std::lock_guard<std::mutex> l(textMutex_); n = (int)presets_.size(); }
+            if (roundi(v) > std::max(0, n - 1)) write(MP_PRE_BROWSE, (float)std::max(0, n - 1));
+            break;
+        }
+        case MP_PRE_LOAD: loadPreset(roundi(values_[MP_PRE_BROWSE].load())); break;
+        case MP_PRE_SAVE: savePreset(-1); break;
+        case MP_PRE_OVER: savePreset(roundi(values_[MP_PRE_BROWSE].load())); break;
         case MP_SL_ADD:
         {
             const auto& s = session_.slot(slot);
@@ -1022,6 +1158,11 @@ void ChoppageMpcApp::syncReadouts(bool force)
     else std::snprintf(buf, sizeof buf, "--");
     setText(MP_INFO_SLICE, buf);
     setText(MP_INFO_MSG, message_.empty() ? std::string("CHOPPAGE") : message_);
+    {
+        std::string n;
+        { std::lock_guard<std::mutex> l(textMutex_); n = presetName_; }
+        setText(MP_PRE_NAME, (n.empty() ? std::string("TYPE A NAME") : n) + ((int)n.size() < kPresetNameMax ? "_" : "") + (caps_ ? "  CAPS" : ""));
+    }
 
     // playhead through the pattern (only while this break plays)
     const int step = eng.slotStep[(size_t)slot].load();

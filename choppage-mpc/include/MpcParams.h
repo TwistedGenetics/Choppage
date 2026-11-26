@@ -85,6 +85,13 @@ enum MpcParam : int
     MP_SLICE_TAP,               // a touch on the SLICE pages' waveform: column + 1 (springs back to 0)
     MP_SL_PLAY,                 // trigger (push the jog wheel on the waveform): play the selected slice
     MP_SNAP,                    // added / dragged markers jump to the nearest drum hit
+    // ---- 0.9: presets in VST2 Plugins/Content/Presets/CHOPPAGE
+    MP_PRE_BROWSE,              // the preset shown (index in the folder's list)
+    MP_PRE_LOAD,                // trigger: load the preset shown
+    MP_PRE_SAVE,                // trigger: save as a new preset (the name typed)
+    MP_PRE_OVER,                // trigger: save over the preset shown
+    MP_PRE_NAME,                // readout: the name being typed
+    MP_PRE_KEY,                 // the name keyboard: key id while touched (1-40 characters, 41 SPACE ... 44 CAPS)
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

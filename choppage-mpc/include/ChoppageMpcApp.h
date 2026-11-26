@@ -79,6 +79,17 @@ private:
     std::string breaksDir_;                         // where DISK lists breaks from (see the constructor)
     std::string breaksLabel_ = "CONTENT/BREAKS";    // the same, for the screen
     void chooseBreaksFolder();
+    // presets (VST2 Plugins/Content/Presets/CHOPPAGE)
+    static constexpr int kPresetNameMax = 24;
+    std::string presetsDir_;
+    std::vector<std::pair<std::string, std::string>> presets_;   // { name, path }, guarded by textMutex_
+    std::string presetName_;                                      // the name being typed, guarded by textMutex_
+    bool caps_ = false;
+    void choosePresetsFolder();
+    void refreshPresets();
+    void loadPreset(int index);
+    void savePreset(int overIndex);                               // -1 = a new file
+    void typeKey(int key);
     std::mutex tapMutex_;
     std::vector<std::pair<int, float>> taps_;        // touches queued by setParam: a quick tap is never missed
     bool dragMoved_ = false;                        // the drag strip moved a marker (it snaps when the drag ends)

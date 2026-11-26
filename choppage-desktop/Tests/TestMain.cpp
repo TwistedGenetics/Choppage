@@ -122,6 +122,21 @@ static ui::WaveView* findWave (juce::Component& c)
     return nullptr;
 }
 
+static void presetTests()
+{
+    Rig r;
+    r.p.loadDemo (0);
+    pump (300);
+    r.setParam ("filter", 0.3f);
+    const auto file = juce::File::getSpecialLocation (juce::File::tempDirectory).getChildFile ("choppage-test.chp");
+    check (r.p.savePreset (file) && file.existsAsFile(), "SAVE PRESET writes a .chp");
+    r.setParam ("filter", 0.9f);
+    check (r.p.loadPreset (file), "LOAD PRESET reads it");
+    pump (300);
+    check (std::abs (r.p.apvts.getRawParameterValue ("filter")->load() - 0.3f) < 1e-3f, "the sound comes back");
+    check (r.p.getSlot (0).content != nullptr, "the break comes back");
+}
+
 static void zoomTests()
 {
     Rig r;
@@ -196,6 +211,7 @@ int main (int argc, char** argv)
                          argc >= 6 ? juce::String (argv[5]).getIntValue() : 0);
     tests();
     zoomTests();
+    presetTests();
     std::cout << "\n" << (checks - failures) << " / " << checks << " checks passed" << std::endl;
     return failures == 0 ? 0 : 1;
 }

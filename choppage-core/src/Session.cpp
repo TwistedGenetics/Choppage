@@ -1154,6 +1154,15 @@ namespace bc
             }
             s.status = Status::loading;
             s.file = kv["path"];
+            {
+                // a preset or project from another machine (or folder): the same file name in the breaks folder
+                std::error_code ec;
+                if (! s.file.empty() && ! std::filesystem::exists (s.file, ec) && ! browserDir.empty())
+                {
+                    const auto alt = std::filesystem::path (browserDir) / std::filesystem::path (s.file).filename();
+                    if (std::filesystem::exists (alt, ec)) s.file = alt.string();
+                }
+            }
             ++pending;
             { std::lock_guard<std::mutex> q (qMutex); jobs.push_back ({ i, s.file, block, s.gridSlicing, s.sensitivity, s.gridPerBar }); }
             qCv.notify_one();

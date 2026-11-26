@@ -37,6 +37,7 @@ private:
     void timerCallback() override;
     void chooseFile();
     void chooseFolder();
+    void choosePreset (bool save);
 
     ChoppageProcessor& proc;
     std::unique_ptr<Panel> panel;

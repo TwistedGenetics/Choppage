@@ -30,6 +30,8 @@ public:
                          (juce::Component*) &akai })
             addChildComponent (t);
         disk.onChooseFolder = [this] { editor.chooseFolder(); };
+        disk.onSavePreset = [this] { editor.choosePreset (true); };
+        disk.onLoadPreset = [this] { editor.choosePreset (false); };
 
         // ---- LCD top bar ----
         auto cell = [this] (std::function<juce::String()> text, std::function<void()> click, std::function<bool()> on = nullptr, float size = 28.0f)
@@ -467,6 +469,21 @@ void ChoppageEditor::chooseFolder()
                               const auto f = fc.getResult();
                               if (f.isDirectory()) proc.scanBrowser (f);
                           });
+}
+
+void ChoppageEditor::choosePreset (bool save)
+{
+    chooser = std::make_unique<juce::FileChooser> (save ? "Save a CHOPPAGE preset" : "Load a CHOPPAGE preset",
+                                                   proc.presetsFolder(), "*.chp");
+    const int mode = save ? juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::warnAboutOverwriting
+                          : juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+    chooser->launchAsync (mode, [this, save] (const juce::FileChooser& fc)
+    {
+        const auto f = fc.getResult();
+        if (f == juce::File()) return;
+        if (save) proc.savePreset (f);
+        else if (f.existsAsFile()) proc.loadPreset (f);
+    });
 }
 
 void ChoppageEditor::chooseFile()

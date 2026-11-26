@@ -868,6 +868,8 @@ namespace ui
         };
         setup (folderCell, "FOLDER...", [this] { if (onChooseFolder) onChooseFolder(); });
         setup (rescanCell, "RESCAN", [this] { proc.scanBrowser (proc.getBrowserFolder()); });
+        setup (saveCell, "SAVE PRESET", [this] { if (onSavePreset) onSavePreset(); });
+        setup (loadCell, "LOAD PRESET", [this] { if (onLoadPreset) onLoadPreset(); });
         setup (upCell, juce::String::fromUTF8 ("\xe2\x96\xb2"), [this] { scroll = std::max (0, scroll - visibleRows()); repaint(); });
         setup (downCell, juce::String::fromUTF8 ("\xe2\x96\xbc"), [this]
         { scroll = std::max (0, std::min ((int) entries.size() - visibleRows(), scroll + visibleRows())); repaint(); });
@@ -894,6 +896,10 @@ namespace ui
         folderCell.setBounds (top.removeFromLeft (150).reduced (0, 2));
         top.removeFromLeft (10);
         rescanCell.setBounds (top.removeFromLeft (130).reduced (0, 2));
+        top.removeFromLeft (10);
+        saveCell.setBounds (top.removeFromLeft (190).reduced (0, 2));
+        top.removeFromLeft (10);
+        loadCell.setBounds (top.removeFromLeft (190).reduced (0, 2));
         top.removeFromLeft (10);
         downCell.setBounds (top.removeFromRight (50).reduced (0, 2));
         top.removeFromRight (6);

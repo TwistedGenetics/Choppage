@@ -303,6 +303,49 @@ int main(int argc, char** argv)
         for (auto& [k, n] : pf.notified) { const int d = n - (before.count(k) ? before.at(k) : 0); if (d > most) { most = d; busiest = k; } }
         CHECK(most <= 2, ("idle: parameter " + std::to_string(busiest) + " re-sent " + std::to_string(most) + " times").c_str());
     }
+    std::printf("presets\n");
+    {
+        const auto root = std::filesystem::temp_directory_path() / "choppage-presets-vst2";
+        std::filesystem::remove_all(root);
+        FakePlatform pp;
+        pp.dir = (root / "Twisted Genetics - VST - CHOPPAGE" / "Content").string();
+        pp.shared = (root / "Content" / "Breaks").string();
+        ChoppageMpcApp a4(pp, false);
+        pp.app = &a4;
+        a4.prepare(44100.0, 256);
+        settle(a4);
+        press(a4, MP_DEMO, 1);
+        settle(a4);
+        const auto folder = root / "Content" / "Presets" / "CHOPPAGE";
+        CHECK(std::filesystem::is_directory(folder), "VST2 Plugins/Content/Presets/CHOPPAGE is made");
+        std::string t;
+        a4.formatValue(MP_PRE_BROWSE, 0, t);
+        CHECK(t == "NO PRESETS YET", ("empty list: " + t).c_str());
+        // type "Amen Roll" on the keyboard (A = 21, M = 37, E = 13, N = 36, SPACE = 41, R = 14, O = 19, L = 29)
+        for (int k : { 21, 37, 13, 36, 41, 14, 19, 29, 29 }) press(a4, MP_PRE_KEY, (float)k);
+        a4.tick();
+        a4.formatValue(MP_PRE_NAME, 0, t);
+        CHECK(t == "Amen Roll_", ("the name as typed: " + t).c_str());
+        set(a4, P_FILTER, 0.3f);
+        press(a4, MP_DICE_PAT, 1);
+        const auto saved = a4.session().slot(0).current;
+        press(a4, MP_PRE_SAVE, 1);
+        CHECK(std::filesystem::exists(folder / "Amen Roll.chp"), "SAVE NEW writes Amen Roll.chp");
+        a4.formatValue(MP_PRE_BROWSE, a4.getParam(MP_PRE_BROWSE), t);
+        CHECK(t == "AMEN ROLL", ("the list shows it: " + t).c_str());
+        // change things, then load it back
+        set(a4, P_FILTER, 0.9f);
+        press(a4, MP_DICE_PAT, 1);
+        CHECK(!(a4.session().slot(0).current == saved), "the pattern changed");
+        press(a4, MP_PRE_LOAD, 1);
+        settle(a4);
+        CHECK(std::fabs(a4.getParam(P_FILTER) - 0.3f) < 1e-4f, "LOAD brings the sound back");
+        CHECK(a4.session().slot(0).current == saved, "LOAD brings the pattern back");
+        // a second save with the same name gets its own file; SAVE OVER replaces the one shown
+        press(a4, MP_PRE_SAVE, 1);
+        CHECK(std::filesystem::exists(folder / "Amen Roll 2.chp"), "a second SAVE NEW does not overwrite");
+        pp.app = nullptr;
+    }
     std::printf("fluid chopping\n");
     {
         set(app, MP_BREAK, 0);

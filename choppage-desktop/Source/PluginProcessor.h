@@ -47,6 +47,10 @@ public:
 
     // ---- the model (forwarded to the core) -----------------------------------------------
     bc::Session& session() noexcept { return sess; }
+    // presets (.chp, the same files as the MPC's VST2 Plugins/Content/Presets/CHOPPAGE): sound, breaks, slices, patterns
+    juce::File presetsFolder() const;
+    bool savePreset (const juce::File&);
+    bool loadPreset (const juce::File&);
     const Slot& getSlot (int i) const { return sess.slot (i); }
     int  getSelectedSlot() const noexcept { return sess.selectedSlot(); }
     void selectSlot (int i) { sess.selectSlot (i); }

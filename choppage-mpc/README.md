@@ -70,9 +70,14 @@ The sections:
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
-**PLAY / SET** (press again for SET):
+**PLAY / SET / PRESETS** (press again for SET, and again for PRESETS):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT, the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
+
+**PRESETS** saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files.
+- **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.
+- **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
+- The breaks are not copied into the preset: CHOPPAGE finds them where they were, or by file name in `Content/Breaks`. The same files load on the desktop.
 
 **PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its pad, G#3–B4). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
 

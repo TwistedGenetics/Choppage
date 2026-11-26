@@ -531,5 +531,11 @@
   {"index": 529, "id": "slMode", "name": "Touch", "kind": "choice", "min": 0, "max": 2, "def": 0, "choices": ["SELECT", "ADD", "DEL"], "hidden": false, "readout": false, "trigger": false},
   {"index": 530, "id": "sliceTap", "name": "Slice Tap", "kind": "int", "min": 0, "max": 84, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 531, "id": "slPlay", "name": "Play Slice", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
-  {"index": 532, "id": "snap", "name": "Snap To Hits", "kind": "bool", "min": 0, "max": 1, "def": 1, "choices": [], "hidden": false, "readout": false, "trigger": false}
+  {"index": 532, "id": "snap", "name": "Snap To Hits", "kind": "bool", "min": 0, "max": 1, "def": 1, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 533, "id": "preBrowse", "name": "Preset", "kind": "int", "min": 0, "max": 999, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
+  {"index": 534, "id": "preLoad", "name": "Load Preset", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 535, "id": "preSave", "name": "Save New", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 536, "id": "preOver", "name": "Save Over", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
+  {"index": 537, "id": "preName", "name": "Name", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 538, "id": "preKey", "name": "Key", "kind": "int", "min": 0, "max": 44, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false}
 ]

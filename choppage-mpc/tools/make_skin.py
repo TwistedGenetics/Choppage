@@ -594,6 +594,14 @@ def P(pid, name, labels, span=1, ids=None):
 def R(pid, name, span=1):
     return {"type": "read", "param": pid, "name": name, "span": span}
 
+# The PRESETS name keyboard: preKey ids 1-40 are these characters, 41 SPACE, 42 DEL, 43 CLEAR, 44 CAPS
+KEY_ROWS = ["1234567890", "QWERTYUIOP", "ASDFGHJKL&", "ZXCVBNM-.'"]
+def KEYS(rows):
+    """A full-width row of keyboard keys: rows = two lists of (id, label, width weight)."""
+    return {"type": "keys", "param": "preKey", "name": "", "rows": rows, "span": 4}
+def key_row(r, extra):
+    return [(r * 10 + i + 1, ch, 1) for i, ch in enumerate(KEY_ROWS[r])] + [extra]
+
 def steps(first):
     return [[K("step%d" % (first + r * 4 + c), "STEP %d" % (first + r * 4 + c)) for c in range(4)] for r in range(4)]
 
@@ -633,6 +641,12 @@ def pages():
             [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)],
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
+        # presets: VST2 Plugins/Content/Presets/CHOPPAGE. Type a name, SAVE NEW; or pick one with PRESET and LOAD.
+        {"fn": 6, "sub": 2, "name": "PRESETS", "rows": [
+            [K("preBrowse", "PRESET"), G("preLoad", "LOAD"), G("preSave", "SAVE\nNEW"), G("preOver", "SAVE\nOVER")],
+            [R("preName", "NAME (TYPE IT BELOW)", span=3), R("infoMsg", "MESSAGE")],
+            [KEYS([key_row(0, (42, "DEL", 1.6)), key_row(1, (43, "CLEAR", 1.6))])],
+            [KEYS([key_row(2, (44, "CAPS", 1.6)), key_row(3, (41, "SPACE", 1.6))])]]},
     ]
 
 # ---------------------------------------------------------------- build
@@ -810,6 +824,28 @@ class Builder:
             self.define(key, component(kids, [act("Mouse Down", "Q-Link", "Data")]))
             out.append(entry(pid, key, o(("version", 1), ("handleName", "Data")),
                              bounds((gx, gy, gw, gh), focus="Yes", invalid="Hide"), remap=[("Data", self.h(pid))]))
+        elif t == "keys":
+            # two rows of keys; the MPC puts the key back to 0 when the finger lifts, so a key lights only while touched
+            n = int(self.p(pid)["max"]) + 1
+            gx, gy, gw = x + CELL_PAD, y + 4, w - 2 * CELL_PAD
+            kh = (ROW_H - 8 - 4) // 2
+            kids = []
+            for r_, row in enumerate(c["rows"]):
+                total = sum(wt for _, _, wt in row)
+                unit = (gw - 4 * (len(row) - 1)) / total
+                bx = 0.0
+                for kid, lab, wt in row:
+                    kw = int(round(unit * wt))
+                    on = self.save("kbd_%dx%d_%d_on.png" % (kw, kh, kid), keycap(kw, kh, lab, True, led=False, picked=True))
+                    off = self.save("kbd_%dx%d_%d_off.png" % (kw, kh, kid), keycap(kw, kh, lab, False, led=False))
+                    kids.append(entry("key %d" % kid, "Button",
+                                      o(("version", 2), ("onImage", on), ("offImage", off), ("buttonId", kid), ("numButtonsInGroup", n),
+                                        ("handleName", "Data"), ("gestureBehaviour", "Instant")),
+                                      bounds((int(bx), r_ * (kh + 4), kw, kh))))
+                    bx += kw + 4
+            key = self.define("cp keys %d" % y, component(kids))
+            out.append(entry("keys %d" % y, key, o(("version", 1), ("handleName", "Data")),
+                             bounds((gx, gy, gw, 2 * kh + 4), invalid="Hide"), remap=[("Data", "ResetOnGestureEnd/" + self.h(pid))]))
         elif t == "read":
             bx, by, bw, bh = self.value_box(c, x, y)
             out.append(self.caption(c["name"], pid, (bx, y + 6, bw, 30)))
@@ -822,7 +858,7 @@ class Builder:
         for r, row in enumerate(page["rows"]):
             col = 0
             for c in row:
-                if c["type"] == "read":
+                if c["type"] in ("read", "keys"):
                     continue
                 if col > 3:
                     raise SystemExit("page %s row %d has more than four Q-Link controls" % (page["name"], r))

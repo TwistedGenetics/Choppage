@@ -142,7 +142,7 @@ namespace ui
         void mouseDown (const juce::MouseEvent&) override;
         void mouseWheelMove (const juce::MouseEvent&, const juce::MouseWheelDetails&) override;
         void refresh();
-        std::function<void()> onChooseFolder;
+        std::function<void()> onChooseFolder, onSavePreset, onLoadPreset;
     private:
         int visibleRows() const;
         juce::Rectangle<int> listArea() const;
@@ -151,7 +151,7 @@ namespace ui
         uint32_t seen = 0;
         int scroll = 0;
         static constexpr int rowH = 34;
-        LcdCell folderCell, rescanCell, upCell, downCell, pathCell;
+        LcdCell folderCell, rescanCell, upCell, downCell, pathCell, saveCell, loadCell;
     };
 
     // ---- FX / SET -----------------------------------------------------------------------------------

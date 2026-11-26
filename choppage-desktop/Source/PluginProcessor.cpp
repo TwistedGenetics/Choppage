@@ -1,4 +1,5 @@
 #include "PluginProcessor.h"
+#include "choppage/Preset.h"
 #include "PluginEditor.h"
 
 using namespace bc;
@@ -230,3 +231,32 @@ void ChoppageProcessor::setStateInformation (const void* data, int size)
 juce::AudioProcessorEditor* ChoppageProcessor::createEditor() { return new ChoppageEditor (*this); }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() { return new ChoppageProcessor(); }
+
+// ===================================================================================== presets
+juce::File ChoppageProcessor::presetsFolder() const
+{
+    auto f = juce::File::getSpecialLocation (juce::File::userMusicDirectory).getChildFile ("CHOPPAGE").getChildFile ("Presets");
+    f.createDirectory();
+    return f;
+}
+
+bool ChoppageProcessor::savePreset (const juce::File& file)
+{
+    std::vector<float> p ((size_t) bc::kNumCoreParams);
+    for (int i = 0; i < bc::kNumCoreParams; ++i) p[(size_t) i] = values[(size_t) i]->load();
+    const auto f = file.hasFileExtension ("chp") ? file : file.withFileExtension ("chp");
+    return bc::Preset::writeFile (f.getFullPathName().toStdString(),
+                                  bc::Preset::make (f.getFileNameWithoutExtension().toStdString(), p.data(), sess.saveState()));
+}
+
+bool ChoppageProcessor::loadPreset (const juce::File& file)
+{
+    std::string text;
+    bc::Preset::Parsed pr;
+    if (! bc::Preset::readFile (file.getFullPathName().toStdString(), text) || ! bc::Preset::parse (text, pr)) return false;
+    for (auto& [id, v] : pr.params)
+        if (auto* prm = apvts.getParameter (id))
+            prm->setValueNotifyingHost (prm->convertTo0to1 (v));
+    sess.loadState (pr.session);
+    return true;
+}
