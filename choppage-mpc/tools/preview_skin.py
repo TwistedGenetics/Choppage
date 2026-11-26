@@ -212,7 +212,7 @@ def main():
             fx = 12 + i * 180
             d.rounded_rectangle((fx, 748, fx + 168, 792), radius=6, fill=(220, 30, 40) if fn == t["fnKeyIndex"] else (60, 60, 64))
             d.text((fx + 84, 770), name, font=font(22), fill=(255, 255, 255), anchor="mm")
-        path = os.path.join(a.out, "%d_%d_%s.png" % (t["fnKeyIndex"], t["fnKeySubIndex"], t["tabName"].replace(" ", "_")))
+        path = os.path.join(a.out, "%d_%d_%s.png" % (t["fnKeyIndex"], t["fnKeySubIndex"], t["tabName"].replace(" ", "_").replace("/", "_")))
         full.convert("RGB").save(path)
         print(path)
 

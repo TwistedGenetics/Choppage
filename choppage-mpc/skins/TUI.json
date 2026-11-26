@@ -91233,9 +91233,9 @@
 },
 {
 "version": 1,
-"tabName": "PRESETS",
-"fnKeyIndex": 6,
-"fnKeySubIndex": 2,
+"tabName": "SAVE/LOAD",
+"fnKeyIndex": 7,
+"fnKeySubIndex": 0,
 "componentDefinition": {
 "version": 2,
 "actions": [],
@@ -91265,7 +91265,7 @@
 "version": 2,
 "imageType": "Regular",
 "colour": "0",
-"image": "bg_6_2.png"
+"image": "bg_7_0.png"
 }
 },
 "handle remapping": {

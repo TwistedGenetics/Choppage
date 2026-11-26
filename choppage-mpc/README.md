@@ -77,11 +77,11 @@ The sections:
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
-**PLAY / SET / PRESETS** (press again for SET, and again for PRESETS):
+**PLAY / SET** (press again for SET):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT, **BREAK BPM** (the selected break's own tempo: if it plays too fast or slow against the MPC, set its real tempo here), the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
 
-**PRESETS** saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
+**SAVE/LOAD** (its own function key, after PLAY) saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
 - **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.
 - **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
 - The breaks are not copied into the preset: CHOPPAGE finds them where they were, or by file name in `Content/Breaks`. The same files load on the desktop.

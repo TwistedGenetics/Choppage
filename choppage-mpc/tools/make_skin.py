@@ -636,7 +636,7 @@ def pages():
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
         # presets: VST2 Plugins/Content/Presets/CHOPPAGE. Type a name, SAVE NEW; or pick one with PRESET and LOAD.
-        {"fn": 6, "sub": 2, "name": "PRESETS", "rows": [
+        {"fn": 7, "sub": 0, "name": "SAVE/LOAD", "rows": [
             [K("preBrowse", "PRESET"), G("preLoad", "LOAD"), G("preSave", "SAVE\nNEW"), G("preOver", "SAVE\nOVER")],
             [R("preName", "NAME (TYPE IT BELOW)", span=3), R("infoMsg", "MESSAGE")],
             [KEYS([key_row(0, (42, "DEL", 1.6)), key_row(1, (43, "CLEAR", 1.6))])],
