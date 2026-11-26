@@ -1116,7 +1116,9 @@ float ChoppageMpcApp::jogged(int index, float v, float prev) const
             if (s.content == nullptr || s.content->buffer == nullptr || s.content->buffer->sampleRate <= 0) return v;
             scale = (double)s.content->buffer->numSamples / s.content->buffer->sampleRate * 1000.0;   // ms across the break
             // ZOOM ALL: 10 ms a click, 1 ms with SHIFT; ZOOM SLICE (getting onto a transient): 1 ms, 0.1 ms with SHIFT
-            if (roundi(values_[MP_ZOOM].load()) == 1) { fine = 0.1; coarse = 1; }
+            if (roundi(values_[MP_ZOOM].load()) == 1 && roundi(values_[MP_ZOOM_LEVEL].load()) > 0)
+            { fine = 1000.0 / s.content->buffer->sampleRate; coarse = 0.25; }          // START / END close-up: 1 sample (SHIFT), 0.25 ms
+            else if (roundi(values_[MP_ZOOM].load()) == 1) { fine = 0.1; coarse = 1; }
             else { fine = 1; coarse = 10; }
             break;
         }
@@ -1628,7 +1630,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
         {
             std::lock_guard<std::mutex> l(textMutex_);
             char t[32];
-            std::snprintf(t, sizeof t, "%.4f S", at / s.content->buffer->sampleRate);
+            std::snprintf(t, sizeof t, roundi(values_[MP_ZOOM_LEVEL].load()) > 0 ? "%.5f S" : "%.4f S", at / s.content->buffer->sampleRate);
             moveText_ = t;
         }
         put(MP_SL_MOVE, (float)at / (float)n);
@@ -1644,7 +1646,7 @@ void ChoppageMpcApp::syncMirrors(bool force)
         {
             std::lock_guard<std::mutex> l(textMutex_);
             char t[40];
-            if (slice < last) std::snprintf(t, sizeof t, "%.4f S", endAt / s.content->buffer->sampleRate);
+            if (slice < last) std::snprintf(t, sizeof t, roundi(values_[MP_ZOOM_LEVEL].load()) > 0 ? "%.5f S" : "%.4f S", endAt / s.content->buffer->sampleRate);
             else std::snprintf(t, sizeof t, "END OF BREAK");
             endText_ = t;
         }
@@ -1785,9 +1787,9 @@ ChoppageMpcApp::View ChoppageMpcApp::viewOf(const SlotContent& c, int sel)
     const int level = roundi(values_[MP_ZOOM_LEVEL].load());
     if (level == 1 || level == 2)
     {
-        // close up on the slice's start (or end): 60 ms, the marker a quarter in (the end three quarters in), so
-        // the transient and a little before it fill the screen
-        const int span = std::clamp((int)(c.buffer->sampleRate * 0.06), kWaveCols * 2, n);
+        // close up on the slice's start (or end): 8 ms (about 4 samples a column), the marker a quarter in (the end
+        // three quarters in), so the very start of the transient and the moment before it fill the screen
+        const int span = std::clamp((int)(c.buffer->sampleRate * 0.008), kWaveCols * 2, n);
         const int at = level == 1 ? r.start : r.end;
         const int from = std::clamp(at - (level == 1 ? span / 4 : span * 3 / 4), 0, std::max(0, n - span));
         return { from, std::min(span, n - from) };

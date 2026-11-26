@@ -61,7 +61,7 @@ The sections:
 - The places and the last folder are kept in the plugin's own `Content/places.txt`, so the next load opens where you left off. **REFRESH** reads the folder again (after copying files in).
 
 **SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DELETE** on the LCD.
-- **ZOOM SLICE** has three levels: press it for the slice, again for a close-up (60 ms) of the slice's **START**, again for its **END**, again for the slice. Turning START (MOVE) or END with the jog wheel goes to that close-up by itself. The key shows the level (SLICE / START / END); **ZOOM ALL** shows the whole break.
+- **ZOOM SLICE** has three levels: press it for the slice, again for a close-up (8 ms, about 4 samples a column) of the slice's **START**, again for its **END**, again for the slice. Turning START (MOVE) or END with the jog wheel goes to that close-up by itself. In the close-ups the jog wheel moves the marker 0.25 ms a click and **one sample with SHIFT**, and times show to 0.01 ms. The key shows the level (SLICE / START / END); **ZOOM ALL** shows the whole break.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
 - **Select a slice** by touching it in the waveform or playing its note (C4 upwards). Then:
   - **+ ADD** (on the LCD, or ADD on CHOP) splits the selected slice at the strongest hit inside it (if it has none, in the middle).

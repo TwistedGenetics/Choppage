@@ -523,9 +523,17 @@ int main(int argc, char** argv)
         set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.001f);
         const double ms3 = app.getParam(MP_SL_MOVE) * lenMs;
         CHECK(std::fabs(ms3 - ms2 - 0.1) < 0.03, ("ZOOM SLICE fine: 0.1 ms on: " + std::to_string(ms3)).c_str());
+        // turning START went to its close-up: 0.25 ms a click, 1 sample with SHIFT
+        CHECK(app.getParam(MP_ZOOM_LEVEL) == 1.0f, "turning START: the start close-up");
         set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.0078f);
         const double ms4 = app.getParam(MP_SL_MOVE) * lenMs;
-        CHECK(std::fabs(ms4 - std::round(ms3) - 1.0) < 0.03 || std::fabs(ms4 - ms3 - 1.0) < 0.6, ("ZOOM SLICE coarse: about 1 ms on: " + std::to_string(ms4)).c_str());
+        CHECK(std::fabs(ms4 - ms3 - 0.25) < 0.13, ("close-up coarse: 0.25 ms on: " + std::to_string(ms4 - ms3)).c_str());
+        const int mk = app.session().selectedSlice();
+        const int smp0 = app.session().slot(0).content->slices.starts[(size_t)mk];
+        set(app, MP_SL_MOVE, app.getParam(MP_SL_MOVE) + 0.001f);
+        const int smp1 = app.session().slot(0).content->slices.starts[(size_t)mk];
+        CHECK(std::abs(smp1 - smp0 - 1) <= 1 && smp1 > smp0, ("close-up fine: one sample on: " + std::to_string(smp1 - smp0)).c_str());
+        set(app, MP_ZOOM_LEVEL, 0);
         set(app, MP_ZOOM, 0);
         // BREAK BPM: whole numbers on the wheel, 0.1 with SHIFT; the break plays at it
         const float b0 = app.getParam(MP_BRK_BPM);
