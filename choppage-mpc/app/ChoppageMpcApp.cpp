@@ -647,7 +647,7 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
 void ChoppageMpcApp::setParam(int index, float plain)
 {
     if (index >= 0 && index < kMpcNumParams) values_[index].store(plain, std::memory_order_relaxed);
-    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY || index == MP_PLACE_TAP || index == MP_LIST_TAP) && plain >= 0.5f)
+    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY || index == MP_PLACE_TAP || index == MP_LIST_TAP || index == MP_SEQ_TAP) && plain >= 0.5f)
     {
         // a touch: kept until the worker's next tick, so a tap shorter than a tick still counts
         std::lock_guard<std::mutex> l(tapMutex_);
@@ -819,7 +819,7 @@ void ChoppageMpcApp::tick()
             handle(t.index, t.value, 0.0f);
         }
         if (!taps.empty())
-            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY, (int)MP_PLACE_TAP, (int)MP_LIST_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
+            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY, (int)MP_PLACE_TAP, (int)MP_LIST_TAP, (int)MP_SEQ_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
     }
     // a slice pad was played: the screen goes to that slice (of that break)
     if (const int hit = session_.engine().sliceHit.exchange(-1, std::memory_order_relaxed); hit >= 0)
@@ -829,7 +829,7 @@ void ChoppageMpcApp::tick()
     }
     for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i)
     {
-        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY || i == MP_PLACE_TAP || i == MP_LIST_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
+        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY || i == MP_PLACE_TAP || i == MP_LIST_TAP || i == MP_SEQ_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
         const float v = values_[i].load(std::memory_order_relaxed);
         if (v == seen_[i]) continue;
         const float prev = seen_[i];

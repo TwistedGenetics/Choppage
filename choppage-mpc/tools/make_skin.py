@@ -1541,6 +1541,29 @@ class Builder:
                                ("replacementStrings", repl),
                                ("info", o(("version", 1), ("type", "CompleteDescription"))),
                                ("tabs", tabs))))
+        # 0.11: no Q-Links on this instrument (asked for): no focus rectangle on any tab, no touch that selects a
+        # Q-Link group (a Mouse Down -> Q-Link action could take the first touch on a grid), and the knobs are
+        # mapped to an unused reserved parameter, so turning one changes nothing.
+        def setkey(obj, key, val):
+            for i_, (k_, _) in enumerate(obj):
+                if k_ == key:
+                    obj[i_] = (key, val)
+
+        def strip_qlink(x):
+            if isinstance(x, O):
+                for i_, (k_, v_) in enumerate(x):
+                    if k_ == "actions" and isinstance(v_, list):
+                        x[i_] = (k_, [a_ for a_ in v_ if dict(a_).get("handler") != "Q-Link"])
+                    strip_qlink(x[i_][1])
+            elif isinstance(x, list):
+                for v_ in x:
+                    strip_qlink(v_)
+        strip_qlink(tui)
+        for tab_ in tabs:
+            setkey(tab_, "qlinkBoundsData", [])
+        inert = self.p("reserved_62")["index"]
+        for m_ in qmaps:
+            setkey(m_, "Q-Links", o(*[("Q-Link %d" % i, inert) for i in range(1, 17)]))
         with open(os.path.join(self.out, "TUI.json"), "w") as f:
             f.write(skin_json(tui))
         # Program mode (no screen page open): the sound and the dice amounts
@@ -1548,7 +1571,7 @@ class Builder:
                                               "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycLen")]
         ql = o(("version", 4), ("info", o(("version", 1), ("type", "CompleteDescription"))),
                ("Screen Mode Q-Links", o(("version", 4), ("map", qmaps))),
-               ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), prog[i]) for i in range(16)])))
+               ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), inert) for i in range(16)])))
         with open(os.path.join(self.out, "Q-Links.json"), "w") as f:
             f.write(skin_json(ql))
         return len(tabs)
