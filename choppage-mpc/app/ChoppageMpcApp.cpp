@@ -1,6 +1,7 @@
 #include "ChoppageMpcApp.h"
 #include "choppage/AudioFile.h"
 #include "choppage/Preset.h"
+#include "choppage/TransientDetector.h"
 #include "choppage/Params.h"
 #include <algorithm>
 #include <array>
@@ -1451,10 +1452,20 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             const auto r = s.content->slices.region(sel, s.content->buffer->numSamples);
             const int edge = std::max(SliceTable::kMinGap, (int)(s.content->buffer->sampleRate * 0.015));
             if (r.length() < 2 * edge + 64) { say("SLICE " + std::to_string(sel + 1) + " IS TOO SHORT TO SPLIT"); break; }
+            // the strongest hit the transient detector finds inside it (at full sensitivity), else the simple search
             bool found = false;
             const int mid = r.start + r.length() / 2;
-            int at = session_.snapToHit(mid, r.length() / 2 - edge, &found);
-            if (!found || at < r.start + edge || at > r.end - edge) { at = mid; found = false; }
+            int at = mid;
+            {
+                float bestS = -1.0f;
+                for (const auto& o : TransientDetector::findOnsets(*s.content->buffer, 1.0f))
+                    if (o.position >= r.start + edge && o.position <= r.end - edge && o.strength > bestS) { bestS = o.strength; at = o.position; found = true; }
+            }
+            if (!found)
+            {
+                at = session_.snapToHit(mid, r.length() / 2 - edge, &found);
+                if (!found || at < r.start + edge || at > r.end - edge) { at = mid; found = false; }
+            }
             session_.addMarker(at);
             session_.selectSlice(sel, false);
             say(found ? "SPLIT SLICE " + std::to_string(sel + 1) + " AT ITS HIT" : "NO HIT IN SLICE " + std::to_string(sel + 1) + ": SPLIT IN THE MIDDLE");

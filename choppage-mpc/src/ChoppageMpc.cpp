@@ -36,7 +36,7 @@ public:
         i.name = "CHOPPAGE";
         i.vendor = "Twisted Genetics";
         i.uniqueId = MPC_FOURCC('T', 'g', 'C', 'h');   // == "uid" in plugin.json
-        i.version = 14003;                              // 0.14.3
+        i.version = 15000;                              // 0.15.0
         i.isInstrument = true;
         i.numInputs = 0;
         i.numOutputs = 2;

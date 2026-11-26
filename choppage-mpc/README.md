@@ -131,3 +131,8 @@ Builds run on GitHub Actions: `choppage-mpc/build.sh` uses the official [MPC Plu
 | `tools/make_skin.py` | Generates `skins/` (TUI.json, Q-Links.json, PNGs) from `tools/params.json` (`test_mpc_app --dump`), and checks the hardware rules (no label over a touch area, focus frame first) |
 | `tools/preview_skin.py` | Draws the screens from the generated TUI.json with real values (`test_mpc_app --state`), to check a layout without an MPC |
 | `tools/sync_core.sh` | One `src/core_*.cpp` wrapper per core source |
+
+## Transient detection (0.15)
+Slicing finds hits with a rebuilt detector: a 24-band log spectrogram every 2.9 ms, SuperFlux in three groups (lows for kicks, mids, highs for snares and hats) plus a 6 ms burst detector for ghost notes and hats, each normalised by its own big hits; every hit is then placed on the sample it starts on and checked to be a real rise, starting on the zero crossing just before it (within 0.3 ms). Flams count as one hit.
+
+On a test bench of 60 breaks with known hit starts (humanised, flams, ghost notes, room, noise, half of them low-passed and 12-bit): F-measure 0.90 -> 0.94, and the median distance from each slice start to the real hit start 0.98 ms -> 0.07 ms (97% within 1 ms, was 51%). SENSITIVITY works as before (higher = more slices; the default 0.62 is the bench's best). **+ ADD** splits a slice at the strongest hit this detector finds inside it.
