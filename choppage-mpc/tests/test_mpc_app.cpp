@@ -351,6 +351,24 @@ int main(int argc, char** argv)
         // a second save with the same name gets its own file; SAVE OVER replaces the one shown
         press(a4, MP_PRE_SAVE, 1);
         CHECK(std::filesystem::exists(folder / "Amen Roll 2.chp"), "a second SAVE NEW does not overwrite");
+        // the DISK list shows presets too, and loads one
+        a4.session().listFolder(folder.string(), "");
+        for (int i = 0; i < 300 && (a4.session().browserScanning() || a4.session().browserFolder() != folder.string()); ++i)
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        a4.tick();
+        const auto ents = a4.session().browserEntries();
+        int at = -1;
+        for (size_t i = 0; i < ents.size(); ++i) if (ents[i].isPreset && ents[i].name == "Amen Roll") at = (int)i;
+        CHECK(at >= 0, "the DISK list shows the saved preset");
+        if (at >= 0)
+        {
+            set(a4, MP_BROWSE, (float)at);
+            press(a4, MP_LOAD);
+            settle(a4);
+            std::string m;
+            a4.formatValue(MP_INFO_MSG, 0, m);
+            CHECK(m.find("LOADED") != std::string::npos, ("pushing LOAD on it loads it: " + m).c_str());
+        }
         pp.app = nullptr;
     }
     std::printf("fluid chopping\n");

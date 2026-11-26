@@ -572,6 +572,12 @@ void ChoppageMpcApp::loadPreset(int index)
         path = presets_[(size_t)index].second;
         name = presets_[(size_t)index].first;
     }
+    loadPresetFile(path, name);
+}
+
+// A preset file (from the PRESET list or the DISK list): the sound and settings, then the breaks and patterns.
+void ChoppageMpcApp::loadPresetFile(const std::string& path, const std::string& name)
+{
     std::string text;
     Preset::Parsed p;
     if (!Preset::readFile(path, text) || !Preset::parse(text, p)) { message_ = "CAN'T READ " + upper(name); messageTicks_ = 90; return; }
@@ -619,8 +625,10 @@ void ChoppageMpcApp::savePreset(int overIndex)
         for (int k = 0; k < (int)presets_.size(); ++k) if (presets_[(size_t)k].second == path) at = k;
     }
     write(MP_PRE_BROWSE, (float)at + (seen_[MP_PRE_BROWSE] == (float)at ? 0.001f : 0.0f));   // (moved a hair: the name redraws)
-    message_ = "SAVED " + upper(name);
-    messageTicks_ = 90;
+    // where it went (the DISK list shows presets too)
+    std::string where = std::filesystem::path(presetsDir_).parent_path().filename().string() + "/" + std::filesystem::path(presetsDir_).filename().string();
+    message_ = "SAVED " + upper(name) + " IN " + upper(where);
+    messageTicks_ = 150;
 }
 
 // The name keyboard: words start with a capital (CAPS: all capitals).
@@ -805,6 +813,7 @@ std::string ChoppageMpcApp::browserText(int k) const
     const auto& e = browser_[(size_t)k];
     if (e.isUp) return "[ .. ]  UP A FOLDER";
     if (e.isDir) return "[ " + upper(e.name) + " ]";
+    if (e.isPreset) return "PRESET  " + upper(e.name);
     char buf[160];
     if (e.bpm > 0) std::snprintf(buf, sizeof buf, "%.0f  %s", e.bpm, upper(e.name).c_str());
     else std::snprintf(buf, sizeof buf, "%s", upper(e.name).c_str());
@@ -1117,6 +1126,11 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             // a folder opens at a touch; a break plays at the first touch and loads at the second
             const auto entries = session_.browserEntries();
             if (pick < (int)entries.size() && entries[(size_t)pick].isDir) { goFolder(entries[(size_t)pick].path); return; }
+            if (pick < (int)entries.size() && pick == roundi(seen_[MP_BROWSE]) && entries[(size_t)pick].isPreset)
+            {
+                loadPresetFile(entries[(size_t)pick].path, entries[(size_t)pick].name);
+                return;
+            }
             if (pick < (int)entries.size() && pick == roundi(seen_[MP_BROWSE]))
             {
                 session_.auditionStop();
@@ -1246,7 +1260,8 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         case MP_SNAP: break;
         case MP_PRE_BROWSE:
         {
-            // shown by formatValue; LOAD / SAVE OVER act on it. Kept inside the list.
+            // shown by formatValue; LOAD / SAVE OVER act on it. Kept inside the list (read again: files copied in show).
+            refreshPresets();
             int n;
             { std::lock_guard<std::mutex> l(textMutex_); n = (int)presets_.size(); }
             if (roundi(v) > std::max(0, n - 1)) write(MP_PRE_BROWSE, (float)std::max(0, n - 1));
@@ -1297,6 +1312,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             const auto entries = session_.browserEntries();
             const int k = roundi(values_[MP_BROWSE].load());
             if (k >= 0 && k < (int)entries.size() && entries[(size_t)k].isDir) { goFolder(entries[(size_t)k].path); break; }
+            if (k >= 0 && k < (int)entries.size() && entries[(size_t)k].isPreset) { loadPresetFile(entries[(size_t)k].path, entries[(size_t)k].name); break; }
             if (k >= 0 && k < (int)entries.size())
             {
                 session_.auditionStop();
@@ -1828,7 +1844,7 @@ void ChoppageMpcApp::syncAudition()
     if (auditionWait_ > 0 && --auditionWait_ == 0)
     {
         const auto entries = session_.browserEntries();
-        if (pick >= 0 && pick < (int)entries.size() && !entries[(size_t)pick].isDir && session_.auditioning() != entries[(size_t)pick].path)
+        if (pick >= 0 && pick < (int)entries.size() && !entries[(size_t)pick].isDir && !entries[(size_t)pick].isPreset && session_.auditioning() != entries[(size_t)pick].path)
             if (!session_.audition(entries[(size_t)pick].path)) { message_ = "CAN'T READ " + upper(entries[(size_t)pick].name); messageTicks_ = 90; }
     }
 }

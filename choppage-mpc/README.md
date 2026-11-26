@@ -90,6 +90,7 @@ The sections:
 **SAVE/LOAD** (its own function key, after PLAY) saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
 - **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.
 - **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
+- The DISK screen lists presets too (`PRESET  NAME`, in their folder): touch one twice, or push the jog wheel on it, to load it. SAVE says which folder it saved into.
 - The breaks are not copied into the preset: CHOPPAGE finds them where they were, or by file name in `Content/Breaks`. The same files load on the desktop.
 
 **PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its note: E2-B3 in C MAJOR, G#3-B4 in CHROMATIC). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.

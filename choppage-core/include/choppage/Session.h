@@ -51,7 +51,7 @@ namespace bc
             uint32_t version = 0;
         };
 
-        struct BrowserEntry { std::string path, name; double bpm = 0, seconds = 0; int bars = 0; bool isDir = false; bool isUp = false; };
+        struct BrowserEntry { std::string path, name; double bpm = 0, seconds = 0; int bars = 0; bool isDir = false; bool isUp = false; bool isPreset = false; };
 
         enum class SliceField { pitch, gate, stretch, reverse, stutter, trans, xfade, level };
 

@@ -276,6 +276,15 @@ namespace bc
                     const auto p = path.string();
                     std::string ext = path.extension().string();
                     for (auto& ch : ext) ch = (char) std::tolower ((unsigned char) ch);
+                    if (ext == ".chp" && scan->flat)          // a CHOPPAGE preset: listed (first), loaded by the app
+                    {
+                        BrowserEntry e;
+                        e.path = p;
+                        e.name = path.stem().string();
+                        e.isPreset = true;
+                        found.push_back (e);
+                        return true;
+                    }
                     if (ext != ".wav" && ext != ".aif" && ext != ".aiff" && ext != ".flac" && ext != ".mp3"
                         && ext != ".rx2" && ext != ".rex") return false;
                     BrowserEntry e;

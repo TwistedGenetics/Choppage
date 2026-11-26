@@ -99,6 +99,7 @@ private:
     void choosePresetsFolder();
     void refreshPresets();
     void loadPreset(int index);
+    void loadPresetFile(const std::string& path, const std::string& name);
     void savePreset(int overIndex);                               // -1 = a new file
     void typeKey(int key);
     std::mutex tapMutex_;
