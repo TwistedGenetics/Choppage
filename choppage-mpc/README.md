@@ -8,7 +8,7 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 ## Install
 1. Unzip and copy the `Twisted Genetics - VST - CHOPPAGE` folder into `VST2 Plugins` on an MPC drive (SD card, SSD or USB).
 2. On the MPC, go to Preferences > Enhancements (Beta) and turn on **Enable Enhancements** and **External Plugin Support**, then restart.
-3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders (CHOPPAGE makes it the first time it loads), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
+3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders. **Make the `Content` and `Breaks` folders yourself**: CHOPPAGE never creates anything in VST2 Plugins (a folder appearing there while the plugin opens left the MPC showing its standard grey screen in 0.8.0 - 0.9.0), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
 ## Pads
@@ -74,7 +74,7 @@ The sections:
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT, the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
 
-**PRESETS** saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files.
+**PRESETS** saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
 - **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.
 - **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
 - The breaks are not copied into the preset: CHOPPAGE finds them where they were, or by file name in `Content/Breaks`. The same files load on the desktop.
