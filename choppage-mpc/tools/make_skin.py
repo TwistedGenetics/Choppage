@@ -1542,7 +1542,8 @@ class Builder:
         self.discrete("lcdColour")
         tabs, qmaps = [], []
         self._seq_windows = []
-        for t, q in (self.main_tab(), self.disk_tab(), self.slice_tab(0), self.slice_tab(1), self.seq_tab()):
+        # (0.14.1: no DISK tab; LOAD on MAIN opens the DISK screen)
+        for t, q in (self.main_tab(), self.slice_tab(0), self.slice_tab(1), self.seq_tab()):
             tabs.append(t)
             qmaps.append(q)
         for page in pages():
@@ -1580,8 +1581,19 @@ class Builder:
         # 0.12: Q-Links back, with no box: on every page knob N turns "qN", which CHOPPAGE sends on to the
         # parameter picked for knob N on the Q-LINKS page
         knobs = [self.p("q%d" % i)["index"] for i in range(1, 17)]
-        for m_ in qmaps:
-            setkey(m_, "Q-Links", o(*[("Q-Link %d" % i, knobs[i - 1]) for i in range(1, 17)]))
+        # 0.14.1: six function keys, so the bar fits the screen (press a key again for its next page)
+        keys = {"MAIN": (0, 0), "SEQ": (0, 1), "PATTERN": (0, 2), "SLICE": (1, 0), "CHOP": (1, 1),
+                "FX PADS": (2, 0), "AKAIZER": (2, 1), "SOUND": (3, 0), "SPACE": (3, 1),
+                "PLAY": (4, 0), "SET": (4, 1), "Q-LINKS": (4, 2), "SAVE/LOAD": (5, 0), "SETTINGS": (5, 1)}
+        for tab_ in tabs:
+            name_ = dict(tab_)["tabName"]
+            if name_ not in keys:
+                raise SystemExit("tab %s has no function key" % name_)
+            setkey(tab_, "fnKeyIndex", keys[name_][0])
+            setkey(tab_, "fnKeySubIndex", keys[name_][1])
+        tabs.sort(key=lambda t_: (dict(t_)["fnKeyIndex"], dict(t_)["fnKeySubIndex"]))
+        qmaps[:] = [o(("Tab", dict(t_)["fnKeyIndex"] + 1), ("SubTab", dict(t_)["fnKeySubIndex"] + 1), ("Bank Direction", "RowTopDown"),
+                      ("Q-Links", o(*[("Q-Link %d" % i, knobs[i - 1]) for i in range(1, 17)]))) for t_ in tabs]
         with open(os.path.join(self.out, "TUI.json"), "w") as f:
             f.write(skin_json(tui))
         # Program mode (no screen page open): the sound and the dice amounts

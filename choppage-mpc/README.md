@@ -11,7 +11,17 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders. **Make the `Content` and `Breaks` folders yourself**: CHOPPAGE never creates anything in VST2 Plugins (a folder appearing there while the plugin opens left the MPC showing its standard grey screen in 0.8.0 - 0.9.0), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
-**Q-Links** (no orange box): the 16 knobs work the same on every page. The **Q-LINKS** page (its own function key) picks what each knob turns: any knob, switch or choice in CHOPPAGE. Turn a Q-LINK cell there (or use the jog wheel) to go through the list; a knob on a switch or list moves it one step a turn. They start on FILTER, RESONANCE, DISTORTION, CRUSH, SAMPLE RATE, REVERB, ECHO, VOLUME, PATTERN / FX AMOUNT, SWING, STYLE and the FX pad times.
+**Function keys** (six, so they fit the screen; press a key again for its next page):
+| Key | Pages |
+|---|---|
+| MAIN | MAIN, SEQ, PATTERN (DISK: the LOAD key on MAIN) |
+| SLICE | SLICE, CHOP |
+| FX PADS | FX PADS, AKAIZER |
+| SOUND | SOUND, SPACE |
+| PLAY | PLAY, SET, Q-LINKS |
+| SAVE/LOAD | SAVE/LOAD, SETTINGS |
+
+**Q-Links** (no orange box): the 16 knobs work the same on every page. The **Q-LINKS** page (PLAY, third press) picks what each knob turns: any knob, switch or choice in CHOPPAGE. Turn a Q-LINK cell there (or use the jog wheel) to go through the list; a knob on a switch or list moves it one step a turn. They start on FILTER, RESONANCE, DISTORTION, CRUSH, SAMPLE RATE, REVERB, ECHO, VOLUME, PATTERN / FX AMOUNT, SWING, STYLE and the FX pad times.
 
 ## Notes (SET > NOTE MAP)
 **C MAJOR** (the default): only white keys, so the MPC's pads in a C major scale (or any keyboard) play everything without setting pads up.
@@ -54,7 +64,7 @@ The sections:
 - **FX** puts each pad's setting knob under it.
 - **LOAD** opens the **DISK screen** over the whole page (the same as the DISK page below, with **BACK** to return).
 
-**DISK page** (press MAIN again, or LOAD on MAIN): browse **any folder on the MPC's drives**, your own samples folders included.
+**DISK screen** (LOAD on MAIN): browse **any folder on the MPC's drives**, your own samples folders included.
 - The top line shows the folder. **UP** goes to the folder above; at the top you see the drives (internal SSD, SD card, USB).
 - The list shows `[ .. ]` (up), the folders as `[ NAME ]`, then the breaks with their tempo. **Touch a folder** to open it. **Touch a break** to hear it, touch it again to load it. Or turn the jog wheel (one line a click) and push it (or **LOAD / OPEN**).
 - **PLACES**: eight keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
@@ -84,13 +94,13 @@ The sections:
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
-**SETTINGS** (press PLAY three times): **EXPORT SETTINGS** writes how CHOPPAGE is set up to `CHOPPAGE Settings.txt` (in `VST2 Plugins/Content/Settings/CHOPPAGE` if you have made `VST2 Plugins/Content`, else in the plugin's own `Content/Settings`): GATE, BREAK SWITCH, TRIGGER, VELOCITY > SLICE, TEMPO SOURCE, SPEED, FIT, PAD QUANTISE, LCD colour, NOTE MAP, PAD NOTES, SLICING / SENSITIVITY / GRID, SNAP, the 8 places, the last folder and the 16 Q-Link assignments. **LOAD SETTINGS** reads it back (after a reinstall, or on another MPC). Breaks, slices, patterns and the sound are presets (SAVE/LOAD), not settings.
+**SETTINGS** (SAVE/LOAD, second press): **EXPORT SETTINGS** writes how CHOPPAGE is set up to `CHOPPAGE Settings.txt` (in `VST2 Plugins/Content/Settings/CHOPPAGE` if you have made `VST2 Plugins/Content`, else in the plugin's own `Content/Settings`): GATE, BREAK SWITCH, TRIGGER, VELOCITY > SLICE, TEMPO SOURCE, SPEED, FIT, PAD QUANTISE, LCD colour, NOTE MAP, PAD NOTES, SLICING / SENSITIVITY / GRID, SNAP, the 8 places, the last folder and the 16 Q-Link assignments. **LOAD SETTINGS** reads it back (after a reinstall, or on another MPC). Breaks, slices, patterns and the sound are presets (SAVE/LOAD), not settings.
 
 **PLAY / SET** (press again for SET):
 - PLAY has GATE, MUTE GROUP, BREAK SWITCH, VELOCITY > SLICE, TRIGGER and PAD NOTES.
 - SET has TEMPO SOURCE, SPEED, FIT, **BREAK BPM** (the selected break's own tempo: if it plays too fast or slow against the MPC, set its real tempo here), the LCD colour (BLUE, GREEN, AMBER, WHITE) and SLICING: TRANS / GRID, **SENSITIVITY**, GRID and RESLICE. The slicing settings are also used the next time a break loads into that slot.
 
-**SAVE/LOAD** (its own function key, after PLAY) saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
+**SAVE/LOAD** (the last function key) saves the whole setup: the 8 breaks, their slices, patterns, memories and every setting. Presets live in `VST2 Plugins/Content/Presets/CHOPPAGE` as `.chp` files when you have made `VST2 Plugins/Content` (the Presets folder is made by your first save); without it they go in the plugin's own `Content/Presets`.
 - **Type a name** on the keyboard (SPACE, DEL, CLEAR, CAPS), then **SAVE NEW**. A name already used gets a number on the end, so nothing is overwritten.
 - **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
 - The DISK screen lists presets too (`PRESET  NAME`, in their folder): touch one twice, or push the jog wheel on it, to load it. SAVE says which folder it saved into.
