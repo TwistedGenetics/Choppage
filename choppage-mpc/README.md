@@ -11,11 +11,17 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders. **Make the `Content` and `Breaks` folders yourself**: CHOPPAGE never creates anything in VST2 Plugins (a folder appearing there while the plugin opens left the MPC showing its standard grey screen in 0.8.0 - 0.9.0), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
-## Pads
-| Pads | Notes (default) | What |
-|---|---|---|
-| 1–8 (bottom two rows) | C1–G1 (36–43) | The 8 breaks. **A break plays only when its key triggers it**, in time with the MPC's tempo. Pressing a key (or a sequenced note) also switches **every screen to that break**: the LCD, the waveform and slices, the SEQ grid and the slice settings |
-| 9–16 (top two rows) | G#1–D#2 (44–51) | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP. The FX plays while you hold the pad and stops when you let go |
+## Notes (SET > NOTE MAP)
+**C MAJOR** (the default): only white keys, so the MPC's pads in a C major scale (or any keyboard) play everything without setting pads up.
+
+| Notes | What |
+|---|---|
+| C0 D0 E0 F0 G0 A0 B0 C1 | The 8 breaks. **A break plays only when its key triggers it**, in time with the MPC's tempo. Pressing a key (or a sequenced note) also switches **every screen to that break** |
+| D1 E1 F1 G1 A1 B1 C2 D2 | Hold FX: STUTTER, ROLL, REVERSE, TAPE STOP, HALF-TIME, AKAIZE, FILTER DIVE, S950 DROP. The FX plays while held |
+| E2 .. B3 (12 white keys) | Pattern memories 1-12 |
+| C4 D4 E4 ... upwards | Slices 1, 2, 3 ... of the playing break (up to 32), and they select that slice on screen |
+
+(C1 = note 36, as on the MPC.) **CHROMATIC** is the older layout: breaks C1-G1 (36-43), FX G#1-D#2, slices 1-16 E2-G3, memories G#3-B4; there **PLAY > PAD NOTES** (36 / 37 / 48) lines pad 1 up with C1.
 
 The 8 FX pads on the touchscreen work the same way: they play while touched and stop when your finger lifts. Keys on the screen (DICE, UNDO, ADD and so on) light while touched and act once per press.
 
@@ -26,7 +32,6 @@ How long a break plays is set by **PLAY > GATE**:
 
 **Mute groups (PLAY > MUTE GROUP, per break):** breaks in the same group cut each other. The new one carries on from the same point in the bar (BREAK SWITCH = BAR SYNC, the default), or starts from step 1 (RESTART), or waits for the next beat (QUANT). Breaks in different groups play together, in time with each other. All 8 start in group 1: one break at a time.
 
-If the program's pads send other notes, set **SET > PAD NOTES** to 37 (the MPC's default) or 48. Slices 1–16 of the playing break are on E2–G3, and pattern memories are on G#3–B4. These are the same as the desktop edition.
 
 ## Screens (the function keys under the MPC's screen)
 Double-tap a knob for a big knob overlay. The Q-Links follow each screen, in rows of four.
@@ -53,13 +58,12 @@ The sections:
 - **PLACES**: four keys for your favourite folders. Go to a folder, press **STORE**, then a PLACE key: it keeps that folder. Tap the PLACE key later to jump straight there. PLACE 1 starts as the breaks folder.
 - The places and the last folder are kept in the plugin's own `Content/places.txt`, so the next load opens where you left off. **REFRESH** reads the folder again (after copying files in).
 
-**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DEL** on the LCD.
+**SLICE / CHOP** (press SLICE again for CHOP): the waveform at the top, with ZOOM ALL or ZOOM SLICE, **+ ADD** and **- DELETE** on the LCD.
 - **ZOOM** on the MAIN screen's LCD switches the same waveform between the whole break and the selected slice (it is the same picture as on SLICE).
-- **Chopping by touch**: the **SELECT / ADD / DEL** keys on the LCD say what a touch on the waveform does.
-  - SELECT: the slice you touch is selected and plays. **Double-tap** empty waveform to add a marker there (SNAP puts it on the nearest hit); double-tap a marker to remove it.
-  - ADD: a new slice starts where you touch. With **SNAP TO HITS** on (CHOP page), it lands on the nearest drum hit; the new slice is selected and plays.
-  - DEL: the slice you touch goes (joined to the one before).
-- **Slice pads** (E2–G3, pad bank B with PAD NOTES at 36) select the slice they play, so you can pick a slice by ear.
+- **Select a slice** by touching it in the waveform or playing its note (C4 upwards). Then:
+  - **+ ADD** (on the LCD, or ADD on CHOP) splits the selected slice at the strongest hit inside it (if it has none, in the middle).
+  - **- DELETE** removes the selected slice: it joins the one before (slice 1 takes in slice 2).
+  (The touch modes and double taps of 0.8.1 - 0.10.5 are gone.)
 - **Jog wheel**: after touching the waveform, turning the jog wheel moves the selected slice's start; pushing it plays the slice.
 - **Touch a slice** in the waveform to select it: everything under the LCD now edits that slice.
 - **Bars of a longer break**: a 1- or 2-bar break is used whole. A longer one uses 2 bars: **EARLIER BARS / LATER BARS** under the hit letters pick which ("BARS 3-4 OF 8"); the break is sliced again for those bars, and the choice is saved.
@@ -86,7 +90,7 @@ The sections:
 - **PRESET** picks a saved preset; **LOAD** loads it, **SAVE OVER** replaces it with what you have now.
 - The breaks are not copied into the preset: CHOPPAGE finds them where they were, or by file name in `Content/Breaks`. The same files load on the desktop.
 
-**PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its pad, G#3–B4). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
+**PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its note: E2-B3 in C MAJOR, G#3-B4 in CHROMATIC). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
 
 **FX PAD QUANTISE** (FX PADS page): OFF, 1/32, 1/16, 1/8, 1/4, BAR. A pad hit off the beat waits for the next line of the grid; letting go ends it on the next line.
 

@@ -175,6 +175,8 @@ int main(int argc, char** argv)
     pf.app = &app;
     app.prepare(44100.0, 512);
     settle(app);
+    CHECK(app.getParam(MP_NOTE_MAP) == 0.0f, "the note map starts as C MAJOR");
+    set(app, MP_NOTE_MAP, 1);     // the tests below were written for CHROMATIC (C1 = break 1 ...); C MAJOR has its own
 
     std::printf("readouts and browser\n");
     std::string t;
@@ -364,25 +366,10 @@ int main(int argc, char** argv)
         app.tick(); settle(app);
         const int under = content().slices.sliceAt((int)((int64_t)content().buffer->numSamples * (2 * col + 1) / (2 * kWaveCols)));
         CHECK(app.session().selectedSlice() == under, "SELECT: a quick touch selects the slice under it");
-        // ADD: a marker at the touch, snapped to a hit
+        // 0.11: a touch only selects; ADD / DELETE act on the selected slice
         set(app, MP_SL_MODE, 1);
         press(app, MP_SLICE_TAP, (float)(col + 3));
-        CHECK(content().numSlices() == n0 + 1, "ADD: a touch adds a slice");
-        const int added = app.session().selectedSlice();
-        const int pos = content().slices.starts[(size_t)added];
-        const int touched = (int)((int64_t)content().buffer->numSamples * (2 * (col + 2) + 1) / (2 * kWaveCols));
-        CHECK(std::abs(pos - touched) <= (int)(content().buffer->sampleRate * 0.061), "ADD: the new start is near the touch (snapped)");
-        CHECK(app.session().snapToHit(pos, 256) == pos || true, "snap is stable");
-        set(app, MP_SNAP, 0.0f);
-        press(app, MP_SLICE_TAP, (float)(col + 20));
-        const int exact = (int)((int64_t)content().buffer->numSamples * (2 * (col + 19) + 1) / (2 * kWaveCols));
-        CHECK(content().slices.starts[(size_t)app.session().selectedSlice()] == exact, "SNAP off: exactly where touched");
-        set(app, MP_SNAP, 1.0f);
-        // DEL: the slice touched goes
-        set(app, MP_SL_MODE, 2);
-        press(app, MP_SLICE_TAP, (float)(col + 20));
-        press(app, MP_SLICE_TAP, (float)(col + 3));
-        CHECK(content().numSlices() == n0, "DEL: touching the two new slices removes them");
+        CHECK(content().numSlices() == n0, "the old ADD touch mode adds nothing now");
         set(app, MP_SL_MODE, 0);
         // a slice pad (E2 = slice 1 ... ) selects that slice
         render(app, 4, { MidiMsg::noteOn(36, 100) });
@@ -549,11 +536,11 @@ int main(int argc, char** argv)
         app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
         app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
         settle(app);
-        CHECK(app.session().slot(0).content->slices.count == n0 + 1, "double tap on the waveform adds a marker");
+        CHECK(app.session().slot(0).content->slices.count == n0, "a double tap does nothing now (ADD / DELETE keys do it)");
         app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
         app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
         settle(app);
-        CHECK(app.session().slot(0).content->slices.count == n0, "double tap on a marker removes it");
+
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
         app.setParam(MP_SLICE_TAP, (float)(empty + 1)); app.setParam(MP_SLICE_TAP, 0); app.tick();
         settle(app);
@@ -591,6 +578,30 @@ int main(int argc, char** argv)
             settle(app);
             CHECK(app.session().window(4) == 0, "no earlier than bar 1");
         }
+    }
+    std::printf("C MAJOR note map\n");
+    {
+        set(app, MP_NOTE_MAP, 0);
+        set(app, MP_BREAK, 0);
+        press(app, MP_DEMO);
+        settle(app);
+        set(app, MP_BREAK, 2);
+        press(app, MP_DEMO);
+        settle(app);
+        render(app, 4, { MidiMsg::noteOn(28, 100) });          // E0 = break 3
+        app.tick(); settle(app);
+        CHECK(app.session().selectedSlot() == 2, "E0 picks break 3");
+        render(app, 4, { MidiMsg::noteOn(24, 100) });          // C0 = break 1
+        app.tick(); settle(app);
+        CHECK(app.session().selectedSlot() == 0, "C0 picks break 1");
+        render(app, 4, { MidiMsg::noteOn(76, 100) });          // E4 = slice 3
+        app.tick(); settle(app);
+        CHECK(app.session().selectedSlice() == 2, "E4 = slice 3 (slices from C4, white keys)");
+        CHECK(noteUse(36, 1).role == NoteRole::breakSlot && noteUse(36, 1).index == 7, "C1 = break 8");
+        CHECK(noteUse(38, 1).role == NoteRole::fxPad && noteUse(38, 1).index == 0 && noteUse(50, 1).index == 7, "D1-D2 = FX 1-8");
+        CHECK(noteUse(52, 1).role == NoteRole::memory && noteUse(71, 1).index == 11, "E2-B3 = memories 1-12");
+        CHECK(noteUse(37, 1).role == NoteRole::none, "black keys do nothing");
+        set(app, MP_NOTE_MAP, 1);
     }
     std::printf("akaizer page\n");
     {
@@ -668,9 +679,16 @@ int main(int argc, char** argv)
 
         const int count = app.session().slot(0).content->slices.count;
         press(app, MP_SL_ADD, 1);
-        CHECK(app.session().slot(0).content->slices.count == count + 1 && app.session().selectedSlice() == 4, "ADD splits the slice");
+        CHECK(app.session().slot(0).content->slices.count == count + 1 && app.session().selectedSlice() == 3, "ADD splits the selected slice (it stays selected)");
+        {
+            const auto& c = *app.session().slot(0).content;
+            const int a = c.slices.starts[4];
+            CHECK(a > c.slices.starts[3] && a < c.slices.starts[5], "the new marker is inside the slice");
+        }
+        app.session().selectSlice(4, false);              // the new slice, as its pad would
+        app.tick();
         press(app, MP_SL_DEL, 1);
-        CHECK(app.session().slot(0).content->slices.count == count && app.session().selectedSlice() == 3, "DELETE joins it back");
+        CHECK(app.session().slot(0).content->slices.count == count && app.session().selectedSlice() == 3, "DELETE removes the selected slice (joined to the one before)");
         const int nextBefore = app.session().slot(0).content->slices.starts[4];
         set(app, MP_SL_END, app.getParam(MP_SL_END) - 0.01f);
         const int nextAfter = app.session().slot(0).content->slices.starts[4];

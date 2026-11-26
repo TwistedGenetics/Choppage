@@ -104,6 +104,7 @@ enum MpcParam : int
     MP_BRK_BPM = MP_PLACE_END,  // the selected break's own tempo (what it plays at against the MPC's tempo)
     MP_WIN_PREV, MP_WIN_NEXT,   // triggers: the 2-bar window of a longer break, a bar earlier / later
     MP_WIN_INFO,                // readout: "BARS 3-4 OF 8"
+    MP_NOTE_MAP,                // 0.11: C MAJOR (breaks C0-C1, FX D1-D2, memories E2-B3, slices from C4, white keys) / CHROMATIC
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;

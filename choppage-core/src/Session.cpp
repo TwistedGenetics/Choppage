@@ -704,9 +704,10 @@ namespace bc
         publish (slot);
     }
 
-    int Session::snapToHit (int position, int radius) const
+    int Session::snapToHit (int position, int radius, bool* found) const
     {
         std::lock_guard<std::recursive_mutex> l (mutex);
+        if (found != nullptr) *found = false;
         const auto& s = slots[(size_t) selectedSlot()];
         if (s.content == nullptr) return position;
         const auto& b = *s.content->buffer;
@@ -736,6 +737,7 @@ namespace bc
             if (score > bestScore) { bestScore = score; best = i; }
         }
         if (best < 0) return position;
+        if (found != nullptr) *found = true;
         // the ratio peaks a little after the true start: walk back while the level still rises
         while (best - hop > a0 && level (best - hop, best - hop + win) > 0.9 * level (best, best + win)
                && level (best - hop - win, best - hop) < level (best - win, best)) best -= hop;

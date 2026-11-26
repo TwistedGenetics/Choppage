@@ -56,7 +56,7 @@ std::vector<MpcParamDef> buildDefs()
         p.max = (float)(p.choices.size() - 1); p.def = (float)def; v.push_back(p); return &v.back(); };
     auto R = [&](const char* id, const char* name) { auto* p = I(id, name, 0, 1, 0); p->readout = true; return p; };
 
-    C("break", "Break", { "1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1" }, 0);
+    C("break", "Break", { "1 C0", "2 D0", "3 E0", "4 F0", "5 G0", "6 A0", "7 B0", "8 C1" }, 0);
     I("browse", "Browse", 0, 255, 0);
     { auto* p = B("load", "Load", false); p->uiOnly = true; }   // the jog wheel's push flips it: every change loads
     T("demo", "Demo");
@@ -158,6 +158,7 @@ std::vector<MpcParamDef> buildDefs()
     T("winPrev", "Bars Earlier");
     T("winNext", "Bars Later");
     R("winInfo", "Bars Used");
+    C("noteMap", "Note Map", { "C MAJOR", "CHROMATIC" }, 0);
     return v;
 }
 
@@ -239,7 +240,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_WIN_INFO + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_NOTE_MAP + 1, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -422,7 +423,9 @@ void ChoppageMpcApp::sliceTap(int column, bool doubleTap)
     const View vw = viewOf(*s.content, session_.selectedSlice());
     const int at = vw.start + (int)((int64_t)vw.length * (2 * column + 1) / (2 * kWaveCols));
     const int under = s.content->slices.sliceAt(at);
-    int mode = roundi(values_[MP_SL_MODE].load());
+    // 0.11: a touch only selects (ADD / DELETE act on the selected slice); the old touch modes and double taps are off
+    doubleTap = false;
+    int mode = 0;
     if (doubleTap && mode == 0)
     {
         // a double tap in SELECT: on a marker (within about a column) it goes; anywhere else a marker is added there
@@ -602,6 +605,8 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
     float v[kNumCoreParams];
     for (int i = 0; i < kNumCoreParams; ++i) v[i] = values_[i].load(std::memory_order_relaxed);
     Engine::Settings s = settingsFromParams(v);
+    const bool cMajor = roundi(values_[MP_NOTE_MAP].load(std::memory_order_relaxed)) == 0;
+    s.noteMap = cMajor ? 1 : 0;
     // on-screen pads: follow the parameter both ways (press and release), only when it changes
     for (int p = 0; p < kFxPads; ++p)
     {
@@ -620,7 +625,8 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
     hostPlaying_ = tr.playing;
 
     // The 16 pads: whatever notes the MPC program sends, pad 1 becomes C1 (36): pads 1-8 the breaks, 9-16 the FX.
-    const int base = padBaseNote(roundi(values_[MP_PAD_NOTES].load(std::memory_order_relaxed)));
+    // (CHROMATIC only: in C MAJOR the notes are taken as they come)
+    const int base = cMajor ? 36 : padBaseNote(roundi(values_[MP_PAD_NOTES].load(std::memory_order_relaxed)));
     midiScratch_.clear();
     for (int i = 0; i < numMidi && (int)midiScratch_.size() < (int)midiScratch_.capacity(); ++i)
     {
@@ -641,7 +647,7 @@ void ChoppageMpcApp::process(float* l, float* r, int frames, const MidiMsg* midi
 void ChoppageMpcApp::setParam(int index, float plain)
 {
     if (index >= 0 && index < kMpcNumParams) values_[index].store(plain, std::memory_order_relaxed);
-    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY || index == MP_PLACE_TAP) && plain >= 0.5f)
+    if ((index == MP_SLICE_TAP || index == MP_WAVE_TAP || index == MP_PRE_KEY || index == MP_PLACE_TAP || index == MP_LIST_TAP) && plain >= 0.5f)
     {
         // a touch: kept until the worker's next tick, so a tap shorter than a tick still counts
         std::lock_guard<std::mutex> l(tapMutex_);
@@ -813,7 +819,7 @@ void ChoppageMpcApp::tick()
             handle(t.index, t.value, 0.0f);
         }
         if (!taps.empty())
-            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY, (int)MP_PLACE_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
+            for (int i : { (int)MP_SLICE_TAP, (int)MP_WAVE_TAP, (int)MP_PRE_KEY, (int)MP_PLACE_TAP, (int)MP_LIST_TAP }) seen_[i] = values_[i].load(std::memory_order_relaxed);
     }
     // a slice pad was played: the screen goes to that slice (of that break)
     if (const int hit = session_.engine().sliceHit.exchange(-1, std::memory_order_relaxed); hit >= 0)
@@ -823,7 +829,7 @@ void ChoppageMpcApp::tick()
     }
     for (int i = kMpcReserveEnd; i < kMpcNumParams; ++i)
     {
-        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY || i == MP_PLACE_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
+        if (i == MP_SLICE_TAP || i == MP_WAVE_TAP || i == MP_PRE_KEY || i == MP_PLACE_TAP || i == MP_LIST_TAP) { seen_[i] = values_[i].load(std::memory_order_relaxed); continue; }   // (the queue above)
         const float v = values_[i].load(std::memory_order_relaxed);
         if (v == seen_[i]) continue;
         const float prev = seen_[i];
@@ -1132,21 +1138,36 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         {
             const auto& s = session_.slot(slot);
             if (s.content == nullptr) break;
+            // the selected slice (a touch or its pad) is split at the strongest hit inside it (not right at its edges)
             const int sel = session_.selectedSlice();
             const auto r = s.content->slices.region(sel, s.content->buffer->numSamples);
-            if (r.length() < 2 * SliceTable::kMinGap) { say("SLICE TOO SHORT TO SPLIT"); break; }
-            session_.addMarker(r.start + r.length() / 2);
-            session_.selectSlice(sel + 1, false);
-            say("SPLIT SLICE " + std::to_string(sel + 1));
+            const int edge = std::max(SliceTable::kMinGap, (int)(s.content->buffer->sampleRate * 0.015));
+            if (r.length() < 2 * edge + 64) { say("SLICE " + std::to_string(sel + 1) + " IS TOO SHORT TO SPLIT"); break; }
+            bool found = false;
+            const int mid = r.start + r.length() / 2;
+            int at = session_.snapToHit(mid, r.length() / 2 - edge, &found);
+            if (!found || at < r.start + edge || at > r.end - edge) { at = mid; found = false; }
+            session_.addMarker(at);
+            session_.selectSlice(sel, false);
+            say(found ? "SPLIT SLICE " + std::to_string(sel + 1) + " AT ITS HIT" : "NO HIT IN SLICE " + std::to_string(sel + 1) + ": SPLIT IN THE MIDDLE");
             break;
         }
         case MP_SL_DEL:
         {
+            // the selected slice goes: it joins the one before (slice 1 takes in slice 2)
+            const auto& s = session_.slot(slot);
+            if (s.content == nullptr || s.content->slices.count < 2) { say("ONE SLICE LEFT: IT STAYS"); break; }
             const int sel = session_.selectedSlice();
-            if (sel <= 0) { say("THE FIRST MARKER STAYS"); break; }
+            if (sel <= 0)
+            {
+                session_.deleteMarker(1);
+                session_.selectSlice(0, false);
+                say("DELETED SLICE 2 INTO SLICE 1");
+                break;
+            }
             session_.deleteMarker(sel);
             session_.selectSlice(sel - 1, false);
-            say("JOINED SLICES " + std::to_string(sel) + " + " + std::to_string(sel + 1));
+            say("DELETED SLICE " + std::to_string(sel + 1) + " (JOINED TO " + std::to_string(sel) + ")");
             break;
         }
         case MP_BROWSE: break;   // shown by formatValue; LOAD acts on it

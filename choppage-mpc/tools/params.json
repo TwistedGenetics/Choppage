@@ -95,7 +95,7 @@
   {"index": 93, "id": "reserved_93", "name": "-", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": true, "readout": false, "trigger": false},
   {"index": 94, "id": "reserved_94", "name": "-", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": true, "readout": false, "trigger": false},
   {"index": 95, "id": "reserved_95", "name": "-", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": true, "readout": false, "trigger": false},
-  {"index": 96, "id": "break", "name": "Break", "kind": "choice", "min": 0, "max": 7, "def": 0, "choices": ["1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1"], "hidden": false, "readout": false, "trigger": false},
+  {"index": 96, "id": "break", "name": "Break", "kind": "choice", "min": 0, "max": 7, "def": 0, "choices": ["1 C0", "2 D0", "3 E0", "4 F0", "5 G0", "6 A0", "7 B0", "8 C1"], "hidden": false, "readout": false, "trigger": false},
   {"index": 97, "id": "browse", "name": "Browse", "kind": "int", "min": 0, "max": 255, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 98, "id": "load", "name": "Load", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 99, "id": "demo", "name": "Demo", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
@@ -550,5 +550,6 @@
   {"index": 548, "id": "brkBpm", "name": "Break BPM", "kind": "float", "min": 40, "max": 300, "def": 170, "choices": [], "hidden": false, "readout": false, "trigger": false},
   {"index": 549, "id": "winPrev", "name": "Bars Earlier", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
   {"index": 550, "id": "winNext", "name": "Bars Later", "kind": "bool", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": false, "trigger": true},
-  {"index": 551, "id": "winInfo", "name": "Bars Used", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false}
+  {"index": 551, "id": "winInfo", "name": "Bars Used", "kind": "int", "min": 0, "max": 1, "def": 0, "choices": [], "hidden": false, "readout": true, "trigger": false},
+  {"index": 552, "id": "noteMap", "name": "Note Map", "kind": "choice", "min": 0, "max": 1, "def": 0, "choices": ["C MAJOR", "CHROMATIC"], "hidden": false, "readout": false, "trigger": false}
 ]

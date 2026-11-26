@@ -104,7 +104,7 @@ namespace bc
         void  deleteMarker (int marker);
         /** The start of the drum hit nearest `position` within ±radius samples (where the level jumps most, moved
             back to the zero crossing just before it), in the selected break. position itself if there is none. */
-        int   snapToHit (int position, int radius) const;
+        int   snapToHit (int position, int radius, bool* found = nullptr) const;
 
         void rollPattern (Style, float amount, bool layers);
         void rollFx (float amount);

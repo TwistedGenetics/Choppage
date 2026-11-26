@@ -632,7 +632,7 @@ def pages():
         {"fn": 6, "sub": 1, "name": "SET", "rows": [
             [P("tempoSrc", "TEMPO SOURCE", ["AUTO", "/2", "X2"], span=2), P("speed", "SPEED", ["0.5X", "1X", "2X"], span=2)],
             [T("fit", "FIT TO\nMPC TEMPO"), P("fitMode", "FIT MODE", ["REPITCH", "KEEP"], span=2), K("brkBpm", "BREAK BPM")],
-            [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=4)],
+            [P("lcdColour", "LCD", ["BLUE", "GREEN", "AMBER", "WHITE"], span=2), P("noteMap", "NOTE MAP", ["C MAJOR", "CHROMATIC"], span=2)],
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
         # presets: VST2 Plugins/Content/Presets/CHOPPAGE. Type a name, SAVE NEW; or pick one with PRESET and LOAD.
@@ -1079,7 +1079,7 @@ class Builder:
             kids.append(self.flip_at("showDisk", (840, rowA[0], 130, rowA[1]), self.lcd_key_png(t, "LOAD", 130, rowA[1]), v, qlink=False))
             # the waveform here is the same picture as on SLICE: its zoom can be put back from MAIN too (lit = ZOOM SLICE)
             kids.append(self.flip_at("zoom", (1142, rowA[0], 112, rowA[1]), self.lcd_key_png(t, "ZOOM", 112, rowA[1], 24), v, qlink=False))
-            notes = ["1 C1", "2 C#1", "3 D1", "4 D#1", "5 E1", "6 F1", "7 F#1", "8 G1"]
+            notes = ["1 C0", "2 D0", "3 E0", "4 F0", "5 G0", "6 A0", "7 B0", "8 C1"]   # C MAJOR (the default note map)
             bw = (1228 - 7 * 8) // 8
             imgs = []
             for i, n in enumerate(notes):
@@ -1335,13 +1335,11 @@ class Builder:
         kids += self.lcd_text("winInfo", (WX0 + kw + 10, 234, sw - 2 * kw - 20, 34), 24, "horizontallyCentred verticallyCentred")
         for t in range(4):
             v = self.vis_theme(t)
-            # TOUCH: what a touch on the waveform does (SELECT / ADD a marker / DEL the slice), beside the zoom keys
-            imgs = []
-            for i, z in enumerate(("SELECT", "ADD", "DEL")):
-                on, off = self.lcd_radio_pngs(t, z, 98, 40, 22)
-                imgs.append((on, off, (i * 104, 0, 98, 40)))
-            self.discrete("slMode")
-            kids.append(self.radio_at("slMode", (738, 16, 306, 40), imgs, self.vis_theme(t), name="cp touch %d" % t, qlink=False))
+            # ADD / DELETE act on the selected slice (picked by a touch or its pad): ADD splits it at its strongest hit,
+            # DELETE removes it (joined to the one before). (0.8.1 - 0.10.5: touch modes SELECT / ADD / DEL here.)
+            for pid, z, x in (("slAdd", "+ ADD", 738), ("slDel", "- DELETE", 892)):
+                on, off = self.lcd_radio_pngs(t, z, 146, 40, 22)
+                kids.append(self.momentary_at(pid, (x, 16, 146, 40), on, off, v))
         kids += self.lcd_text("infoStatus", (26, 272, 900, 26), 22, style="SemiBold")
         kids += self.lcd_text("infoSlice", (930, 272, 324, 26), 22, "right verticallyCentred")
         for t in range(4):

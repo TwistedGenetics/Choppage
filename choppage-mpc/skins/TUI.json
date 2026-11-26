@@ -621,8 +621,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_1_c1_146x38_on.png",
-"offImage": "lcdbtn_0_1_c1_146x38_off.png",
+"onImage": "lcdbtn_0_1_c0_146x38_on.png",
+"offImage": "lcdbtn_0_1_c0_146x38_off.png",
 "buttonId": 0,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -650,8 +650,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_2_c_1_75766_146x38_on.png",
-"offImage": "lcdbtn_0_2_c_1_75766_146x38_off.png",
+"onImage": "lcdbtn_0_2_d0_146x38_on.png",
+"offImage": "lcdbtn_0_2_d0_146x38_off.png",
 "buttonId": 1,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -679,8 +679,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_3_d1_146x38_on.png",
-"offImage": "lcdbtn_0_3_d1_146x38_off.png",
+"onImage": "lcdbtn_0_3_e0_146x38_on.png",
+"offImage": "lcdbtn_0_3_e0_146x38_off.png",
 "buttonId": 2,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -708,8 +708,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_4_d_1_529e1_146x38_on.png",
-"offImage": "lcdbtn_0_4_d_1_529e1_146x38_off.png",
+"onImage": "lcdbtn_0_4_f0_146x38_on.png",
+"offImage": "lcdbtn_0_4_f0_146x38_off.png",
 "buttonId": 3,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -737,8 +737,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_5_e1_146x38_on.png",
-"offImage": "lcdbtn_0_5_e1_146x38_off.png",
+"onImage": "lcdbtn_0_5_g0_146x38_on.png",
+"offImage": "lcdbtn_0_5_g0_146x38_off.png",
 "buttonId": 4,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -766,8 +766,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_6_f1_146x38_on.png",
-"offImage": "lcdbtn_0_6_f1_146x38_off.png",
+"onImage": "lcdbtn_0_6_a0_146x38_on.png",
+"offImage": "lcdbtn_0_6_a0_146x38_off.png",
 "buttonId": 5,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -795,8 +795,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_7_f_1_e8ac1_146x38_on.png",
-"offImage": "lcdbtn_0_7_f_1_e8ac1_146x38_off.png",
+"onImage": "lcdbtn_0_7_b0_146x38_on.png",
+"offImage": "lcdbtn_0_7_b0_146x38_off.png",
 "buttonId": 6,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -824,8 +824,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_8_g1_146x38_on.png",
-"offImage": "lcdbtn_0_8_g1_146x38_off.png",
+"onImage": "lcdbtn_0_8_c1_146x38_on.png",
+"offImage": "lcdbtn_0_8_c1_146x38_off.png",
 "buttonId": 7,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1340,8 +1340,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_1_c1_146x38_on.png",
-"offImage": "lcdbtn_1_1_c1_146x38_off.png",
+"onImage": "lcdbtn_1_1_c0_146x38_on.png",
+"offImage": "lcdbtn_1_1_c0_146x38_off.png",
 "buttonId": 0,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1369,8 +1369,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_2_c_1_75766_146x38_on.png",
-"offImage": "lcdbtn_1_2_c_1_75766_146x38_off.png",
+"onImage": "lcdbtn_1_2_d0_146x38_on.png",
+"offImage": "lcdbtn_1_2_d0_146x38_off.png",
 "buttonId": 1,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1398,8 +1398,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_3_d1_146x38_on.png",
-"offImage": "lcdbtn_1_3_d1_146x38_off.png",
+"onImage": "lcdbtn_1_3_e0_146x38_on.png",
+"offImage": "lcdbtn_1_3_e0_146x38_off.png",
 "buttonId": 2,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1427,8 +1427,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_4_d_1_529e1_146x38_on.png",
-"offImage": "lcdbtn_1_4_d_1_529e1_146x38_off.png",
+"onImage": "lcdbtn_1_4_f0_146x38_on.png",
+"offImage": "lcdbtn_1_4_f0_146x38_off.png",
 "buttonId": 3,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1456,8 +1456,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_5_e1_146x38_on.png",
-"offImage": "lcdbtn_1_5_e1_146x38_off.png",
+"onImage": "lcdbtn_1_5_g0_146x38_on.png",
+"offImage": "lcdbtn_1_5_g0_146x38_off.png",
 "buttonId": 4,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1485,8 +1485,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_6_f1_146x38_on.png",
-"offImage": "lcdbtn_1_6_f1_146x38_off.png",
+"onImage": "lcdbtn_1_6_a0_146x38_on.png",
+"offImage": "lcdbtn_1_6_a0_146x38_off.png",
 "buttonId": 5,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1514,8 +1514,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_7_f_1_e8ac1_146x38_on.png",
-"offImage": "lcdbtn_1_7_f_1_e8ac1_146x38_off.png",
+"onImage": "lcdbtn_1_7_b0_146x38_on.png",
+"offImage": "lcdbtn_1_7_b0_146x38_off.png",
 "buttonId": 6,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -1543,8 +1543,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_8_g1_146x38_on.png",
-"offImage": "lcdbtn_1_8_g1_146x38_off.png",
+"onImage": "lcdbtn_1_8_c1_146x38_on.png",
+"offImage": "lcdbtn_1_8_c1_146x38_off.png",
 "buttonId": 7,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2059,8 +2059,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_1_c1_146x38_on.png",
-"offImage": "lcdbtn_2_1_c1_146x38_off.png",
+"onImage": "lcdbtn_2_1_c0_146x38_on.png",
+"offImage": "lcdbtn_2_1_c0_146x38_off.png",
 "buttonId": 0,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2088,8 +2088,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_2_c_1_75766_146x38_on.png",
-"offImage": "lcdbtn_2_2_c_1_75766_146x38_off.png",
+"onImage": "lcdbtn_2_2_d0_146x38_on.png",
+"offImage": "lcdbtn_2_2_d0_146x38_off.png",
 "buttonId": 1,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2117,8 +2117,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_3_d1_146x38_on.png",
-"offImage": "lcdbtn_2_3_d1_146x38_off.png",
+"onImage": "lcdbtn_2_3_e0_146x38_on.png",
+"offImage": "lcdbtn_2_3_e0_146x38_off.png",
 "buttonId": 2,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2146,8 +2146,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_4_d_1_529e1_146x38_on.png",
-"offImage": "lcdbtn_2_4_d_1_529e1_146x38_off.png",
+"onImage": "lcdbtn_2_4_f0_146x38_on.png",
+"offImage": "lcdbtn_2_4_f0_146x38_off.png",
 "buttonId": 3,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2175,8 +2175,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_5_e1_146x38_on.png",
-"offImage": "lcdbtn_2_5_e1_146x38_off.png",
+"onImage": "lcdbtn_2_5_g0_146x38_on.png",
+"offImage": "lcdbtn_2_5_g0_146x38_off.png",
 "buttonId": 4,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2204,8 +2204,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_6_f1_146x38_on.png",
-"offImage": "lcdbtn_2_6_f1_146x38_off.png",
+"onImage": "lcdbtn_2_6_a0_146x38_on.png",
+"offImage": "lcdbtn_2_6_a0_146x38_off.png",
 "buttonId": 5,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2233,8 +2233,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_7_f_1_e8ac1_146x38_on.png",
-"offImage": "lcdbtn_2_7_f_1_e8ac1_146x38_off.png",
+"onImage": "lcdbtn_2_7_b0_146x38_on.png",
+"offImage": "lcdbtn_2_7_b0_146x38_off.png",
 "buttonId": 6,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2262,8 +2262,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_8_g1_146x38_on.png",
-"offImage": "lcdbtn_2_8_g1_146x38_off.png",
+"onImage": "lcdbtn_2_8_c1_146x38_on.png",
+"offImage": "lcdbtn_2_8_c1_146x38_off.png",
 "buttonId": 7,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2778,8 +2778,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_1_c1_146x38_on.png",
-"offImage": "lcdbtn_3_1_c1_146x38_off.png",
+"onImage": "lcdbtn_3_1_c0_146x38_on.png",
+"offImage": "lcdbtn_3_1_c0_146x38_off.png",
 "buttonId": 0,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2807,8 +2807,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_2_c_1_75766_146x38_on.png",
-"offImage": "lcdbtn_3_2_c_1_75766_146x38_off.png",
+"onImage": "lcdbtn_3_2_d0_146x38_on.png",
+"offImage": "lcdbtn_3_2_d0_146x38_off.png",
 "buttonId": 1,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2836,8 +2836,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_3_d1_146x38_on.png",
-"offImage": "lcdbtn_3_3_d1_146x38_off.png",
+"onImage": "lcdbtn_3_3_e0_146x38_on.png",
+"offImage": "lcdbtn_3_3_e0_146x38_off.png",
 "buttonId": 2,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2865,8 +2865,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_4_d_1_529e1_146x38_on.png",
-"offImage": "lcdbtn_3_4_d_1_529e1_146x38_off.png",
+"onImage": "lcdbtn_3_4_f0_146x38_on.png",
+"offImage": "lcdbtn_3_4_f0_146x38_off.png",
 "buttonId": 3,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2894,8 +2894,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_5_e1_146x38_on.png",
-"offImage": "lcdbtn_3_5_e1_146x38_off.png",
+"onImage": "lcdbtn_3_5_g0_146x38_on.png",
+"offImage": "lcdbtn_3_5_g0_146x38_off.png",
 "buttonId": 4,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2923,8 +2923,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_6_f1_146x38_on.png",
-"offImage": "lcdbtn_3_6_f1_146x38_off.png",
+"onImage": "lcdbtn_3_6_a0_146x38_on.png",
+"offImage": "lcdbtn_3_6_a0_146x38_off.png",
 "buttonId": 5,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2952,8 +2952,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_7_f_1_e8ac1_146x38_on.png",
-"offImage": "lcdbtn_3_7_f_1_e8ac1_146x38_off.png",
+"onImage": "lcdbtn_3_7_b0_146x38_on.png",
+"offImage": "lcdbtn_3_7_b0_146x38_off.png",
 "buttonId": 6,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -2981,8 +2981,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_8_g1_146x38_on.png",
-"offImage": "lcdbtn_3_8_g1_146x38_off.png",
+"onImage": "lcdbtn_3_8_c1_146x38_on.png",
+"offImage": "lcdbtn_3_8_c1_146x38_off.png",
 "buttonId": 7,
 "numButtonsInGroup": 8,
 "handleName": "Data",
@@ -20536,7 +20536,7 @@
 }
 },
 {
-"key": "cp touch 0",
+"key": "cp hold lcdbtn_0_add_e2d42_146x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -20587,45 +20587,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_0_select_98x40_on.png",
-"offImage": "lcdbtn_0_select_98x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_0_add_98x40_on.png",
-"offImage": "lcdbtn_0_add_98x40_off.png",
+"onImage": "lcdbtn_0_add_e2d42_146x40_on.png",
+"offImage": "lcdbtn_0_add_e2d42_146x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 3,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -20638,43 +20609,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "104 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 2",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_0_del_98x40_on.png",
-"offImage": "lcdbtn_0_del_98x40_off.png",
-"buttonId": 2,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "208 0 98 40"
+"bounds": "0 0 146 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp touch 1",
+"key": "cp hold lcdbtn_0_delete_eed9f_146x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -20725,45 +20667,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_1_select_98x40_on.png",
-"offImage": "lcdbtn_1_select_98x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_1_add_98x40_on.png",
-"offImage": "lcdbtn_1_add_98x40_off.png",
+"onImage": "lcdbtn_0_delete_eed9f_146x40_on.png",
+"offImage": "lcdbtn_0_delete_eed9f_146x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 3,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -20776,43 +20689,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "104 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 2",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_1_del_98x40_on.png",
-"offImage": "lcdbtn_1_del_98x40_off.png",
-"buttonId": 2,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "208 0 98 40"
+"bounds": "0 0 146 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp touch 2",
+"key": "cp hold lcdbtn_1_add_e2d42_146x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -20863,45 +20747,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_2_select_98x40_on.png",
-"offImage": "lcdbtn_2_select_98x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_2_add_98x40_on.png",
-"offImage": "lcdbtn_2_add_98x40_off.png",
+"onImage": "lcdbtn_1_add_e2d42_146x40_on.png",
+"offImage": "lcdbtn_1_add_e2d42_146x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 3,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -20914,43 +20769,14 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "104 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 2",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_2_del_98x40_on.png",
-"offImage": "lcdbtn_2_del_98x40_off.png",
-"buttonId": 2,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "208 0 98 40"
+"bounds": "0 0 146 40"
 }
 }
 ]
 }
 },
 {
-"key": "cp touch 3",
+"key": "cp hold lcdbtn_1_delete_eed9f_146x40_on.png",
 "value": {
 "version": 2,
 "actions": [],
@@ -21001,45 +20827,16 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 0",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_select_98x40_on.png",
-"offImage": "lcdbtn_3_select_98x40_off.png",
-"buttonId": 0,
-"numButtonsInGroup": 3,
-"handleName": "Data",
-"gestureBehaviour": "Instant"
-}
-},
-"handle remapping": {
-"version": 1,
-"map": []
-},
-"bounds": {
-"version": 1,
-"acceptsHWFocus": "No",
-"showWhenDataModelInvalid": "Show",
-"whenVisible": "Always",
-"boundsType": "Absolute",
-"bounds": "0 0 98 40"
-}
-},
-{
-"version": 2,
-"componentData": {
-"version": 1,
-"name": "choice 1",
-"type": "Button",
-"data": {
-"version": 2,
-"onImage": "lcdbtn_3_add_98x40_on.png",
-"offImage": "lcdbtn_3_add_98x40_off.png",
+"onImage": "lcdbtn_1_delete_eed9f_146x40_on.png",
+"offImage": "lcdbtn_1_delete_eed9f_146x40_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 3,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21052,23 +20849,74 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "104 0 98 40"
+"bounds": "0 0 146 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_2_add_e2d42_146x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
 }
 },
 {
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "choice 2",
+"name": "pad",
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "lcdbtn_3_del_98x40_on.png",
-"offImage": "lcdbtn_3_del_98x40_off.png",
-"buttonId": 2,
-"numButtonsInGroup": 3,
+"onImage": "lcdbtn_2_add_e2d42_146x40_on.png",
+"offImage": "lcdbtn_2_add_e2d42_146x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
 "handleName": "Data",
-"gestureBehaviour": "Instant"
+"gestureBehaviour": "Hold"
 }
 },
 "handle remapping": {
@@ -21081,7 +20929,247 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "208 0 98 40"
+"bounds": "0 0 146 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_2_delete_eed9f_146x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_2_delete_eed9f_146x40_on.png",
+"offImage": "lcdbtn_2_delete_eed9f_146x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 146 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_3_add_e2d42_146x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_add_e2d42_146x40_on.png",
+"offImage": "lcdbtn_3_add_e2d42_146x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 146 40"
+}
+}
+]
+}
+},
+{
+"key": "cp hold lcdbtn_3_delete_eed9f_146x40_on.png",
+"value": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "pad",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "lcdbtn_3_delete_eed9f_146x40_on.png",
+"offImage": "lcdbtn_3_delete_eed9f_146x40_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 1,
+"handleName": "Data",
+"gestureBehaviour": "Hold"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 146 40"
 }
 }
 ]
@@ -42663,8 +42751,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_311x64_blue_on.png",
-"offImage": "pick_311x64_blue_off.png",
+"onImage": "pick_153x64_blue_on.png",
+"offImage": "pick_153x64_blue_off.png",
 "buttonId": 0,
 "numButtonsInGroup": 4,
 "handleName": "Data",
@@ -42681,7 +42769,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "6 6 311 52"
+"bounds": "6 6 153 52"
 }
 },
 {
@@ -42692,8 +42780,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_311x64_green_on.png",
-"offImage": "pick_311x64_green_off.png",
+"onImage": "pick_153x64_green_on.png",
+"offImage": "pick_153x64_green_off.png",
 "buttonId": 1,
 "numButtonsInGroup": 4,
 "handleName": "Data",
@@ -42710,7 +42798,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "314 6 311 52"
+"bounds": "156 6 153 52"
 }
 },
 {
@@ -42721,8 +42809,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_311x64_amber_on.png",
-"offImage": "pick_311x64_amber_off.png",
+"onImage": "pick_153x64_amber_on.png",
+"offImage": "pick_153x64_amber_off.png",
 "buttonId": 2,
 "numButtonsInGroup": 4,
 "handleName": "Data",
@@ -42739,7 +42827,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "622 6 311 52"
+"bounds": "306 6 153 52"
 }
 },
 {
@@ -42750,8 +42838,8 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_311x64_white_on.png",
-"offImage": "pick_311x64_white_off.png",
+"onImage": "pick_153x64_white_on.png",
+"offImage": "pick_153x64_white_off.png",
 "buttonId": 3,
 "numButtonsInGroup": 4,
 "handleName": "Data",
@@ -42768,7 +42856,124 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "930 6 311 52"
+"bounds": "456 6 153 52"
+}
+}
+]
+}
+},
+{
+"key": "cp pick noteMap",
+"value": {
+"version": 2,
+"actions": [
+{
+"version": 1,
+"onAction": "Mouse Down",
+"handler": "Q-Link",
+"handleName": "Data",
+"additionalData": ""
+}
+],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "0",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "focus",
+"type": "Focus",
+"data": {
+"version": 1,
+"backgroundColour": "24c0141c",
+"outlineColour": "ffc0141c",
+"backgroundInset": 0.0,
+"outlineThickness": 4.0
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "WhenFocussed",
+"boundsType": "Proportional",
+"bounds": "0 0 1 1"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 0",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "pick_304x64_c_major_on.png",
+"offImage": "pick_304x64_c_major_off.png",
+"buttonId": 0,
+"numButtonsInGroup": 2,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "6 6 304 52"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 1",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "pick_304x64_chromatic_on.png",
+"offImage": "pick_304x64_chromatic_off.png",
+"buttonId": 1,
+"numButtonsInGroup": 2,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "307 6 304 52"
 }
 }
 ]
@@ -44450,8 +44655,8 @@
 "value": ["1", "2", "3", "4"]
 },
 {
-"key": "Parameter 529",
-"value": ["SELECT", "ADD", "DEL"]
+"key": "Parameter 552",
+"value": ["C MAJOR", "CHROMATIC"]
 }
 ],
 "info": {
@@ -61009,8 +61214,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 0",
+"name": "slAdd",
+"type": "cp hold lcdbtn_0_add_e2d42_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61021,7 +61226,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 207"
 }
 ]
 },
@@ -61031,7 +61236,7 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
 }
 },
@@ -61039,8 +61244,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 1",
+"name": "slDel",
+"type": "cp hold lcdbtn_0_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61051,7 +61256,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -61061,7 +61266,37 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_1_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
 }
 },
@@ -61069,8 +61304,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 2",
+"name": "slDel",
+"type": "cp hold lcdbtn_1_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61081,7 +61316,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -61091,7 +61326,37 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_2_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
 }
 },
@@ -61099,8 +61364,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 3",
+"name": "slDel",
+"type": "cp hold lcdbtn_2_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -61111,7 +61376,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -61121,7 +61386,67 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_3_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slDel",
+"type": "cp hold lcdbtn_3_delete_eed9f_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 208"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "892 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
 }
 },
@@ -68735,8 +69060,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 0",
+"name": "slAdd",
+"type": "cp hold lcdbtn_0_add_e2d42_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -68747,7 +69072,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 207"
 }
 ]
 },
@@ -68757,7 +69082,7 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
 }
 },
@@ -68765,8 +69090,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 1",
+"name": "slDel",
+"type": "cp hold lcdbtn_0_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -68777,7 +69102,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -68787,7 +69112,37 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_1_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
 }
 },
@@ -68795,8 +69150,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 2",
+"name": "slDel",
+"type": "cp hold lcdbtn_1_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -68807,7 +69162,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -68817,7 +69172,37 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_2_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
 }
 },
@@ -68825,8 +69210,8 @@
 "version": 2,
 "componentData": {
 "version": 1,
-"name": "slMode",
-"type": "cp touch 3",
+"name": "slDel",
+"type": "cp hold lcdbtn_2_delete_eed9f_146x40_on.png",
 "data": {
 "version": 1,
 "handleName": "Data"
@@ -68837,7 +69222,7 @@
 "map": [
 {
 "key": "Data",
-"value": "Parameter 529"
+"value": "ResetOnGestureEnd/Parameter 208"
 }
 ]
 },
@@ -68847,7 +69232,67 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "738 16 306 40",
+"bounds": "892 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slAdd",
+"type": "cp hold lcdbtn_3_add_e2d42_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 207"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "738 16 146 40",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "slDel",
+"type": "cp hold lcdbtn_3_delete_eed9f_146x40_on.png",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "ResetOnGestureEnd/Parameter 208"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "892 16 146 40",
 "additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
 }
 },
@@ -91032,7 +91477,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "20 392 1248 30"
+"bounds": "20 392 618 30"
 }
 },
 {
@@ -91061,7 +91506,73 @@
 "showWhenDataModelInvalid": "Hide",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "16 426 1248 64"
+"bounds": "16 426 618 64"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[NOTE MAP]/Parameter 552"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "650 392 618 30"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "noteMap",
+"type": "cp pick noteMap",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 552"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "646 426 618 64"
 }
 },
 {
