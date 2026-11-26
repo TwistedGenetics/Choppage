@@ -636,6 +636,12 @@ def pages():
             [P("slicing", "SLICING", ["TRANS", "GRID"]), K("sens", "SENSITIVITY"), P("grid", "GRID", ["1/8", "1/16", "1/32"]),
              G("reslice", "RESLICE")]]},
         # presets: VST2 Plugins/Content/Presets/CHOPPAGE. Type a name, SAVE NEW; or pick one with PRESET and LOAD.
+        # Q-LINKS: what each of the MPC's 16 Q-Link knobs turns (on every page)
+        {"fn": 8, "sub": 0, "name": "Q-LINKS", "rows": [
+            [K("qt1", "Q-LINK 1"), K("qt2", "Q-LINK 2"), K("qt3", "Q-LINK 3"), K("qt4", "Q-LINK 4")],
+            [K("qt5", "Q-LINK 5"), K("qt6", "Q-LINK 6"), K("qt7", "Q-LINK 7"), K("qt8", "Q-LINK 8")],
+            [K("qt9", "Q-LINK 9"), K("qt10", "Q-LINK 10"), K("qt11", "Q-LINK 11"), K("qt12", "Q-LINK 12")],
+            [K("qt13", "Q-LINK 13"), K("qt14", "Q-LINK 14"), K("qt15", "Q-LINK 15"), K("qt16", "Q-LINK 16")]]},
         {"fn": 7, "sub": 0, "name": "SAVE/LOAD", "rows": [
             [K("preBrowse", "PRESET"), G("preLoad", "LOAD"), G("preSave", "SAVE\nNEW"), G("preOver", "SAVE\nOVER")],
             [R("preName", "NAME (TYPE IT BELOW)", span=3), R("infoMsg", "MESSAGE")],
@@ -1561,9 +1567,11 @@ class Builder:
         strip_qlink(tui)
         for tab_ in tabs:
             setkey(tab_, "qlinkBoundsData", [])
-        inert = self.p("reserved_62")["index"]
+        # 0.12: Q-Links back, with no box: on every page knob N turns "qN", which CHOPPAGE sends on to the
+        # parameter picked for knob N on the Q-LINKS page
+        knobs = [self.p("q%d" % i)["index"] for i in range(1, 17)]
         for m_ in qmaps:
-            setkey(m_, "Q-Links", o(*[("Q-Link %d" % i, inert) for i in range(1, 17)]))
+            setkey(m_, "Q-Links", o(*[("Q-Link %d" % i, knobs[i - 1]) for i in range(1, 17)]))
         with open(os.path.join(self.out, "TUI.json"), "w") as f:
             f.write(skin_json(tui))
         # Program mode (no screen page open): the sound and the dice amounts
@@ -1571,7 +1579,7 @@ class Builder:
                                               "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycLen")]
         ql = o(("version", 4), ("info", o(("version", 1), ("type", "CompleteDescription"))),
                ("Screen Mode Q-Links", o(("version", 4), ("map", qmaps))),
-               ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), inert) for i in range(16)])))
+               ("Program Mode Q-Links", o(*[("Q-Link %d" % (i + 1), knobs[i]) for i in range(16)])))
         with open(os.path.join(self.out, "Q-Links.json"), "w") as f:
             f.write(skin_json(ql))
         return len(tabs)

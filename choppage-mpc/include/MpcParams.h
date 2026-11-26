@@ -105,7 +105,11 @@ enum MpcParam : int
     MP_WIN_PREV, MP_WIN_NEXT,   // triggers: the 2-bar window of a longer break, a bar earlier / later
     MP_WIN_INFO,                // readout: "BARS 3-4 OF 8"
     MP_NOTE_MAP,                // 0.11: C MAJOR (breaks C0-C1, FX D1-D2, memories E2-B3, slices from C4, white keys) / CHROMATIC
-    kMpcParamEnd
+    // ---- 0.12: the 16 Q-Link knobs, each sent on to the parameter picked for it on the Q-LINKS page
+    MP_QK0,                     // 16 knobs (0-1): what the MPC's Q-Links turn on every page
+    MP_QT0 = MP_QK0 + 16,       // 16 targets: an entry in the list of parameters a knob can turn (0 = none)
+    MP_QT_END = MP_QT0 + 16,
+    kMpcParamEnd = MP_QT_END
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
 
@@ -121,6 +125,7 @@ constexpr int kWaveFrames = 4 * 3 * 2 * kWaveLevels;
 constexpr int kTabFrames = 15;
 constexpr int kListLines = 5;
 constexpr int kPlaces = 4;
+constexpr int kQLinks = 16;
 inline int waveFrame(int theme, int look, int mark, int level) { return ((theme * 3 + look) * 2 + mark) * kWaveLevels + level; }
 inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
 
@@ -152,6 +157,9 @@ struct MpcParamDef
 };
 
 const MpcParamDef& mpcParamDef(int index);
+// The parameters a Q-Link can be set to turn (entry 0 = none), from a parameter table / for this plugin's table.
+std::vector<int> qLinkTargets(const std::vector<MpcParamDef>& table);
+const std::vector<int>& qLinkList();
 bool isStepParam(int index);
 bool isPictureParam(int index);   // the playhead, waveform columns and tabs: film-strip frames, no text
 // The notes pad 1 plays for each MP_PAD_NOTES choice.

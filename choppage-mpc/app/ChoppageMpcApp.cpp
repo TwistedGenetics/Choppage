@@ -16,6 +16,8 @@ namespace bc {
 // ===================================================================================== parameter table
 namespace {
 
+std::vector<int> buildQList(const std::vector<MpcParamDef>& v);
+
 std::vector<MpcParamDef> buildDefs()
 {
     std::vector<MpcParamDef> v;
@@ -159,7 +161,35 @@ std::vector<MpcParamDef> buildDefs()
     T("winNext", "Bars Later");
     R("winInfo", "Bars Used");
     C("noteMap", "Note Map", { "C MAJOR", "CHROMATIC" }, 0);
+    for (int k = 0; k < kQLinks; ++k) F(("q" + std::to_string(k + 1)).c_str(), ("Q-Link " + std::to_string(k + 1)).c_str(), 0.0f, 1.0f, 0.0f);
+    for (int k = 0; k < kQLinks; ++k)
+    { auto* p = I(("qt" + std::to_string(k + 1)).c_str(), ("Q-Link " + std::to_string(k + 1) + " Target").c_str(), 0, 255, 0); p->uiOnly = true; }
+    // the knobs start on the sound and the dice (what Program mode had before 0.11)
+    const auto list = buildQList(v);
+    const char* start[kQLinks] = { "filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
+                                   "patAmount", "fxAmount", "swing", "style", "stutRate", "rollRate", "tapeMs", "akCycLen" };
+    for (int k = 0; k < kQLinks; ++k)
+        for (size_t e = 1; e < list.size(); ++e)
+            if (v[(size_t)list[e]].id == start[k]) v[(size_t)(MP_QT0 + k)].def = (float)e;
     return v;
+}
+
+// What a Q-Link can be set to turn: every knob, switch and choice a page has (not readouts, taps, keys, the step
+// grid or the knobs themselves). Entry 0 is "none".
+std::vector<int> buildQList(const std::vector<MpcParamDef>& v)
+{
+    std::vector<int> list { -1 };
+    for (int i = 0; i < (int)v.size() && (int)list.size() < 256; ++i)
+    {
+        const auto& d = v[(size_t)i];
+        if (d.hidden || d.readout || d.trigger || d.uiOnly) continue;
+        if (i >= MP_QK0 && i < MP_QT_END) continue;
+        if (isStepParam(i) || isPictureParam(i)) continue;
+        if (i >= MP_CELL0 && i < MP_CELL0 + kSeqLanes * 16) continue;
+        if (i >= MP_VSTEP0 && i < MP_VSTEP0 + 16) continue;
+        list.push_back(i);
+    }
+    return list;
 }
 
 const std::vector<MpcParamDef>& defs()
@@ -173,6 +203,21 @@ const std::vector<MpcParamDef>& defs()
 }
 
 float clampf(float v, float lo, float hi) { return v < lo ? lo : v > hi ? hi : v; }
+// a parameter's value as the MPC's 0-1 (with its skew) and back
+static float toNorm(int index, float plain)
+{
+    const auto& d = mpcParamDef(index);
+    const float lin = d.max > d.min ? std::clamp((plain - d.min) / (d.max - d.min), 0.0f, 1.0f) : 0.0f;
+    return d.skew != 1.0f ? std::pow(lin, d.skew) : lin;
+}
+static float toPlain(int index, float norm)
+{
+    const auto& d = mpcParamDef(index);
+    const float lin = d.skew != 1.0f ? std::pow(std::clamp(norm, 0.0f, 1.0f), 1.0f / d.skew) : std::clamp(norm, 0.0f, 1.0f);
+    float p = d.min + lin * (d.max - d.min);
+    if (d.kind != MpcKind::Float) p = std::round(p);
+    return p;
+}
 int roundi(float v) { return (int)std::lround(v); }
 
 const int kStutterValues[] = { 0, 2, 3, 4, 6, 8 };
@@ -218,6 +263,14 @@ std::string upper(std::string s)
 
 } // namespace
 
+std::vector<int> qLinkTargets(const std::vector<MpcParamDef>& table) { return buildQList(table); }
+
+const std::vector<int>& qLinkList()
+{
+    static const std::vector<int> list = qLinkTargets(defs());
+    return list;
+}
+
 const MpcParamDef& mpcParamDef(int index)
 {
     const auto& d = defs();
@@ -240,7 +293,7 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_NOTE_MAP + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_QT0 + kQLinks, "parameter table");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -664,6 +717,23 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
 {
     if (index < 0 || index >= kMpcNumParams) return false;
     if (index < kNumCoreParams) { out = formatParam(index, plain); return true; }
+    if (index >= MP_QT0 && index < MP_QT0 + kQLinks)
+    {
+        const auto& list = qLinkList();
+        const int e = roundi(plain);
+        out = e > 0 && e < (int)list.size() ? upper(mpcParamDef(list[(size_t)e]).name) : std::string("NONE");
+        return true;
+    }
+    if (index >= MP_QK0 && index < MP_QK0 + kQLinks)
+    {
+        const int t = qTarget(index - MP_QK0);
+        if (t < 0) { out = "-"; return true; }
+        std::string val;
+        formatValue(t, values_[t].load(std::memory_order_relaxed), val);
+        out = upper(mpcParamDef(t).name) + " " + val;
+        if (out.size() > 31) out = out.substr(0, 31);
+        return true;
+    }
     const auto& d = mpcParamDef(index);
     if (d.hidden) { out = ""; return true; }
     if (isPictureParam(index) && index != MP_PLAYHEAD) { out = ""; return true; }
@@ -873,6 +943,7 @@ void ChoppageMpcApp::tick()
     syncList(false);
     syncSeq(false);
     syncAudition();
+    syncQLinks();
     if (messageTicks_ > 0 && --messageTicks_ == 0) message_.clear();
 }
 
@@ -883,7 +954,8 @@ void ChoppageMpcApp::tick()
 float ChoppageMpcApp::jogged(int index, float v, float prev) const
 {
     double fine = 0, coarse = 0, scale = 1;              // in the parameter's own units (scale: units per 1.0)
-    switch (index)
+    if (index >= MP_QT0 && index < MP_QT0 + kQLinks) { fine = coarse = 1; }
+    else switch (index)
     {
         case MP_BROWSE: case MP_PRE_BROWSE: fine = coarse = 1; break;
         case MP_AKR_LOOP_BPM: case MP_BRK_BPM: fine = 0.1; coarse = 1; break;
@@ -916,9 +988,58 @@ float ChoppageMpcApp::jogged(int index, float v, float prev) const
     return (float)std::clamp(now, (double)d.min, (double)d.max);
 }
 
+// ===================================================================================== Q-Links
+// The MPC's 16 Q-Link knobs turn MP_QK0.. on every page; each goes on to the parameter picked for it (Q-LINKS page).
+int ChoppageMpcApp::qTarget(int k) const
+{
+    const auto& list = qLinkList();
+    const int e = roundi(values_[MP_QT0 + k].load(std::memory_order_relaxed));
+    return e > 0 && e < (int)list.size() ? list[(size_t)e] : -1;
+}
+
+void ChoppageMpcApp::qLinkTurned(int k, float v, float prev)
+{
+    const int t = qTarget(k);
+    if (t < 0) return;
+    const auto& d = mpcParamDef(t);
+    float plain;
+    if (d.kind == MpcKind::Float) plain = toPlain(t, v);
+    else
+    {
+        // a switch or a list: one step a move, whichever way the knob went (the knob then shows where it is)
+        const float now = values_[t].load(std::memory_order_relaxed);
+        if (std::fabs(v - prev) < 1e-6f) return;
+        plain = std::clamp(std::round(now) + (v > prev ? 1.0f : -1.0f), d.min, d.max);
+    }
+    values_[t].store(plain, std::memory_order_relaxed);
+    platform_.notifyParameter(t, plain);
+    qMoved_[k] = 3;                                     // the knob leads for a few ticks: no echo back onto it
+}
+
+void ChoppageMpcApp::syncQLinks()
+{
+    for (int k = 0; k < kQLinks; ++k)
+    {
+        if (qMoved_[k] > 0) { --qMoved_[k]; if (mpcParamDef(qTarget(k) < 0 ? 0 : qTarget(k)).kind == MpcKind::Float) continue; }
+        const int t = qTarget(k);
+        if (t < 0) continue;
+        const float n = toNorm(t, values_[t].load(std::memory_order_relaxed));
+        if (std::fabs(n - seen_[MP_QK0 + k]) > 0.002f) write(MP_QK0 + k, n);
+    }
+}
+
 void ChoppageMpcApp::handle(int index, float v, float prev)
 {
     if (const float j = jogged(index, v, prev); j != v) { write(index, j); v = j; }
+    if (index >= MP_QK0 && index < MP_QK0 + kQLinks) { qLinkTurned(index - MP_QK0, v, prev); return; }
+    if (index >= MP_QT0 && index < MP_QT0 + kQLinks)
+    {
+        const int k = index - MP_QT0, t = qTarget(k);
+        message_ = "Q-LINK " + std::to_string(k + 1) + (t < 0 ? std::string(" DOES NOTHING") : " TURNS " + upper(mpcParamDef(t).name));
+        messageTicks_ = 90;
+        qMoved_[k] = 0;
+        return;
+    }
     auto say = [this](const std::string& m) { message_ = m; messageTicks_ = 90; };
     const auto& d = mpcParamDef(index);
     const bool on = v >= 0.5f;

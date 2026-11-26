@@ -11,7 +11,7 @@ It runs the same engine as the desktop AU / VST3, laid out as an Akai S950 front
 3. Put your breaks (WAV, AIFF or REX .rx2 / .rex) in **`VST2 Plugins/Content/Breaks`**: a shared folder beside your plugin folders. **Make the `Content` and `Breaks` folders yourself**: CHOPPAGE never creates anything in VST2 Plugins (a folder appearing there while the plugin opens left the MPC showing its standard grey screen in 0.8.0 - 0.9.0), so breaks don't live inside the plugin and survive reinstalls. Other plugins can use the same idea (`VST2 Plugins/Content/Wavetables` ...). Breaks left in the plugin's own `Content/Breaks` are still listed until the shared folder has some. A REX loop loads with ReCycle's slices and tempo. A tempo in the file name is read: `amen_170.wav` = 170 BPM.
 4. Make a plugin program with CHOPPAGE (it's under External Plugins).
 
-**No Q-Links**: the touch screen, the pads and the jog wheel do everything; the Q-Link knobs are not used by CHOPPAGE (no orange Q box).
+**Q-Links** (no orange box): the 16 knobs work the same on every page. The **Q-LINKS** page (its own function key) picks what each knob turns: any knob, switch or choice in CHOPPAGE. Turn a Q-LINK cell there (or use the jog wheel) to go through the list; a knob on a switch or list moves it one step a turn. They start on FILTER, RESONANCE, DISTORTION, CRUSH, SAMPLE RATE, REVERB, ECHO, VOLUME, PATTERN / FX AMOUNT, SWING, STYLE and the FX pad times.
 
 ## Notes (SET > NOTE MAP)
 **C MAJOR** (the default): only white keys, so the MPC's pads in a C major scale (or any keyboard) play everything without setting pads up.

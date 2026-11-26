@@ -91290,6 +91290,1973 @@
 },
 {
 "version": 1,
+"tabName": "Q-LINKS",
+"fnKeyIndex": 8,
+"fnKeySubIndex": 0,
+"componentDefinition": {
+"version": 2,
+"actions": [],
+"backgroundData": {
+"version": 1,
+"focussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+},
+"unfocussed": {
+"version": 1,
+"colour": "ffe4e1da",
+"image": ""
+}
+},
+"ignoreMousePresses": false,
+"disableCoarseDataWheel": false,
+"componentsData": [
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "background",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "Regular",
+"colour": "0",
+"image": "bg_8_0.png"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "0 0 1280 628"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "lcd_1260x134.png",
+"numFrames": 4,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 48"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 6 1260 134"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "fff4f6ff",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "fff4f6ff",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "fff4f6ff",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "fff4f6ff",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_0.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/0/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff142008",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff142008",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff142008",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff142008",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_1.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/1/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff241200",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff241200",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff241200",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff241200",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_2.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/2/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoName",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff15171a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 128"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 18 880 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoBpm",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 36.0
+},
+"colour": "ff15171a",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 129"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 18 308 44",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoStatus",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "SemiBold",
+"height": 26.0
+},
+"colour": "ff15171a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 130"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "32 64 900 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "lcd infoSlice",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 26.0
+},
+"colour": "ff15171a",
+"justification": "right verticallyCentred",
+"case": "Original"
+},
+"type": "Value",
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 131"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "940 64 308 34",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "playhead",
+"type": "Image",
+"data": {
+"version": 2,
+"imageType": "FilmStrip",
+"colour": "0",
+"image": "playhead_3.png",
+"numFrames": 65,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 133"
+}
+]
+},
+"bounds": {
+"version": 2,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "30 112 1220 16",
+"additionalInvalidatingHandles": ["IndexedEnabling/3/4/Parameter 48"]
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 1]/Parameter 569"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "110 158 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt1",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 569"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 150 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 2]/Parameter 570"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "425 158 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt2",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 570"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "325 150 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 3]/Parameter 571"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "740 158 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt3",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 571"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "640 150 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 4]/Parameter 572"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1055 158 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt4",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 572"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "955 150 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 5]/Parameter 573"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "110 276 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt5",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 573"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 268 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 6]/Parameter 574"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "425 276 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt6",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 574"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "325 268 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 7]/Parameter 575"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "740 276 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt7",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 575"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "640 268 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 8]/Parameter 576"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1055 276 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt8",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 576"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "955 268 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 9]/Parameter 577"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "110 394 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt9",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 577"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 386 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 10]/Parameter 578"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "425 394 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt10",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 578"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "325 386 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 11]/Parameter 579"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "740 394 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt11",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 579"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "640 386 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 12]/Parameter 580"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1055 394 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt12",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 580"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "955 386 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 13]/Parameter 581"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "110 512 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt13",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 581"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "10 504 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 14]/Parameter 582"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "425 512 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt14",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 582"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "325 504 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 15]/Parameter 583"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "740 512 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt15",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 583"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "640 504 315 112"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "caption",
+"type": "Label",
+"data": {
+"version": 1,
+"textStyle": {
+"version": 1,
+"font": {
+"version": 1,
+"name": "Roboto",
+"style": "Bold",
+"height": 22.0
+},
+"colour": "ff2a2a2a",
+"justification": "left verticallyCentred",
+"case": "Original"
+},
+"type": "Name",
+"handleName": "WithName[Q-LINK 16]/Parameter 584"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "1055 512 209 32"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "qt16",
+"type": "cp knob 315",
+"data": {
+"version": 1,
+"handleName": "Data"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": [
+{
+"key": "Data",
+"value": "Parameter 584"
+}
+]
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "Yes",
+"showWhenDataModelInvalid": "Hide",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "955 504 315 112"
+}
+}
+]
+},
+"qlinkBoundsData": []
+},
+{
+"version": 1,
 "tabName": "SAVE/LOAD",
 "fnKeyIndex": 7,
 "fnKeySubIndex": 0,

@@ -603,6 +603,31 @@ int main(int argc, char** argv)
         CHECK(noteUse(37, 1).role == NoteRole::none, "black keys do nothing");
         set(app, MP_NOTE_MAP, 1);
     }
+    std::printf("Q-Links: each knob turns the parameter picked for it\n");
+    {
+        std::string t;
+        app.formatValue(MP_QT0, app.getParam(MP_QT0), t);
+        CHECK(t == "FILTER", ("Q-Link 1 starts on FILTER: " + t).c_str());
+        set(app, MP_QK0, 0.25f);
+        CHECK(std::fabs(app.getParam(P_FILTER) - mpcParamDef(P_FILTER).min - 0.25f * (mpcParamDef(P_FILTER).max - mpcParamDef(P_FILTER).min)) < 0.02f
+              || mpcParamDef(P_FILTER).skew != 1.0f, "turning Q-Link 1 moves FILTER");
+        app.formatValue(MP_QK0, app.getParam(MP_QK0), t);
+        CHECK(t.rfind("FILTER ", 0) == 0, ("the knob shows its parameter and value: " + t).c_str());
+        // point Q-Link 2 at NOTE MAP (a choice): one step a move
+        const auto& list = qLinkList();
+        int e = 0;
+        for (size_t i = 0; i < list.size(); ++i) if (list[i] == MP_NOTE_MAP) e = (int)i;
+        CHECK(e > 0, "NOTE MAP can be a Q-Link's target");
+        set(app, MP_QT0 + 1, (float)e);
+        const float nm = app.getParam(MP_NOTE_MAP);
+        set(app, MP_QK0 + 1, app.getParam(MP_QK0 + 1) + (nm < 0.5f ? 0.01f : -0.01f));
+        CHECK(std::fabs(app.getParam(MP_NOTE_MAP) - (nm < 0.5f ? 1.0f : 0.0f)) < 0.01f, "a choice moves one step");
+        set(app, MP_NOTE_MAP, 1);
+        // the knob follows its parameter when the screen moves it
+        set(app, P_FILTER, mpcParamDef(P_FILTER).max);
+        for (int i = 0; i < 6; ++i) app.tick();
+        CHECK(app.getParam(MP_QK0) > 0.99f, "the knob follows FILTER when it is moved elsewhere");
+    }
     std::printf("akaizer page\n");
     {
         set(app, P_AKR_FREQ_MAN, 0.0f);

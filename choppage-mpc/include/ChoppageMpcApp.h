@@ -109,6 +109,10 @@ private:
     bool haveLastTap_ = false;
     bool dragMoved_ = false;                        // the drag strip moved a marker (it snaps when the drag ends)
     float jogged(int index, float v, float prev) const;
+    int qTarget(int k) const;
+    void qLinkTurned(int k, float v, float prev);
+    void syncQLinks();
+    int qMoved_[kQLinks] = {};
     void sliceTap(int column, bool doubleTap = false);                      // SELECT / ADD / DEL at a column of the SLICE waveform
     int dragTicks_ = 0;                             // a drag on the strip is under way: hold the view, don't mirror
     std::string moveText_ = "-";                    // MOVE knob text: the marker's time
