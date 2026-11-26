@@ -97,7 +97,7 @@ public:
         // ".../VST2 Plugins/Content/Breaks", beside the plugin folders
         const std::string& f = mpc::pluginFolder();
         const auto slash = f.find_last_of('/');
-        return f.empty() || slash == std::string::npos || slash == 0 ? std::string() : f.substr(0, slash) + "/Content/Breaks";
+        (void)slash; return std::string();
     }
     void notifyParameter(int index, float plainValue) override
     {
