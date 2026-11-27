@@ -61,6 +61,11 @@ static void settle(ChoppageMpcApp& app)
 }
 
 static void set(ChoppageMpcApp& app, int i, float v) { app.setParam(i, v); app.tick(); settle(app); }
+// UNDO keeps a step once a change has settled for a quarter of a second
+static void settleUndo(ChoppageMpcApp& app)
+{
+    for (int k = 0; k < 3; ++k) { std::this_thread::sleep_for(std::chrono::milliseconds(300)); for (int i = 0; i < 6; ++i) app.tick(); }
+}
 // A key or tap on the MPC: down (the app acts), then the MPC puts it back to 0 when the finger lifts.
 static void press(ChoppageMpcApp& app, int i, float v = 1.0f) { set(app, i, v); set(app, i, 0.0f); }
 // The jog wheel's push on the DISK list flips LOAD; every change loads.
@@ -110,12 +115,18 @@ static int state(const char* path, int lcd, int view)
     settle(app);
     press(app, MP_DICE_PAT, 1);
     press(app, MP_DICE_FX, 1);
+    app.session().setStepCondition(2, false, cond::percentBase + 10);   // a few trig conditions for the PROB rows
+    app.session().setStepCondition(6, false, cond::abBase);
+    app.session().setStepCondition(4, true, cond::fill);
+    app.session().setStepCondition(12, true, cond::notFirst);
     set(app, MP_SLICE, 5);
     set(app, MP_BROWSE, 2);
     set(app, P_LCD_COLOUR, (float)lcd);
     if (view > 0) set(app, MP_SHOW_PAT + view - 1, 1);
     set(app, P_PAD1 + 2, 1);
     render(app, 60, { MidiMsg::noteOn(36, 100) });
+    settle(app);
+    app.session().selectSlot(0);      // the break with the pattern (and its PROB rows) on the SEQ screens
     settle(app);
     FILE* f = std::fopen(path, "w");
     if (!f) return 1;
@@ -221,10 +232,12 @@ int main(int argc, char** argv)
     CHECK(app.session().slot(1).program.pattern.slice[2] == 4, "a step knob sets that step's slice");
     set(app, MP_STEP0 + 2, 0);
     CHECK(app.session().slot(1).program.pattern.slice[2] == -1, "step knob at 0 is a rest");
+    settleUndo(app);
+    const Pattern edited = app.session().slot(1).program.pattern;
     press(app, MP_DICE_PAT, 1);
     CHECK(!(app.session().slot(1).program.pattern == rolled), "a second roll changes the pattern");
     press(app, MP_UNDO, 1);
-    CHECK(app.session().slot(1).program.pattern == rolled, "UNDO goes back to the first roll");
+    CHECK(app.session().slot(1).program.pattern == edited, "UNDO goes back to the first roll (as edited)");
     press(app, MP_REDO, 1);
     CHECK(app.getParam(MP_UNDO) == 0.0f && app.getParam(MP_REDO) == 0.0f, "UNDO / REDO spring back");
     press(app, MP_DICE_FX, 1);
@@ -915,6 +928,34 @@ int main(int argc, char** argv)
         CHECK(fxf == 17 + 1 + 2, "the FX row shows it (selected)");
         set(app, MP_STEP_FX, 0);
         CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::none, "STEP FX OFF clears it");
+
+        // 0.17: the NOTE PROB / FX PROB rows (Elektron trig conditions)
+        press(app, MP_SEQ_TAP, 7 * 16 + 4 + 1);              // the NOTE PROB row under step 5: selects it
+        CHECK((int)app.getParam(MP_SEQ_SEL) == 5, "a tap on the NOTE PROB row selects step 5");
+        {
+            const int nf = (int)std::lround(app.getParam(MP_NCOND0 + 4));
+            CHECK(nf == condFrame((int)std::lround(app.getParam(P_LCD_COLOUR)), true, 0), "the NOTE PROB cell shows ALWAYS, selected");
+        }
+        set(app, MP_NCOND0 + 4, app.getParam(MP_NCOND0 + 4) + 1);   // jog up: FILL
+        CHECK(app.session().slot(0).program.pattern.noteCond[4] == cond::fill, "jog on a NOTE PROB cell: ALWAYS -> FILL");
+        set(app, MP_NCOND0 + 4, app.getParam(MP_NCOND0 + 4) - 1);
+        set(app, MP_NCOND0 + 4, app.getParam(MP_NCOND0 + 4) - 1);   // back past ALWAYS: wraps to 8:8
+        CHECK(app.session().slot(0).program.pattern.noteCond[4] == cond::kCount - 1, "jog back past ALWAYS wraps to 8:8");
+        CHECK(app.getParam(MP_STEP_NCOND) == (float)(cond::kCount - 1), "the NOTE PROB knob follows the selected step");
+        app.formatValue(MP_NCOND0 + 4, app.getParam(MP_NCOND0 + 4), t);
+        CHECK(t == "NOTE 8:8", ("the cell's text while jogged: " + t).c_str());
+        set(app, MP_STEP_FCOND, (float)(cond::percentBase + 10));
+        CHECK(app.session().slot(0).program.pattern.fxCond[4] == cond::percentBase + 10, "the FX PROB knob sets 50% on the selected step");
+        set(app, MP_STEP_NCOND, 0);
+        set(app, MP_STEP_FCOND, 0);
+        // UNDO / REDO take sound settings back too (any core parameter), not only the pattern
+        settleUndo(app);
+        const float filterWas = app.getParam(P_FILTER);
+        set(app, P_FILTER, 0.25f);
+        press(app, MP_UNDO, 1);
+        CHECK(std::fabs(app.getParam(P_FILTER) - filterWas) < 1e-6f, "UNDO puts the FILTER knob back");
+        press(app, MP_REDO, 1);
+        CHECK(std::fabs(app.getParam(P_FILTER) - 0.25f) < 1e-6f, "REDO turns it again");
 
         // the jog wheel on a cell cycles only that lane's hits
         auto laneSlices = [&](Badge b) { std::vector<int> v; for (int k = 0; k < c.numSlices(); ++k) if (c.badges[(size_t)k] == b) v.push_back(k); return v; };

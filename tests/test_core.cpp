@@ -6,6 +6,7 @@
       FX pads + character · editing, history, memories · state round trip
       WAV / AIFF in and out · break browser · Akaize render · bounce
 */
+#include <thread>
 #include "choppage/Analysis.h"
 #include "choppage/AudioFile.h"
 #include "choppage/DemoBreak.h"
@@ -158,9 +159,22 @@ static void generatorTests()
     check (a == Generator::pattern (in), "same seed, same pattern");
     in.current.slice[5] = 3; in.current.locked[5] = true;
     check (Generator::pattern (in).slice[5] == 3, "a locked step survives the dice");
-    int kicks = 0;
-    for (int st : { 0, 16 }) if (a.slice[(size_t) st] >= 0 && c->badges[(size_t) a.slice[(size_t) st]] == Badge::kick) ++kicks;
-    check (kicks == 2, "JUNGLE puts kicks on the ones");
+    // every style, many rolls: a kick on the one, and the grooves' backbeat - most bars have a snare on 2 or 4 (step 5 / 13)
+    for (int st = 0; st < kNumStyles; ++st)
+    {
+        int kickOnOne = 0, backbeat = 0, rolls = 40;
+        for (int seed = 0; seed < rolls; ++seed)
+        {
+            Generator::Input g = in;
+            g.current = g.original; g.style = (Style) st; g.seed = seed * 31 + 7; g.amount = 1.0f;
+            const auto p = Generator::pattern (g);
+            auto badgeAt = [&] (int k) { return p.slice[(size_t) k] >= 0 ? c->badges[(size_t) p.slice[(size_t) k]] : Badge::other; };
+            kickOnOne += badgeAt (0) == Badge::kick;
+            backbeat += badgeAt (4) == Badge::snare || badgeAt (12) == Badge::snare || badgeAt (8) == Badge::snare;
+        }
+        check (kickOnOne == rolls && backbeat >= rolls * 3 / 4, std::string (styleNames()[(size_t) st]) + ": a kick on the one every roll, a snare backbeat in "
+                                                                + std::to_string (backbeat) + " / " + std::to_string (rolls));
+    }
     auto fx = Generator::fx (in.original, 1.0f, 7);
     int ev = 0; for (int i = 0; i < fx.numSteps; ++i) ev += fx.fx[(size_t) i].type != FxType::none;
     check (ev > 2 && fx.fx[0].type == FxType::none, "FX dice scatters events and leaves the one clean (" + std::to_string (ev) + ")");
@@ -281,6 +295,26 @@ static void fxTests()
         auto wet = r.run (1.5, { MidiMsg::noteOn (kFirstFxNote + pad, 110, (int) (0.4 * r.sr)), MidiMsg::noteOff (kFirstFxNote + pad, (int) (1.2 * r.sr)) });
         const float d = difference (dry, wet);
         check (d > 0.001f && finite (wet), std::string ("pad ") + fxPadName (pad) + " changes the sound (" + fmt (d, 4) + ")");
+    }
+    {
+        // the AKAIZE pad held from the screen (not MIDI), the host playing and stopped (CHOPPAGE's own clock)
+        for (bool hostPlays : { true, false })
+            for (bool inTime : { false, true })
+            {
+                auto runIt = [&] (bool held) {
+                    Rig r;
+                    r.host.playing = hostPlays;
+                    r.set (P_AK_MODE, inTime ? 1.0f : 0.0f);
+                    if (! hostPlays) { r.autoKey = false; r.s.setPlaying (true); }
+                    Audio a = r.run (0.4);
+                    if (held) r.s.setPadHeld (PerfFx::akaize, true);
+                    Audio b = r.run (0.8);
+                    return b;
+                };
+                const float d = difference (runIt (false), runIt (true));
+                check (d > 0.01f, std::string ("AKAIZE held on screen, host ") + (hostPlays ? "playing" : "stopped") + (inTime ? ", IN TIME" : ", STRETCH")
+                                    + " changes the sound (" + fmt (d, 4) + ")");
+            }
     }
     {
         // the Akaizer's settings, live: CYCLE LENGTH / FREQ on the AKAIZE pad and on per-slice STRETCH
@@ -712,6 +746,138 @@ static void rexTests()
     }
 }
 
+// 0.17: UNDO / REDO for everything
+static void undoTests()
+{
+    std::cout << "\n== undo / redo ==" << std::endl;
+    Rig r;
+    std::vector<float> params = r.plain;
+    auto settle = [&] { for (int k = 0; k < 3; ++k) { r.s.undoCheckpoint (params); std::this_thread::sleep_for (std::chrono::milliseconds (300)); } r.s.undoCheckpoint (params); };
+    settle();
+    check (! r.s.canUndo(), "nothing to undo at the start");
+    const auto before = r.s.slot (0).current;
+    r.s.rollPattern (Style::jungle, 1.0f, true);
+    settle();
+    check (r.s.canUndo() && ! (r.s.slot (0).current == before), "a pattern roll is a step");
+    params[P_FILTER] = 0.3f;
+    settle();
+    r.s.setStepCondition (2, false, cond::abBase);
+    settle();
+    auto p1 = r.s.undo();
+    check (r.s.slot (0).current.noteCond[2] == 0 && p1.size() == params.size() && std::abs (p1[P_FILTER] - 0.3f) < 1e-6f, "undo: the condition goes, the filter stays");
+    params = p1;
+    auto p2 = r.s.undo();
+    check (! p2.empty() && std::abs (p2[P_FILTER] - 1.0f) < 1e-6f, "undo: the filter knob goes back");
+    params = p2;
+    auto p3 = r.s.undo();
+    check (r.s.slot (0).current == before, "undo: the pattern roll goes back");
+    params = p3;
+    settle();
+    check (r.s.canRedo(), "after undo, redo is there (and a settled state doesn't clear it)");
+    auto p4 = r.s.redo(); params = p4;
+    check (! (r.s.slot (0).current == before), "redo: the roll comes back");
+    // a load is a step too: undo puts the old break back (no reload)
+    settle();
+    const auto oldContent = r.s.slot (1).content;
+    r.s.loadDemo (1); r.s.waitUntilIdle(); r.s.poll();
+    r.s.setBadge (0, Badge::snare);
+    settle();
+    r.s.undo();
+    check (r.s.slot (1).content == oldContent || r.s.slot (0).content->badges[0] != Badge::snare, "undo after a load / a badge change puts it back");
+    // UNDO straight after an edit (before it settled) takes that edit back
+    settle();
+    const auto beforeQuick = r.s.slot (r.s.selectedSlot()).current;
+    r.s.setStepCondition (5, true, cond::fill);
+    r.s.undo (params);
+    check (r.s.slot (r.s.selectedSlot()).current == beforeQuick, "undo straight after an edit takes it back");
+    r.s.redo (params);
+    check (r.s.slot (r.s.selectedSlot()).current.fxCond[5] == cond::fill, "and redo brings it back");
+}
+
+// 0.17: trig conditions (NOTE PROB / FX PROB), ROLL MODE, HALF-TIME MODE
+static void conditionTests()
+{
+    std::cout << "\n== trig conditions, roll and half-time modes ==" << std::endl;
+    check (cond::kCount == 65 && cond::name (0) == "ALWAYS" && cond::name (cond::fill) == "FILL" && cond::name (cond::percentBase + 10) == "50%"
+             && cond::name (cond::abBase) == "1:2" && cond::name (cond::abBase + 1) == "2:2" && cond::name (cond::kCount - 1) == "8:8",
+           "the conditions: ALWAYS, FILL ... NOT 1ST, 1% .. 99%, 1:2 .. 8:8 (65)");
+    auto bars = [] (int condition, bool fill, int barsToRun) {
+        Rig r;
+        r.set (P_FILL, fill ? 1.0f : 0.0f);
+        const int slot = r.s.selectedSlot();
+        r.s.setPatternLength (1);
+        for (int k = 0; k < 16; ++k) r.s.setStepCondition (k, false, condition);
+        const double bar = 4.0 * 60.0 / r.host.bpm;
+        auto a = r.run (bar * barsToRun);
+        std::vector<float> out;
+        for (int b = 0; b < barsToRun; ++b) out.push_back (rms (a, (int) ((b + 0.05) * bar * r.sr), (int) (0.9 * bar * r.sr)));
+        (void) slot;
+        return out;
+    };
+    auto always = bars (cond::always, false, 2);
+    auto ab = bars (cond::abBase, false, 4);            // 1:2: the 1st and 3rd time round
+    check (always[0] > 0.02f && always[1] > 0.02f, "ALWAYS plays every bar");
+    check (ab[0] > 0.02f && ab[1] < 0.002f && ab[2] > 0.02f && ab[3] < 0.002f,
+           "1:2 plays the 1st and 3rd time round only (" + fmt (ab[0], 3) + " " + fmt (ab[1], 4) + " " + fmt (ab[2], 3) + " " + fmt (ab[3], 4) + ")");
+    auto first = bars (cond::first, false, 2), notFirst = bars (cond::notFirst, false, 2);
+    check (first[0] > 0.02f && first[1] < 0.002f && notFirst[0] < 0.002f && notFirst[1] > 0.02f, "1ST / NOT 1ST");
+    auto fillOff = bars (cond::fill, false, 1), fillOn = bars (cond::fill, true, 1), notFill = bars (cond::notFill, false, 1);
+    check (fillOff[0] < 0.002f && fillOn[0] > 0.02f && notFill[0] > 0.02f, "FILL plays only with FILL on, NOT FILL without it");
+    auto half = bars (cond::percentBase + 10, false, 1), always1 = bars (cond::always, false, 1), one = bars (cond::percentBase, false, 1);
+    check (half[0] > 0.002f && half[0] < always1[0] * 0.95f && one[0] < half[0],
+           "50% plays some hits (rms " + fmt (half[0], 3) + " of " + fmt (always1[0], 3) + "), 1% hardly any (" + fmt (one[0], 4) + ")");
+    {
+        // the FX row's own condition: a STUTTER on every step, FX PROB FILL (FILL off): as if there were no FX
+        Rig a, b, c;
+        for (Rig* r : { &a, &b }) { r->s.setPatternLength (1); for (int k = 0; k < 16; ++k) r->s.setFxStep (k, FxType::stutter, 32); }
+        for (int k = 0; k < 16; ++k) b.s.setStepCondition (k, true, cond::fill);
+        c.s.setPatternLength (1);
+        auto wa = a.run (1.0), wb = b.run (1.0), wc = c.run (1.0);
+        check (difference (wa, wc) > 0.01f && difference (wb, wc) < 0.001f, "FX PROB: FILL (off) keeps a step's FX out");
+    }
+    {
+        // patterns keep their conditions through a save
+        Rig r;
+        r.s.setStepCondition (3, false, cond::abBase + 4);
+        r.s.setStepCondition (5, true, cond::percentBase + 3);
+        const auto st = r.s.saveState();
+        Rig q;
+        q.s.loadState (st);
+        q.s.waitUntilIdle(); q.s.poll();
+        const auto& p = q.s.slot (q.s.selectedSlot()).current;
+        check (p.noteCond[3] == cond::abBase + 4 && p.fxCond[5] == cond::percentBase + 3 && p.noteCond[4] == 0, "... the conditions come back");
+    }
+    // ROLL MODE: each one sounds different; HALF-TIME MODE: each one sounds different
+    {
+        std::vector<Audio> rolls;
+        for (int m = 0; m < 6; ++m)
+        {
+            Rig r;
+            r.set (P_ROLL_MODE, (float) m);
+            rolls.push_back (r.run (1.5, { MidiMsg::noteOn (kFirstFxNote + PerfFx::roll, 110, (int) (0.4 * r.sr)), MidiMsg::noteOff (kFirstFxNote + PerfFx::roll, (int) (1.4 * r.sr)) }));
+        }
+        bool allDiffer = true;
+        for (int m = 1; m < 6; ++m) allDiffer = allDiffer && difference (rolls[0], rolls[(size_t) m]) > 0.002f && finite (rolls[(size_t) m]);
+        const int at = (int) (0.45 * 44100), late = (int) (1.25 * 44100), w = (int) (0.1 * 44100);
+        check (allDiffer, "ROLL MODE: PITCH UP, VEL UP, VEL UP +PITCH, VEL DOWN, VEL DOWN -PITCH, PITCH DOWN all differ");
+        check (rms (rolls[1], at, w) < rms (rolls[1], late, w) && rms (rolls[3], at, w) > rms (rolls[3], late, w),
+               "VEL UP gets louder, VEL DOWN quieter (" + fmt (rms (rolls[1], at, w), 3) + " -> " + fmt (rms (rolls[1], late, w), 3) + ", "
+               + fmt (rms (rolls[3], at, w), 3) + " -> " + fmt (rms (rolls[3], late, w), 3) + ")");
+    }
+    {
+        std::vector<Audio> halves;
+        for (int m = 0; m < 5; ++m)
+        {
+            Rig r;
+            r.set (P_HALF_MODE, (float) m);
+            halves.push_back (r.run (2.0, { MidiMsg::noteOn (kFirstFxNote + PerfFx::halfTime, 110, (int) (0.3 * r.sr)), MidiMsg::noteOff (kFirstFxNote + PerfFx::halfTime, (int) (1.9 * r.sr)) }));
+        }
+        bool allDiffer = true;
+        for (int m = 1; m < 5; ++m) allDiffer = allDiffer && difference (halves[0], halves[(size_t) m]) > 0.002f && finite (halves[(size_t) m]);
+        check (allDiffer, "HALF-TIME MODE: 1/2, 3/4, 2/3, 1/4, 1/2 TAPE all differ");
+    }
+}
+
 int main()
 {
     wavVariantTests();
@@ -719,6 +885,8 @@ int main()
     generatorTests();
     playbackTests();
     fxTests();
+    conditionTests();
+    undoTests();
     editTests();
     fileTests();
     paramTests();

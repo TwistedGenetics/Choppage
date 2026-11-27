@@ -119,6 +119,11 @@ enum MpcParam : int
     MP_SET_EXPORT = MP_PLACE4 + 4, // key: write the settings file
     MP_SET_IMPORT,                 // key: read it back
     MP_SET_INFO,                   // readout: where the settings file is
+    // ---- 0.17: Elektron-style trig conditions on the SEQ page: the NOTE PROB and FX PROB rows
+    MP_NCOND0,                     // 16 NOTE PROB cells (film strip frame, see condFrame()); the jog wheel steps the condition
+    MP_FCOND0 = MP_NCOND0 + 16,    // 16 FX PROB cells
+    MP_STEP_NCOND = MP_FCOND0 + 16,   // the selected step's note condition (choice: cond::names())
+    MP_STEP_FCOND,                 // the selected step's FX condition
     kMpcParamEnd
 };
 constexpr int kMpcNumParams = kMpcParamEnd;
@@ -141,7 +146,7 @@ inline int waveFrame(int theme, int look, int mark, int level) { return ((theme 
 inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
 
 // SEQ grid (lanes KICK SNARE GHOST HAT OPEN PERC). Cell frame = 1 + theme * kCellFrames + c; c: 0 empty, 1 empty on
-// a beat, 2-65 a hit playing slice c - 1. Frame 0 and the last frame are spare, so the jog wheel can always move a
+// a beat, 2-65 a hit playing slice c - 1 (each lane's strip shows its hit letter: K S GS H O P, and the slice number). Frame 0 and the last frame are spare, so the jog wheel can always move a
 // cell's value both ways (the app reads the direction, cycles the lane's slices, and puts the right frame back).
 // FX row frame = theme * kFxRowFrames + (selected ? 17 : 0) + f; f: 0 none, 1-16 type 1-4 x rate 8 / 16 / 32 / 64.
 // The step row: theme * 17 + step (0 = none).
@@ -151,6 +156,11 @@ constexpr int kCellStripFrames = 4 * kCellFrames + 2;
 constexpr int kFxRowFrames = 34;
 inline int cellFrame(int theme, int c) { return 1 + theme * kCellFrames + c; }
 inline int fxRowFrame(int theme, bool selected, int f) { return theme * kFxRowFrames + (selected ? 17 : 0) + f; }
+// NOTE PROB / FX PROB cells: frame = 1 + (theme * 2 + selected) * kCondFrames + condition (cond:: ids, 0 = ALWAYS).
+// Frame 0 and the last frame are spare, like the grid cells, so the jog wheel can move a cell's value either way.
+constexpr int kCondFrames = 65;   // cond::kCount
+constexpr int kCondStripFrames = 4 * 2 * kCondFrames + 2;
+inline int condFrame(int theme, bool selected, int c) { return 1 + (theme * 2 + (selected ? 1 : 0)) * kCondFrames + c; }
 
 enum class MpcKind { Float, Int, Bool, Choice };
 

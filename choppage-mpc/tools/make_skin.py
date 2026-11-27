@@ -487,10 +487,14 @@ LANES = ["KICK", "SNARE", "GHOST", "HAT", "OPEN", "PERC"]
 GX0, GPITCH, GCELL = 140, 69, 63 # grid columns: x of column 0, pitch, cell width
 FX_LETTER = "SRAT"               # STUTTER REVERSE STRETCH (Akaize) TAPE STOP, as on the desktop
 
-def cell_frames(w, h):
-    """1 spare + theme x (0 empty, 1 empty on a beat, 2-65 a hit: slice number) + 1 spare. The spares let the jog
-    wheel move a cell's value either way from any frame."""
+LANE_LETTER = ["K", "S", "GS", "H", "O", "P"]   # the hit letters of the break books (P = PERC: anything else)
+
+def cell_frames(w, h, lane):
+    """1 spare + theme x (0 empty, 1 empty on a beat, 2-65 a hit: the lane's letter, big, and the slice number,
+    small) + 1 spare. One strip per lane. The spares let the jog wheel move a cell's value either way from any
+    frame."""
     frames = []
+    letter = LANE_LETTER[lane]
     for theme in range(4):
         bgc, ink, dim, faint = LCD[theme]
         for c in range(CELL_FRAMES):
@@ -500,12 +504,57 @@ def cell_frames(w, h):
                 d.rectangle((1, 1, w - 2, h - 2), outline=dim if c == 1 else mix(bgc, dim, 0.55), width=2)
             else:
                 d.rectangle((0, 0, w - 1, h - 1), fill=ink)
-                t = str(c - 1)
-                size = min(int(h * 0.78), 28)
-                while size > 10 and mono_font(size).getlength(t) > w - 6:
-                    size -= 1
-                d.text((w / 2, h / 2 + 1), t, font=mono_font(size), fill=bgc, anchor="mm")
+                num = str(c - 1) if h >= 36 else ""   # (too small to read in the PATTERN section's short cells)
+                big = min(int(h * 0.78), 30)
+                small = max(10, min(int(h * 0.42), 17))
+                while big > 10 and mono_font(big).getlength(letter) + mono_font(small).getlength(num) + 4 > w - 6:
+                    big -= 1
+                lw = mono_font(big).getlength(letter)
+                nw = mono_font(small).getlength(num)
+                x0 = (w - (lw + (3 + nw if num else 0))) / 2
+                d.text((x0, h / 2 + 1), letter, font=mono_font(big), fill=bgc, anchor="lm")
+                d.text((x0 + lw + 3, h - 4), num, font=mono_font(small), fill=bgc, anchor="ls")
             frames.append(im)
+    return [frames[0]] + frames + [frames[-1]]
+
+COND_FRAMES = 65                 # MpcParams.h kCondFrames (= cond::kCount)
+COND_PCT = [1, 2, 4, 6, 9, 13, 19, 25, 33, 41, 50, 59, 67, 75, 81, 87, 91, 94, 96, 98, 99]
+
+def cond_short(c):
+    """choppage cond::shortName: "" ALWAYS, F !F P !P N !N 1 !1, 50 (percent), 1:2 (A:B)"""
+    fixed = ["", "F", "!F", "P", "!P", "N", "!N", "1ST", "!1ST"]
+    if c < 9:
+        return fixed[c]
+    if c < 30:
+        return "%d%%" % COND_PCT[c - 9]
+    k = c - 30
+    for b in range(2, 9):
+        if k < b:
+            return "%d:%d" % (k + 1, b)
+        k -= b
+    return "?"
+
+def cond_frames(w, h):
+    """1 spare + (theme x 2 + selected) x 65 conditions + 1 spare: the NOTE PROB / FX PROB rows."""
+    frames = []
+    for theme in range(4):
+        bgc, ink, dim, faint = LCD[theme]
+        for sel in range(2):
+            for c in range(COND_FRAMES):
+                im = Image.new("RGB", (w, h), bgc)
+                d = ImageDraw.Draw(im)
+                t = cond_short(c)
+                if t:
+                    d.rectangle((3, 3, w - 4, h - 4), fill=mix(bgc, ink, 0.25))
+                    size = min(int(h * 0.72), 22)
+                    while size > 10 and mono_font(size).getlength(t) > w - 8:
+                        size -= 1
+                    d.text((w / 2, h / 2 + 1), t, font=mono_font(size), fill=ink, anchor="mm")
+                else:
+                    d.line([(8, h / 2), (w - 8, h / 2)], fill=mix(bgc, dim, 0.6), width=2)
+                if sel:
+                    d.rectangle((0, 0, w - 1, h - 1), outline=SEL_YELLOW, width=3)
+                frames.append(im)
     return [frames[0]] + frames + [frames[-1]]
 
 def fxrow_frames(w, h):
@@ -551,14 +600,18 @@ def head_frames(h):
             frames.append(im)
     return frames
 
-def grid_cover(theme, w, h, lane_y, lane_h):
-    """The LCD under the grid: glass + lane names."""
+def grid_cover(theme, w, h, lane_y, lane_h, rows=None):
+    """The LCD under the grid: glass + lane names. rows: [(name, y centre)] when the rows aren't all lane_h."""
     bgc, ink, dim, faint = LCD[theme]
     im = Image.new("RGB", (w, h), bgc)
     d = ImageDraw.Draw(im)
-    for i, n in enumerate(LANES + ["FX"]):
-        y = lane_y + i * lane_h + (lane_h - 6) / 2
-        d.text((8, y), n, font=mono_font(min(24, lane_h - 4)), fill=ink, anchor="lm")
+    if rows is None:
+        rows = [(n, lane_y + i * lane_h + (lane_h - 6) / 2) for i, n in enumerate(LANES + ["FX"])]
+    for n, y in rows:
+        size = min(24, lane_h - 4)
+        while size > 12 and mono_font(size).getlength(n) > GX0 - 26 - 12:
+            size -= 1
+        d.text((8, y), n, font=mono_font(size), fill=ink, anchor="lm")
     return im
 
 def dice_bar(w, h, text, on):
@@ -611,7 +664,7 @@ def pages():
             [K("akCycLen", "AKAIZE PAD LENGTH"), K("akCycFreq", "AKAIZE PAD FREQ"), T("akFreqManual", "PAD FREQ\nMANUAL"), K("akRatio", "AKAIZE PAD STRETCH")],
             [K("slCycLen", "SLICE STRETCH LENGTH"), K("slCycFreq", "SLICE STRETCH FREQ"), T("slFreqManual", "SLICE FREQ\nMANUAL"), K("dropRate", "S950 DROP RATE")],
             [P("padQuant", "FX PAD QUANTISE (START AND STOP ON THE GRID)", ["OFF", "1/32", "1/16", "1/8", "1/4", "BAR"], span=2,
-               ids=[0, 4, 1, 2, 3, 5]), K("fxAmount", "FX AMOUNT"), G("diceFx", "FX\nDICE")]]},
+               ids=[0, 4, 1, 2, 3, 5]), K("rollMode", "ROLL MODE"), K("halfMode", "HALF-TIME")]]},
         {"fn": 4, "sub": 1, "name": "AKAIZER", "rows": [
             [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 IS AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
             [K("akrCycLen", "CYCLE LENGTH"), K("akrCycFreq", "CYCLE FREQ"), T("akrFreqManual", "FREQ\nMANUAL"), K("akrPitch", "PITCH", bi=True)],
@@ -963,11 +1016,11 @@ class Builder:
         return entry(pid, key, o(("version", 1), ("handleName", "Data")), bounds(rect, focus="Yes", invalid="Hide", inval=vis),
                      remap=[("Data", self.h(pid))])
 
-    def radio_at(self, pid, rect, images, vis=None, ids=None, name=None, focus=True, qlink=True):
+    def radio_at(self, pid, rect, images, vis=None, ids=None, name=None, focus=True, qlink=True, count=None):
         """A button group: images = [(on, off, (x, y, w, h) relative)], buttonId = position (or ids)."""
         x, y, w, h = rect
         n = len(images)
-        count = max(ids) + 1 if ids else n
+        count = count or (max(ids) + 1 if ids else n)
         key = name or "cp radio %s %d" % (pid, x * 10000 + y)
         kids = [focus_entry()] if focus else []
         for i, (on, off, r) in enumerate(images):
@@ -1119,7 +1172,7 @@ class Builder:
         # ---- sections under the dice row (one shows, by MP_VIEW)
         SY = 430
         pad_w, pad_h, gap = 152, 88, 6
-        settings = ["stutRate", "rollRate", None, "tapeMs", None, "akCycLen", "diveRes", "dropRate"]
+        settings = ["stutRate", "rollRate", None, "tapeMs", "halfMode", "akCycLen", "diveRes", "dropRate"]
         names = ["STUTTER", "ROLL", "REVERSE", "TAPE STOP", "HALF-TIME", "AKAIZE", "FILT DIVE", "S950 DROP"]
         win = (10, 44, pad_w - 20, 34)
         for view in (0, 1):     # the 8 FX pads along the bottom (MAIN and FX sections)
@@ -1403,14 +1456,16 @@ class Builder:
         return tab, self.qmap(page)
 
 
-    def grid_block(self, y_head, head_h, y_lanes, lane_h, cell_h, fx_h, vis=None, tag=""):
+    def grid_block(self, y_head, head_h, y_lanes, lane_h, cell_h, fx_h, vis=None, tag="", cond_h=0):
         """The SEQ grid: step row, 6 lanes x 16 cells, the FX row. Each cell is its own focusable control: a tap
         puts a hit there or takes it off (and selects the step), and while it has focus the jog wheel steps through
         that lane's slices. A tap on the FX row selects the step for STEP FX / RATE."""
         kids = []
-        cs = "cells_%d.png" % cell_h
-        if cs not in self.images:
-            self.save(cs, film(cell_frames(GCELL, cell_h)))
+        ntaps = self.p("seqTap")["max"] + 1
+        cs_of = ["cells_%s_%d.png" % (slug(LANE_LETTER[lane]), cell_h) for lane in range(6)]
+        if cs_of[0] not in self.images:
+            for lane in range(6):
+                self.save(cs_of[lane], film(cell_frames(GCELL, cell_h, lane)))
             self.save("clear_cell_%d.png" % cell_h, clear_png(GCELL, cell_h))
         fs = "fxrow_%d.png" % fx_h
         if fs not in self.images:
@@ -1426,6 +1481,7 @@ class Builder:
         key = "cp seq cell %d" % cell_h
         # buttonId comes from the component definition, so give each cell its own definition id via a wrapper
         for lane in range(6):
+            cs = cs_of[lane]
             for col in range(16):
                 i = lane * 16 + col
                 k2 = "%s #%d" % (key, i + 1)
@@ -1434,18 +1490,48 @@ class Builder:
                     entry("cell", "Image", o(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", cs),
                                               ("numFrames", 4 * CELL_FRAMES + 2), ("handleName", "Data")), bounds((0, 0, GCELL, cell_h))),
                     entry("tap", "Button", o(("version", 2), ("onImage", clear), ("offImage", clear), ("buttonId", i + 1),
-                                             ("numButtonsInGroup", 113), ("handleName", "Tap"), ("gestureBehaviour", "Instant")),
+                                             ("numButtonsInGroup", ntaps), ("handleName", "Tap"), ("gestureBehaviour", "Instant")),
                           bounds((0, 0, GCELL, cell_h)))]))
                 kids.append(entry("cell%d" % (i + 1), k2, o(("version", 1), ("handleName", "Data")),
                                   bounds((GX0 + col * GPITCH, y_lanes + lane * lane_h, GCELL, cell_h), focus="Yes", invalid="Hide", inval=vis),
                                   remap=[("Data", self.h("cell%d" % (i + 1))), ("Tap", "ResetOnGestureEnd/" + self.h("seqTap"))]))
         yfx = y_lanes + 6 * lane_h
+        if cond_h:
+            # NOTE PROB between PERC and FX, FX PROB under FX (as on the desktop)
+            y_ncond, yfx = yfx, yfx + cond_h + 2
+            y_fcond = yfx + fx_h + 2
+            kids += self.cond_row(y_ncond, cond_h, "ncond", 7, ntaps, vis)
+            kids += self.cond_row(y_fcond, cond_h, "fcond", 8, ntaps, vis)
         for col in range(16):
             kids.append(self.strip_at(fs, 4 * FXROW_FRAMES, (GX0 + col * GPITCH, yfx, GCELL, fx_h), "fxrow%d" % (col + 1), vis, "fx row"))
         cl = "clear_fx_%d.png" % fx_h
         imgs = [(cl, cl, (col * GPITCH, 0, GPITCH, fx_h)) for col in range(16)]
         kids.append(self.radio_at("seqTap", (GX0, yfx, 16 * GPITCH, fx_h), imgs, vis, ids=list(range(97, 113)),
-                                  name="cp fx row tap %s" % tag, focus=False, qlink=False))
+                                  name="cp fx row tap %s" % tag, focus=False, qlink=False, count=ntaps))
+        return kids
+
+    def cond_row(self, y, h, pid, row, ntaps, vis):
+        """A NOTE PROB / FX PROB row: 16 focusable cells (the jog wheel steps the condition; a tap selects the step)."""
+        kids = []
+        cs = "cond_%d.png" % h
+        if cs not in self.images:
+            self.save(cs, film(cond_frames(GCELL, h)))
+            self.save("clear_cond_%d.png" % h, clear_png(GCELL, h))
+        assert 4 * 2 * COND_FRAMES + 2 == self.p(pid + "1")["max"] + 1
+        clear = "clear_cond_%d.png" % h
+        for col in range(16):
+            tid = row * 16 + col + 1
+            k2 = "cp seq cond %d #%d" % (h, tid)
+            self.define(k2, component([
+                focus_entry(),
+                entry("cell", "Image", o(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", cs),
+                                          ("numFrames", 4 * 2 * COND_FRAMES + 2), ("handleName", "Data")), bounds((0, 0, GCELL, h))),
+                entry("tap", "Button", o(("version", 2), ("onImage", clear), ("offImage", clear), ("buttonId", tid),
+                                         ("numButtonsInGroup", ntaps), ("handleName", "Tap"), ("gestureBehaviour", "Instant")),
+                      bounds((0, 0, GCELL, h)))]))
+            kids.append(entry("%s%d" % (pid, col + 1), k2, o(("version", 1), ("handleName", "Data")),
+                              bounds((GX0 + col * GPITCH, y, GCELL, h), focus="Yes", invalid="Hide", inval=vis),
+                              remap=[("Data", self.h("%s%d" % (pid, col + 1))), ("Tap", "ResetOnGestureEnd/" + self.h("seqTap"))]))
         return kids
 
     def key_row(self, pid, rect, labels, caption, key_h, vis=None):
@@ -1490,14 +1576,22 @@ class Builder:
         self.discrete("original")
         kids += self.lcd_radio("original", (26, HY, 330, HH), ["PATTERN", "ORIGINAL"], 24)
         kids += self.lcd_radio("length", (376, HY, 360, HH), ["1 BAR", "2 BARS", "4 BARS"], 22)
-        kids += self.lcd_radio("seqPage", (756, HY, 370, HH), ["1-16", "17-32", "33-48", "49-64"], 22)
-        kids += self.lcd_toggle("seqFollow", (1140, HY, 114, HH), "FOLLOW", 20)
-        lane_y, lane_h, fx_h = 100, 52, 36
+        kids += self.lcd_radio("seqPage", (756, HY, 320, HH), ["1-16", "17-32", "33-48", "49-64"], 20)
+        kids += self.lcd_toggle("seqFollow", (1086, HY, 92, HH), "FOLLOW", 18)
+        kids += self.lcd_toggle("fill", (1184, HY, 70, HH), "FILL", 20)
+        # 6 hit lanes, NOTE PROB, FX, FX PROB (0.17: the two PROB rows, Elektron trig conditions)
+        lane_y, lane_h, cond_h, fx_h = 100, 44, 30, 32
+        y_n = 6 * lane_h
+        y_fx = y_n + cond_h + 2
+        y_f = y_fx + fx_h + 2
+        cover_h = y_f + cond_h + 2
+        rows = [(n, i * lane_h + (lane_h - 4) / 2) for i, n in enumerate(LANES)] + \
+               [("N PROB", y_n + cond_h / 2), ("FX", y_fx + fx_h / 2), ("FX PROB", y_f + cond_h / 2)]
         for t in range(4):
             png = "gridcover_seq_%d.png" % t
-            self.save(png, grid_cover(t, 1228, 7 * lane_h + 2, 0, lane_h))
-            kids.append(self.image_at(png, (26, lane_y, 1228, 7 * lane_h + 2), self.vis_theme(t), "grid lanes"))
-        kids += self.grid_block(66, 28, lane_y, lane_h, lane_h - 6, fx_h, tag="seq")
+            self.save(png, grid_cover(t, 1228, cover_h, 0, lane_h, rows))
+            kids.append(self.image_at(png, (26, lane_y, 1228, cover_h), self.vis_theme(t), "grid lanes"))
+        kids += self.grid_block(66, 28, lane_y, lane_h, lane_h - 4, fx_h, tag="seq", cond_h=cond_h)
         kids += self.lcd_text("infoBrk", (30, 64, 104, 32), 26)
         # under the LCD: the two dice bars (the whole bar rolls) and the pattern tools
         DY, DH = 478, 66
@@ -1516,8 +1610,11 @@ class Builder:
         kids += k
         self._seq_windows.append(win)
         kids += self.key_row("stepFx", (212, RY, 640, RH), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP"], "FX ON THE STEP", 44)
-        kids += self.key_row("stepRate", (858, RY, 300, RH), ["1/8", "1/16", "1/32", "1/64"], "FX RATE", 44)
-        kids.append(self.flip_at("undo", (1164, RY, 106, RH), self.key_png("UNDO", 106, RH)))
+        kids += self.key_row("stepRate", (858, RY, 236, RH), ["1/8", "1/16", "1/32", "1/64"], "FX RATE", 44)
+        for pid, text, x, w_ in (("undo", "UNDO", 1100, 84), ("redo", "REDO", 1188, 82)):
+            png = self.save("keybig_%s_%dx%d.png" % (pid, w_, RH),
+                            film([keycap(w_, RH, text, False, led=False), keycap(w_, RH, text, True, led=False, picked=True)]))
+            kids.append(self.flip_at(pid, (x, RY, w_, RH), png))
         bgim = Image.new("RGB", (W, H), PANEL)
         d = ImageDraw.Draw(bgim)
         for yy in range(H):

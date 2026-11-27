@@ -60,6 +60,8 @@ private:
     void syncList(bool force);
     void syncSeq(bool force);
     void syncAudition();
+    std::vector<float> undoParams() const;            // the core parameters an undo step keeps (not the FX pads, not FILL)
+    void applyUndo(const std::vector<float>& params, const char* what);
     void moveMarkerOf(int marker, int position);
     struct View { int start = 0, length = 1; };
     View viewOf(const SlotContent& c, int sel);
@@ -124,6 +126,9 @@ private:
     std::string endText_ = "-";                     // END knob text
     std::string cellText_[kSeqLanes * 16];          // what the MPC shows while a grid cell is jogged ("K 05")
     float cellShown_[kSeqLanes * 16] = {};          // the frame each cell shows (jog direction = value vs this)
+    std::string condText_[32];                      // NOTE PROB / FX PROB cells: "NOTE 50%" while jogged
+    float condShown_[32] = {};                      // the frame each of them shows
+    int undoTick_ = 0;                              // the undo checkpoint runs every few ticks
 
     // shared with the audio thread
     std::atomic<double> fallbackBpm_{170.0};        // the selected break's tempo, when the MPC sends none

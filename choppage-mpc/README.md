@@ -51,7 +51,7 @@ Double-tap a knob for a big knob overlay. The Q-Links follow each screen, in row
 **MAIN** is the desktop's main screen in the BR3AK arrangement. The S950 LCD has:
 - ▶ (CHOPPAGE's own clock while the MPC is stopped), ◀ BREAK NAME ▶, LOAD and the tempo.
 - The 8 break keys.
-- The break's **waveform with its slice markers** (the selected slice in a yellow box, the slice playing now lit up) and the hit letter (K S G H O X) of every slice. Tap the waveform to pick and hear a slice.
+- The break's **waveform with its slice markers** (the selected slice in a yellow box, the slice playing now lit up) and the hit letter (K S G H O P) of every slice. Tap the waveform to pick and hear a slice.
 - The selected slice's settings and the status line.
 
 Under the LCD:
@@ -87,7 +87,9 @@ The sections:
 - **CHOP** has ADD (split the slice in two), DELETE (join it to the one before), NUDGE START < >, EDIT ALL SLICES, SLICING (TRANSIENTS / GRID), SENSITIVITY, GRID and RESLICE.
 - Slices sit end to end, so a slice's END is the next slice's START. The last slice ends with the break.
 
-**SEQ** is the BR3AK pattern editor: KICK, SNARE, GHOST, HAT, OPEN and PERC lanes over 16 steps. A hit shows the number of the slice it plays.
+**SEQ** is the BR3AK pattern editor: KICK, SNARE, GHOST, HAT, OPEN and PERC lanes over 16 steps, then **N PROB**, FX and **FX PROB**. A hit shows its letter as in the break books (K, S, GS, H, O, P for perc) with the number of the slice it plays.
+- **N PROB / FX PROB** (0.17): Elektron-style trig conditions, for the step's note and for its FX. Touch a cell (it selects the step) and **turn the jog wheel** through ALWAYS, FILL (F), NOT FILL (!F), PRE (P), NOT PRE (!P), NEI (N), NOT NEI (!N), 1ST, NOT 1ST (!1ST), 1% – 99% and 1:2 … 8:8. PRE: the last condition on the row came true; NEI: the same on the other row. A dash is ALWAYS. **FILL** (top right) turns fills on.
+- **UNDO / REDO** (0.17) take back anything: the pattern, slices, the breaks loaded, every knob and switch.
 - **Tap** a cell to put a hit of that kind there, or take it off.
 - With the cell selected (red frame), **turn the jog wheel** to step through that lane's hits only: kicks in KICK, snares in SNARE, ghosts in GHOST, hats in HAT, open hats in OPEN, percs in PERC. The MPC shows which one (for example "K 05").
 - **FX on a step:** tap a step, or the FX row under the grid, to select it. Then pick its FX (STUTTER, REVERSE, STRETCH, TAPE STOP or OFF) and RATE (1/8 to 1/64). The FX row shows each step's FX.
@@ -109,6 +111,8 @@ The sections:
 **PATTERN** memories: pick one with MEMORY, then **SAVE PATTERN** or **SAVE ORIGINAL** (the break as recorded, no FX), and **RECALL** (or play its note: E2-B3 in C MAJOR, G#3-B4 in CHROMATIC). **PATTERN** also has **RESET TO ORIGINAL** (the break as recorded, FX lane emptied; UNDO brings your pattern back). RESET is also in the MAIN screen's PATTERN section.
 
 **FX PAD QUANTISE** (FX PADS page): OFF, 1/32, 1/16, 1/8, 1/4, BAR. A pad hit off the beat waits for the next line of the grid; letting go ends it on the next line.
+
+**ROLL MODE** and **HALF-TIME** (FX PADS page, bottom row, 0.17): ROLL can go PITCH UP, VEL UP, VEL UP +PITCH, VEL DOWN, VEL DOWN -PITCH or PITCH DOWN; HALF-TIME can be 1/2, 3/4, 2/3, 1/4 or 1/2 TAPE (an octave down). The HALF-TIME pad on MAIN shows its setting.
 
 **PATTERN, FX PADS, SOUND / SPACE**: everything else, in rows of four. FX PADS has the AKAIZE pad's and slice STRETCH's CYCLE LENGTH / FREQ / MANUAL.
 

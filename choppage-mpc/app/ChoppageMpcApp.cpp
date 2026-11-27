@@ -123,7 +123,7 @@ std::vector<MpcParamDef> buildDefs()
     { auto* p = I(("tab" + std::to_string(c + 1)).c_str(), ("Tab " + std::to_string(c + 1)).c_str(), 0, tabFrame(3, kTabFrames - 1), 0); p->readout = true; }
     { auto* p = C("seqPage", "Steps", { "1-16", "17-32", "33-48", "49-64" }, 0); p->uiOnly = true; }
     { auto* p = B("seqFollow", "Follow", true); p->uiOnly = true; }
-    { auto* p = I("seqTap", "Grid Tap", 0, kSeqLanes * 16 + 16, 0); p->uiOnly = true; }
+    { auto* p = I("seqTap", "Grid Tap", 0, kSeqLanes * 16 + 48, 0); p->uiOnly = true; }   // + FX row, NOTE PROB, FX PROB
     { auto* p = I("seqHead", "Step Now", 0, 4 * 17 - 1, 0); p->readout = true; }
     for (int c = 0; c < kSeqLanes * 16; ++c)
     { auto* p = I(("cell" + std::to_string(c + 1)).c_str(), ("Cell " + std::to_string(c + 1)).c_str(), 0, kCellStripFrames - 1, 1); p->uiOnly = true; }
@@ -174,6 +174,13 @@ std::vector<MpcParamDef> buildDefs()
     T("setExport", "Export Settings");
     T("setImport", "Load Settings");
     R("setInfo", "Settings File");
+    // 0.17: the NOTE PROB and FX PROB rows (Elektron trig conditions)
+    for (int k = 0; k < 16; ++k)
+    { auto* p = I(("ncond" + std::to_string(k + 1)).c_str(), ("Note Prob " + std::to_string(k + 1)).c_str(), 0, kCondStripFrames - 1, 1); p->uiOnly = true; }
+    for (int k = 0; k < 16; ++k)
+    { auto* p = I(("fcond" + std::to_string(k + 1)).c_str(), ("FX Prob " + std::to_string(k + 1)).c_str(), 0, kCondStripFrames - 1, 1); p->uiOnly = true; }
+    { auto* p = C("stepNCond", "Note Prob", cond::names(), 0); p->uiOnly = true; }
+    { auto* p = C("stepFCond", "FX Prob", cond::names(), 0); p->uiOnly = true; }
     // the knobs start on the sound and the dice (what Program mode had before 0.11)
     const auto list = buildQList(v);
     const char* start[kQLinks] = { "filter", "filterRes", "dist", "crush", "srate", "reverb", "echoMix", "volume",
@@ -196,6 +203,7 @@ std::vector<int> buildQList(const std::vector<MpcParamDef>& v)
         if (i >= MP_QK0 && i < MP_QT_END) continue;
         if (isStepParam(i) || isPictureParam(i)) continue;
         if (i >= MP_CELL0 && i < MP_CELL0 + kSeqLanes * 16) continue;
+        if (i >= MP_NCOND0 && i < MP_FCOND0 + 16) continue;
         if (i >= MP_VSTEP0 && i < MP_VSTEP0 + 16) continue;
         list.push_back(i);
     }
@@ -303,7 +311,8 @@ int padBaseNote(int choice)
 // ===================================================================================== app
 ChoppageMpcApp::ChoppageMpcApp(IPlatform& platform, bool startWorker) : platform_(platform)
 {
-    static_assert(kMpcNumParams == MP_SET_INFO + 1, "parameter table");
+    static_assert(kMpcNumParams == MP_STEP_FCOND + 1, "parameter table");
+    static_assert(kCondFrames == cond::kCount, "one NOTE PROB / FX PROB frame per condition");
     for (int i = 0; i < kMpcNumParams; ++i)
     {
         values_[i] = mpcParamDef(i).def;
@@ -939,6 +948,12 @@ bool ChoppageMpcApp::formatValue(int index, float plain, std::string& out) const
         out = cellText_[(size_t)(index - MP_CELL0)];
         return true;
     }
+    if (index >= MP_NCOND0 && index < MP_FCOND0 + 16)
+    {
+        std::lock_guard<std::mutex> l(textMutex_);
+        out = condText_[(size_t)(index - MP_NCOND0)];
+        return true;
+    }
     if (isStepParam(index) || (index >= MP_VSTEP0 && index < MP_VSTEP0 + 16))
     {
         std::lock_guard<std::mutex> l(textMutex_);
@@ -1094,6 +1109,9 @@ void ChoppageMpcApp::tick()
         lastVersion_ = ~0u;   // the strip goes back onto the marker
     }
 
+    // an undo step when something settled (every 6th tick: about 5 times a second)
+    if (++undoTick_ >= 6) { undoTick_ = 0; session_.undoCheckpoint(undoParams()); }
+
     // 2. the session moved: mirrors and readouts follow
     syncMirrors(false);
     syncReadouts(false);
@@ -1233,8 +1251,32 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
         const int lane = k / 16, step = roundi(seen_[MP_SEQ_PAGE]) * 16 + k % 16;
         const auto& s = session_.slot(slot);
         if (s.content == nullptr || step >= s.program.pattern.numSteps) return;
-        write(MP_SEQ_SEL, (float)(step + 1));                 // the step STEP FX / RATE edit
-        if (lane < kSeqLanes) session_.toggleStep(step, kLaneBadge[lane]);   // the FX row only selects
+        write(MP_SEQ_SEL, (float)(step + 1));                 // the step STEP FX / RATE / the conditions edit
+        if (lane < kSeqLanes) session_.toggleStep(step, kLaneBadge[lane]);   // the FX and PROB rows only select
+        seqKey_ = ~0ull;
+        return;
+    }
+    if (index >= MP_NCOND0 && index < MP_FCOND0 + 16)
+    {
+        // the jog wheel on a focused NOTE PROB / FX PROB cell: the next / previous condition
+        const bool fxRow = index >= MP_FCOND0;
+        const int col = (index - MP_NCOND0) % 16;
+        const int dir = v > condShown_[index - MP_NCOND0] ? 1 : -1;
+        const int step = roundi(seen_[MP_SEQ_PAGE]) * 16 + col;
+        const auto& s = session_.slot(slot);
+        if (s.content == nullptr || step >= s.program.pattern.numSteps) { seqKey_ = ~0ull; return; }
+        write(MP_SEQ_SEL, (float)(step + 1));
+        const int cur = (fxRow ? s.program.pattern.fxCond : s.program.pattern.noteCond)[(size_t)step];
+        session_.setStepCondition(step, fxRow, (cur + dir + cond::kCount) % cond::kCount);
+        seqKey_ = ~0ull;
+        return;
+    }
+    if (index == MP_STEP_NCOND || index == MP_STEP_FCOND)
+    {
+        const int step = std::clamp(roundi(seen_[MP_SEQ_SEL]), 1, 64) - 1;
+        const auto& s = session_.slot(slot);
+        if (s.content == nullptr || step >= s.program.pattern.numSteps) { seqKey_ = ~0ull; return; }
+        session_.setStepCondition(step, index == MP_STEP_FCOND, std::clamp(roundi(v), 0, cond::kCount - 1));
         return;
     }
     if (index >= MP_CELL0 && index < MP_CELL0 + kSeqLanes * 16)
@@ -1544,8 +1586,8 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             break;
         case MP_DICE_FX: session_.rollFx(values_[P_FX_AMOUNT].load()); break;
         case MP_RESET_ORIG: session_.resetToOriginal(); say("PATTERN + FX BACK TO THE ORIGINAL"); break;
-        case MP_UNDO: session_.historyBack(); break;
-        case MP_REDO: session_.historyForward(); break;
+        case MP_UNDO: applyUndo(session_.undo(undoParams()), "UNDO"); break;
+        case MP_REDO: applyUndo(session_.redo(undoParams()), "REDO"); break;
         case MP_ORIGINAL: session_.setShowOriginal(on); break;
         case MP_PLAY: session_.setPlaying(on); break;
         case MP_SLICE: session_.selectSlice(roundi(v) - 1, true); break;
@@ -1932,6 +1974,35 @@ void ChoppageMpcApp::syncList(bool force)
 }
 
 // ===================================================================================== SEQ grid
+// ===================================================================================== undo
+// One undo for everything: the pattern, slices, chopping, the breaks loaded and every sound / FX setting. The
+// session keeps the steps; a step is the state before something settled (a quarter of a second without change).
+std::vector<float> ChoppageMpcApp::undoParams() const
+{
+    std::vector<float> v((size_t)kNumCoreParams);
+    for (int p = 0; p < kNumCoreParams; ++p)
+        v[(size_t)p] = (p >= P_PAD1 && p < P_PAD1 + kFxPads) || p == P_FILL ? 0.0f : values_[p].load(std::memory_order_relaxed);
+    return v;
+}
+
+void ChoppageMpcApp::applyUndo(const std::vector<float>& params, const char* what)
+{
+    if ((int)params.size() < kNumCoreParams)
+    {
+        message_ = std::string("NOTHING TO ") + what;
+        messageTicks_ = 60;
+        return;
+    }
+    for (int p = 0; p < kNumCoreParams; ++p)
+    {
+        if ((p >= P_PAD1 && p < P_PAD1 + kFxPads) || p == P_FILL) continue;
+        if (std::fabs(values_[p].load() - params[(size_t)p]) > 1.0e-7f) write(p, params[(size_t)p]);
+    }
+    lastVersion_ = ~0u; seqKey_ = ~0ull; waveKey_ = ~0ull;   // every mirror follows the state put back
+    message_ = what;
+    messageTicks_ = 45;
+}
+
 void ChoppageMpcApp::syncSeq(bool force)
 {
     const int slot = session_.selectedSlot();
@@ -2010,7 +2081,26 @@ void ChoppageMpcApp::syncSeq(bool force)
         const float r = fx.rate <= 8 ? 0.0f : fx.rate <= 16 ? 1.0f : fx.rate <= 32 ? 2.0f : 3.0f;
         if (seen_[MP_STEP_FX] != t) write(MP_STEP_FX, t);
         if (fx.type != FxType::none && seen_[MP_STEP_RATE] != r) write(MP_STEP_RATE, r);
+        const float nc = (float)pat.noteCond[(size_t)sel], fc = (float)pat.fxCond[(size_t)sel];
+        if (force || seen_[MP_STEP_NCOND] != nc) write(MP_STEP_NCOND, nc);
+        if (force || seen_[MP_STEP_FCOND] != fc) write(MP_STEP_FCOND, fc);
     }
+    // the NOTE PROB and FX PROB rows: each step's condition (ALWAYS shows as a dash), the selected step framed
+    for (int row = 0; row < 2; ++row)
+        for (int col = 0; col < 16; ++col)
+        {
+            const int step = page * 16 + col;
+            const int c = step < pat.numSteps ? (int)(row == 0 ? pat.noteCond : pat.fxCond)[(size_t)step] : 0;
+            const int k = row * 16 + col;
+            {
+                std::lock_guard<std::mutex> l(textMutex_);
+                condText_[(size_t)k] = std::string(row == 0 ? "NOTE " : "FX ") + cond::name(c);
+            }
+            const float f = (float)condFrame(theme, step == sel, std::clamp(c, 0, kCondFrames - 1));
+            condShown_[k] = f;
+            const int idx = MP_NCOND0 + k;
+            if (force || seen_[idx] != f || values_[idx].load() != f) write(idx, f);
+        }
 }
 
 // ===================================================================================== DISK audition
