@@ -799,6 +799,28 @@ static void undoTests()
 // while (it used to stand still behind them and come back late: the break slowed)
 static void inTimeUnderLaneTests()
 {
+    {
+        // 0.17.2: CC 102 plays any slice (past the 16 slice notes); CC 103+ sets a pad's setting for one press
+        std::cout << "\n== CC: slice, pad setting ==" << std::endl;
+        Rig r;
+        r.s.loadDemo (0); r.s.waitUntilIdle(); r.s.poll();
+        r.run (0.3);
+        MidiMsg cc; cc.offset = 100; cc.data[0] = 0xB0; cc.data[1] = (uint8_t) kCcPlaySlice; cc.data[2] = 18;
+        r.s.engine().sliceHit.store (-1);
+        r.run (0.1, { cc });
+        check (r.s.engine().sliceHit.load() == 0 * kMaxSlices + 18, "CC 102 = 18 plays slice 19");
+        MidiMsg pc; pc.offset = 10; pc.data[0] = 0xB0; pc.data[1] = (uint8_t) (kCcPadSetting + 1); pc.data[2] = 4;   // ROLL at 1/64
+        r.set (P_ROLL_MODE, 3.0f);   // VEL DOWN: no pitch change, so a repeat is the same sound
+        auto rolled = r.run (0.4, { pc, MidiMsg::noteOn (kFirstFxNote + 1, 100, 20) });
+        // a 1/64 roll repeats every ~0.022 s at 170: the output looks like itself one repeat later
+        const int rep = (int) (r.sr * 60.0 / 170.0 / 16.0);
+        double xy = 0, xx = 0, yy = 0;
+        for (int i = (int) (r.sr * 0.1); i < (int) (r.sr * 0.35); ++i)
+        { const double a = rolled.l[(size_t) i], b = rolled.l[(size_t) (i - rep)]; xy += a * b; xx += a * a; yy += b * b; }
+        const double corr = xy / std::sqrt (std::max (1e-12, xx * yy));
+        check (corr > 0.8, "CC 104 = 4 makes ROLL 1/64 for that press (" + std::to_string (corr) + ")");
+    }
+
     std::cout << "\n== AKAIZE IN TIME under the FX lane ==" << std::endl;
     PerfFx fx;
     const double sr = 44100.0;

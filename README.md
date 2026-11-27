@@ -22,6 +22,8 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
 | E2 – G3 | Pad bank B | Slices 1–16 of the playing break |
 | G#3 – B4 | Pad bank C | Pattern memories 1–16 |
 
+**MIDI CCs** (0.17.2, any channel), for a host that sequences CHOPPAGE closely: **CC 102** = v plays slice v + 1 (0-63, past the 16 slice notes). **CC 103-110** = v sets FX pad 1-8's setting for its next press by note, until that note lets go (v 0 = the pad's own knob): STUTTER / ROLL v 1-4 = 1/8 1/16 1/32 1/64, TAPE STOP v 1-127 = 0.1-3 s, HALF-TIME v 1-5 = its modes, AKAIZE v 1-4 = stretch 1.5 2 3 4, FILT DIVE v 1-127 = resonance, S950 DROP v 1-127 = 4-15.6 kHz. Paula's Revenge's `Uxy`, `Sxx` and `9xx` commands use these.
+
 ## The panel
 - **Tabs**: **SAMPLE** · **SEQ** · **FX** · **SET** · **AKAI** · **DISK**
 - **Status line**: the selected break's MUTE GROUP (GRP 1–4) and PLAYING / OTHER PLAYING (another break is running) / STOPPED. Hits show as K S GS H O P.
