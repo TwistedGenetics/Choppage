@@ -132,7 +132,7 @@ std::vector<MpcParamDef> buildDefs()
     R("infoBrk", "Break Now");
     F("slEnd", "End", 0, 1, 1);
     { auto* p = I("seqSel", "Step", 1, 64, 1); p->uiOnly = true; }
-    C("stepFx", "Step FX", { "OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP" }, 0);
+    C("stepFx", "Step FX", { "OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP", "ROLL" }, 0);   // (ROLL: 0.17.1)
     C("stepRate", "Step FX Rate", { "1/8", "1/16", "1/32", "1/64" }, 1);
     for (int k = 0; k < 16; ++k)
     { auto* p = I(("fxrow" + std::to_string(k + 1)).c_str(), ("FX Step " + std::to_string(k + 1)).c_str(), 0, 4 * kFxRowFrames - 1, 0); p->readout = true; }

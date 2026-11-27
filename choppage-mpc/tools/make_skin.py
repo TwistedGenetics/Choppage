@@ -482,10 +482,10 @@ def bar_key(w, h, text, on):
 
 # ---------------------------------------------------------------- the BR3AK SEQ grid
 CELL_FRAMES = 66                 # MpcParams.h kCellFrames (strip = 1 spare + 4 themes x 66 + 1 spare)
-FXROW_FRAMES = 34                # MpcParams.h kFxRowFrames
+FXROW_FRAMES = 42                # MpcParams.h kFxRowFrames
 LANES = ["KICK", "SNARE", "GHOST", "HAT", "OPEN", "PERC"]
 GX0, GPITCH, GCELL = 140, 69, 63 # grid columns: x of column 0, pitch, cell width
-FX_LETTER = "SRAT"               # STUTTER REVERSE STRETCH (Akaize) TAPE STOP, as on the desktop
+FX_LETTER = ["S", "R", "A", "T", "RL"]   # STUTTER REVERSE STRETCH (Akaize) TAPE STOP ROLL, as on the desktop
 
 LANE_LETTER = ["K", "S", "GS", "H", "O", "P"]   # the hit letters of the break books (P = PERC: anything else)
 
@@ -558,12 +558,12 @@ def cond_frames(w, h):
     return [frames[0]] + frames + [frames[-1]]
 
 def fxrow_frames(w, h):
-    """theme x (selected ? 17 : 0) + f; f 0 none, 1-16 FX type (S R A T) x rate (8 16 32 64)."""
+    """theme x (selected ? 21 : 0) + f; f 0 none, 1-20 FX type (S R A T RL) x rate (8 16 32 64)."""
     frames = []
     for theme in range(4):
         bgc, ink, dim, faint = LCD[theme]
         for sel in range(2):
-            for f in range(17):
+            for f in range(21):
                 im = Image.new("RGB", (w, h), bgc)
                 d = ImageDraw.Draw(im)
                 if sel:
@@ -1258,7 +1258,7 @@ class Builder:
             w_ = 140 if pid in ("seqFollow", "original") else (1270 - 772 - 280) // 2
             kids.append(self.flip_at(pid, (x, r0 + 4, w_ - 4, rh - 8), self.key_png(text, w_ - 4, rh - 8), vv, qlink=False))
             x += w_
-        kids += self.key_row("stepFx", (10, r1, 640, rh), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP"],
+        kids += self.key_row("stepFx", (10, r1, 640, rh), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP", "ROLL"],
                              "FX ON THE SELECTED STEP (TAP A STEP TO PICK IT)", 58, vv)
         kids += self.key_row("stepRate", (656, r1, 330, rh), ["1/8", "1/16", "1/32", "1/64"], "FX RATE", 58, vv)
         x = 992
@@ -1609,7 +1609,7 @@ class Builder:
         k, win = self.knob_at("seqSel", (10, RY, 196, RH), 64, value_size=22)
         kids += k
         self._seq_windows.append(win)
-        kids += self.key_row("stepFx", (212, RY, 640, RH), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP"], "FX ON THE STEP", 44)
+        kids += self.key_row("stepFx", (212, RY, 640, RH), ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP", "ROLL"], "FX ON THE STEP", 44)
         kids += self.key_row("stepRate", (858, RY, 236, RH), ["1/8", "1/16", "1/32", "1/64"], "FX RATE", 44)
         for pid, text, x, w_ in (("undo", "UNDO", 1100, 84), ("redo", "REDO", 1188, 82)):
             png = self.save("keybig_%s_%dx%d.png" % (pid, w_, RH),

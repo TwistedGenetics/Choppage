@@ -925,7 +925,7 @@ int main(int argc, char** argv)
         CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::stutter && app.session().slot(0).program.pattern.fx[3].rate == 32,
               "STEP FX STUTTER at 1/32 on step 4");
         const int fxf = (int)std::lround(app.getParam(MP_FXROW0 + 3)) % kFxRowFrames;
-        CHECK(fxf == 17 + 1 + 2, "the FX row shows it (selected)");
+        CHECK(fxf == 21 + 1 + 2, "the FX row shows it (selected)");
         set(app, MP_STEP_FX, 0);
         CHECK(app.session().slot(0).program.pattern.fx[3].type == FxType::none, "STEP FX OFF clears it");
 

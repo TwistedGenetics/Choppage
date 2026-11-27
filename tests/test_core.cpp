@@ -795,6 +795,42 @@ static void undoTests()
 }
 
 // 0.17: trig conditions (NOTE PROB / FX PROB), ROLL MODE, HALF-TIME MODE
+// 0.17.1: AKAIZE IN TIME held by hand stays in time when the FX lane's STUTTER / REVERSE / TAPE STOP take over for a
+// while (it used to stand still behind them and come back late: the break slowed)
+static void inTimeUnderLaneTests()
+{
+    std::cout << "\n== AKAIZE IN TIME under the FX lane ==" << std::endl;
+    PerfFx fx;
+    const double sr = 44100.0;
+    fx.prepare (sr, 512);
+    PerfFx::Settings ps;
+    ps.samplesPerBeat = sr * 60.0 / 170.0;
+    ps.akInTime = true; ps.akRatio = 1.0; ps.akPitch = 1.0;
+    ps.quantSteps = 0.0;
+    // the input: a ramp (each sample's value = its time), so the output says where the effect reads from
+    long t = 0;
+    auto block = [&] (bool stutter, int n, double& ratio) {
+        std::array<bool, kFxPads> held {};
+        held[(size_t) PerfFx::akaize] = true;
+        held[(size_t) PerfFx::stutter] = stutter;
+        std::vector<float> l ((size_t) n), r ((size_t) n);
+        for (int i = 0; i < n; ++i) l[(size_t) i] = r[(size_t) i] = (float) (t + i) * 1.0e-5f;
+        fx.process (l.data(), r.data(), n, held, ps);
+        double out = 0, in = 0;
+        for (int i = 0; i < n; ++i) { out += l[(size_t) i]; in += (double) (t + i) * 1.0e-5; }
+        t += n;
+        ratio = out / in;
+    };
+    double ratio = 0;
+    for (int k = 0; k < 40; ++k) block (false, 512, ratio);
+    const double before = ratio;
+    for (int k = 0; k < 40; ++k) block (true, 512, ratio);       // the lane's STUTTER on top for ~0.46 s
+    for (int k = 0; k < 6; ++k) block (false, 512, ratio);       // (the fades)
+    double after = 0;
+    for (int k = 0; k < 10; ++k) { block (false, 512, ratio); after += ratio / 10.0; }
+    check (std::abs (after - 1.0) < 0.1 && std::abs (before - 1.0) < 0.1, "AKAIZE held through a lane STUTTER comes back in time (" + std::to_string (before) + " / " + std::to_string (after) + ")");
+}
+
 static void conditionTests()
 {
     std::cout << "\n== trig conditions, roll and half-time modes ==" << std::endl;
@@ -886,6 +922,7 @@ int main()
     playbackTests();
     fxTests();
     conditionTests();
+    inTimeUnderLaneTests();
     undoTests();
     editTests();
     fileTests();

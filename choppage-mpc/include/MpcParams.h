@@ -148,14 +148,14 @@ inline int tabFrame(int theme, int t) { return theme * kTabFrames + t; }
 // SEQ grid (lanes KICK SNARE GHOST HAT OPEN PERC). Cell frame = 1 + theme * kCellFrames + c; c: 0 empty, 1 empty on
 // a beat, 2-65 a hit playing slice c - 1 (each lane's strip shows its hit letter: K S GS H O P, and the slice number). Frame 0 and the last frame are spare, so the jog wheel can always move a
 // cell's value both ways (the app reads the direction, cycles the lane's slices, and puts the right frame back).
-// FX row frame = theme * kFxRowFrames + (selected ? 17 : 0) + f; f: 0 none, 1-16 type 1-4 x rate 8 / 16 / 32 / 64.
+// FX row frame = theme * kFxRowFrames + (selected ? 21 : 0) + f; f: 0 none, 1-20 type 1-5 x rate 8 / 16 / 32 / 64.
 // The step row: theme * 17 + step (0 = none).
 constexpr int kSeqLanes = 6;
 constexpr int kCellFrames = 66;
 constexpr int kCellStripFrames = 4 * kCellFrames + 2;
-constexpr int kFxRowFrames = 34;
+constexpr int kFxRowFrames = 42;   // (0.17.1: 5 FX types with ROLL)
 inline int cellFrame(int theme, int c) { return 1 + theme * kCellFrames + c; }
-inline int fxRowFrame(int theme, bool selected, int f) { return theme * kFxRowFrames + (selected ? 17 : 0) + f; }
+inline int fxRowFrame(int theme, bool selected, int f) { return theme * kFxRowFrames + (selected ? 21 : 0) + f; }
 // NOTE PROB / FX PROB cells: frame = 1 + (theme * 2 + selected) * kCondFrames + condition (cond:: ids, 0 = ALWAYS).
 // Frame 0 and the last frame are spare, like the grid cells, so the jog wheel can move a cell's value either way.
 constexpr int kCondFrames = 65;   // cond::kCount

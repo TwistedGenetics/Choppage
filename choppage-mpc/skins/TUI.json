@@ -18243,10 +18243,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x58_off_on.png",
-"offImage": "pick_129x58_off_off.png",
+"onImage": "pick_108x58_off_on.png",
+"offImage": "pick_108x58_off_off.png",
 "buttonId": 0,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -18261,7 +18261,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 129 58"
+"bounds": "0 0 108 58"
 }
 },
 {
@@ -18272,10 +18272,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x58_stutter_on.png",
-"offImage": "pick_129x58_stutter_off.png",
+"onImage": "pick_108x58_stutter_on.png",
+"offImage": "pick_108x58_stutter_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -18290,7 +18290,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "127 0 129 58"
+"bounds": "106 0 108 58"
 }
 },
 {
@@ -18301,10 +18301,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x58_reverse_on.png",
-"offImage": "pick_129x58_reverse_off.png",
+"onImage": "pick_108x58_reverse_on.png",
+"offImage": "pick_108x58_reverse_off.png",
 "buttonId": 2,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -18319,7 +18319,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "254 0 129 58"
+"bounds": "212 0 108 58"
 }
 },
 {
@@ -18330,10 +18330,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x58_stretch_on.png",
-"offImage": "pick_129x58_stretch_off.png",
+"onImage": "pick_108x58_stretch_on.png",
+"offImage": "pick_108x58_stretch_off.png",
 "buttonId": 3,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -18348,7 +18348,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "381 0 129 58"
+"bounds": "318 0 108 58"
 }
 },
 {
@@ -18359,10 +18359,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x58_tape_stop_on.png",
-"offImage": "pick_129x58_tape_stop_off.png",
+"onImage": "pick_108x58_tape_stop_on.png",
+"offImage": "pick_108x58_tape_stop_off.png",
 "buttonId": 4,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -18377,7 +18377,36 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "508 0 129 58"
+"bounds": "424 0 108 58"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 5",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "pick_108x58_roll_on.png",
+"offImage": "pick_108x58_roll_off.png",
+"buttonId": 5,
+"numButtonsInGroup": 6,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "530 0 108 58"
 }
 }
 ]
@@ -43992,10 +44021,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x44_off_on.png",
-"offImage": "pick_129x44_off_off.png",
+"onImage": "pick_108x44_off_on.png",
+"offImage": "pick_108x44_off_off.png",
 "buttonId": 0,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -44010,7 +44039,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "0 0 129 44"
+"bounds": "0 0 108 44"
 }
 },
 {
@@ -44021,10 +44050,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x44_stutter_on.png",
-"offImage": "pick_129x44_stutter_off.png",
+"onImage": "pick_108x44_stutter_on.png",
+"offImage": "pick_108x44_stutter_off.png",
 "buttonId": 1,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -44039,7 +44068,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "127 0 129 44"
+"bounds": "106 0 108 44"
 }
 },
 {
@@ -44050,10 +44079,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x44_reverse_on.png",
-"offImage": "pick_129x44_reverse_off.png",
+"onImage": "pick_108x44_reverse_on.png",
+"offImage": "pick_108x44_reverse_off.png",
 "buttonId": 2,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -44068,7 +44097,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "254 0 129 44"
+"bounds": "212 0 108 44"
 }
 },
 {
@@ -44079,10 +44108,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x44_stretch_on.png",
-"offImage": "pick_129x44_stretch_off.png",
+"onImage": "pick_108x44_stretch_on.png",
+"offImage": "pick_108x44_stretch_off.png",
 "buttonId": 3,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -44097,7 +44126,7 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "381 0 129 44"
+"bounds": "318 0 108 44"
 }
 },
 {
@@ -44108,10 +44137,10 @@
 "type": "Button",
 "data": {
 "version": 2,
-"onImage": "pick_129x44_tape_stop_on.png",
-"offImage": "pick_129x44_tape_stop_off.png",
+"onImage": "pick_108x44_tape_stop_on.png",
+"offImage": "pick_108x44_tape_stop_off.png",
 "buttonId": 4,
-"numButtonsInGroup": 5,
+"numButtonsInGroup": 6,
 "handleName": "Data",
 "gestureBehaviour": "Instant"
 }
@@ -44126,7 +44155,36 @@
 "showWhenDataModelInvalid": "Show",
 "whenVisible": "Always",
 "boundsType": "Absolute",
-"bounds": "508 0 129 44"
+"bounds": "424 0 108 44"
+}
+},
+{
+"version": 2,
+"componentData": {
+"version": 1,
+"name": "choice 5",
+"type": "Button",
+"data": {
+"version": 2,
+"onImage": "pick_108x44_roll_on.png",
+"offImage": "pick_108x44_roll_off.png",
+"buttonId": 5,
+"numButtonsInGroup": 6,
+"handleName": "Data",
+"gestureBehaviour": "Instant"
+}
+},
+"handle remapping": {
+"version": 1,
+"map": []
+},
+"bounds": {
+"version": 1,
+"acceptsHWFocus": "No",
+"showWhenDataModelInvalid": "Show",
+"whenVisible": "Always",
+"boundsType": "Absolute",
+"bounds": "530 0 108 44"
 }
 }
 ]
@@ -49807,7 +49865,7 @@
 },
 {
 "key": "Parameter 505",
-"value": ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP"]
+"value": ["OFF", "STUTTER", "REVERSE", "STRETCH", "TAPE STOP", "ROLL"]
 },
 {
 "key": "Parameter 506",
@@ -62490,7 +62548,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62524,7 +62582,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62558,7 +62616,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62592,7 +62650,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62626,7 +62684,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62660,7 +62718,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62694,7 +62752,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62728,7 +62786,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62762,7 +62820,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62796,7 +62854,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62830,7 +62888,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62864,7 +62922,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62898,7 +62956,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62932,7 +62990,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -62966,7 +63024,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -63000,7 +63058,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_26.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70101,7 +70159,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70134,7 +70192,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70167,7 +70225,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70200,7 +70258,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70233,7 +70291,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70266,7 +70324,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70299,7 +70357,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70332,7 +70390,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70365,7 +70423,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70398,7 +70456,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70431,7 +70489,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70464,7 +70522,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70497,7 +70555,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70530,7 +70588,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70563,7 +70621,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },
@@ -70596,7 +70654,7 @@
 "imageType": "FilmStrip",
 "colour": "0",
 "image": "fxrow_32.png",
-"numFrames": 136,
+"numFrames": 168,
 "handleName": "Data"
 }
 },

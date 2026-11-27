@@ -92,7 +92,7 @@ The sections:
 - **UNDO / REDO** (0.17) take back anything: the pattern, slices, the breaks loaded, every knob and switch.
 - **Tap** a cell to put a hit of that kind there, or take it off.
 - With the cell selected (red frame), **turn the jog wheel** to step through that lane's hits only: kicks in KICK, snares in SNARE, ghosts in GHOST, hats in HAT, open hats in OPEN, percs in PERC. The MPC shows which one (for example "K 05").
-- **FX on a step:** tap a step, or the FX row under the grid, to select it. Then pick its FX (STUTTER, REVERSE, STRETCH, TAPE STOP or OFF) and RATE (1/8 to 1/64). The FX row shows each step's FX.
+- **FX on a step:** tap a step, or the FX row under the grid, to select it. Then pick its FX (STUTTER, REVERSE, STRETCH, TAPE STOP, **ROLL** (0.17.1) or OFF) and RATE (1/8 to 1/64: STUTTER's and ROLL's size). The FX row shows each step's FX (RL = roll). STRETCH steps use the AKAIZE pad's settings (AKAIZER page: AKAIZE MODE, PAD STRETCH, IN TIME PITCH; FX PADS page: CYCLE): one setup for both.
 - Above the grid: PATTERN / ORIGINAL, LENGTH, STEPS (1-16 to 49-64) and FOLLOW, which keeps the playing steps on screen.
 - The 16 Q-Links set the slice of the 16 steps shown.
 
