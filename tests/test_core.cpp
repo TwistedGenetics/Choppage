@@ -313,6 +313,9 @@ static void fxTests()
                                  MidiMsg::noteOff (kFirstFxNote + PerfFx::akaize, (int) (1.2 * r.sr)) });
         };
         auto st = modeRun (false, 0), it = modeRun (true, 0), itUp = modeRun (true, 12);
+        // ... and IN TIME at pitch 0 is really heard: not the dry break (the grains repeat, then jump to the beat)
+        auto dry = [] { Rig r; return r.run (1.5); }();
+        check (difference (dry, it) > 0.01f, "AKAIZE MODE IN TIME at pitch 0 changes the sound (not the dry break): " + fmt (difference (dry, it), 4));
         check (difference (st, it) > 0.001f && difference (it, itUp) > 0.001f && finite (it) && finite (itUp)
                  && rms (it, (int) (0.5 * 44100), (int) (0.6 * 44100)) > 0.01f,
                "AKAIZE MODE IN TIME on the pad differs from STRETCH, IN TIME PITCH changes it");
@@ -323,6 +326,8 @@ static void fxTests()
             return r.run (1.0);
         };
         auto sSt = sliceMode (false), sIt = sliceMode (true);
+        auto sDry = [] { Rig r; return r.run (1.0); }();
+        check (difference (sDry, sIt) > 0.01f, "slice STRETCH x2 IN TIME changes the sound: " + fmt (difference (sDry, sIt), 4));
         check (difference (sSt, sIt) > 0.001f && finite (sIt) && rms (sIt) > 0.01f, "slice STRETCH x2 IN TIME plays the grains at normal speed");
     }
     {
