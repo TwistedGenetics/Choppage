@@ -305,6 +305,25 @@ static void fxTests()
         };
         auto s1 = sliceRun (800), s2 = sliceRun (100);
         check (difference (s1, s2) > 0.001f && finite (s2) && rms (s1) > 0.01f, "slice STRETCH x2: CYCLE LENGTH changes it");
+        // AKAIZE MODE IN TIME: the grains (and the metallic sound) but the beat kept
+        auto modeRun = [] (bool inTime, float pitch) {
+            Rig r;
+            r.set (P_AK_MODE, inTime ? 1.0f : 0.0f); r.set (P_AK_PITCH, pitch);
+            return r.run (1.5, { MidiMsg::noteOn (kFirstFxNote + PerfFx::akaize, 110, (int) (0.4 * r.sr)),
+                                 MidiMsg::noteOff (kFirstFxNote + PerfFx::akaize, (int) (1.2 * r.sr)) });
+        };
+        auto st = modeRun (false, 0), it = modeRun (true, 0), itUp = modeRun (true, 12);
+        check (difference (st, it) > 0.001f && difference (it, itUp) > 0.001f && finite (it) && finite (itUp)
+                 && rms (it, (int) (0.5 * 44100), (int) (0.6 * 44100)) > 0.01f,
+               "AKAIZE MODE IN TIME on the pad differs from STRETCH, IN TIME PITCH changes it");
+        auto sliceMode = [] (bool inTime) {
+            Rig r;
+            r.set (P_AK_MODE, inTime ? 1.0f : 0.0f);
+            r.s.setSliceValue (Session::SliceField::stretch, 2.0f, true);
+            return r.run (1.0);
+        };
+        auto sSt = sliceMode (false), sIt = sliceMode (true);
+        check (difference (sSt, sIt) > 0.001f && finite (sIt) && rms (sIt) > 0.01f, "slice STRETCH x2 IN TIME plays the grains at normal speed");
     }
     {
         Rig clean, s950, low;
@@ -482,6 +501,12 @@ static void fileTests()
         check (std::abs (rs - 0.5) < 0.01 && std::abs (r.s.slot (3).content->bpm - 170.0) < 0.01 && ! r.s.loopBpmSet (3),
                "... half the length, now 170 BPM (x" + fmt (rs, 3) + ")");
         check (r.s.slot (3).file != first && fs::exists (first), "a second render gets its own file");
+        r.s.loadDemo (3);
+        r.s.waitUntilIdle(); r.s.poll();
+        set.inTime = true; set.pitch = 7.0;
+        check (r.s.akaizeSlot (3, set), "render: AKAIZE MODE IN TIME, PITCH +7");
+        const double ri = (double) r.s.slot (3).content->buffer->numSamples / n0;
+        check (std::abs (ri - 1.0) < 0.01, "... IN TIME keeps the length, the beat (x" + fmt (ri, 3) + ")");
     }
 
     // bounce

@@ -51,6 +51,7 @@ Every green build of `main` becomes a **Release** with `CHOPPAGE-macOS.zip`. Unz
   - **CYCLE LENGTH** 20–2000 samples, **CYCLE FREQ** linked to the length (41000 / length) unless **MANUAL**, **PITCH** ±24 semitones.
   - The render is 16-bit like the original Akaizer, written to `~/Music/CHOPPAGE/Renders/<name>_akaized.wav` (a new file each time) and loaded back in.
   - The same cycle settings drive the live **AKAIZE pad** and **slice STRETCH**.
+  - **AKAIZE MODE**: STRETCH (slows down, as before) or **IN TIME**: the metallic Akai grain sound while the beat stays in time. **IN TIME PITCH** (±24 semitones) moves only the grains' pitch on the pad and slice STRETCH; the render keeps its length and uses its own PITCH.
 - **DISK tab**: a break browser for `~/Music/CHOPPAGE/Breaks` (or any folder) listing BPM, bars, length and name. Click loads into the selected break; shift-click loads into the next empty one.
 - **Long breaks**: a break longer than 2 bars uses 2 of its bars (the first 2 here; the MPC edition can pick which).
 - **Presets**: SAVE PRESET / LOAD PRESET on the DISK tab save the whole setup (breaks, slices, patterns, memories, settings) as a `.chp` file in `~/Music/CHOPPAGE/Presets`. The files are the same as the MPC's (`VST2 Plugins/Content/Presets/CHOPPAGE`), so presets move between the two; breaks are found by path, or by file name in the Breaks folder.

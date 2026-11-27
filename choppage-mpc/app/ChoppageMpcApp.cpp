@@ -1529,6 +1529,7 @@ void ChoppageMpcApp::handle(int index, float v, float prev)
             r.cycleLength = roundi(values_[P_AKR_CYC_LEN].load());
             r.cycleFreq = akaizeFreq(values_[P_AKR_CYC_LEN].load(), values_[P_AKR_CYC_FREQ].load(), values_[P_AKR_FREQ_MAN].load() > 0.5f);
             r.pitch = values_[P_AKR_PITCH].load();
+            r.inTime = values_[P_AK_MODE].load() > 0.5f;   // AKAIZE MODE IN TIME: the length (the beat) kept
             say("AKAIZING...");
             syncReadouts(true);
             const bool ok = session_.akaizeSlot(slot, r);

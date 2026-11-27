@@ -159,6 +159,7 @@ namespace bc
             int    cycleLength = 800;      // 20 .. 2000 samples
             int    cycleFreq = 51;         // 20 .. 2050 cps (the caller links it to the length unless MANUAL)
             double pitch = 0.0;            // semitones of repitch before the stretch, -24 .. 24
+            bool   inTime = false;         // AKAIZE MODE IN TIME: 100% (the length kept), the grains and pitch only
         };
         /** Renders the break the Akaizer way (16-bit, exactly as the original computes it), writes
             Renders/<name>_akaized.wav and loads it back into the slot (slices moved, settings and pattern kept). */

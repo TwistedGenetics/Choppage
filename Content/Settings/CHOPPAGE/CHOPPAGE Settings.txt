@@ -1,12 +1,12 @@
 CHOPPAGE SETTINGS 1
 param gateMode 0
 param breakMode 1
-param trigger 0
+param trigger 1
 param velSlice 0
-param tempoSrc 0
-param speed 1
+param tempoSrc 1
+param speed 2
 param fit 1
-param fitMode 0
+param fitMode 1
 param padQuant 1
 param lcdColour 0
 param noteMap 0
@@ -26,11 +26,11 @@ qlink5 srate
 qlink6 reverb
 qlink7 echoMix
 qlink8 volume
-qlink9 patAmount
+qlink9 -
 qlink10 fxAmount
 qlink11 swing
 qlink12 style
 qlink13 stutRate
 qlink14 rollRate
-qlink15 tapeMs
+qlink15 -
 qlink16 akCycLen

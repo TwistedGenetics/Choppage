@@ -615,7 +615,9 @@ def pages():
         {"fn": 4, "sub": 1, "name": "AKAIZER", "rows": [
             [T("akrSync", "SYNC TO\nMPC BPM"), K("akrLoopBpm", "LOOP BPM (0 IS AUTO)"), K("akrTarget", "TARGET (NO MPC TEMPO)"), K("akrStretch", "STRETCH (SYNC OFF)")],
             [K("akrCycLen", "CYCLE LENGTH"), K("akrCycFreq", "CYCLE FREQ"), T("akrFreqManual", "FREQ\nMANUAL"), K("akrPitch", "PITCH", bi=True)],
-            [G("akaize", "AKAIZE\nTHE BREAK"), R("infoBpm", "BREAK TEMPO"), R("infoMsg", "MESSAGE", span=2)]]},
+            [G("akaize", "AKAIZE\nTHE BREAK"), R("infoBpm", "BREAK TEMPO"), R("infoMsg", "MESSAGE", span=2)],
+            [P("akMode", "AKAIZE MODE: PAD, SLICES, RENDER", ["STRETCH", "IN TIME"], span=2), K("akPitch", "IN TIME PITCH", bi=True),
+             K("akRatio", "PAD STRETCH")]]},
         {"fn": 5, "sub": 0, "name": "SOUND", "rows": [
             [K("character", "CHARACTER"), K("srate", "SAMPLE RATE"), K("volume", "VOLUME"), K("filter", "FILTER")],
             [P("filterType", "FILTER TYPE", ["LP", "HP"]), K("filterRes", "RESONANCE"), K("dist", "DISTORTION"), K("distTone", "DIST TONE", bi=True)],

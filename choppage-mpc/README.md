@@ -114,6 +114,8 @@ The sections:
 
 **AKAIZER** (press FX PADS again): the full Akaizer render. SYNC TO MPC BPM (from LOOP BPM, AUTO = the break's own tempo; TARGET when the MPC has no tempo) or STRETCH 25–2000 % with SYNC off, CYCLE LENGTH, CYCLE FREQ (linked to the length unless FREQ MANUAL), PITCH ±24. **AKAIZE THE BREAK** writes a 16-bit `<name>_akaized.wav` to `Content/Renders` and loads it back into the break.
 
+**AKAIZE MODE** (AKAIZER page, bottom row): STRETCH slows things down as before. **IN TIME** gives the metallic Akai grain sound while the beat stays in time — on the AKAIZE pad, on slice STRETCH and on the render (which then keeps the break's length, with PITCH applied). **IN TIME PITCH** (±24) moves only the grains' pitch on the pad and slices.
+
 **Hits are found automatically:** when a break loads, CHOPPAGE slices it and works out what each slice is (kick, snare, ghost, hat, open hat or perc), on the MPC just as on the desktop. The SEQ lanes and the dice use these. If one is wrong, set it with HIT on the SLICE screen.
 
 ## What the MPC can't do

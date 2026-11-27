@@ -1126,6 +1126,7 @@ namespace bc
         const auto& src = *s.content->buffer;
         const double loop = loopBpm (slot);
         double stretchPercent = set.sync && set.targetBpm > 1.0 && loop > 1.0 ? loop / set.targetBpm * 100.0 : set.stretchPercent;
+        if (set.inTime) stretchPercent = 100.0;                   // IN TIME: the length (the beat) kept
         stretchPercent = clampv (stretchPercent, 25.0, 2000.0);
 
         // Akaizer works on interleaved 16-bit, exactly as the original program did
